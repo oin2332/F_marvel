@@ -75,15 +75,15 @@ class _UserUnloginState extends State<UserUnlogin> {
                 onPressed: () async {
                   await login();
                 },
-                // style: ElevatedButton.styleFrom(
-                //   padding: EdgeInsets.zero, // 패딩을 제거하여 이미지에 꽉 차게 합니다.
-                // ),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.zero, // 패딩을 제거하여 이미지에 꽉 차게 합니다.
+                ),
                 child: Container(
-                  width: 150, // 이미지의 너비에 맞게 조정
+                  width: 350, // 이미지의 너비에 맞게 조정
                   height: 50, // 이미지의 높이에 맞게 조정
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/kakao/kakao_join_wide.png'),
+                      image: AssetImage('assets/kakao_join_wide.png'),
                     ),
                   ),
                 ),
