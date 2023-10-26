@@ -37,6 +37,7 @@ dependencies:
   provider:
   kakao_flutter_sdk_user:
   path:
+  page_transition: ^2.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
