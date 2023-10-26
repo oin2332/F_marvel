@@ -23,7 +23,7 @@ class _MainPageState extends State<MainPage> {
 
   final List<String> images = [
     'assets/fine.jpg',
-    'assets/goong.jpg',
+    'assets/gong.jpg',
     'assets/steak.jpg',
     'assets/whine.jpg',
     'assets/whisky.png',
