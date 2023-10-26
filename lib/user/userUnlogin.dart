@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:food_marvel/user/join.dart';
+import 'package:food_marvel/user/userMain.dart';
 import 'package:food_marvel/user/userSetting.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:path/path.dart';
@@ -137,7 +138,7 @@ class _UserUnloginState extends State<UserUnlogin> {
               IconButton(onPressed: (){}, icon: Icon(Icons.search)),
               IconButton(onPressed: (){}, icon: Icon(Icons.chat)),
               IconButton(onPressed: (){}, icon: Icon(Icons.calendar_today_outlined)),
-              IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (_) => UserSetting()));}, icon: Icon(Icons.person))
+              IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (_) => UserMain()));}, icon: Icon(Icons.person))
             ],
           ),
         ),
