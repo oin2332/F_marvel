@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:food_marvel/etc/conditions.dart';
+import 'package:food_marvel/etc/conditionList.dart';
+import 'package:food_marvel/etc/customerSuggest.dart';
+import 'package:food_marvel/etc/noticeList.dart';
 import 'package:food_marvel/user/profileEdit.dart';
 import 'package:food_marvel/user/userInfoEdit.dart';
 
@@ -126,7 +128,7 @@ class UserSetting extends StatelessWidget {
               Container(height: 1, width: 250, color: Colors.grey),
               Text('기타', style: TextStyle(color: Colors.grey[600]!),),
               TextButton(
-                onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (_) => Conditions()));},
+                onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (_) => NoticeList()));},
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -139,7 +141,9 @@ class UserSetting extends StatelessWidget {
                 ),
               ),
               TextButton(
-                onPressed: (){},
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => CustomerSuggest()));
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
