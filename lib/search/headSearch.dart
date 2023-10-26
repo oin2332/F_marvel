@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:food_marvel/main/mainPage.dart';
+
+
 
 void main() => runApp(MaterialApp(
   title: 'Search',
@@ -38,8 +41,14 @@ class _SearchState extends State<Search> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color(0xFFFF7070),
-        leading: Align(
-          alignment: Alignment.center,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.of(context).pop(
+              MaterialPageRoute(
+                builder: (context) => MainPage(),
+              ),
+            );
+          },
           child: Icon(Icons.chevron_left, color: Colors.white),
         ),
         title: Container(

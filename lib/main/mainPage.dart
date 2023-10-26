@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+import '../search/headSearch.dart';
 import '13_tapBar.dart';
 import '20_Move.dart';
 import '4_NameCard.dart';
@@ -155,7 +156,7 @@ class _MainPageState extends State<MainPage> {
             height: 40,
             child: InkWell(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Sample4()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Search()));
               },
               child: Row(
                 children: [
