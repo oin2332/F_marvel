@@ -94,42 +94,60 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Widget _numberpeople(String num) {
+    bool isSelected = selectedNumber == int.parse(num); // 현재 숫자가 선택된 숫자와 같은지 확인
     return Container(
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  selectedNumber = int.parse(num);
+                });
+              },
               child: Padding(
-                padding: const EdgeInsets.all(0.0), // 넓이 조절
+                padding: const EdgeInsets.all(0.0),
                 child: Text(
-                  '${num}명',
-                  style: TextStyle(color: Colors.black),
+                  '$num명',
+                  style: TextStyle(
+                    color: isSelected ? Colors.white : Colors.black,
+                  ),
                 ),
               ),
               style: ButtonStyle(
                 shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100), // 원형으로 설정
+                    borderRadius: BorderRadius.circular(100),
                   ),
                 ),
-                minimumSize: MaterialStateProperty.all(Size(40, 40)), // 버튼의 최소 크기를 설정
-                backgroundColor: MaterialStateProperty.all(Colors.white), // 배경색을 흰색으로 설정
+                minimumSize: MaterialStateProperty.all(Size(40, 40)),
+                backgroundColor: MaterialStateProperty.all(
+                  isSelected ? Color(0xFFFF6347) : Colors.white,
+                ),
                 side: MaterialStateProperty.all(
                   BorderSide(
-                    color: Colors.black, // 테두리 색상을 지정
-                    width: 1, // 테두리 두께
+                    color: Colors.black,
+                    width: 1,
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
 
+
+
+  int? selectedNumber;
+
+  Map<CalendarFormat, String> _availableCalendarFormats = {
+    CalendarFormat.month: '월',
+    CalendarFormat.twoWeeks: '2주',
+    CalendarFormat.week: '주',
+  };
 
   void _showModalBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -144,6 +162,7 @@ class _DetailPageState extends State<DetailPage> {
             child: Column(
               children: [
                 TableCalendar(
+                  availableCalendarFormats: _availableCalendarFormats,
                   focusedDay: DateTime.now(),
                   firstDay: DateTime(1800),
                   lastDay: DateTime(3000),
@@ -154,27 +173,29 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                   onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
                     setState(() {
-                      _selectedDay = selectedDay; // 선택한 날짜 저장
+                      _selectedDay = selectedDay;
                     });
                   },
                   selectedDayPredicate: (DateTime date) {
                     if (_selectedDay == null) {
                       return false;
                     }
-
                     return date.year == _selectedDay!.year &&
                         date.month == _selectedDay!.month &&
                         date.day == _selectedDay!.day;
                   },
+                  calendarFormat: CalendarFormat.month, // 초기 달력 형식을 월로 설정
                   enabledDayPredicate: (DateTime date) {
                     // 이전 날짜는 비활성화
                     return date.isAfter(DateTime.now());
                   },
-                  locale: 'ko_KR', // 한글로 날짜 표시
+                  locale: 'ko_KR',
                   calendarStyle: CalendarStyle(
-                    weekendTextStyle: TextStyle(color: Colors.blue), // 토요일은 파란색으로 표시
+                    weekendTextStyle: TextStyle(color: Colors.blue),
                   ),
                 ),
+
+
                 SizedBox(height: 15
                   ,),
                 SingleChildScrollView(
@@ -198,14 +219,11 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                 ),
 
-
-
-
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pop(); // 모달 닫기
                   },
-                  child: Text('닫기'),
+                  child: Text('확인'),
                 ),
               ],
             ),
@@ -348,9 +366,9 @@ class _DetailPageState extends State<DetailPage> {
                             padding: const EdgeInsets.symmetric(horizontal: 30.0), // 넓이 조절
                             child: Row(
                               children: [
-                                Icon(Icons.call,size: 18,),
+                                Icon(Icons.call,size: 18,color: Colors.black),
                                 SizedBox(width: 3,),
-                                Text('전화하기'),
+                                Text('전화하기',style: TextStyle(color: Colors.black)),
                               ],
                             ),
                           ),
@@ -366,9 +384,9 @@ class _DetailPageState extends State<DetailPage> {
                             padding: const EdgeInsets.symmetric(horizontal: 30.0), // 넓이 조절
                             child:  Row(
                               children: [
-                                Icon(Icons.call,size: 18,),
+                                Icon(Icons.location_on,size: 18,color: Colors.black,),
                                 SizedBox(width: 3,),
-                                Text('위치보기'),
+                                Text('위치보기',style: TextStyle(color: Colors.black),),
                               ],
                             ),
                           ),
@@ -391,63 +409,65 @@ class _DetailPageState extends State<DetailPage> {
                 child:  Container(
                   padding: const EdgeInsets.all(30.0),
                   child:  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('예약 일시' ,style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-                        SizedBox(height: 10,),
-                        TextButton(
-                          onPressed: () {
-                            _showModalBottomSheet(context);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 30.0), // 넓이 조절
-                            child: Row(
-                              children: [
-                                Icon(Icons.calendar_today_outlined, size: 18, color: Colors.black),
-                                SizedBox(width: 8),
-                                Text(getToday(), style: TextStyle(color: Colors.black),),
-                                Text(' / ',style: TextStyle(color: Colors.black),),
-                                Text('$peopleCount 명', style: TextStyle(color: Colors.black),),
-                              ],
-                            ),
-
-                          ),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(Colors.white), // 배경색을 흰색으로 설정
-                            side: MaterialStateProperty.all(BorderSide(color: Colors.black, width: 1)), // 테두리 설정
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('예약 일시' ,style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+                      SizedBox(height: 10,),
+                      TextButton(
+                        onPressed: () {
+                          _showModalBottomSheet(context);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                          child: Row(
+                            children: [
+                              Icon(Icons.calendar_today_outlined, size: 18, color: Colors.black),
+                              SizedBox(width: 8),
+                              Text('${_selectedDay != null ? DateFormat('yyyy-MM-dd (E)', 'ko_KR').format(_selectedDay!) : '날짜 선택 안 함'}', style: TextStyle(color: Colors.black),
+                              ),
+                              Text(' / ',style: TextStyle(color: Colors.black),),
+                              Text('${selectedNumber != null ? '$selectedNumber 명' : '인원 선택 안 함'}', style: TextStyle(color: Colors.black),
+                              ),
+                            ],
                           ),
                         ),
-                        SizedBox(height: 8,),
-                        Container(
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: [
-                                _clockbutton('11:00'),
-                                SizedBox(width: 8,),
-                                _clockbutton('13:00'),
-                                SizedBox(width: 8,),
-                                _clockbutton('14:00'),
-                                SizedBox(width: 8,),
-                                _clockbutton('15:00'),
-                                SizedBox(width: 8,),
-                                _clockbutton('16:00'),
-                                SizedBox(width: 8,),
-                                _clockbutton('17:00'),
-                                SizedBox(width: 8,),
-                                _clockbutton('19:00'),
-                                SizedBox(width: 8,),
-                                _clockbutton('20:00'),
-                                SizedBox(width: 8,),
-                                _clockbutton('21:00'),
-                                SizedBox(width: 8,),
-                              ],
-                            ),
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Colors.white),
+                          side: MaterialStateProperty.all(BorderSide(color: Colors.black, width: 1)),
+                        ),
+                      ),
+
+                      SizedBox(height: 8,),
+                      Container(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              _clockbutton('11:00'),
+                              SizedBox(width: 8,),
+                              _clockbutton('13:00'),
+                              SizedBox(width: 8,),
+                              _clockbutton('14:00'),
+                              SizedBox(width: 8,),
+                              _clockbutton('15:00'),
+                              SizedBox(width: 8,),
+                              _clockbutton('16:00'),
+                              SizedBox(width: 8,),
+                              _clockbutton('17:00'),
+                              SizedBox(width: 8,),
+                              _clockbutton('19:00'),
+                              SizedBox(width: 8,),
+                              _clockbutton('20:00'),
+                              SizedBox(width: 8,),
+                              _clockbutton('21:00'),
+                              SizedBox(width: 8,),
+                            ],
                           ),
                         ),
-                        SizedBox(height: 15,),
+                      ),
+                      SizedBox(height: 15,),
 
-                        Center(
+                      Center(
                           child: TextButton(
                             onPressed: () {
                               //
@@ -461,20 +481,20 @@ class _DetailPageState extends State<DetailPage> {
                               backgroundColor: MaterialStateProperty.all(Colors.white), // 배경색 설정
                             ),
                             child: Center(
-                              child :Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  SizedBox(width: 3,),
-                                  Text('예약가능 날짜 찾기',style: TextStyle(color:Color(0xFFFF6347)),),
-                                  Icon(Icons.keyboard_arrow_right,color:Color(0xFFFF6347),)
-                                ],
-                              )
+                                child :Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    SizedBox(width: 3,),
+                                    Text('예약가능 날짜 찾기',style: TextStyle(color:Color(0xFFFF6347)),),
+                                    Icon(Icons.keyboard_arrow_right,color:Color(0xFFFF6347),)
+                                  ],
+                                )
 
                             ),
-                            )
-                          ),
-                      ],
-                    ),
+                          )
+                      ),
+                    ],
+                  ),
                 ),
               ),
             underlineBox(5.0),
