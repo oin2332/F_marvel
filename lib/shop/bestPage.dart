@@ -40,6 +40,73 @@ class _BestPageState extends State<BestPage> {
       ],
     );
   }
+  Map<int, bool> isBookmarkedMap = {};
+
+  Widget _buildRestaurantItem(int index) {
+    final restaurant = top10Restaurants[index];
+     // 레스토랑 항목에 대한 북마크 상태를 가져옴
+    final isBookmarked = isBookmarkedMap[index] ?? false;
+
+    return InkWell(
+      onTap: () {
+        // 레스토랑 항목을 누를 때 실행할 동작 추가
+
+      },
+      child: Column(
+        children: [
+          SizedBox(height: 10),
+          Row(
+            children: [
+              SizedBox(width: 16),
+              Container(
+                width: 100,
+                height: 100,
+                child: Image.asset(restaurant['image']),
+              ),
+              SizedBox(width: 15),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(restaurant['name'], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  Text('위치: ${restaurant['location']}'),
+                  Text('평점: ${restaurant['rating']}'),
+                ],
+              ),
+              Spacer(),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    isBookmarkedMap[index] = !isBookmarked;
+                  });
+                },
+                child: Image.asset(
+                  isBookmarked ? 'assets/bookmark2-removebg-preview.png' : 'assets/bookmark-removebg-preview.png',
+                  width: 50,
+                  height: 50,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 샘플 레스토랑 데이터
+  final List<Map<String, dynamic>> top10Restaurants = [
+    {
+      'name': '레스토랑 1',
+      'location': '위치 1',
+      'rating': 4.5,
+      'image': 'assets/2.jpg',
+    },
+    {
+      'name': '레스토랑 2',
+      'location': '위치 2',
+      'rating': 4.2,
+      'image': 'assets/2.jpg',
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +118,7 @@ class _BestPageState extends State<BestPage> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("전국 BEST 맛집", style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold, color: Colors.black),),
+              Text("전국 BEST 맛집", style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold, color: Colors.black)),
               Row(
                 children: [
                   Text("랭킹 기준", style: TextStyle(fontSize: 12, color: Colors.black)),
@@ -87,14 +154,47 @@ class _BestPageState extends State<BestPage> {
         ),
         body: TabBarView(
           children: [
-            Center(child: Text("전국 탭 내용")),
-            Center(child: Text("서울 탭 내용")),
-            Center(child: Text("인천 탭 내용")),
-            Center(child: Text("경기 탭 내용")),
-            Center(child: Text("제주 탭 내용")),
-            Center(child: Text("경상도 탭 내용")),
-            Center(child: Text("전라도 탭 내용")),
-            Center(child: Text("충청도 탭 내용")),
+            ListView.builder(
+              itemCount: top10Restaurants.length,
+              itemBuilder: (context, index) {
+                return _buildRestaurantItem(index);
+              },
+            ),ListView.builder(
+              itemCount: top10Restaurants.length,
+              itemBuilder: (context, index) {
+                return _buildRestaurantItem(index);
+              },
+            ),ListView.builder(
+              itemCount: top10Restaurants.length,
+              itemBuilder: (context, index) {
+                return _buildRestaurantItem(index);
+              },
+            ),ListView.builder(
+              itemCount: top10Restaurants.length,
+              itemBuilder: (context, index) {
+                return _buildRestaurantItem(index);
+              },
+            ),ListView.builder(
+              itemCount: top10Restaurants.length,
+              itemBuilder: (context, index) {
+                return _buildRestaurantItem(index);
+              },
+            ),ListView.builder(
+              itemCount: top10Restaurants.length,
+              itemBuilder: (context, index) {
+                return _buildRestaurantItem(index);
+              },
+            ),ListView.builder(
+              itemCount: top10Restaurants.length,
+              itemBuilder: (context, index) {
+                return _buildRestaurantItem(index);
+              },
+            ),ListView.builder(
+              itemCount: top10Restaurants.length,
+              itemBuilder: (context, index) {
+                return _buildRestaurantItem(index);
+              },
+            ),
           ],
         ),
       ),
