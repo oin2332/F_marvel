@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_marvel/user/userSetting.dart';
 
 class UserMain extends StatefulWidget {
   const UserMain({super.key});
@@ -7,7 +8,7 @@ class UserMain extends StatefulWidget {
   State<UserMain> createState() => _UserMainState();
 }
 
-class _UserMainState extends State<UserMain> with SingleTickerProviderStateMixin {
+class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
 
   late TabController _tabController;
 
@@ -26,7 +27,17 @@ class _UserMainState extends State<UserMain> with SingleTickerProviderStateMixin
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('')),
+      appBar: AppBar(
+        title: Text(''),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => UserSetting()));
+            },
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Row(
@@ -49,6 +60,7 @@ class _UserMainState extends State<UserMain> with SingleTickerProviderStateMixin
               )
             ],
           ),
+          SizedBox(height: 20),
           ElevatedButton(
               onPressed: (){},
               style: ButtonStyle(
@@ -68,21 +80,41 @@ class _UserMainState extends State<UserMain> with SingleTickerProviderStateMixin
           ),
           SizedBox(height: 20),
           TabBar(
+            controller: _tabController,
+            labelColor: Colors.blue,
+            unselectedLabelColor: Colors.grey,
             tabs: [
               Tab(text: '나의 저장'),
               Tab(text: '리뷰'),
             ],
           ),
-          Expanded(
+          SizedBox(height: 20),
+          Container(
+            height: 200,
             child: TabBarView(
+              controller: _tabController,
               children: [
-                Center(child: Text('나의 저장 내용')),
-                Center(child: Text('리뷰 내용')),
+                ListView(
+                  children: [
+                    Text('컬렉션', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text('+ 새 컬렉션 만들기'),
+                    ),
+                    SizedBox(height: 30),
+                    Text('저장한 레스토랑', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
+                    SizedBox(height: 10),
+                    Text('저장한 레스토랑이 없습니다.', style: TextStyle(color: Colors.grey[400]!),textAlign: TextAlign.center,),
+                    Text('요즘 많이 저장하는 레스토랑을 확인해보세요.', style: TextStyle(color: Colors.grey[400]!),textAlign: TextAlign.center,),
+                  ],
+                ),
+                Text('등록된 리뷰가 없습니다', style: TextStyle(color: Colors.grey[400]!),textAlign: TextAlign.center,)
               ],
             ),
           ),
         ],
-    ),
+      ),
     );
   }
 }

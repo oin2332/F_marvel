@@ -138,7 +138,7 @@ class _UserUnloginState extends State<UserUnlogin> {
               IconButton(onPressed: (){}, icon: Icon(Icons.search)),
               IconButton(onPressed: (){}, icon: Icon(Icons.chat)),
               IconButton(onPressed: (){}, icon: Icon(Icons.calendar_today_outlined)),
-              IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (_) => UserSetting()));}, icon: Icon(Icons.person))
+              IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (_) => UserMain()));}, icon: Icon(Icons.person))
             ],
           ),
         ),

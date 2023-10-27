@@ -15,8 +15,42 @@ class ProfileEdit extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              InkWell(onTap: (){},child: Image.asset('assets/user/userProfile.png')),
-              SizedBox(height: 50,),
+              InkWell(
+                  onTap: (){
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ListTile(
+                              leading: Icon(Icons.photo),
+                              title: Text('앨범에서 선택'),
+                              onTap: () {
+                                // 앨범에서 선택하는 로직을 추가하세요
+                                // 예를 들어, 이미지 선택 코드를 넣어주세요.
+                                Navigator.pop(context); // 모달 바텀 시트 닫기
+                              },
+                            ),
+                            ListTile(
+                              leading: Icon(Icons.image),
+                              title: Text('기본 이미지로 변경'),
+                              onTap: () {
+                                // 기본 이미지로 변경하는 로직을 추가하세요
+                                Navigator.pop(context); // 모달 바텀 시트 닫기
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Container(
+                      width: 100, // 너비 조절
+                      height: 100, // 높이 조절
+                      child: Image.asset('assets/user/userProfile.png'))
+              ),
+              SizedBox(height: 20),
               Align(
                 alignment: Alignment.topLeft,
                 child: Text('닉네임', style: TextStyle(color: Colors.grey[600]!)),
@@ -40,7 +74,7 @@ class ProfileEdit extends StatelessWidget {
                   ),
                 )),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 15),
               Align(
                 alignment: Alignment.topLeft,
                 child: Text('자기소개', style: TextStyle(color: Colors.grey[600]!)),
@@ -88,7 +122,6 @@ class ProfileEdit extends StatelessWidget {
                 )),
               ),
               SizedBox(height: 20),
-
               Container(height: 1, width: 400, color: Colors.grey[300]!),
               Container(
                 height: 300,
