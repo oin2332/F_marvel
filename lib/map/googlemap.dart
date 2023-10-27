@@ -13,11 +13,18 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
  late GoogleMapController mapController;
- late LatLng _center = const LatLng(45.521563, -122.677433);
+ late LatLng _center;
+
+ @override
+ void initState() {
+  super.initState();
+  _getCurrentLocation(); // Get current location when the app starts
+ }
 
  void _onMapCreated(GoogleMapController controller) {
   mapController = controller;
  }
+
  Set<Marker> _markers = {};
 
  Future<void> _getCurrentLocation() async {
@@ -38,8 +45,10 @@ class _MyAppState extends State<MyApp> {
    try {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    // Do something with the obtained position if needed
-    print('Current position: ${position.latitude}, ${position.longitude}');
+
+    setState(() {
+     _center = LatLng(position.latitude, position.longitude);
+    });
 
     // Clear previous markers
     _markers.clear();
@@ -56,17 +65,12 @@ class _MyAppState extends State<MyApp> {
      ),
     );
 
-    // Update the center of the map to the current position
-    setState(() {
-     _center = LatLng(position.latitude, position.longitude);
-    });
-
     // Move the camera to the current position
     mapController.animateCamera(
      CameraUpdate.newCameraPosition(
       CameraPosition(
        target: LatLng(position.latitude, position.longitude),
-       zoom: 15.0, // You can adjust the zoom level as needed
+       zoom: 15.0,
       ),
      ),
     );
@@ -93,19 +97,26 @@ class _MyAppState extends State<MyApp> {
       Expanded(
        child: GoogleMap(
         onMapCreated: _onMapCreated,
-        initialCameraPosition: CameraPosition(
-         target: _center, // Set initial position to _center
+        initialCameraPosition: _center == null
+            ? const CameraPosition(
+         target: LatLng(37.4910133, 126.7206483),
          zoom: 11.0,
+        )
+            : CameraPosition(
+         target: _center,
+         zoom: 15.0,
         ),
-        markers: _markers, // Pass the markers set to the GoogleMap widget
+        markers: _markers,
        ),
-      ),
-      ElevatedButton(
-       onPressed: _getCurrentLocation,
-       child: Text('Get Current Location'),
       ),
      ],
     ),
+    floatingActionButton: FloatingActionButton(
+     onPressed: _getCurrentLocation,
+     child: Icon(Icons.my_location),
+     backgroundColor: Colors.blue[700],
+    ),
+    floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
    ),
   );
  }
