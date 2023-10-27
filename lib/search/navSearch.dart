@@ -8,7 +8,7 @@ void main() => runApp(MaterialApp(
 ));
 
 class NavSearch extends StatefulWidget {
-  const NavSearch({super.key});
+  const NavSearch({Key? key});
 
   @override
   State<NavSearch> createState() => _NavSearchState();
@@ -17,11 +17,23 @@ class NavSearch extends StatefulWidget {
 class _NavSearchState extends State<NavSearch> {
   TextEditingController _searchController = TextEditingController();
   List<String> recentSearches = [];
+  bool isFilterVisible = false;
 
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+  void openModal() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Container(
+          // 모달 창 내용을 이곳에 추가
+          // 필터 옵션 등을 나타내는 위젯을 넣을 수 있습니다.
+        );
+      },
+    );
   }
 
   Widget _menubutton(String text) {
@@ -168,6 +180,140 @@ class _NavSearchState extends State<NavSearch> {
                         ],
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "관심 급상승 음식점",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Center(
+                            child: Wrap(
+                              alignment: WrapAlignment.start,
+                              children: [
+                                for (int i = 1; i <= 5; i++)
+                                  Container(
+                                    margin: EdgeInsets.all(15.0),
+                                    padding: EdgeInsets.all(10.0),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "$i",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            height: 1.5,
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(left: 15.0),
+                                          child: Text(
+                                            "음식점",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Wrap(
+                              alignment: WrapAlignment.start,
+                              children: [
+                                for (int i = 6; i <= 10; i++)
+                                  Container(
+                                    margin: EdgeInsets.all(15.0),
+                                    padding: EdgeInsets.all(10.0),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "$i",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            height: 1.5,
+                                          ),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.only(left: 15.0),
+                                          child: Text(
+                                            "음식점",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(
+                        "어떤 레스토랑 찾으세요??",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 15.0,
+                        mainAxisSpacing: 15.0,
+                      ),
+                      itemCount: 4,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: EdgeInsets.all(15.0),
+                          padding: EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            color: Colors.grey,
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Item $index",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        );
+                      },
+                    )
                   ],
                 ),
               ),
