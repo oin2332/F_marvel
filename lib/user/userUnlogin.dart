@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:food_marvel/user/join.dart';
+import 'package:food_marvel/user/userJoin.dart';
 import 'package:food_marvel/user/userMain.dart';
 import 'package:food_marvel/user/userSetting.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
@@ -124,7 +125,7 @@ class _UserUnloginState extends State<UserUnlogin> {
                 ),
               SizedBox(height: 20),
               TextButton(
-                  onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (_) => Join()));},
+                  onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (_) => UserJoin()));},
                   child: Text('회원 가입 ', style: TextStyle(decoration: TextDecoration.underline),)
               )
               ],

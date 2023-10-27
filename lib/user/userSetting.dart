@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_marvel/etc/customerSuggest.dart';
 import 'package:food_marvel/etc/noticeList.dart';
+import 'package:food_marvel/user/notificationSetting.dart';
 import 'package:food_marvel/user/profileEdit.dart';
 import 'package:food_marvel/user/userInfoEdit.dart';
 
@@ -99,7 +100,9 @@ class UserSetting extends StatelessWidget {
                 ),
               ),
               TextButton(
-                onPressed: (){},
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => NotificationSetting()));
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(

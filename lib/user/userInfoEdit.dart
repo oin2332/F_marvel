@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_marvel/user/easyLogin.dart';
 import 'package:food_marvel/user/nameEdit.dart';
+import 'package:food_marvel/user/notificationSetting.dart';
 import 'package:food_marvel/user/phoneEdit.dart';
 import 'package:food_marvel/user/pwdEdit.dart';
 
