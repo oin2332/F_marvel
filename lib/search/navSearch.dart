@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:food_marvel/search/headSearch.dart';
+import 'package:food_marvel/shop/bestPage.dart';
 
 void main() => runApp(MaterialApp(
-  title: 'NavSearch',
-  home: NavSearch(),
-  debugShowCheckedModeBanner: false,
-));
+      title: 'NavSearch',
+      home: NavSearch(),
+      debugShowCheckedModeBanner: false,
+    ));
 
 class NavSearch extends StatefulWidget {
   const NavSearch({Key? key});
@@ -24,14 +25,14 @@ class _NavSearchState extends State<NavSearch> {
     _searchController.dispose();
     super.dispose();
   }
+
   void openModal() {
     showModalBottomSheet(
       context: context,
       builder: (context) {
         return Container(
-          // 모달 창 내용을 이곳에 추가
-          // 필터 옵션 등을 나타내는 위젯을 넣을 수 있습니다.
-        );
+            // 모달 내용을 구현하십시오.
+            );
       },
     );
   }
@@ -40,7 +41,12 @@ class _NavSearchState extends State<NavSearch> {
     return Container(
       margin: EdgeInsets.only(bottom: 10.0),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          if (text == 'Best맛집') {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => BestPage()));
+          }
+        },
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
@@ -58,7 +64,7 @@ class _NavSearchState extends State<NavSearch> {
   }
 
   Widget _menuButtonList() {
-    List<String> buttons = ['내주변', '지역', '음식 종류', '가격', '분위기', '몰라'];
+    List<String> buttons = ['내주변', 'Best맛집', '음식 종류', '가격', '분위기', '몰라'];
 
     return Container(
       height: 60,
@@ -105,13 +111,17 @@ class _NavSearchState extends State<NavSearch> {
                       ),
                       child: TextField(
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => Search()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Search()));
                         },
                         decoration: InputDecoration(
                           prefixIcon: Icon(Icons.search, color: Colors.black),
                           hintText: "지역, 음식, 매장명 검색",
                           border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 100.0),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: 15.0, horizontal: 100.0),
                           hintStyle: TextStyle(
                             height: 1,
                             color: Colors.black,
@@ -134,7 +144,8 @@ class _NavSearchState extends State<NavSearch> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(bottom: 5.0, left: 15.0),
+                          padding:
+                              const EdgeInsets.only(bottom: 5.0, left: 15.0),
                           child: Text(
                             "날짜/시간/인원 선택",
                             style: TextStyle(
@@ -155,10 +166,11 @@ class _NavSearchState extends State<NavSearch> {
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
-                      child:Row(
+                      child: Row(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 10.0, bottom: 10.0),
+                            padding:
+                                const EdgeInsets.only(left: 10.0, bottom: 10.0),
                             child: Icon(
                               Icons.tune_outlined,
                               color: Colors.black,
@@ -334,9 +346,7 @@ class _NavSearchState extends State<NavSearch> {
                 child: Icon(Icons.home),
               ),
               InkWell(
-                onTap: () {
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => Search()));
-                },
+                onTap: () {},
                 child: Icon(Icons.search),
               ),
               InkWell(
