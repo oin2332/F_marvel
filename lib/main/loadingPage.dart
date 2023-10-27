@@ -35,7 +35,7 @@ class _LoadingPageState extends State<LoadingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Image.asset('assets/loading.png'), // loading.png 이미지를 중앙에 표시
+        child: Image.asset('assets/main/loading.png'), // loading.png 이미지를 중앙에 표시
       ),
     );
   }

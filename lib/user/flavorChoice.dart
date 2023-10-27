@@ -8,6 +8,30 @@ class FlavorChoice extends StatefulWidget {
 }
 
 class _FlavorChoiceState extends State<FlavorChoice> {
+  List<String> selectedFlavors = [];
+  String selectedPriceRange = '';
+
+  void toggleFlavor(String flavor) {
+    setState(() {
+      if (selectedFlavors.contains(flavor)) {
+        selectedFlavors.remove(flavor);
+      } else {
+        if (selectedFlavors.length < 5) {
+          selectedFlavors.add(flavor);
+        }
+      }
+    });
+  }
+  void clearSelectedFlavors() {
+    setState(() {
+      selectedFlavors.clear();
+      selectedPriceRange = '';
+    });
+  }
+
+  Color getButtonColor(String flavor) {
+    return selectedFlavors.contains(flavor) ? Colors.green : Colors.blue;
+  }
 
   void _showConfirmationDialog() {
     showModalBottomSheet(
@@ -24,16 +48,19 @@ class _FlavorChoiceState extends State<FlavorChoice> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('내 취향 선택을 그만 하시겠어요?', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+              Text('내 취향 선택을 그만 하시겠어요?',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
               SizedBox(height: 20),
-              Divider( // 이 부분이 추가된 부분입니다.
+              Divider(
                 color: Colors.grey[300]!,
                 thickness: 1,
                 height: 1,
               ),
               SizedBox(height: 16),
-              Text('취향선택을 완료하시면 취향에 맞게 추천해드려요!', style: TextStyle(color: Colors.grey),),
+              Text('취향선택을 완료하시면 취향에 맞게 추천해드려요!',
+                style: TextStyle(color: Colors.grey),),
               SizedBox(height: 50),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -66,18 +93,30 @@ class _FlavorChoiceState extends State<FlavorChoice> {
   }
 
   @override
+
   Widget build(BuildContext context) {
+    final flavors = [
+      '한식', '중식', '일식', '양식',
+      '퓨전', '디저트', '간식', '분식',
+      '베이커리', '햄버거', '피자', '카페',
+      '술집', '기타',
+    ];
+
     return MaterialApp(
       home: DefaultTabController(
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('취향 선택'),
+            backgroundColor:  Colors.white,
+            iconTheme: IconThemeData(color: Colors.black),
+            title: Text('취향 선택',style: TextStyle(color: Colors.black),),
             leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: _showConfirmationDialog,
             ),
             bottom: TabBar(
+              labelColor: Colors.black,
+              indicatorColor: Colors.black,
               tabs: [
                 Tab(text: '음식종류'),
                 Tab(text: '가격범위')
@@ -86,38 +125,202 @@ class _FlavorChoiceState extends State<FlavorChoice> {
           ),
           body: TabBarView(
             children: [
-              Padding( // 음식종류 탭
+              Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('어떤 음식을 좋아하시나요'),
+                    Text('어떤 음식을 좋아하시나요?'),
                     Text('최대 5개를 선택하실 수 있습니다.'),
-                    SizedBox(height: 40),
-                    Row(
-                      children: [
-                        ElevatedButton(onPressed: (){}, child: Text('한식')),
-                        ElevatedButton(onPressed: (){}, child: Text('중식'))
-                      ],
+                    Text(
+                      '(${selectedFlavors.length}/5)개 선택됨', // 선택된 항목의 수를 표시
+                      style: TextStyle(
+                        color: Colors.red, // 빨간색 텍스트
+                      ),
                     ),
-                    Row(
-                      children: [
-                        ElevatedButton(onPressed: (){}, child: Text('한식')),
-                        ElevatedButton(onPressed: (){}, child: Text('중식'))
-                      ],
-                    )
-                  ]
+                    SizedBox(height: 40),
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: flavors.map((flavor) {
+                        final isSelected = selectedFlavors.contains(flavor);
+                        return ElevatedButton(
+                          onPressed: () {
+                            toggleFlavor(flavor);
+                          },
+                          style: ButtonStyle(
+                            minimumSize: MaterialStateProperty.all(
+                                Size(192, 50)),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    20), // 모서리 둥글기 조절
+                              ),
+                            ),
+                            backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+                              if (isSelected) {
+                                return Color(0xFFFF6347); // 선택된 경우의 배경색
+                              } else {
+                                return Colors.white; // 선택되지 않은 경우의 배경색
+                              }
+                            }),
+                            side: MaterialStateProperty.all(
+                              BorderSide(color: Colors.grey, width: 1),
+                            ),
+                          ),
+                          child: Text(
+                            '$flavor${isSelected ? ' (선택됨)' : ''}',
+                            style: TextStyle(
+                              color: isSelected ? Colors.white : Colors.black,
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    SizedBox(height: 130,),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          SizedBox(
+                            width: 190,
+                            height: 50,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+                                  return Colors.white; // 흰 배경색
+                                }),
+                                side: MaterialStateProperty.all(
+                                  BorderSide(color: Colors.grey, width: 1), // 검정 테두리
+                                ),
+                              ),
+                              onPressed: () {
+                                clearSelectedFlavors();// 취소 작업을 수행
+                              },
+                              child: Text(
+                                '취소',
+                                style: TextStyle(
+                                  color: Colors.black, // 검정 글자색
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 190,
+                            height: 50,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+                                  return Colors.white30; // 흰 배경색
+                                }),
+                                side: MaterialStateProperty.all(
+                                  BorderSide(color: Colors.white30, width: 1), // 검정 테두리
+                                ),
+                              ),
+                              onPressed: () {
+                                // 완료 작업을 수행
+                              },
+                              child: Text(
+                                '완료',
+                                style: TextStyle(
+                                  color: Colors.black54, // 글자색
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              Padding( // 가격범위 탭
+              Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('프로필에는 노출되지 않습니다', style: TextStyle(color: Colors.deepOrange)),
-                      Text('식당방문시 주로 고려하시는 가격대를'),
-                      Text('선택해주세요(1인기준 가격입니다.)'),
-                    ]
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('프로필에는 노출되지 않습니다',
+                        style: TextStyle(color: Colors.deepOrange)),
+                    Text('식당 방문 시 주로 고려하시는 가격대를'),
+                    Text('선택해주세요 (1인 기준 가격입니다).'),
+                    SizedBox(height: 16,),
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: [
+                        // 가격 범위 버튼들
+                        _buildPriceRangeButton('3만원 - 10만원'),
+                        _buildPriceRangeButton('5만원 - 10만원'),
+                        _buildPriceRangeButton('5만원 - 15만원'),
+                        _buildPriceRangeButton('5만원 이하'),
+                        _buildPriceRangeButton('10만원 이하'),
+                        _buildPriceRangeButton('15만원 이하'),
+                        _buildPriceRangeButton('5만원 이상'),
+                        _buildPriceRangeButton('10만원 이상'),
+                        _buildPriceRangeButton('15만원 이상'),
+                        _buildPriceRangeButton('20만원 이상'),
+                        _buildPriceRangeButton('직접 선택'),
+
+                        // 다른 가격대 버튼들을 추가할 수 있습니다.
+                      ],
+                    ),
+                    SizedBox(height: 335,),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          SizedBox(
+                            width: 190,
+                            height: 50,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+                                  return Colors.white; // 흰 배경색
+                                }),
+                                side: MaterialStateProperty.all(
+                                  BorderSide(color: Colors.grey, width: 1), // 검정 테두리
+                                ),
+                              ),
+                              onPressed: () {
+                                clearSelectedFlavors();// 취소 작업을 수행
+                              },
+                              child: Text(
+                                '취소',
+                                style: TextStyle(
+                                  color: Colors.black, // 검정 글자색
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 190,
+                            height: 50,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+                                  return Colors.white30; // 흰 배경색
+                                }),
+                                side: MaterialStateProperty.all(
+                                  BorderSide(color: Colors.white30, width: 1), // 검정 테두리
+                                ),
+                              ),
+                              onPressed: () {
+                                // 완료 작업을 수행
+                              },
+                              child: Text(
+                                '완료',
+                                style: TextStyle(
+                                  color: Colors.black54, // 검정 글자색
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -126,4 +329,43 @@ class _FlavorChoiceState extends State<FlavorChoice> {
       ),
     );
   }
+  Widget _buildPriceRangeButton(String label) {
+    final isSelected = selectedPriceRange == label;
+    return ElevatedButton(
+      onPressed: () {
+        setState(() {
+          selectedPriceRange = label;
+        });
+      },
+      style: ButtonStyle(
+        minimumSize: MaterialStateProperty.all(Size(125, 50)),
+        shape: MaterialStateProperty.all(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+        backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+          if (isSelected) {
+            return Color(0xFFFF6347); // 선택된 경우의 배경색
+          } else {
+            return Colors.white; // 선택되지 않은 경우의 배경색
+          }
+        }),
+        side: MaterialStateProperty.all(
+          BorderSide(
+            color: Colors.grey,
+            width: 1,
+          ),
+        ),
+      ),
+      child: Text(
+        '$label${isSelected ? '' : ''}',
+        style: TextStyle(
+          fontSize: 14,
+          color: isSelected ? Colors.white : Colors.black,
+        ),
+      ),
+    );
+  }
+
 }
