@@ -25,29 +25,29 @@ class _MainPageState extends State<MainPage> {
   int _currentPage = 0;
 
   final List<String> images = [
-    'assets/fine.jpg',
-    'assets/gong.jpg',
-    'assets/steak.jpg',
-    'assets/whine.jpg',
-    'assets/whisky.png',
+    'assets/main/fine.jpg',
+    'assets/main/gong.jpg',
+    'assets/main/steak.jpg',
+    'assets/main/whine.jpg',
+    'assets/main/whisky.png',
   ];
 
   final List<ButtonData> buttonsData = [
-    ButtonData('assets/top10.png', 'BEST'),
-    ButtonData('assets/recommend-removebg-preview.png', '추천'),
-    ButtonData('assets/JapanFood.png', '오마카세'),
-    ButtonData('assets/steak.png', '스테이크'),
-    ButtonData('assets/cafe.png', '카페'),
-    ButtonData('assets/KFood.png', '한식'),
-    ButtonData('assets/ChinessFood.png', '중식'),
-    ButtonData('assets/JFood.png', '일식'),
-    ButtonData('assets/pasta.png', '양식'),
-    ButtonData('assets/AsianFood.png', '아시안'),
-    ButtonData('assets/chicken.png', '치킨'),
-    ButtonData('assets/pizza.png', '피자'),
-    ButtonData('assets/burger.png', '버거'),
-    ButtonData('assets/bunsick.png', '분식'),
-    ButtonData('assets/pojang.png', '포장마차'),
+    ButtonData('assets/main/top10.png', 'BEST'),
+    ButtonData('assets/main/recommend-removebg-preview.png', '추천'),
+    ButtonData('assets/main/JapanFood.png', '오마카세'),
+    ButtonData('assets/main/steak.png', '스테이크'),
+    ButtonData('assets/main/cafe.png', '카페'),
+    ButtonData('assets/main/KFood.png', '한식'),
+    ButtonData('assets/main/ChinessFood.png', '중식'),
+    ButtonData('assets/main/JFood.png', '일식'),
+    ButtonData('assets/main/pasta.png', '양식'),
+    ButtonData('assets/main/AsianFood.png', '아시안'),
+    ButtonData('assets/main/chicken.png', '치킨'),
+    ButtonData('assets/main/pizza.png', '피자'),
+    ButtonData('assets/main/burger.png', '버거'),
+    ButtonData('assets/main/bunsick.png', '분식'),
+    ButtonData('assets/main/pojang.png', '포장마차'),
   ];
 
   void initState() {
@@ -146,7 +146,7 @@ class _MainPageState extends State<MainPage> {
         leading: ClipOval(
           child: Container(
             width: 20,height: 20,
-            child: Image.asset('assets/logo3.jpg', width: 10,height: 10,),
+            child: Image.asset('assets/main/logo3.jpg', width: 10,height: 10,),
           ),
         ),
         title: Container(
@@ -264,22 +264,22 @@ class _MainPageState extends State<MainPage> {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                buildIconWithText('assets/gps-removebg-preview.png', '내주변', () {
+                buildIconWithText('assets/main/gps-removebg-preview.png', '내주변', () {
                   navigatePlacePage(5);
                 }),
-                buildIconWithText('assets/incheon.jpg', '인천/부평', () {
+                buildIconWithText('assets/main/incheon.jpg', '인천/부평', () {
                   navigatePlacePage(0);
                 }),
-                buildIconWithText('assets/incheon2.jpg', '인천/연수', () {
+                buildIconWithText('assets/main/incheon2.jpg', '인천/연수', () {
                   navigatePlacePage(1);
                 }),
-                buildIconWithText('assets/seoul.jpg', '서울/동암', () {
+                buildIconWithText('assets/main/seoul.jpg', '서울/동암', () {
                   navigatePlacePage(2);
                 }),
-                buildIconWithText('assets/seoul2.jpg', '서울/중구', () {
+                buildIconWithText('assets/main/seoul2.jpg', '서울/중구', () {
                   navigatePlacePage(3);
                 }),
-                buildIconWithText('assets/seoul3.jpg', '서울/남동구', () {
+                buildIconWithText('assets/main/seoul3.jpg', '서울/남동구', () {
                   navigatePlacePage(4);
                 }),
               ],
