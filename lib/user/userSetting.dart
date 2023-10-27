@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:food_marvel/etc/conditionList.dart';
 import 'package:food_marvel/etc/customerSuggest.dart';
 import 'package:food_marvel/etc/noticeList.dart';
 import 'package:food_marvel/user/profileEdit.dart';

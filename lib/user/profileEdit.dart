@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:food_marvel/user/bdayRegister.dart';
+import 'package:food_marvel/user/flavorChoice.dart';
 
 class ProfileEdit extends StatelessWidget {
   const ProfileEdit({super.key});
@@ -13,7 +15,7 @@ class ProfileEdit extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconButton(onPressed: (){}, icon: Icon(Icons.portrait_rounded, size: 80,)),
+              InkWell(onTap: (){},child: Image.asset('assets/user/userProfile.png')),
               SizedBox(height: 50,),
               Align(
                 alignment: Alignment.topLeft,
@@ -103,7 +105,9 @@ class ProfileEdit extends StatelessWidget {
                         )
                     ),
                     TextButton(
-                        onPressed: (){},
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => FlavorChoice()));
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -113,7 +117,9 @@ class ProfileEdit extends StatelessWidget {
                         )
                     ),
                     TextButton(
-                        onPressed: (){},
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => BdayRegister()));
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [

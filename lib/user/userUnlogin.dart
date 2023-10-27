@@ -84,7 +84,7 @@ class _UserUnloginState extends State<UserUnlogin> {
                   height: 50, // 이미지의 높이에 맞게 조정
                   decoration: const BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/kakao_join_wide.png'),
+                      image: AssetImage('assets/kakao/kakao_join_wide.png'),
                     ),
                   ),
                 ),
@@ -138,7 +138,7 @@ class _UserUnloginState extends State<UserUnlogin> {
               IconButton(onPressed: (){}, icon: Icon(Icons.search)),
               IconButton(onPressed: (){}, icon: Icon(Icons.chat)),
               IconButton(onPressed: (){}, icon: Icon(Icons.calendar_today_outlined)),
-              IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (_) => UserMain()));}, icon: Icon(Icons.person))
+              IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (_) => UserSetting()));}, icon: Icon(Icons.person))
             ],
           ),
         ),
