@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:food_marvel/user/userSetting.dart';
 import 'dart:async';
 
 import '../search/headSearch.dart';
+import '../shop/storePage.dart';
+import '../user/userSetting.dart';
 import '13_tapBar.dart';
 import '20_Move.dart';
 import '4_NameCard.dart';
@@ -90,19 +91,19 @@ class _MainPageState extends State<MainPage> {
     final pages = [
       Sample4(),
       Sample4(),
-      Sample4(),
-      Sample4(),
-      Sample4(),
-      Sample4(),
-      Sample4(),
-      Sample4(),
-      Sample4(),
-      Sample4(),
-      Sample4(),
-      Sample4(),
-      Sample4(),
-      Sample4(),
-      Sample4(),
+      StorePage(),
+      StorePage(),
+      StorePage(),
+      StorePage(),
+      StorePage(),
+      StorePage(),
+      StorePage(),
+      StorePage(),
+      StorePage(),
+      StorePage(),
+      StorePage(),
+      StorePage(),
+      StorePage(),
     ];
 
     if (index >= 0 && index < pages.length) {
@@ -186,7 +187,9 @@ class _MainPageState extends State<MainPage> {
             icon: Icon(Icons.notifications, color: Colors.grey),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => UserSetting()));
+            },
             icon: Icon(Icons.brightness_5, color: Colors.grey),
           ),
         ],
