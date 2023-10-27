@@ -39,6 +39,9 @@ dependencies:
   path:
   page_transition: ^2.0.0
   table_calendar:
+  google_maps_flutter:
+  location:
+  geolocator:
 
 
   # The following adds the Cupertino Icons font to your application.
