@@ -14,6 +14,7 @@ class UserInfoEdit extends StatefulWidget {
 
 class _UserInfoEditState extends State<UserInfoEdit> {
   List<String> genderOptions = ['남성', '여성', '선택안함'];
+  String selectedGender = '선택안함'; // 추가: 선택된 성별을 저장할 변수
 
   void _selectGender(BuildContext context) {
     showModalBottomSheet(
@@ -27,8 +28,10 @@ class _UserInfoEditState extends State<UserInfoEdit> {
               return ListTile(
                 title: Text(genderOptions[index]),
                 onTap: () {
-                  // 여기에 선택된 항목에 대한 처리를 추가하세요.
-                  Navigator.pop(context); // Bottom sheet를 닫습니다.
+                  setState(() {
+                    selectedGender = genderOptions[index]; // 선택된 성별을 저장
+                  });
+                  Navigator.pop(context);
                 },
               );
             },
@@ -148,7 +151,7 @@ class _UserInfoEditState extends State<UserInfoEdit> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('성별', style: TextStyle(color: Colors.grey[600]!)),
-                      Text('선택안함', style: TextStyle(color: Colors.grey[400]!, fontWeight: FontWeight.bold)),
+                      Text(selectedGender, style: TextStyle(color: Colors.grey[400]!, fontWeight: FontWeight.bold)),
                     ],
                   ),
                   Icon(Icons.keyboard_arrow_right, color: Colors.black),
@@ -163,7 +166,9 @@ class _UserInfoEditState extends State<UserInfoEdit> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) => NotificationSetting()));
+              },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

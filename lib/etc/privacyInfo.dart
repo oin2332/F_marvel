@@ -24,6 +24,7 @@ class PrivacyInfo extends StatelessWidget {
               columnWidths: {
                 0: FlexColumnWidth(2), // 첫 번째 열의 너비
                 1: FlexColumnWidth(3), // 두 번째 열의 너비
+                2: FlexColumnWidth(2),
               },
               children: [
                 TableRow(
