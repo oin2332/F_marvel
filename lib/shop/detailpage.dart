@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:food_marvel/shop/tabBar.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:table_calendar/table_calendar.dart';
+
+import '../main.dart';
+
+
 
 
 class DetailPage extends StatefulWidget {
 
-   DetailPage({Key? key}) : super(key: key);
+  DetailPage({Key? key}) : super(key: key);
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -18,7 +24,10 @@ class _DetailPageState extends State<DetailPage> {
     _pageController.addListener(_onPageChanged); // 페이지 변경 리스너 추가
     initializeDateFormatting("ko_KR", null);
   }
-
+  String _dday = '';
+  DateTime? selectedDay;
+  DateTime? _selectedDay;
+  List<String> path = ['1.jpg', '2.jpg', '1.jpg', '2.jpg'];
   final List<Map<String, dynamic>> storeList = [
     {
       '제목' : '가게이름',
@@ -61,19 +70,137 @@ class _DetailPageState extends State<DetailPage> {
     );
   }
 
-  void _showModalBottomSheet() {
+  Widget _clockbutton(colock){
+    return  Container(
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            TextButton(
+              onPressed: () {},
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0), // 넓이 조절
+                child: Text(colock,style: TextStyle(color: Colors.white),),
+              ),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Color(0xFFFF6347),), // 배경색을 흰색으로 설정
+              ),
+            )
+
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _numberpeople(String num) {
+    return Container(
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: [
+            TextButton(
+              onPressed: () {},
+              child: Padding(
+                padding: const EdgeInsets.all(0.0), // 넓이 조절
+                child: Text(
+                  '${num}명',
+                  style: TextStyle(color: Colors.black),
+                ),
+              ),
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100), // 원형으로 설정
+                  ),
+                ),
+                minimumSize: MaterialStateProperty.all(Size(40, 40)), // 버튼의 최소 크기를 설정
+                backgroundColor: MaterialStateProperty.all(Colors.white), // 배경색을 흰색으로 설정
+                side: MaterialStateProperty.all(
+                  BorderSide(
+                    color: Colors.black, // 테두리 색상을 지정
+                    width: 1, // 테두리 두께
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  void _showModalBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30)),
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
       ),
       builder: (BuildContext context) {
         return SizedBox(
-          height: 900, // 원하는 높이로 설정
+          height: 900,
           child: Container(
             child: Column(
               children: [
-                Text('이곳에 모달 내용을 원하는 형식으로 배치합니다.'),
+                TableCalendar(
+                  focusedDay: DateTime.now(),
+                  firstDay: DateTime(1800),
+                  lastDay: DateTime(3000),
+                  headerStyle: HeaderStyle(
+                    formatButtonVisible: false,
+                    titleCentered: true,
+                    titleTextStyle: TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                  onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
+                    setState(() {
+                      _selectedDay = selectedDay; // 선택한 날짜 저장
+                    });
+                  },
+                  selectedDayPredicate: (DateTime date) {
+                    if (_selectedDay == null) {
+                      return false;
+                    }
+
+                    return date.year == _selectedDay!.year &&
+                        date.month == _selectedDay!.month &&
+                        date.day == _selectedDay!.day;
+                  },
+                  enabledDayPredicate: (DateTime date) {
+                    // 이전 날짜는 비활성화
+                    return date.isAfter(DateTime.now());
+                  },
+                  locale: 'ko_KR', // 한글로 날짜 표시
+                  calendarStyle: CalendarStyle(
+                    weekendTextStyle: TextStyle(color: Colors.blue), // 토요일은 파란색으로 표시
+                  ),
+                ),
+                SizedBox(height: 15
+                  ,),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      SizedBox(width: 12,),
+                      _numberpeople('1'),
+                      SizedBox(width: 6,),
+                      _numberpeople('2'),SizedBox(width: 6,),
+                      _numberpeople('3'),SizedBox(width: 6,),
+                      _numberpeople('4'),SizedBox(width: 6,),
+                      _numberpeople('5'),SizedBox(width: 6,),
+                      _numberpeople('6'),SizedBox(width: 6,),
+                      _numberpeople('7'),SizedBox(width: 6,),
+                      _numberpeople('8'),SizedBox(width: 6,),
+                      _numberpeople('9'),SizedBox(width: 6,),
+                      _numberpeople('10'),
+
+                    ],
+                  ),
+                ),
+
+
+
+
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pop(); // 모달 닫기
@@ -95,6 +222,19 @@ class _DetailPageState extends State<DetailPage> {
     final String day = DateFormat('E', 'ko_KR').format(now); // 현재 요일을 구합니다.
     return '오늘($day)';
   }
+  String getThisMonth() {
+    final DateTime now = DateTime.now();
+    final String month = DateFormat('MMMM', 'ko_KR').format(now); // 이번 달을 구합니다.
+    return '$month';
+  }
+
+  String getNextMonth() {
+    final DateTime now = DateTime.now();
+    final DateTime nextMonth = now.add(Duration(days: 30)); // 현재 날짜에서 30일을 더해 다음 달을 구합니다.
+    final String month = DateFormat('MMMM', 'ko_KR').format(nextMonth); // 다음 달을 문자열로 변환합니다.
+    return '$month';
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +267,7 @@ class _DetailPageState extends State<DetailPage> {
               Stack(
                 children: [
                   Container(
-                    height: 200,
+                    height: 400,
                     child: PageView.builder(
                       controller: _pageController,
                       itemCount: imagePaths.length,
@@ -248,38 +388,341 @@ class _DetailPageState extends State<DetailPage> {
               //예약 일시 부분
 
               Container(
-                padding: const EdgeInsets.all(30.0),
-                child:  Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('예약 일시' ,style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-                    TextButton(
-                      onPressed: () {
-                        _showModalBottomSheet();
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30.0), // 넓이 조절
-                        child: Row(
-                          children: [
-                            Icon(Icons.calendar_today_outlined, size: 18, color: Colors.black),
-                            SizedBox(width: 8),
-                            Text(getToday(), style: TextStyle(color: Colors.black),),
-                            Text('$peopleCount 명', style: TextStyle(color: Colors.black),),
-                          ],
-                        ),
+                child:  Container(
+                  padding: const EdgeInsets.all(30.0),
+                  child:  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('예약 일시' ,style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+                        SizedBox(height: 10,),
+                        TextButton(
+                          onPressed: () {
+                            _showModalBottomSheet(context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 30.0), // 넓이 조절
+                            child: Row(
+                              children: [
+                                Icon(Icons.calendar_today_outlined, size: 18, color: Colors.black),
+                                SizedBox(width: 8),
+                                Text(getToday(), style: TextStyle(color: Colors.black),),
+                                Text(' / ',style: TextStyle(color: Colors.black),),
+                                Text('$peopleCount 명', style: TextStyle(color: Colors.black),),
+                              ],
+                            ),
 
+                          ),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(Colors.white), // 배경색을 흰색으로 설정
+                            side: MaterialStateProperty.all(BorderSide(color: Colors.black, width: 1)), // 테두리 설정
+                          ),
+                        ),
+                        SizedBox(height: 8,),
+                        Container(
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: [
+                                _clockbutton('11:00'),
+                                SizedBox(width: 8,),
+                                _clockbutton('13:00'),
+                                SizedBox(width: 8,),
+                                _clockbutton('14:00'),
+                                SizedBox(width: 8,),
+                                _clockbutton('15:00'),
+                                SizedBox(width: 8,),
+                                _clockbutton('16:00'),
+                                SizedBox(width: 8,),
+                                _clockbutton('17:00'),
+                                SizedBox(width: 8,),
+                                _clockbutton('19:00'),
+                                SizedBox(width: 8,),
+                                _clockbutton('20:00'),
+                                SizedBox(width: 8,),
+                                _clockbutton('21:00'),
+                                SizedBox(width: 8,),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 15,),
+
+                        Center(
+                          child: TextButton(
+                            onPressed: () {
+                              //
+                            },
+                            style: ButtonStyle(
+                              fixedSize: MaterialStateProperty.all(Size(180, 40)), // 버튼의 최소 크기 설정
+                              shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0), // 꼭지점을 둥글게 설정
+                                side: BorderSide(color:Color(0xFFFF6347), width: 1), // 1픽셀 두꺼운 테두리 설정
+                              )),
+                              backgroundColor: MaterialStateProperty.all(Colors.white), // 배경색 설정
+                            ),
+                            child: Center(
+                              child :Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  SizedBox(width: 3,),
+                                  Text('예약가능 날짜 찾기',style: TextStyle(color:Color(0xFFFF6347)),),
+                                  Icon(Icons.keyboard_arrow_right,color:Color(0xFFFF6347),)
+                                ],
+                              )
+
+                            ),
+                            )
+                          ),
+                      ],
+                    ),
+                ),
+              ),
+            underlineBox(5.0),
+              Container(
+                child: Column(
+                  children: [
+                    SizedBox(height: 15,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        TextButton(onPressed: (){}, child: Text('홈',style: TextStyle(color: Colors.black),),),
+                        TextButton(onPressed: (){}, child: Text('메뉴',style: TextStyle(color: Colors.black),),),
+                        TextButton(onPressed: (){}, child: Text('사진',style: TextStyle(color: Colors.black),),),
+                        TextButton(onPressed: (){}, child: Text('리뷰',style: TextStyle(color: Colors.black),),),
+                      ],
+                    ),
+                    SizedBox(height: 10,),
+
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          height: 2,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          height: 2,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          height: 2,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.25,
+                          height: 2,
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    
+                    //예약오픈일정
+                    Container(
+                      padding: EdgeInsets.all(30),
+                      child: Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('예약 오픈 일정',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                              SizedBox(height: 30,),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      SizedBox(width: 20,),
+                                      Icon(Icons.access_time,color:Color(0xFFFF6347),),
+                                      SizedBox(width: 6,),
+                                      Text(getThisMonth()+'1일 14:00',style: TextStyle(color : Color(0xFFFF6347),fontWeight: FontWeight.bold,fontSize: 16),)
+                                    ],
+                                  ),
+                                  SizedBox(height: 3,),
+                                  Row(
+                                    children: [
+                                      SizedBox(width: 50,),
+                                      Text(getThisMonth()+'15일 ~ 30일까지 예약이 가능합니다')
+                                    ],
+                                  ),
+                                  SizedBox(height: 24,),
+
+                                  Row(
+                                    children: [
+                                      SizedBox(width: 20,),
+                                      Icon(Icons.access_time,color:Color(0xFFFF6347),),
+                                      SizedBox(width: 6,),
+                                      Text(getThisMonth()+'15일 14:00',style: TextStyle(color : Color(0xFFFF6347),fontWeight: FontWeight.bold,fontSize: 16),)
+                                    ],
+                                  ),
+                                  SizedBox(height: 3,),
+                                  Row(
+                                    children: [
+                                      SizedBox(width: 50,),
+                                      Text(getNextMonth()+'1일 ~ 15일까지 예약이 가능합니다')
+                                    ],
+                                  ),
+
+
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(Colors.white), // 배경색을 흰색으로 설정
-                        side: MaterialStateProperty.all(BorderSide(color: Colors.black, width: 1)), // 테두리 설정
+                    ),
+            underlineBox(5.0),
+            //공지--------------------------
+
+                    Container(
+                      padding: EdgeInsets.all(30),
+                      child: Row(
+                        children: [
+                          Column(
+                            children: [
+                              Text('${storeList[index]['카테고리']} 공지',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                            ],
+                          )
+                        ],
                       ),
                     ),
 
 
-                  ],
-                ),
-              ),
+            underlineBox(5.0),
+                    //편의시설--------------------
 
+                    Container(
+                      padding: EdgeInsets.all(30),
+                      child: Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('편의시설',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                              SizedBox(height: 32,),
+                              Row(
+                                children: [
+                                  //계단
+                                  if(true)
+                                  Column(children: [
+                                    Image.asset('assets/amenities/stairs.png',width: 50, fit: BoxFit.contain),
+                                    Text('계단 있어요'),
+                                  ],),
+                                  SizedBox(width: 34,),
+                                  if(false)
+                                  Column(children: [
+                                    Image.asset('assets/amenities/stairs.png',width: 50, fit: BoxFit.contain),
+                                    Text('계단 없어요'),
+                                  ],),
+
+                                  Column(children: [
+                                    Image.asset('assets/amenities/floor.png',width: 50, fit: BoxFit.contain),
+                                    Text('3층'),
+                                  ],),
+                                  SizedBox(width: 34,),
+
+                                  if(false)
+                                  Column(children: [
+                                    Image.asset('assets/amenities/kid.png',width: 50, fit: BoxFit.contain),
+                                    Text('키즈존'),
+                                  ],),
+                                  if(true)
+                                  Column(children: [
+                                    Image.asset('assets/amenities/nokid.png',width: 50, fit: BoxFit.contain),
+                                    Text('NO키즈존'),
+                                  ],),
+                                  SizedBox(width: 34,),
+
+                                  Column(children: [
+                                    Image.asset('assets/amenities/parking.png',width: 50, fit: BoxFit.contain),
+                                    Text('주차'),
+                                  ],),
+
+                                ],
+                              ),
+                              SizedBox(height: 35,),
+                              Row(
+                                children: [
+                                  Column( children: [
+                                        Image.asset('assets/amenities/toilet.png',width: 50, fit: BoxFit.contain),
+                                        Text('화장실'),
+                                  ],),
+                                  SizedBox(width: 34,),
+
+                                  Column( children: [
+                                    Image.asset('assets/amenities/elevator.png',width: 50, fit: BoxFit.contain),
+                                    Text('엘리베이터'),
+                                    SizedBox(width: 34,),
+                                  ],),
+
+                                ],
+                              )
+
+
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    //계단정보
+
+                    //주차정보
+
+                    underlineBox(5.0),
+                    //메뉴--------------------
+                    Container(
+                      padding: EdgeInsets.all(30),
+                      child: Row(
+                        children: [
+                          Column(
+                            children: [
+                              Text('메뉴',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+
+                    underlineBox(5.0),
+                    //사진--------------------
+                    Container(
+                      padding: EdgeInsets.all(30),
+                      child: Row(
+                        children: [
+                          Column(
+                            children: [
+                              Text('사진',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+
+
+
+
+
+
+          ],
+                ),
+              )
 
 
 
