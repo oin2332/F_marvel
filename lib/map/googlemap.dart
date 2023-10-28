@@ -11,9 +11,23 @@ class MyApp extends StatefulWidget {
  _MyAppState createState() => _MyAppState();
 }
 
+class Place {
+ final String name;
+ final String address;
+ final LatLng location;
+
+ Place({required this.name, required this.address, required this.location});
+}
+
+List<Place> places = [
+ Place(name: '칸다소바', address: '인천 부평구 부평대로36번길 5', location: LatLng(37.4910133, 126.7206483)),
+ Place(name: '인브스키친', address: '인천 부평구 부평대로 39-6', location: LatLng(37.490815, 126.720895)),
+ Place(name: '에픽', address: '인천 부평구 경원대로1363번길 8', location: LatLng(37.490539, 126.718667)),
+];
+
 class _MyAppState extends State<MyApp> {
  late GoogleMapController mapController;
- late LatLng _center;
+ late LatLng _center = LatLng(37.4895, 126.7220); // 인천 부평구의 중심 좌표
 
  @override
  void initState() {
@@ -28,60 +42,57 @@ class _MyAppState extends State<MyApp> {
  Set<Marker> _markers = {};
 
  Future<void> _getCurrentLocation() async {
-  LocationPermission permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.denied) {
-   permission = await Geolocator.requestPermission();
-   if (permission != LocationPermission.whileInUse &&
-       permission != LocationPermission.always) {
-    // Handle the case if the user denies the permission
-    print('Location permission denied.');
-    return;
-   }
-  }
+  // Clear previous markers
+  _markers.clear();
 
-  bool isGeolocationAvailable = await Geolocator.isLocationServiceEnabled();
+  // TODO: 위치 서비스를 사용하여 정확한 현재 위치 가져오기
+  Position position = await Geolocator.getCurrentPosition(
+   desiredAccuracy: LocationAccuracy.high,
+  );
 
-  if (isGeolocationAvailable) {
-   try {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+  // Move the camera to the current position
+  mapController.animateCamera(
+   CameraUpdate.newCameraPosition(
+    CameraPosition(
+     target: LatLng(position.latitude, position.longitude),
+     zoom: 15.0,
+    ),
+   ),
+  );
 
-    setState(() {
-     _center = LatLng(position.latitude, position.longitude);
-    });
+  // Add markers for the current position
+  _markers.add(
+   Marker(
+    markerId: MarkerId('current_location'),
+    position: LatLng(position.latitude, position.longitude),
+    infoWindow: InfoWindow(
+     title: 'Current Location',
+     snippet: 'Lat: ${position.latitude}, Lng: ${position.longitude}',
+    ),
+   ),
+  );
+  // Add markers for the dummy places
 
-    // Clear previous markers
-    _markers.clear();
 
-    // Add a marker for the current position
+  // Add markers for the dummy places
+  void _addDummyMarkers() {
+   for (var place in places) {
     _markers.add(
      Marker(
-      markerId: MarkerId('current_location'),
-      position: LatLng(position.latitude, position.longitude),
+      markerId: MarkerId(place.name),
+      position: place.location,
       infoWindow: InfoWindow(
-       title: 'Current Location',
-       snippet: 'Lat: ${position.latitude}, Lng: ${position.longitude}',
+       title: place.name,
+       snippet: place.address,
       ),
      ),
     );
-
-    // Move the camera to the current position
-    mapController.animateCamera(
-     CameraUpdate.newCameraPosition(
-      CameraPosition(
-       target: LatLng(position.latitude, position.longitude),
-       zoom: 15.0,
-      ),
-     ),
-    );
-   } catch (error) {
-    // Handle error if necessary
-    print('Error getting location: $error');
    }
-  } else {
-   // Handle case when location services are not available
-   print('Location services are not enabled.');
   }
+  // Add markers for the dummy places
+  _addDummyMarkers();
+
+  setState(() {}); // Rebuild the widget after updating markers
  }
 
  @override
@@ -121,3 +132,5 @@ class _MyAppState extends State<MyApp> {
   );
  }
 }
+
+
