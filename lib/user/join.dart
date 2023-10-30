@@ -1,5 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+
+import '../board/boardAdd.dart';
+import '../firebase/firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(MyApp());
+}
 
 class Join extends StatefulWidget {
   const Join({super.key});
@@ -28,7 +40,7 @@ class _JoinState extends State<Join> {
     // Firestore에서 중복 아이디 체크
 
     try {
-      await _fs.collection('userList').add({
+      await _fs.collection('T3_USER_TBL').add({
         'id': _id.text,
         'pwd': _pwd.text,
         'email': _email.text,

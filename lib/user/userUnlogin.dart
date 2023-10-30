@@ -8,9 +8,14 @@ import 'package:food_marvel/user/userSetting.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:path/path.dart';
 
+import '../firebase/firebase_options.dart';
+
 
 void main() async {
-
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 

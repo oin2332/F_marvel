@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:food_marvel/user/follower.dart';
+import 'package:food_marvel/user/following.dart';
+import 'package:food_marvel/user/profileEdit.dart';
 import 'package:food_marvel/user/userSetting.dart';
 
 class UserMain extends StatefulWidget {
@@ -51,9 +54,17 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
                   Text('고독한 미식가_11909', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
                   Row(
                     children: [
-                      TextButton(onPressed: (){setState(() {});}, child: Text('팔로잉')),
+                      TextButton(
+                          onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (_) => Following()));
+                            },
+                          child: Text('팔로잉')),
                       Divider(color: Colors.black, thickness: 5, height: 50),
-                      TextButton(onPressed: (){setState(() {});}, child: Text('팔로워')),
+                      TextButton(
+                          onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (_) => Follower()));
+                          },
+                          child: Text('팔로워')),
                     ],
                   )
                 ],
@@ -62,7 +73,9 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
           ),
           SizedBox(height: 20),
           ElevatedButton(
-              onPressed: (){},
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (_) => ProfileEdit()));
+              },
               style: ButtonStyle(
                 padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(16.0)),
                 minimumSize: MaterialStateProperty.all<Size>(Size(double.infinity, 0)),
