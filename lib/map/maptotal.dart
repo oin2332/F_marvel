@@ -18,6 +18,8 @@ List<Place> places = [
   Place(name: '칸다소바', address: '인천 부평구 부평대로36번길 5'),
   Place(name: '인브스키친', address: '인천 부평구 부평대로 39-6'),
   Place(name: '에픽', address: '인천 부평구 경원대로1363번길 8'),
+  Place(name: '크라이치즈버거', address: '경기도 부천시 원미구 심곡2동 신흥로52번길 35'),
+  Place(name: '타키', address: '인천광역시 서구 신석로77번길 12'),
   // 다른 더미 데이터들도 동일한 방식으로 추가할 수 있음
 ];
 
