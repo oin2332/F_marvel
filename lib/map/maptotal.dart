@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
+import 'package:food_marvel/map/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-Future<LatLng?> getLocationFromAddress(String address) async {
-  try {
-    List<Location> locations = await locationFromAddress(address);
-    if (locations.isNotEmpty) {
-      Location location = locations.first;
-      return LatLng(location.latitude, location.longitude);
-    }
-    return null;
-  } catch (e) {
-    print('Error: $e');
-    return null;
-  }
-}
+// Future<LatLng?> getLocationFromAddress(String address) async {
+//   try {
+//     List<Location> locations = await locationFromAddress(address);
+//     if (locations.isNotEmpty) {
+//       Location location = locations.first;
+//       return LatLng(location.latitude, location.longitude);
+//     }
+//     return null;
+//   } catch (e) {
+//     print('Error: $e');
+//     return null;
+//   }
+// }
+
 
 class Place {
   final String name;
@@ -25,6 +26,7 @@ class Place {
   Place({required this.name, required this.address})
       : location = getLocationFromAddress(address);
 }
+
 
 List<Place> places = [
   Place(name: '칸다소바', address: '인천 부평구 부평대로36번길 5'),
@@ -44,7 +46,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   late GoogleMapController mapController;
-  late LatLng _center = LatLng(37.4895, 126.7220);
+  LatLng _center = LatLng(37.4895, 126.7220); // 초기 지도 중심 좌표 및 확대 수준 설정
+  double _zoomLevel = 14.0; // 줌 레벨 변수 추가 및 초기값 설정
 
   Set<Marker> _markers = {};
 
@@ -55,7 +58,9 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+    _getCurrentMyLocation(); // Get current location when the app starts
     _addMarkers();
+
   }
 
   Future<void> _addMarkers() async {
@@ -89,7 +94,7 @@ class _MyAppState extends State<MyApp> {
         CameraUpdate.newCameraPosition(
           CameraPosition(
             target: myLocation,
-            zoom: 18.0,
+            zoom: 17.0, // 현재 줌 레벨 사용
           ),
         ),
       );
