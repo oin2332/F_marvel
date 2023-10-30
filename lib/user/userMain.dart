@@ -44,7 +44,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
             children: [
               InkWell(
                 onTap: () {},
-                child: Image.asset('assets/userProfile.png', width: 100, height: 100),
+                child: Image.asset('assets/user/userProfile.png', width: 100, height: 100),
               ),
               Column(
                 children: [
