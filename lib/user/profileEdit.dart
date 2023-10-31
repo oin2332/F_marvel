@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_marvel/user/bdayRegister.dart';
 import 'package:food_marvel/user/flavorChoice.dart';
+import 'package:food_marvel/user/snsConnect.dart';
 
 class ProfileEdit extends StatelessWidget {
   const ProfileEdit({super.key});
@@ -128,7 +129,9 @@ class ProfileEdit extends StatelessWidget {
                 child: ListView(
                   children: [
                     TextButton(
-                        onPressed: (){},
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => SnsConnect()));
+                        },
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
