@@ -10,6 +10,8 @@ class FlavorChoice extends StatefulWidget {
 class _FlavorChoiceState extends State<FlavorChoice> {
   List<String> selectedFlavors = [];
   String selectedPriceRange = '';
+  bool isSelectionMade = false;
+  double selectedCustomPrice = 5.0; // 초기 선택값 (예: 20만원)
 
   void toggleFlavor(String flavor) {
     setState(() {
@@ -20,12 +22,15 @@ class _FlavorChoiceState extends State<FlavorChoice> {
           selectedFlavors.add(flavor);
         }
       }
+      isSelectionMade = selectedFlavors.isNotEmpty || selectedPriceRange.isNotEmpty;
     });
   }
   void clearSelectedFlavors() {
     setState(() {
       selectedFlavors.clear();
       selectedPriceRange = '';
+      selectedCustomPrice = 5.0; // 직접 선택 값을 초기 설정값으로 설정
+      isSelectionMade = false;
     });
   }
 
@@ -65,16 +70,32 @@ class _FlavorChoiceState extends State<FlavorChoice> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+                        return Colors.white; // 배경색을 흰색으로 설정
+                      }),
+                      side: MaterialStateProperty.all(
+                        BorderSide(color: Colors.grey, width: 1), // 회색 보더 설정
+                      ),
+                    ),
                     onPressed: () {
                       Navigator.pop(context); // 모달 닫기
                       Navigator.pop(context); // 현재 페이지 닫기
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                      child: Text('그만두기'),
+                      child: Text('그만두기',style: TextStyle(
+                        color: Colors.black, // 검정 글자색
+                      ),),
+
                     ),
                   ),
                   ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+                        return Color(0xFFFF6347); // 배경색을 ff6347로 설정
+                      }),
+                    ),
                     onPressed: () {
                       Navigator.pop(context); // 모달 닫기
                     },
@@ -97,8 +118,8 @@ class _FlavorChoiceState extends State<FlavorChoice> {
   Widget build(BuildContext context) {
     final flavors = [
       '한식', '중식', '일식', '양식',
-      '퓨전', '디저트', '간식', '분식',
-      '베이커리', '햄버거', '피자', '카페',
+      '아시안', '치킨', '피자', '버거',
+      '분식', '포장마차', '오마카세', '스테이크',
       '술집', '기타',
     ];
 
@@ -197,6 +218,9 @@ class _FlavorChoiceState extends State<FlavorChoice> {
                               ),
                               onPressed: () {
                                 clearSelectedFlavors();// 취소 작업을 수행
+                                setState(() {
+                                  isSelectionMade = false;
+                                });
                               },
                               child: Text(
                                 '취소',
@@ -212,7 +236,11 @@ class _FlavorChoiceState extends State<FlavorChoice> {
                             child: ElevatedButton(
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-                                  return Colors.white30; // 흰 배경색
+                                  if (isSelectionMade) {
+                                    return Color(0xFFFF6347); // 선택 사항이 있을 때 ff6347 사용
+                                  } else {
+                                    return Colors.white30; // 그 외의 경우, 흰색 사용
+                                  } // 흰 배경색
                                 }),
                                 side: MaterialStateProperty.all(
                                   BorderSide(color: Colors.white30, width: 1), // 검정 테두리
@@ -224,7 +252,7 @@ class _FlavorChoiceState extends State<FlavorChoice> {
                               child: Text(
                                 '완료',
                                 style: TextStyle(
-                                  color: Colors.black54, // 글자색
+                                  color: Colors.white, // 글자색
                                 ),
                               ),
                             ),
@@ -261,11 +289,11 @@ class _FlavorChoiceState extends State<FlavorChoice> {
                         _buildPriceRangeButton('15만원 이상'),
                         _buildPriceRangeButton('20만원 이상'),
                         _buildPriceRangeButton('직접 선택'),
-
                         // 다른 가격대 버튼들을 추가할 수 있습니다.
                       ],
                     ),
-                    SizedBox(height: 335,),
+
+                    SizedBox(height: 255,),
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: Row(
@@ -285,6 +313,9 @@ class _FlavorChoiceState extends State<FlavorChoice> {
                               ),
                               onPressed: () {
                                 clearSelectedFlavors();// 취소 작업을 수행
+                                setState(() {
+                                  isSelectionMade = false;
+                                });
                               },
                               child: Text(
                                 '취소',
@@ -300,7 +331,11 @@ class _FlavorChoiceState extends State<FlavorChoice> {
                             child: ElevatedButton(
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-                                  return Colors.white30; // 흰 배경색
+                                  if (isSelectionMade) {
+                                    return Color(0xFFFF6347); // 선택 사항이 있을 때 ff6347 사용
+                                  } else {
+                                    return Colors.white30; // 그 외의 경우, 흰색 사용
+                                  } // 흰 배경색
                                 }),
                                 side: MaterialStateProperty.all(
                                   BorderSide(color: Colors.white30, width: 1), // 검정 테두리
@@ -312,7 +347,7 @@ class _FlavorChoiceState extends State<FlavorChoice> {
                               child: Text(
                                 '완료',
                                 style: TextStyle(
-                                  color: Colors.black54, // 검정 글자색
+                                  color: Colors.white, // 검정 글자색
                                 ),
                               ),
                             ),
@@ -330,42 +365,75 @@ class _FlavorChoiceState extends State<FlavorChoice> {
     );
   }
   Widget _buildPriceRangeButton(String label) {
-    final isSelected = selectedPriceRange == label;
-    return ElevatedButton(
-      onPressed: () {
-        setState(() {
-          selectedPriceRange = label;
-        });
-      },
-      style: ButtonStyle(
-        minimumSize: MaterialStateProperty.all(Size(125, 50)),
-        shape: MaterialStateProperty.all(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+    final isSelected = label == '직접 선택'
+        ? selectedPriceRange == label
+        : selectedPriceRange == label;
+    if (label == '직접 선택') {
+      return Column(
+        children: [
+          Text('가격 범위를 직접 선택하세요: ${selectedCustomPrice.toStringAsFixed(1)}만원'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('0만원'),
+              Expanded(
+                child: Slider(
+                  value: selectedCustomPrice,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedCustomPrice = value;
+                    });
+                    isSelectionMade = selectedFlavors.isNotEmpty || selectedPriceRange.isNotEmpty || selectedCustomPrice > 0.0;
+                  },
+                  min: 0.0,
+                  max: 40.0, // 원하는 최대 가격 범위를 설정
+                  activeColor: Color(0xFFFF6347),
+                ),
+              ),
+              Text('40만원'),
+            ],
+          ),
+        ],
+      );
+    } else {
+      return ElevatedButton(
+        onPressed: () {
+          setState(() {
+            selectedPriceRange = label;
+            isSelectionMade =
+                selectedFlavors.isNotEmpty || selectedPriceRange.isNotEmpty;
+          });
+        },
+        style: ButtonStyle(
+          minimumSize: MaterialStateProperty.all(Size(125, 50)),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+          ),
+          backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+            if (isSelected) {
+              return Color(0xFFFF6347); // 선택된 경우의 배경색
+            } else {
+              return Colors.white; // 선택되지 않은 경우의 배경색
+            }
+          }),
+          side: MaterialStateProperty.all(
+            BorderSide(
+              color: Colors.grey,
+              width: 1,
+            ),
           ),
         ),
-        backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
-          if (isSelected) {
-            return Color(0xFFFF6347); // 선택된 경우의 배경색
-          } else {
-            return Colors.white; // 선택되지 않은 경우의 배경색
-          }
-        }),
-        side: MaterialStateProperty.all(
-          BorderSide(
-            color: Colors.grey,
-            width: 1,
+        child: Text(
+          '$label${isSelected ? '' : ''}',
+          style: TextStyle(
+            fontSize: 14,
+            color: isSelected ? Colors.white : Colors.black,
           ),
         ),
-      ),
-      child: Text(
-        '$label${isSelected ? '' : ''}',
-        style: TextStyle(
-          fontSize: 14,
-          color: isSelected ? Colors.white : Colors.black,
-        ),
-      ),
-    );
+      );
+    }
   }
 
 }
