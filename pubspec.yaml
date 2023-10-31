@@ -44,6 +44,7 @@ dependencies:
   geolocator:
   http:
   geocoding:
+  permission_handler:
 
 
   # The following adds the Cupertino Icons font to your application.
