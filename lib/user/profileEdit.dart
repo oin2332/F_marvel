@@ -9,10 +9,13 @@ class ProfileEdit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('프로필 수정')),
+      appBar: AppBar(
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black),
+          title: Text('프로필 수정',style: TextStyle(color: Colors.black),)),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(14.0),
+          padding: const EdgeInsets.all(13.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -51,7 +54,7 @@ class ProfileEdit extends StatelessWidget {
                       height: 100, // 높이 조절
                       child: Image.asset('assets/user/userProfile.png'))
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 1),
               Align(
                 alignment: Alignment.topLeft,
                 child: Text('닉네임', style: TextStyle(color: Colors.grey[600]!)),
@@ -90,7 +93,7 @@ class ProfileEdit extends StatelessWidget {
                     color: Colors.grey[400]!,
                     fontSize: 14,
                   ),
-                  contentPadding: EdgeInsets.symmetric(vertical: 50),
+                  contentPadding: EdgeInsets.symmetric(vertical: 40),
                   border: OutlineInputBorder(
                     borderSide: BorderSide(
                       color: Colors.red, // 테두리 색상 설정
@@ -166,11 +169,13 @@ class ProfileEdit extends StatelessWidget {
                     )
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
       ),
+
+
       );
   }
 }
