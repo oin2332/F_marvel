@@ -73,6 +73,7 @@ flutter:
     - assets/main/
     - assets/amenities/
     - assets/storePageIMG/BEKMIWOO/
+    - assets/searchIMG/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

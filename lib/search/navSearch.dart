@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_marvel/search/headSearch.dart';
 import 'package:food_marvel/shop/bestPage.dart';
+import 'package:food_marvel/search/ImportRestaurant.dart';
 
 void main() => runApp(MaterialApp(
       title: 'NavSearch',
@@ -109,28 +110,34 @@ class _NavSearchState extends State<NavSearch> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(15.0),
                       ),
-                      child: TextField(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Search()));
-                        },
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.search, color: Colors.black),
-                          hintText: "지역, 음식, 매장명 검색",
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 15.0, horizontal: 100.0),
-                          hintStyle: TextStyle(
-                            height: 1,
-                            color: Colors.black,
+                      child: Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10.0),
+                            child: Icon(
+                              Icons.search,
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          color: Colors.black,
-                        ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => Search()),
+                              );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 5.0, left: 15.0),
+                              child: Text(
+                                "지역/음식/매장명 검색",
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                     SizedBox(height: 10),
@@ -285,51 +292,11 @@ class _NavSearchState extends State<NavSearch> {
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Text(
-                        "어떤 레스토랑 찾으세요??",
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 15.0,
-                        mainAxisSpacing: 15.0,
-                      ),
-                      itemCount: 4,
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return Container(
-                          margin: EdgeInsets.all(15.0),
-                          padding: EdgeInsets.all(10.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            color: Colors.grey,
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Item $index",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        );
-                      },
-                    )
                   ],
                 ),
               ),
             ),
+            ImportRestaurant(),
           ],
         ),
       ),
