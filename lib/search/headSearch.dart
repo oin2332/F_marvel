@@ -1,15 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_marvel/main/importbottomBar.dart';
 import 'package:food_marvel/main/mainPage.dart';
 import 'package:food_marvel/search/ImportRestaurant.dart';
+import 'package:firebase_core/firebase_core.dart';
 
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MaterialApp(
+    title: 'Search',
+    home: Search(),
+    debugShowCheckedModeBanner: false,
+  ));
+}
 
-
-void main() => runApp(MaterialApp(
-  title: 'Search',
-  home: Search(),
-  debugShowCheckedModeBanner: false,
-));
+final FirebaseFirestore _searchval = FirebaseFirestore.instance;
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -17,6 +23,7 @@ class Search extends StatefulWidget {
   @override
   State<Search> createState() => _SearchState();
 }
+
 
 class _SearchState extends State<Search> {
   TextEditingController _searchController = TextEditingController();
@@ -28,14 +35,42 @@ class _SearchState extends State<Search> {
     super.dispose();
   }
 
-  void _onSearchSubmitted(String value) {
+  void _onSearchSubmitted(String value) async {
+    String searchText = _searchController.text;
     setState(() {
-      recentSearches.insert(0, value);
+      recentSearches.insert(0, searchText);
       if (recentSearches.length > 6) {
         recentSearches.removeAt(6);
       }
+      print(searchText);
       _searchController.clear();
     });
+
+    try {
+      await _searchval.collection('T3_SEARCH_TBL').add({
+        'searchvalue': searchText,
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('성공!!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
+  }
+
+  Future<void> _loadRecentSearches() async {
+    final snapshot = await _searchval.collection('T3_SEARCH_TBL').get();
+    if (snapshot.docs.isNotEmpty) {
+      recentSearches = snapshot.docs.map((doc) => doc['searchvalue'].toString()).toList();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRecentSearches();
   }
 
   @override
@@ -183,7 +218,6 @@ class _SearchState extends State<Search> {
                                     ),
                                   ),
                                 ),
-
                               ],
                             ),
                           ),
@@ -225,7 +259,6 @@ class _SearchState extends State<Search> {
                               ],
                             ),
                           ),
-
                       ],
                     ),
                   ),

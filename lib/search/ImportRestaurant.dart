@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 class ImportRestaurant extends StatelessWidget {
-  final List<int> shuffledIndices = [0, 1, 2, 3, 4, 5];
+  final List<int> shuffledIndices = [0, 1, 2, 3, 4, 5, 6];
 
   ImportRestaurant() {
     shuffledIndices.shuffle(Random());
@@ -16,7 +16,7 @@ class ImportRestaurant extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(15.0),
           child: Text(
-            "어떤 레스토랑 찾으세요??",
+            "어떤 맛집 찾으세요??",
             style: TextStyle(
               fontSize: 15,
               color: Colors.grey,
@@ -38,38 +38,43 @@ class ImportRestaurant extends StatelessWidget {
             if (shuffledIndex == 0) {
               return _buildItemWithImage(
                 image: 'assets/searchIMG/searchimg0.jpg',
-                title: "#1번 임시 \n랜덤출력",
-                content: "#내용1",
+                title: "#주차가능매장",
               );
             } else if (shuffledIndex == 1) {
               return _buildItemWithImage(
                 image: 'assets/searchIMG/searchimg1.jpg',
-                title: "#2번 임시 \n랜덤출력",
+                title: "#포장가능",
                 content: "#내용2",
               );
             } else if (shuffledIndex == 2) {
               return _buildItemWithImage(
                 image: 'assets/searchIMG/searchimg2.jpg',
-                title: "#3번 임시 \n랜덤출력",
-                content: "#내용3",
+                title: "#엘레베이터",
+                content: "#엘레베이터 있어요",
               );
             } else if (shuffledIndex == 3) {
               return _buildItemWithImage(
                 image: 'assets/searchIMG/searchimg3.jpg',
-                title: "#4번 임시 \n랜덤출력",
+                title: "#2차로 가기 \n 좋은",
                 content: "#내용4",
               );
             } else if (shuffledIndex == 4) {
               return _buildItemWithImage(
                 image: 'assets/searchIMG/searchimg4.jpg',
-                title: "#5번 임시 \n랜덤출력",
+                title: "#분위기 좋은",
                 content: "#내용5",
               );
             } else if (shuffledIndex == 5) {
               return _buildItemWithImage(
                 image: 'assets/searchIMG/searchimg5.jpg',
-                title: "#편의시설 \n 랜덤출력",
+                title: "#1층매장",
                 content: "#내용6",
+              );
+            } else if (shuffledIndex == 6) {
+              return _buildItemWithImage(
+                image: 'assets/searchIMG/searchimg6.jpg',
+                title: "#키즈존",
+                content: "#내용7",
               );
             } else {
               return _buildItemWithoutImage(index);
@@ -121,7 +126,7 @@ class ImportRestaurant extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 18,
-              color: Colors.white54,
+              color: Colors.lightBlueAccent,
             ),
             textAlign: TextAlign.center,
           ),

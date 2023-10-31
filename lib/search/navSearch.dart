@@ -5,10 +5,10 @@ import 'package:food_marvel/shop/bestPage.dart';
 import 'package:food_marvel/search/ImportRestaurant.dart';
 
 void main() => runApp(MaterialApp(
-      title: 'NavSearch',
-      home: NavSearch(),
-      debugShowCheckedModeBanner: false,
-    ));
+  title: 'NavSearch',
+  home: NavSearch(),
+  debugShowCheckedModeBanner: false,
+));
 
 class NavSearch extends StatefulWidget {
   const NavSearch({Key? key});
@@ -33,8 +33,8 @@ class _NavSearchState extends State<NavSearch> {
       context: context,
       builder: (context) {
         return Container(
-            // 모달 내용을 구현하십시오.
-            );
+          // 모달 내용을 구현하십시오.
+        );
       },
     );
   }
@@ -46,7 +46,9 @@ class _NavSearchState extends State<NavSearch> {
         onPressed: () {
           if (text == 'Best맛집') {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => BestPage()));
+              context,
+              MaterialPageRoute(builder: (context) => BestPage()),
+            );
           }
         },
         style: ElevatedButton.styleFrom(
@@ -152,8 +154,7 @@ class _NavSearchState extends State<NavSearch> {
                           ),
                         ),
                         Padding(
-                          padding:
-                              const EdgeInsets.only(bottom: 5.0, left: 15.0),
+                          padding: const EdgeInsets.only(bottom: 5.0, left: 15.0),
                           child: Text(
                             "날짜/시간/인원 선택",
                             style: TextStyle(
@@ -166,6 +167,23 @@ class _NavSearchState extends State<NavSearch> {
                         Padding(
                           padding: const EdgeInsets.only(right: 15.0),
                         ),
+                        ElevatedButton(
+                          onPressed: () {
+                            // 검색 버튼을 눌렀을 때 수행할 동작 추가
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            primary: Colors.blue,
+                          ),
+                          child: Text(
+                            "검색하기",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     Divider(
@@ -177,8 +195,7 @@ class _NavSearchState extends State<NavSearch> {
                       child: Row(
                         children: [
                           Padding(
-                            padding:
-                                const EdgeInsets.only(left: 10.0, bottom: 10.0),
+                            padding: const EdgeInsets.only(left: 10.0, bottom: 10.0),
                             child: Icon(
                               Icons.tune_outlined,
                               color: Colors.black,
@@ -303,6 +320,8 @@ class _NavSearchState extends State<NavSearch> {
       ),
       resizeToAvoidBottomInset: false,
       bottomNavigationBar: BottomNavBar(),
+
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
