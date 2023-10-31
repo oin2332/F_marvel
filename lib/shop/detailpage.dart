@@ -486,9 +486,8 @@ class _DetailPageState extends State<DetailPage> {
                             ],
                           ),
                         ),
-
                         underlineBox(5.0),
-                        //사진--------------------
+                    
                         Container(
                           padding: EdgeInsets.all(30),
                           child: Row(
@@ -502,7 +501,22 @@ class _DetailPageState extends State<DetailPage> {
                           ),
                         ),
 
+                        underlineBox(5.0),
+                        //사진--------------------
 
+
+                        Container(
+                          padding: EdgeInsets.all(30),
+                          child: Row(
+                            children: [
+                              Column(
+                                children: [
+                                  Text('지도',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
 
 
 

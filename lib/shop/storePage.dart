@@ -1,9 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:food_marvel/shop/reservationPage.dart';
+import 'package:food_marvel/shop/tabBar.dart';
 
+import '../search/headSearch.dart';
+import '../search/navSearch.dart';
 import 'detailpage.dart';
 
-void main() {
+
+void main() async{
   runApp(const MyApp());
 }
 
@@ -14,12 +20,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: DetailPage(),
+      home: TabBarEx(),
     );
   }
 }
 
 class ModalData extends ChangeNotifier {
+
   int currentStep = 1;
   String selectedValue = '';
 
