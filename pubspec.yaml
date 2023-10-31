@@ -45,6 +45,7 @@ dependencies:
   http:
   geocoding:
   permission_handler:
+  vertical_barchart: ^2.0.0+2
 
 
 
