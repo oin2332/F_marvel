@@ -5,13 +5,13 @@ class ImportRestaurant extends StatelessWidget {
   final List<int> shuffledIndices = [0, 1, 2, 3, 4, 5];
 
   ImportRestaurant() {
-    // Shuffle the indices
     shuffledIndices.shuffle(Random());
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.all(15.0),

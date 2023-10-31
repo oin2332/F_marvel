@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_marvel/main/importbottomBar.dart';
 import 'package:food_marvel/main/mainPage.dart';
 import 'package:food_marvel/search/ImportRestaurant.dart';
 
@@ -236,37 +237,7 @@ class _SearchState extends State<Search> {
         ),
       ),
       resizeToAvoidBottomInset: false,
-      bottomNavigationBar: BottomAppBar(
-        child: Container(
-          height: 70,
-          color: Color.fromRGBO(180, 180, 180, 0.7),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              InkWell(
-                onTap: () {},
-                child: Icon(Icons.home),
-              ),
-              InkWell(
-                onTap: () {},
-                child: Icon(Icons.search),
-              ),
-              InkWell(
-                onTap: () {},
-                child: Icon(Icons.message),
-              ),
-              InkWell(
-                onTap: () {},
-                child: Icon(Icons.calendar_today_rounded),
-              ),
-              InkWell(
-                onTap: () {},
-                child: Icon(Icons.person),
-              ),
-            ],
-          ),
-        ),
-      ),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }

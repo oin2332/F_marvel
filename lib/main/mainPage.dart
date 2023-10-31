@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:food_marvel/main/importbottomBar.dart';
+import 'package:food_marvel/search/navSearch.dart';
 import 'dart:async';
 
 import '../search/headSearch.dart';
@@ -287,22 +289,7 @@ class _MainPageState extends State<MainPage> {
           ),SizedBox(height: 10),
         ],
       ),
-      bottomNavigationBar: BottomAppBar(
-        child: Container(
-          height: 50,
-          color: Color.fromRGBO(180, 180, 180, 0.7),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              InkWell(onTap: () {}, child: Icon(Icons.home)),
-              InkWell(onTap: () {}, child: Icon(Icons.search)),
-              InkWell(onTap: () {}, child: Icon(Icons.message)),
-              InkWell(onTap: () {}, child: Icon(Icons.calendar_today_rounded)),
-              InkWell(onTap: () {}, child: Icon(Icons.person)),
-            ],
-          ),
-        ),
-      ),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }
