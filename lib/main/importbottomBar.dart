@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:food_marvel/main/mainPage.dart';
 import 'package:food_marvel/search/navSearch.dart';
 
+import '../user/userMain.dart';
+
 class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,9 @@ class BottomNavBar extends StatelessWidget {
             ),
             InkWell(onTap: () {}, child: Icon(Icons.message)),
             InkWell(onTap: () {}, child: Icon(Icons.calendar_today_rounded)),
-            InkWell(onTap: () {}, child: Icon(Icons.person)),
+            InkWell(onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => UserMain()));
+            }, child: Icon(Icons.person)),
           ],
         ),
       ),

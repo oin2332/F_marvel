@@ -57,6 +57,8 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons:
+  url_launcher:
+  font_awesome_flutter:
 
 
   # The "flutter_lints" package below contains a set of recommended lints to
