@@ -21,6 +21,78 @@ class _MyCollectionEditState extends State<MyCollectionEdit> {
   TextEditingController descriptionController = TextEditingController();
   bool isCollectionPublic = false;
 
+  void _showConfirmationDialog() {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      builder: (BuildContext context) {
+        return Container(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: 16),
+              Text('변경사항을 저장하지 않고 나가시겠어요?',
+                style: TextStyle(color: Colors.grey),),
+              SizedBox(height: 50),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      fixedSize: MaterialStateProperty.all<Size>(
+                        Size(180, 45), // 버튼의 너비와 높이를 동일한 값으로 설정
+                      ),
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+                        return Colors.white; // 배경색을 흰색으로 설정
+                      }),
+                      side: MaterialStateProperty.all(
+                        BorderSide(color: Colors.grey, width: 1), // 회색 보더 설정
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context); // 모달 닫기
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Text('취소',style: TextStyle(
+                        color: Colors.black, // 검정 글자색
+                      ),),
+
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      fixedSize: MaterialStateProperty.all<Size>(
+                        Size(180, 45), // 버튼의 너비와 높이를 동일한 값으로 설정
+                      ),
+                      backgroundColor: MaterialStateProperty.resolveWith<Color>((states) {
+                        return Color(0xFFFF6347); // 배경색을 ff6347로 설정
+                      }),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context); // 모달 닫기
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Text('나가기'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -34,6 +106,10 @@ class _MyCollectionEditState extends State<MyCollectionEdit> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: _showConfirmationDialog,
+        ),
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
         title: Text('컬렉션 수정', style: TextStyle(color: Colors.black)),
