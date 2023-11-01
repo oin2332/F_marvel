@@ -4,7 +4,7 @@ import 'package:food_marvel/main/importbottomBar.dart';
 import 'package:food_marvel/main/mainPage.dart';
 import 'package:food_marvel/search/ImportRestaurant.dart';
 import 'package:firebase_core/firebase_core.dart';
-
+import 'package:food_marvel/search/ImportSuddenpopular.dart';
 import '../firebase/firebase_options.dart';
 
 void main() async {
@@ -35,6 +35,19 @@ class _SearchState extends State<Search> {
   void dispose() {
     _searchController.dispose();
     super.dispose();
+  }
+
+  void _removeSearch(String search) {
+    setState(() {
+      recentSearches.remove(search);
+    });
+    _searchval.collection('T3_SEARCH_TBL').where('searchvalue', isEqualTo: search).get().then((QuerySnapshot querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        doc.reference.delete().then((value) => _loadRecentSearches());
+      });
+    }).catchError((error) {
+      print("Error removing document: $error");
+    });
   }
 
   void _onSearchSubmitted(String value) async {
@@ -68,6 +81,7 @@ class _SearchState extends State<Search> {
   }
 
 
+
   Future<void> _loadRecentSearches() async {
     final snapshot = await _searchval.collection('T3_SEARCH_TBL')
         .orderBy('timestamp', descending: true)
@@ -82,6 +96,8 @@ class _SearchState extends State<Search> {
         recentSearches = loadedSearches;
       });
     }
+
+
   }
 
 
@@ -163,6 +179,7 @@ class _SearchState extends State<Search> {
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween, // 추가
                           children: [
                             Text(
                               search,
@@ -173,9 +190,8 @@ class _SearchState extends State<Search> {
                             ),
                             InkWell(
                               onTap: () {
-                                setState(() {
-                                  recentSearches.remove(search);
-                                });
+                                // 검색어를 삭제
+                                _removeSearch(search);
                               },
                               child: Icon(
                                 Icons.clear,
@@ -189,102 +205,13 @@ class _SearchState extends State<Search> {
                   ),
               ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Text(
-                "관심 급상승 음식점",
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Center(
-                    child: Wrap(
-                      alignment: WrapAlignment.start,
-                      children: [
-                        for (int i = 1; i <= 5; i++)
-                          Container(
-                            margin: EdgeInsets.all(15.0),
-                            padding: EdgeInsets.all(10.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "$i",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    height: 1.5,
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(left: 15.0),
-                                  child: Text(
-                                    "음식점",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Center(
-                    child: Wrap(
-                      alignment: WrapAlignment.start,
-                      children: [
-                        for (int i = 6; i <= 10; i++)
-                          Container(
-                            margin: EdgeInsets.all(15.0),
-                            padding: EdgeInsets.all(10.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "$i",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    height: 1.5,
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(left: 15.0),
-                                  child: Text(
-                                    "음식점",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            ImportRestaurant(),
+            ImportSuddenPopular(), // 관심급상승음식점부분 임포트
+            ImportRestaurant(), // 어떤맛집찾으세요부분 임포트
           ],
         ),
       ),
       resizeToAvoidBottomInset: false,
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: BottomNavBar(), // 바텀바 부분 임포트
     );
   }
 }
