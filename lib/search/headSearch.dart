@@ -50,6 +50,15 @@ class _SearchState extends State<Search> {
     });
   }
 
+  void _onRecentSearchTapped(String search) {
+    setState(() {
+      _searchController.text = search;
+    });
+
+
+  }
+
+
   void _onSearchSubmitted(String value) async {
     String searchText = _searchController.text;
     setState(() {
@@ -171,34 +180,38 @@ class _SearchState extends State<Search> {
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Container(
-                        margin: EdgeInsets.all(15.0),
-                        padding: EdgeInsets.all(10.0),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween, // 추가
-                          children: [
-                            Text(
-                              search,
-                              style: TextStyle(
-                                fontSize: 13,
+                      InkWell(
+                        onTap: () {
+                          _onRecentSearchTapped(search);
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(15.0),
+                          padding: EdgeInsets.all(10.0),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                search,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                              textAlign: TextAlign.center,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                // 검색어를 삭제
-                                _removeSearch(search);
-                              },
-                              child: Icon(
-                                Icons.clear,
-                                size: 18,
+                              InkWell(
+                                onTap: () {
+                                  _removeSearch(search);
+                                },
+                                child: Icon(
+                                  Icons.clear,
+                                  size: 18,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ],
