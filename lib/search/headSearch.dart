@@ -51,10 +51,6 @@ class _SearchState extends State<Search> {
         'searchvalue': _searchController.text,
         'timestamp': FieldValue.serverTimestamp(),
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('성공!!')),
-      );
-
 
 
     } catch (e) {
