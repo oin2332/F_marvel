@@ -1,29 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:food_marvel/map/circleboundary.dart';
-import 'package:food_marvel/map/geocoding.dart';
+import 'package:food_marvel/map/function/circleboundary.dart';
+import 'package:food_marvel/map/function/geocoding.dart';
+import 'package:food_marvel/map/function/getdbdata.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:firebase_core/firebase_core.dart'; // Firebase Core 패키지를 import 합니다.
+
 
 class Place {
   final String name;
   final String address;
   final Future<LatLng?> location; // 위치를 비동기로 받음
 
-  Place({required this.name, required this.address})
+  Place({required this.name, required this.address, required String category})
       : location = getLocationFromAddress(address);
 }
 
-List<Place> places = [
-  Place(name: '칸다소바', address: '인천 부평구 부평대로36번길 5'),
-  Place(name: '인브스키친', address: '인천 부평구 부평대로 39-6'),
-  Place(name: '에픽', address: '인천 부평구 경원대로1363번길 8'),
-  Place(name: '크라이치즈버거', address: '경기도 부천시 원미구 심곡2동 신흥로52번길 35'),
-  Place(name: '타키', address: '인천광역시 서구 신석로77번길 12'),
-  // 다른 더미 데이터들도 동일한 방식으로 추가할 수 있음
-];
+// List<Place> places = [
+//   Place(name: '칸다소바', address: '인천 부평구 부평대로36번길 5'),
+//   Place(name: '인브스키친', address: '인천 부평구 부평대로 39-6'),
+//   Place(name: '에픽', address: '인천 부평구 경원대로1363번길 8'),
+//   Place(name: '크라이치즈버거', address: '경기도 부천시 원미구 심곡2동 신흥로52번길 35'),
+//   Place(name: '타키', address: '인천광역시 서구 신석로77번길 12'),
+//   // 다른 더미 데이터들도 동일한 방식으로 추가할 수 있음
+// ];
 
-void main() => runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(); // Firebase 초기화 함수를 호출합니다.
+  runApp(MyApp()); // 앱을 실행합니다.
+}
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -55,6 +62,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _addMarkers() async {
+    List<Place> places = await getData();
     for (var place in places) {
       LatLng? location = await place.location;
       if (location != null) {
