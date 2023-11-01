@@ -2,6 +2,7 @@
     package="dev.mayleaf.food_marvel">
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.ACCESS+BACKGROUND_LOCATION"/>
+
     <application
         android:label="food_marvel"
         android:name="${applicationName}"
