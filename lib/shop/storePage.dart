@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: TabBarEx(),
+      home: StorePage(),
     );
   }
 }
@@ -146,35 +146,44 @@ class _StorePageState extends State<StorePage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      myMap[index]['이름'],
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    Text(myMap[index]['설명']),
-                    Row(
-                      children: [
-                        Icon(Icons.star, size: 25, color: Colors.yellow[600]),
-                        Text(
-                          myMap[index]['별점'],
-                          style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.bold,
+                    InkWell(
+                      child:Column(
+                          children: [
+                            Text(
+                            myMap[index]['이름'],
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                           ),
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          '(123)',
-                          style: TextStyle(fontSize: 11, color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                    Text(
-                      myMap[index]['주소'],
-                      style: TextStyle(fontSize: 11, color: Colors.grey),
-                    ),
-                    Text(
-                      myMap[index]['시간'],
-                      style: TextStyle(fontSize: 11, color: Colors.grey),
+                          Text(myMap[index]['설명']),
+                          Row(
+                            children: [
+                              Icon(Icons.star, size: 25, color: Colors.yellow[600]),
+                              Text(
+                                myMap[index]['별점'],
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              SizedBox(width: 8),
+                              Text(
+                                '(123)',
+                                style: TextStyle(fontSize: 11, color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            myMap[index]['주소'],
+                            style: TextStyle(fontSize: 11, color: Colors.grey),
+                          ),
+                          Text(
+                            myMap[index]['시간'],
+                            style: TextStyle(fontSize: 11, color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                      onTap: (){
+                         Navigator.push(context, MaterialPageRoute(builder: (_) => DetailPage()));
+                      },
                     ),
                     SizedBox(height: 20),
                     Row(

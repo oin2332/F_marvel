@@ -272,10 +272,18 @@ class _DetailPageState extends State<DetailPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            TextButton(onPressed: (){}, child: Text('홈',style: TextStyle(color: Colors.black),),),
-                            TextButton(onPressed: (){}, child: Text('메뉴',style: TextStyle(color: Colors.black),),),
-                            TextButton(onPressed: (){}, child: Text('사진',style: TextStyle(color: Colors.black),),),
-                            TextButton(onPressed: (){}, child: Text('리뷰',style: TextStyle(color: Colors.black),),),
+                            TextButton(onPressed: (){
+
+                            }, child: Text('홈',style: TextStyle(color: Colors.black),),),
+                            TextButton(onPressed: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (_) => TabBarEx(initialTabIndex: 1)));
+                            }, child: Text('메뉴',style: TextStyle(color: Colors.black),),),
+                            TextButton(onPressed: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (_) => TabBarEx(initialTabIndex: 2)));
+                            }, child: Text('사진',style: TextStyle(color: Colors.black),),),
+                            TextButton(onPressed: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (_) => TabBarEx(initialTabIndex: 3)));
+                            }, child: Text('리뷰',style: TextStyle(color: Colors.black),),),
                           ],
                         ),
                         SizedBox(height: 10,),

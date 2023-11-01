@@ -5,19 +5,22 @@ import 'package:vertical_barchart/vertical-barchart.dart';
 import 'package:vertical_barchart/vertical-barchartmodel.dart';
 
 import 'averageChart.dart';
+import 'detailpage.dart';
 
 class TabBarEx extends StatefulWidget {
-  const TabBarEx({Key? key}) : super(key: key);
+  final int initialTabIndex;
+  TabBarEx({required this.initialTabIndex});
 
   @override
   _TabBarExState createState() => _TabBarExState();
 }
 
 class _TabBarExState extends State<TabBarEx> {
+
   @override
   void initState() {
     super.initState();
-
+    tabIndex = widget.initialTabIndex;
     for (var value in img[0].values) {
       if (value is String && value.endsWith('.jpeg')) {
         Path.add(value);
@@ -139,6 +142,7 @@ class _TabBarExState extends State<TabBarEx> {
     ),
   ];
 
+  int tabIndex = 1;
   double countOfOnly5Stars  = 0;
   double countOfOnly4Stars  = 0;
   double countOfOnly3Stars  = 0;
@@ -185,7 +189,7 @@ class _TabBarExState extends State<TabBarEx> {
     return MaterialApp(
       home: DefaultTabController(
         length: 4,
-        initialIndex: 1,
+        initialIndex: tabIndex,
         child: Scaffold(
           appBar: AppBar(
             title: Row(
@@ -210,7 +214,15 @@ class _TabBarExState extends State<TabBarEx> {
                 Tab(text: '메뉴'),
                 Tab(text: '사진 ${Path.length}'),
                 Tab(text: '리뷰 ${Star.length}'),
-              ],
+
+
+
+
+
+
+
+
+                              ],
             ),
           ),
           body: TabBarView(
@@ -470,8 +482,6 @@ class _TabBarExState extends State<TabBarEx> {
   //--------------------------------------------------------------//
 }
 
-void main() {
-  runApp(TabBarEx());
-}
+
 
 
