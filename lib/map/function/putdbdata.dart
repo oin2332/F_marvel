@@ -1,82 +1,103 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:firebase_core/firebase_core.dart';
+import '../../firebase/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(MaterialApp(
-    home: DataEntryForm(),
-  ));
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  ); // Firebase 앱을 초기화합니다.
+  runApp(MyApp());
 }
-class DataEntryForm extends StatefulWidget {
-  const DataEntryForm({super.key});
 
+class MyApp extends StatelessWidget {
   @override
-  State<DataEntryForm> createState() => _DataEntryFormState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Firestore Example',
+      home: MyHomePage(),
+    );
+  }
 }
 
-class _DataEntryFormState extends State<DataEntryForm> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
-  final TextEditingController _categoryController = TextEditingController();
+class MyHomePage extends StatefulWidget {
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
 
-  // Firestore 인스턴스 생성
+class _MyHomePageState extends State<MyHomePage> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  String? selectedPlace = ''; // 선택된 장소를 저장할 변수
 
-  Future<void> saveDataToFirestore(String name, String address, String category) async {
-    try {
-      // Firestore에 데이터 추가
-      await _firestore.collection('son_test').add({
-        'name': name,
-        'address': address,
-        'category': category,
-      });
-    } catch (e) {
-      // 에러 처리
-      print('Error saving data: $e');
+  void _handleRadioValueChange(String? value) {
+    setState(() {
+      selectedPlace = value;
+    });
+  }
+
+  Future<void> _addPlaceToFirestore() async {
+    if (selectedPlace != null && selectedPlace!.isNotEmpty) {
+      String documentName = FieldValue.serverTimestamp().toString(); // 원하는 문서 이름으로 지정할 수 있습니다.
+      Map<String, dynamic> place = {
+        'name': selectedPlace,
+        'address': '장소의 주소 또는 설명',
+      };
+
+      DocumentReference documentReference = _firestore.collection('son_test').doc(documentName);
+      await documentReference.set(place);
+
+      print('Place added to Firestore: $place');
+    } else {
+      print('Please select a place first.');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(16.0),
-      child: SingleChildScrollView(
-        child: Material(
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 50,),
-              TextField(
-                controller: _nameController,
-                decoration: InputDecoration(labelText: '이름'),
-              ),
-              TextField(
-                controller: _addressController,
-                decoration: InputDecoration(labelText: '주소'),
-              ),
-              TextField(
-                controller: _categoryController,
-                decoration: InputDecoration(labelText: '카테고리'),
-              ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () async {
-                  String name = _nameController.text;
-                  String address = _addressController.text;
-                  String category = _categoryController.text;
-
-                  // Firestore에 데이터 저장
-                  await saveDataToFirestore(name, address, category);
-
-                  // Bottom Sheet 닫기
-                  Navigator.of(context).pop();
-                },
-                child: Text('저장'),
-              ),
-            ],
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Firestore Example'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            RadioListTile<String>(
+              title: Text('칸다소바'),
+              value: '칸다소바',
+              groupValue: selectedPlace,
+              onChanged: _handleRadioValueChange,
+            ),
+            RadioListTile<String>(
+              title: Text('인브스키친'),
+              value: '인브스키친',
+              groupValue: selectedPlace,
+              onChanged: _handleRadioValueChange,
+            ),
+            RadioListTile<String>(
+              title: Text('에픽'),
+              value: '에픽',
+              groupValue: selectedPlace,
+              onChanged: _handleRadioValueChange,
+            ),
+            RadioListTile<String>(
+              title: Text('크라이치즈버거'),
+              value: '크라이치즈버거',
+              groupValue: selectedPlace,
+              onChanged: _handleRadioValueChange,
+            ),
+            RadioListTile<String>(
+              title: Text('타키'),
+              value: '타키',
+              groupValue: selectedPlace,
+              onChanged: _handleRadioValueChange,
+            ),
+            ElevatedButton(
+              onPressed: _addPlaceToFirestore,
+              child: Text('Add Selected Place to Firestore'),
+            ),
+          ],
         ),
       ),
     );

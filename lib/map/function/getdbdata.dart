@@ -1,28 +1,28 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../maptotal.dart';
 
-
 Future<List<Place>> getData() async {
   print("Fetching data from Firestore");
   List<Place> places = [];
 
-  final DocumentReference documentRef = FirebaseFirestore.instance.collection('son_test').doc("store1");
-  CollectionReference placesCollection = documentRef.collection('places');
-  QuerySnapshot querySnapshot = await placesCollection.get();
+  try {
+    CollectionReference placesCollection = FirebaseFirestore.instance.collection('son_test');
+    QuerySnapshot querySnapshot = await placesCollection.get();
 
-  querySnapshot.docs.forEach((doc) {
-    String name = doc['name'];
-    String address = doc['address'];
-    String category = doc['category'];
-
-    // Place 객체를 생성하여 리스트에 추가
-    Place place = Place(name: name, address: address, category: category);
-    places.add(place);
-    print('Fetched Place: $name, $address, $category');
-  });
+    querySnapshot.docs.forEach((doc) {
+      String name = doc['name'];
+      String address = doc['address'];
+      Place place = Place(name: name, address: address, category: '');
+      places.add(place);
+      print('Fetched Place: $name, $address');
+    });
+  } catch (e) {
+    print('Error fetching data: $e');
+  }
 
   return places;
 }
+
 
 
 Future<void> saveDataToFirestore(String name, String address, String category) async {

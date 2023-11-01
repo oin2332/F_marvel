@@ -5,7 +5,9 @@ import 'package:food_marvel/map/function/getdbdata.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:firebase_core/firebase_core.dart'; // Firebase Core 패키지를 import 합니다.
+import 'package:firebase_core/firebase_core.dart';
+
+import '../firebase/firebase_options.dart'; // Firebase Core 패키지를 import 합니다.
 
 
 class Place {
@@ -15,6 +17,8 @@ class Place {
 
   Place({required this.name, required this.address, required String category})
       : location = getLocationFromAddress(address);
+
+  get category => null;
 }
 
 // List<Place> places = [
@@ -28,7 +32,13 @@ class Place {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(); // Firebase 초기화 함수를 호출합니다.
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  ); // Firebase 초기화 함수를 호출합니다.
+  List<Place> places = await getData();
+  for (Place place in places) {
+    print('Name: ${place.name}, Address: ${place.address}, Category: ${place.category}');
+  }
   runApp(MyApp()); // 앱을 실행합니다.
 }
 
