@@ -139,7 +139,7 @@ class _SearchState extends State<Search> {
                 Padding(
                   padding: const EdgeInsets.all(15.0),
                   child: Text(
-                    "최근 검색어",
+                    "내 최근 검색어",
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
