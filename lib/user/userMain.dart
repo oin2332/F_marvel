@@ -6,6 +6,7 @@ import 'package:food_marvel/user/profileEdit.dart';
 import 'package:food_marvel/user/userSetting.dart';
 
 import 'bdayRegister.dart';
+import 'myCollection.dart';
 
 class UserMain extends StatefulWidget {
   final String? collectionName;
@@ -166,7 +167,16 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
               children: [
                 ListView(
                   children: [
-                    Text('컬렉션', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => MyCollection(
+                          collectionName: collectionName,
+                          description: description,
+                          isPublic: isPublic,
+                        )));
+                      },
+                      child:Text('컬렉션', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
+                    ),
                     SizedBox(height: 20),
                     Text('컬렉션 이름: $collectionName'),
                     Text('설명: $description'),

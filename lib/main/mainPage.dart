@@ -210,30 +210,30 @@ class _MainPageState extends State<MainPage> {
             color: Colors.grey[200]!,
           ),
           child: SizedBox(
-            height: 40,
-            child: InkWell(
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Search()));
-              },
-              child: Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.search,
-                      color: Colors.grey[400]!,
+              height: 40,
+              child: InkWell(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Search()));
+                },
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.search,
+                        color: Colors.grey[400]!,
+                      ),
                     ),
-                  ),
-                  Text(
-                    "지역, 음식, 매장명 검색",
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.grey[400]!,
+                    Text(
+                      "지역, 음식, 매장명 검색",
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.grey[400]!,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            )
+                  ],
+                ),
+              )
           ),
         ),
         actions: <Widget>[
@@ -262,9 +262,9 @@ class _MainPageState extends State<MainPage> {
                     controller: _pageController,
                     itemBuilder: (context, index) {
                       return InkWell(
-                        onTap: (){
-                          navigateEventPage(index);
-                        },
+                          onTap: (){
+                            navigateEventPage(index);
+                          },
                           child: Stack(
                             children: [
                               Image.asset(
@@ -275,7 +275,7 @@ class _MainPageState extends State<MainPage> {
                                   top: 20,
                                   left: 20,
                                   child: Container(
-                                    color: Colors.white,
+                                    color: Colors.white.withAlpha(150),
                                     padding: EdgeInsets.all(8),
                                     child: Text(
                                       'BEST & NEW', style: TextStyle(
@@ -323,13 +323,13 @@ class _MainPageState extends State<MainPage> {
                         children: [
                           ClipOval(
                             child: Image.asset(
-                                buttonsData[index].image,
-                            fit: BoxFit.cover,
-                            width: 52,
-                            height: 52,),
+                              buttonsData[index].image,
+                              fit: BoxFit.cover,
+                              width: 52,
+                              height: 52,),
                           ),
                           Text(buttonsData[index].text,
-                          style: TextStyle(fontSize: 16),)
+                            style: TextStyle(fontSize: 16),)
                         ],
                       ),
                     );
