@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_marvel/shop/underlindeBox.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -11,10 +12,18 @@ class ReservationAdd extends StatefulWidget {
 
 class _ReservationAddState extends State<ReservationAdd> {
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
+
 
   DateTime? selectedDay;
   DateTime? _selectedDay;
   int? selectedNumber;
+
 
   Map<CalendarFormat, String> _availableCalendarFormats = {
     CalendarFormat.month: '월',
@@ -180,6 +189,146 @@ class _ReservationAddState extends State<ReservationAdd> {
   }
 
 
+
+  void _secondModalSheet() {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+      ),
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: 900, // 원하는 높이로 설정
+          child: Container(
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      Text('예약 날짜 정확한가요?',style: TextStyle(fontSize: 23,fontWeight: FontWeight.bold),)
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 2,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20,),
+                Container(
+                  padding: EdgeInsets.all(20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text('방문 일정을 다시 한번 확인해 주세요.'),
+                          SizedBox(height: 10,),
+                          Container(
+                            width: 350,
+                            padding: EdgeInsets.all(30),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey, width: 1.0), // 테두리선 색 및 너비 조절
+                              borderRadius: BorderRadius.circular(10), // 레디우스 조절
+                            ),
+                            child: Column(
+                              children: [
+                                Text('가게이름',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+                                Text('주소/카테고리',style: TextStyle(fontSize: 12,color: Colors.grey),),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Container(
+                                          width: 50, // 원하는 가로폭 설정
+                                          height: 50, // 원하는 세로 높이 설정 (옵션)
+                                          child: Image.asset('assets/amenities/1.png'),
+                                        ),
+                                        Text(
+                                          '${_selectedDay != null ? DateFormat('yyyy-MM-dd (E)', 'ko_KR').format(_selectedDay!) : '날짜를 선택하지 않았습니다'}'
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(width: 30,),
+
+                                    Column(
+                                      children: [
+                                        Container(
+                                          width: 50, // 원하는 가로폭 설정
+                                          height: 50, // 원하는 세로 높이 설정 (옵션)
+                                          child: Image.asset('assets/amenities/2.png'),
+                                        ),
+                                        Text('13 : 00')
+                                      ],
+                                    ),
+                                    SizedBox(width: 30,),
+
+                                    Column(
+                                      children: [
+                                        Container(
+                                          width: 50, // 원하는 가로폭 설정
+                                          height: 50, // 원하는 세로 높이 설정 (옵션)
+                                          child: Image.asset('assets/amenities/3.png'),
+                                        ),
+                                        Text('${selectedNumber}명')
+                                      ],
+                                    ),
+
+                                  ],
+                                ),
+
+
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 10,),
+
+                          Text('당일취소및 노쇼는 가게뿐만 아니라 다른 고객님들께도'),
+                          Text('피해가 될수 있으므로 신중히 예약 부탁드립니다. :)'),
+
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // 모달 닫기
+                  },
+                  child: Text('닫기'),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget underlineBox(x) {
+    return SizedBox(
+      width: double.infinity,
+      height: x,
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: Colors.grey[400],
+        ),
+      ),
+    );
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -255,7 +404,7 @@ class _ReservationAddState extends State<ReservationAdd> {
             Center(
                 child: TextButton(
                   onPressed: () {
-                    //
+                    _secondModalSheet();
                   },
                   style: ButtonStyle(
                     fixedSize: MaterialStateProperty.all(Size(180, 40)),
