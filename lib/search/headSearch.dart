@@ -30,6 +30,7 @@ class _SearchState extends State<Search> {
   TextEditingController _searchController = TextEditingController();
   List<String> recentSearches = [];
 
+
   @override
   void dispose() {
     _searchController.dispose();
@@ -43,12 +44,12 @@ class _SearchState extends State<Search> {
       if (recentSearches.length > 6) {
         recentSearches.removeAt(6);
       }
-
     });
 
     try {
       await _searchval.collection('T3_SEARCH_TBL').add({
         'searchvalue': _searchController.text,
+        'timestamp': FieldValue.serverTimestamp(),
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('성공!!')),
@@ -64,18 +65,31 @@ class _SearchState extends State<Search> {
     _searchController.clear();
   }
 
-  Future<void> _loadRecentSearches() async {
-    final snapshot = await _searchval.collection('T3_SEARCH_TBL').get();
-    if (snapshot.docs.isNotEmpty) {
-      recentSearches = snapshot.docs.map((doc) => doc['searchvalue'].toString()).toList();
-    }
-  }
-
   @override
   void initState() {
     super.initState();
     _loadRecentSearches();
   }
+
+
+  Future<void> _loadRecentSearches() async {
+    final snapshot = await _searchval.collection('T3_SEARCH_TBL')
+        .orderBy('timestamp', descending: true)
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      List<String> loadedSearches = snapshot.docs.map((doc) => doc['searchvalue'].toString()).toList();
+      if (loadedSearches.length > 6) {
+        loadedSearches = loadedSearches.sublist(0, 6);
+      }
+      setState(() {
+        recentSearches = loadedSearches;
+      });
+    }
+  }
+
+
+
 
   @override
   Widget build(BuildContext context) {
