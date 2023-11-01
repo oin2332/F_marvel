@@ -1,36 +1,8 @@
-import 'package:firebase_core/firebase_core.dart';
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; // 필요한 패키지를 추가합니다.
 import 'package:food_marvel/user/userModel.dart';
 import 'package:provider/provider.dart';
-
-import '../firebase/firebase_options.dart';
 import 'join.dart';
-
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(
-      ChangeNotifierProvider(
-        create: (context) => UserModel(),
-        child: MyApp(),
-      )
-  );
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '로그인',
-      home: LoginPage(),
-    );
-  }
-}
 
 class LoginPage extends StatefulWidget {
   @override
@@ -50,35 +22,52 @@ class _LoginPageState extends State<LoginPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: ListView(
           children: [
+            Image.asset('assets/main/loading.png'),
+            SizedBox(height: 30),
             TextField(
               controller: _id,
-              decoration: InputDecoration(labelText: '아이디'),
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.grey[200]!,
+                hintText: '아이디',
+                hintStyle: TextStyle(color: Colors.black38),
+                border: InputBorder.none, // 밑줄 없애기
+              ),
             ),
-            SizedBox(height: 8),
+            SizedBox(height: 15),
             TextField(
               controller: _pwd,
               obscureText: true,
-              decoration: InputDecoration(labelText: '비밀번호'),
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.grey[200]!,
+                hintText: '패스워드',
+                hintStyle: TextStyle(color: Colors.black38),
+                border: InputBorder.none, // 밑줄 없애기
+              ),
             ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _login,
-              child: Text('로그인'),
-            ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Join(),
-                  ),
-                );
-              },
-              child: Text('회원가입'),
+            SizedBox(height: 80),
+            Column(
+              children: [
+                ElevatedButton(
+                  onPressed: _login,
+                  child: Text('로그인'),
+                ),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Join(),
+                      ),
+                    );
+                  },
+                  child: Text('회원가입'),
+                ),
+              ],
             ),
           ],
         ),
@@ -90,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
     String id = _id.text;
     String password = _pwd.text;
 
-    final userDocs = await _fs.collection('userList')
+    final userDocs = await _fs.collection('T3_USER_TBL')
         .where('id', isEqualTo: id)
         .where('pwd', isEqualTo: password).get();
 

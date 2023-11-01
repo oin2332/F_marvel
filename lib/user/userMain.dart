@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:food_marvel/user/follower.dart';
 import 'package:food_marvel/user/following.dart';
 import 'package:food_marvel/user/newCollection.dart';
+import 'package:food_marvel/user/notification.dart';
 import 'package:food_marvel/user/profileEdit.dart';
 import 'package:food_marvel/user/userSetting.dart';
 
@@ -55,7 +56,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
           IconButton(
             icon: Icon(Icons.notifications,color: Colors.grey),
             onPressed: () {
-
+              Navigator.push(context, MaterialPageRoute(builder: (_) => NotificationPage()));
             },
           ),IconButton(
             icon: Icon(Icons.settings,color: Colors.grey),
@@ -97,27 +98,30 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
             ],
           ),
           SizedBox(height: 20),
-          ElevatedButton(
-              onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (_) => ProfileEdit()));
-              },
-              style: ButtonStyle(
-                fixedSize: MaterialStateProperty.all<Size>(
-                  Size(double.infinity, 50), // 버튼의 너비와 높이를 조절
-                ),
-                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(10.0)),
-                minimumSize: MaterialStateProperty.all<Size>(Size(double.infinity, 0)),
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                elevation: MaterialStateProperty.all<double>(0),
-                overlayColor: MaterialStateProperty.all<Color>(Colors.grey[200]!), // 터치 효과 색상
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    side: BorderSide(color: Colors.grey), // border 색상 black
-                    borderRadius: BorderRadius.circular(30), // 버튼 테두리 모양 조정
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => ProfileEdit()));
+                },
+                style: ButtonStyle(
+                  fixedSize: MaterialStateProperty.all<Size>(
+                    Size(double.infinity, 50), // 버튼의 너비와 높이를 조절
+                  ),
+                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(10.0)),
+                  minimumSize: MaterialStateProperty.all<Size>(Size(double.infinity, 0)),
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                  elevation: MaterialStateProperty.all<double>(0),
+                  overlayColor: MaterialStateProperty.all<Color>(Colors.grey[200]!), // 터치 효과 색상
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      side: BorderSide(color: Colors.grey), // border 색상 black
+                      borderRadius: BorderRadius.circular(30), // 버튼 테두리 모양 조정
+                    ),
                   ),
                 ),
-              ),
-              child: Text('프로필 수정', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),),
+                child: Text('프로필 수정', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),),
+            ),
           ),
           SizedBox(height: 20),
           Container(
