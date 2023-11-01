@@ -209,7 +209,7 @@ class _SearchState extends State<Search> {
             ImportRestaurant(), // 어떤맛집찾으세요부분 임포트
           ],
         ),
-      ),
+      ),//
       resizeToAvoidBottomInset: false,
       bottomNavigationBar: BottomNavBar(), // 바텀바 부분 임포트
     );
