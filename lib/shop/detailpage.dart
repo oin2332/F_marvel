@@ -477,38 +477,142 @@ class _DetailPageState extends State<DetailPage> {
                         underlineBox(5.0),
                         //메뉴--------------------
                         Container(
-                          padding: EdgeInsets.all(30),
-                          child: Row(
+
+                          child: Column(
                             children: [
-                              Column(
-                                children: [
-                                  Text('메뉴', style: TextStyle(fontSize: 20,
-                                      fontWeight: FontWeight.bold),),
-                                ],
-                              )
+                              Container(
+                                padding: EdgeInsets.all(30),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('메뉴', style: TextStyle(fontSize: 20,
+                                          fontWeight: FontWeight.bold),),
+                                      TextButton(onPressed: (){
+                                        Navigator.push(context, MaterialPageRoute(
+                                            builder: (_) => TabBarEx(initialTabIndex: 1)));
+                                      }, child: Text('전체보기 >',style: TextStyle(fontSize: 12,color: Colors.grey),))
+                                    ],
+                                  ),
+                              ),
+                              underlineBox(2.0),
+                              Container(
+                                padding: EdgeInsets.only(left: 30,top: 10,right: 30,bottom: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('Food', style: TextStyle(fontSize: 15,
+                                        fontWeight: FontWeight.bold),),
+                                    TextButton(onPressed: (){}, child: Text('9,000~ 4,0000원',style: TextStyle(fontSize: 15,color: Colors.grey),))
+                                  ],
+                                ),
+                              ),
+                              underlineBox(1.0),
+                              Container(
+                                padding: EdgeInsets.only(left: 30,top: 10,right: 30,bottom: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('멀봐 ', style: TextStyle(fontSize: 15,
+                                        fontWeight: FontWeight.bold),),
+                                    TextButton(onPressed: (){}, child: Text('6816351원',style: TextStyle(fontSize: 15,color: Colors.grey),))
+                                  ],
+                                ),
+                              ),
+                              underlineBox(1.0),
+                              Container(
+                                padding: EdgeInsets.only(left: 30,top: 10,right: 30,bottom: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('멀봐 ', style: TextStyle(fontSize: 15,
+                                        fontWeight: FontWeight.bold),),
+                                    TextButton(onPressed: (){}, child: Text('6816351원',style: TextStyle(fontSize: 15,color: Colors.grey),))
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
                         ),
                         underlineBox(5.0),
-
-                        Container(
-                          padding: EdgeInsets.all(30),
-                          child: Row(
-                            children: [
-                              Column(
-                                children: [
-                                  Text('사진', style: TextStyle(fontSize: 20,
-                                      fontWeight: FontWeight.bold),),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-
-                        underlineBox(5.0),
+                        
                         //사진--------------------
 
+                        Container(
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(30),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('사진', style: TextStyle(fontSize: 20,
+                                        fontWeight: FontWeight.bold),),
+                                    TextButton(onPressed: (){
+                                      Navigator.push(context, MaterialPageRoute(
+                                          builder: (_) => TabBarEx(initialTabIndex: 2)));
+                                    }, child: Text('전체보기 >',style: TextStyle(fontSize: 12,color: Colors.grey),))
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Image.asset(
+                                          'assets/storePageIMG/BEKMIWOO/BEKMIWOO1.jpeg',
+                                          width: 125,
+                                        ),
+                                        SizedBox(width: 3,),
+                                        Image.asset(
+                                          'assets/storePageIMG/BEKMIWOO/BEKMIWOO2.jpeg',
+                                          width: 125,
+                                        ),
+                                        SizedBox(width: 3,),
+                                        Image.asset(
+                                          'assets/storePageIMG/BEKMIWOO/BEKMIWOO3.jpeg',
+                                          width: 125,
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 7,),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Image.asset(
+                                          'assets/storePageIMG/BEKMIWOO/BEKMIWOO4.jpeg',
+                                          width: 125,
+                                        ),
+                                        SizedBox(width: 3,),
+                                        Image.asset(
+                                          'assets/storePageIMG/BEKMIWOO/BEKMIWOO5.jpeg',
+                                          width: 125,
+                                        ),
+                                        SizedBox(width: 3,),
+                                        Image.asset(
+                                          'assets/storePageIMG/BEKMIWOO/BEKMIWOO6.jpeg',
+                                          width: 125,
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10,)
+                                  ],
+                                ),
+                              )
 
+
+
+
+
+
+                            ],
+                          ),
+                        ),
+
+                        underlineBox(5.0),
+                        //지도
                         Container(
                           padding: EdgeInsets.all(30),
                           child: Row(
@@ -517,6 +621,45 @@ class _DetailPageState extends State<DetailPage> {
                                 children: [
                                   Text('지도', style: TextStyle(fontSize: 20,
                                       fontWeight: FontWeight.bold),),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+
+                        underlineBox(5.0),
+                        //상세정보
+                        Container(
+                          padding: EdgeInsets.all(30),
+                          child: Row(
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text('상세정보', style: TextStyle(fontSize: 20,
+                                      fontWeight: FontWeight.bold),),
+                                  SizedBox(height: 20,),
+                                  Container(
+                                    padding: EdgeInsets.all(20),
+                                    child: Column(
+                                      children: [
+                                        Text('주저리주저리'),
+                                        Text('주저리주저리'),
+                                        Text('주저리주저리'),
+                                        Text('주저리주저리'),
+                                        Text('주저리주저리'),
+                                        Text('주저리주저리'),
+                                        Text('주저리주저리'),
+                                        Text('주저리주저리'),
+                                        Text('주저리주저리'),
+                                        Text('주저리주저리'),
+                                        Text('주저리주저리'),
+                                        Text('주저리주저리'),
+                                        Text('주저리주저리'),
+                                        Text('주저리주저리'),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               )
                             ],
@@ -634,6 +777,7 @@ class _DetailPageState extends State<DetailPage> {
 
 
   List<String> path = ['1.jpg', '2.jpg', '1.jpg', '2.jpg'];
+  List<String> imgtest = ['BEKMIWOO1.jpeg','BEKMIWOO2.jpeg','BEKMIWOO3.jpeg','BEKMIWOO4.jpeg','BEKMIWOO5.jpeg','BEKMIWOO6.jpeg','BEKMIWOO7.jpeg',];
   final List<Map<String, dynamic>> storeList = [
     {
       '제목': '가게이름',
