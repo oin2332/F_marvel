@@ -115,9 +115,8 @@ class _StorePageState extends State<StorePage> {
       '예약2' : '13 : 00 ',
       '예약3' : '16 : 00',
     },
-
-
   ];
+
   Widget _testlist() { // 가게 리스트 출력부분 
     return Expanded(
       child: ListView.builder(

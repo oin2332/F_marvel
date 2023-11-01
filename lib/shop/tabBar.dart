@@ -17,6 +17,7 @@ class TabBarEx extends StatefulWidget {
 
 class _TabBarExState extends State<TabBarEx> {
 
+  late List<VBarChartModel> bardata;
   @override
   void initState() {
     super.initState();
@@ -41,10 +42,49 @@ class _TabBarExState extends State<TabBarEx> {
 
     average = total / Star.length;
     countOfOnly5Stars = Star.where((star) => star == '5').length.toDouble();
-    countOfOnly5Stars = Star.where((star) => star == '4').length.toDouble();
-    countOfOnly5Stars = Star.where((star) => star == '3').length.toDouble();
-    countOfOnly5Stars = Star.where((star) => star == '2').length.toDouble();
-    countOfOnly5Stars = Star.where((star) => star == '1').length.toDouble();
+    countOfOnly4Stars = Star.where((star) => star == '4').length.toDouble();
+    countOfOnly3Stars = Star.where((star) => star == '3').length.toDouble();
+    countOfOnly2Stars = Star.where((star) => star == '2').length.toDouble();
+    countOfOnly1Stars = Star.where((star) => star == '1').length.toDouble();
+
+    bardata = [
+      VBarChartModel(
+        index: 0,
+        label: "5점",
+        colors: [Colors.orange, Colors.deepOrange],
+        jumlah: countOfOnly5Stars,
+        tooltip: "${countOfOnly5Stars}",
+
+      ),
+      VBarChartModel(
+        index: 1,
+        label: "4점",
+        colors: [Colors.orange, Colors.deepOrange],
+        jumlah: countOfOnly4Stars,
+        tooltip: "${countOfOnly4Stars}",
+      ),
+      VBarChartModel(
+        index: 2,
+        label: "3점",
+        colors: [Colors.orange, Colors.deepOrange],
+        jumlah: countOfOnly3Stars,
+        tooltip: "${countOfOnly3Stars}",
+      ),
+      VBarChartModel(
+        index: 3,
+        label: "2점",
+        colors: [Colors.orange, Colors.deepOrange],
+        jumlah: countOfOnly2Stars,
+        tooltip: "${countOfOnly2Stars}",
+      ),
+      VBarChartModel(
+        index: 4,
+        label: "1점",
+        colors: [Colors.orange, Colors.deepOrange],
+        jumlah: countOfOnly1Stars,
+        tooltip: "${countOfOnly1Stars}",
+      ),
+    ];
 
   }
 
@@ -103,44 +143,6 @@ class _TabBarExState extends State<TabBarEx> {
     }
   ];
 
-  List<VBarChartModel> bardata = [
-    VBarChartModel(
-      index: 0,
-      label: "5점",
-      colors: [Colors.orange, Colors.deepOrange],
-      jumlah: 5,
-      tooltip: "5", // 툴팁도 수정
-    ),
-    VBarChartModel(
-      index: 1,
-      label: "4점",
-      colors: [Colors.orange, Colors.deepOrange],
-      jumlah: 3,
-      tooltip: "3",
-
-    ),
-    VBarChartModel(
-      index: 2,
-      label: "3점",
-      colors: [Colors.orange, Colors.deepOrange],
-      jumlah: 2,
-      tooltip: "2",
-    ),
-    VBarChartModel(
-      index: 3,
-      label: "2점",
-      colors: [Colors.orange, Colors.deepOrange],
-      jumlah: 1,
-      tooltip: "1",
-    ),
-    VBarChartModel(
-      index: 4,
-      label: "1점",
-      colors: [Colors.orange, Colors.deepOrange],
-      jumlah: 2,
-      tooltip: "2",
-    ),
-  ];
 
   int tabIndex = 1;
   double countOfOnly5Stars  = 0;
