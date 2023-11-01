@@ -1,8 +1,10 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_marvel/main/importbottomBar.dart';
 import 'package:food_marvel/search/navSearch.dart';
 import 'dart:async';
 
+import '../firebase/firebase_options.dart';
 import '../search/headSearch.dart';
 import '../shop/storePage.dart';
 import '../user/userSetting.dart';
@@ -11,11 +13,22 @@ import '20_Move.dart';
 import '4_NameCard.dart';
 
 
-void main() => runApp(MaterialApp(
-  title: 'Home',
-  home: MainPage(),
-  debugShowCheckedModeBanner: false,
-));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: MainPage(),
+    );
+  }
+}
 
 class MainPage extends StatefulWidget {
   @override

@@ -5,17 +5,17 @@ import 'package:food_marvel/main/mainPage.dart';
 import 'package:food_marvel/search/ImportRestaurant.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import '../firebase/firebase_options.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(MaterialApp(
-    title: 'Search',
-    home: Search(),
-    debugShowCheckedModeBanner: false,
-  ));
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(MyApp());
 }
 
-final FirebaseFirestore _searchval = FirebaseFirestore.instance;
+
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -26,6 +26,7 @@ class Search extends StatefulWidget {
 
 
 class _SearchState extends State<Search> {
+  final FirebaseFirestore _searchval = FirebaseFirestore.instance;
   TextEditingController _searchController = TextEditingController();
   List<String> recentSearches = [];
 
@@ -42,22 +43,25 @@ class _SearchState extends State<Search> {
       if (recentSearches.length > 6) {
         recentSearches.removeAt(6);
       }
-      print(searchText);
-      _searchController.clear();
+
     });
 
     try {
       await _searchval.collection('T3_SEARCH_TBL').add({
-        'searchvalue': searchText,
+        'searchvalue': _searchController.text,
       });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('성공!!')),
       );
+
+
+
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: $e')),
       );
     }
+    _searchController.clear();
   }
 
   Future<void> _loadRecentSearches() async {
