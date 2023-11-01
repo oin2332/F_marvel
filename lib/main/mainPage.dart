@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_marvel/main/importbottomBar.dart';
 import 'package:food_marvel/search/navSearch.dart';
+import 'package:food_marvel/shop/bestPage.dart';
 import 'dart:async';
 
 import '../firebase/firebase_options.dart';
@@ -121,7 +122,7 @@ class _MainPageState extends State<MainPage> {
 
   void navigateToPage(int index) {
     final pages = [
-      Sample4(),
+      BestPage(),
       Sample4(),
       StorePage(),
       StorePage(),
@@ -252,7 +253,7 @@ class _MainPageState extends State<MainPage> {
         children: [
           Column(
             children: [
-              SizedBox(height: 15,),
+              SizedBox(height: 10,),
               Container(
                 height: 250,
                 width: double.infinity,
@@ -264,10 +265,43 @@ class _MainPageState extends State<MainPage> {
                         onTap: (){
                           navigateEventPage(index);
                         },
-                        child: Image.asset(
-                            images[index],
-                        height: 200.0,
-                        fit: BoxFit.cover,),
+                          child: Stack(
+                            children: [
+                              Image.asset(
+                                images[index],
+                                height: 250.0,
+                                fit: BoxFit.cover,),
+                              Positioned(
+                                  top: 20,
+                                  left: 20,
+                                  child: Container(
+                                    color: Colors.white,
+                                    padding: EdgeInsets.all(8),
+                                    child: Text(
+                                      'BEST & NEW', style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    ),
+                                  )
+                              ),Positioned(
+                                  top: 50,
+                                  left: 20,
+                                  child: Container(
+                                    color: Colors.black54,
+                                    padding: EdgeInsets.all(8),
+                                    child: Text(
+                                      '이번주의 맛집 칼럼을 확인하세요', style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    ),
+                                  )
+                              ),
+                            ],
+                          )
                       );
                     }),
               ),
