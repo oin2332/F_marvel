@@ -3,13 +3,17 @@ import 'package:food_marvel/board/timeLine.dart';
 import 'package:food_marvel/main/mainPage.dart';
 import 'package:food_marvel/search/navSearch.dart';
 import 'package:food_marvel/user/userUnlogin.dart';
+import 'package:provider/provider.dart';
 
 import '../reservation/RtabBar.dart';
 import '../user/userMain.dart';
+import '../user/userModel.dart';
 
 class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // 로그인 세션
+    UserModel userModel = Provider.of<UserModel>(context);
     return BottomAppBar(
       child: Container(
         height: 50,
@@ -36,7 +40,11 @@ class BottomNavBar extends StatelessWidget {
               Navigator.push(context, MaterialPageRoute(builder: (context) => ResTabBar()));
             }, child: Icon(Icons.calendar_today_rounded)),
             InkWell(onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => UserUnlogin()));
+              if (userModel.isLogin) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => UserMain()));
+              } else {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => UserUnlogin()));
+              }
             }, child: Icon(Icons.person)),
           ],
         ),
