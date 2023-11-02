@@ -182,9 +182,77 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
                       child:Text('컬렉션', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
                     ),
                     SizedBox(height: 20),
-                    Text('컬렉션 이름: $collectionName'),
-                    Text('설명: $description'),
-                    Text('컬렉션 공개 여부: ${isPublic == null ? '알 수 없음' : isPublic! ? '공개' : '비공개'}'),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => MyCollection(
+                              collectionName: collectionName,
+                              description: description,
+                              isPublic: isPublic,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          Column(
+                            children: [
+                              Container(
+                                height: 70,
+                                width: 150,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.vertical(
+                                    top: Radius.circular(10.0),
+                                  ),
+                                  gradient: LinearGradient(
+                                    colors: [Colors.white10, Colors.grey],
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                  ),
+                                  border: Border.all(color: Colors.grey),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'FOOD MARVEL',
+                                    style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold, fontSize: 14),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 1),
+                              Container(
+                                height: 30,
+                                width: 150,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.vertical(
+                                    bottom: Radius.circular(10.0),
+                                  ),
+                                  border: Border.all(color: Colors.grey),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text('  $description', style: TextStyle(color: Colors.deepOrange)),
+                                    Icon(
+                                      Icons.turned_in_not_outlined,
+                                      color: Colors.deepOrange,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 5,),
+                    Row(
+                      children: [
+                        Icon(
+                          isPublic == true ? Icons.lock_open : Icons.lock_outline,
+                          color: Colors.black, // 색상을 조정하세요.
+                        ),
+                        Text(' $collectionName',style: TextStyle(fontWeight: FontWeight.bold),),
+                      ],
+                    ),
 
                     ElevatedButton(
                       style: ButtonStyle(
