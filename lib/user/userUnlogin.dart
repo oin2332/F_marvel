@@ -2,9 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:food_marvel/board/timeLine.dart';
+import 'package:food_marvel/firebase/imageUpload.dart';
 import 'package:food_marvel/user/join.dart';
 import 'package:food_marvel/user/loginPage.dart';
-import 'package:food_marvel/user/userJoin.dart';
 import 'package:food_marvel/user/userMain.dart';
 import 'package:food_marvel/user/userModel.dart';
 import 'package:food_marvel/user/userSetting.dart';
@@ -121,7 +121,7 @@ class _UserUnloginState extends State<UserUnlogin> {
               IconButton(onPressed: (){}, icon: Icon(Icons.home)),
               IconButton(onPressed: (){}, icon: Icon(Icons.search)),
               IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => TimeLine()));}, icon: Icon(Icons.chat)),
-              IconButton(onPressed: (){}, icon: Icon(Icons.calendar_today_outlined)),
+              IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => ImageUpload()));}, icon: Icon(Icons.calendar_today_outlined)),
               IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => UserMain()));}, icon: Icon(Icons.person))
             ],
           ),

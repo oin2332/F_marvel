@@ -23,6 +23,7 @@ class _JoinState extends State<Join> {
 
   final FirebaseFirestore _fs = FirebaseFirestore.instance;
   final TextEditingController _id = TextEditingController();
+  final TextEditingController _name = TextEditingController();
   final TextEditingController _pwd = TextEditingController();
   final TextEditingController _pwd2 = TextEditingController();
   final TextEditingController _email = TextEditingController();
@@ -41,9 +42,16 @@ class _JoinState extends State<Join> {
     try {
       await _fs.collection('T3_USER_TBL').add({
         'id': _id.text,
+        'name' : _name.text,
         'pwd': _pwd.text,
-        'email': _email.text,
         'phone': _phone.text,
+        'reservation' : isInterlock,
+        'under14' : isAgeAgree,
+        'use' : isUseAgree,
+        'privacy' : isPrivacyAgree,
+        'third' : isThirdAgree,
+        'select' : isSelectedAgree,
+        'event' : isEventAgree,
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -51,9 +59,9 @@ class _JoinState extends State<Join> {
       );
 
       _id.clear();
+      _name.clear();
       _pwd.clear();
       _pwd2.clear();
-      _email.clear();
       _phone.clear();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -94,36 +102,78 @@ class _JoinState extends State<Join> {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            Text('이름', style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('아이디', style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 5),
             TextField(
               controller: _id,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.grey[200]!, // 배경색 설정
-                labelText: '아이디? 이름?',
-                labelStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
+                hintText: '아이디',
+                hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
                 border: InputBorder.none, // 밑줄 없애기
               ),
               style: TextStyle(fontSize: 13),
             ),
-            SizedBox(height: 5),
-            Text('레스토랑을 예약할 때 사용할 이름이므로 꼭 실명을 사용해 주세요.', style: TextStyle(color: Colors.black54, fontSize: 10)),
-            SizedBox(height: 40),
-            Text('휴대폰 번호', style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(height: 30),
+            Text('비밀번호', style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 5),
             TextField(
               controller: _pwd,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.grey[200]!, // 배경색 설정
-                labelText: '휴대폰 번호',
-                labelStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
+                hintText: '비밀번호',
+                hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
                 border: InputBorder.none, // 밑줄 없애기
               ),
               style: TextStyle(fontSize: 13),
             ),
-            SizedBox(height: 40),
+            SizedBox(height: 30),
+            Text('비밀번호 확인', style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(height: 5),
+            TextField(
+              controller: _pwd2,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.grey[200]!, // 배경색 설정
+                hintText: '비밀번호 확인',
+                hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
+                border: InputBorder.none, // 밑줄 없애기
+              ),
+              style: TextStyle(fontSize: 13),
+            ),
+            SizedBox(height: 30),
+            Text('이름', style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(height: 5),
+            TextField(
+              controller: _name,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.grey[200]!, // 배경색 설정
+                hintText: '이름',
+                hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
+                border: InputBorder.none, // 밑줄 없애기
+              ),
+              style: TextStyle(fontSize: 13),
+            ),
+            SizedBox(height: 5),
+            Text('레스토랑을 예약할 때 사용할 이름이므로 꼭 실명을 사용해 주세요.', style: TextStyle(color: Colors.black54, fontSize: 10)),
+            SizedBox(height: 30),
+            Text('휴대폰 번호', style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(height: 5),
+            TextField(
+              controller: _phone,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.grey[200]!, // 배경색 설정
+                hintText: '휴대폰 번호',
+                hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
+                border: InputBorder.none, // 밑줄 없애기
+              ),
+              style: TextStyle(fontSize: 13),
+            ),
+            SizedBox(height: 30),
             Text('닉네임 (선택)', style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 5),
             TextField(
@@ -131,13 +181,13 @@ class _JoinState extends State<Join> {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.grey[200]!, // 배경색 설정
-                labelText: '닉네임 작성은 선택 사항 입니다.',
-                labelStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
+                hintText: '닉네임 작성은 선택 사항 입니다.',
+                hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
                 border: InputBorder.none, // 밑줄 없애기
               ),
               style: TextStyle(fontSize: 13),
             ),
-            SizedBox(height: 40),
+            SizedBox(height: 30),
             Text('전화,링크 예약 앱에 연동하기 (선택)', style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 5),
             Row(
