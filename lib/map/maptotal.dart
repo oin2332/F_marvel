@@ -26,7 +26,7 @@ class GooGleMap extends StatefulWidget {
 }
 
 class _MyAppState extends State<GooGleMap> {
-  late GoogleMapController mapController;
+  late GoogleMapController? mapController; // nullable로 선언
   LatLng _center = LatLng(37.4895, 126.7220);
   double _zoomLevel = 14.0;
   LatLng? _selectedLocation;
@@ -110,7 +110,7 @@ class _MyAppState extends State<GooGleMap> {
 
         LatLng myLocation = LatLng(position.latitude, position.longitude);
 
-        mapController.animateCamera(
+        mapController?.animateCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(
               target: myLocation,
