@@ -38,6 +38,7 @@ class _MyAppState extends State<MyApp> {
   final TextEditingController _pay = TextEditingController();
   final TextEditingController _noshow = TextEditingController();
   final TextEditingController _time = TextEditingController();
+  final TextEditingController _silplemono = TextEditingController();
   String? _selectUser;
 
   //CRUD - Create,Add
@@ -64,6 +65,7 @@ class _MyAppState extends State<MyApp> {
         'S_PAY': _pay.text,
         'S_RE_MEMO': _noshow.text,
         'S_TIME': _time.text,
+        'S_SILPLEMONO': _silplemono.text,
         'timestamp' : FieldValue.serverTimestamp(),
       });
       _id.clear();
@@ -83,6 +85,7 @@ class _MyAppState extends State<MyApp> {
       _pay.clear();
       _noshow.clear();
       _time.clear();
+      _silplemono.clear();
 
     } else {
       print("제목 또는 내용을 입력해주세요.");
@@ -118,49 +121,139 @@ class _MyAppState extends State<MyApp> {
           children: snap.data!.docs.map(
                 (DocumentSnapshot document) {
               Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-              return RadioListTile(
-                title: Text(data['S_ID']),
-                subtitle: Column(
-                  children: [
-                    Text("KEYWORD1: ${data['KEYWORD1']}"),
-                    Text("KEYWORD2: ${data['KEYWORD2']}"),
-                    Text("S_ADDR1: ${data['S_ADDR1']}"),
-                    Text("S_ADDR2: ${data['S_ADDR2']}"),
-                    Text("S_ADDR3: ${data['S_ADDR3']}"),
-                    Text("S_BREAKTIME: ${data['S_BREAKTIME']}"),
-                    Text("S_HOMEPAGE: ${data['S_HOMEPAGE']}"),
-                    Text("S_ID: ${data['S_ID']}"),
-                    Text("S_PWD: ${data['S_PWD']}"),
-                    Text("S_IMG: ${data['S_IMG']}"),
-                    Text("S_INFO1: ${data['S_INFO1']}"),
-                    Text("S_MEMO: ${data['S_MEMO']}"),
-                    Text("S_NUMBER: ${data['S_NUMBER']}"),
-                    Text("S_NAME: ${data['S_NAME']}"),
-                    Text("S_PAY: ${data['S_PAY']}"),
-                    Text("S_RE_MEMO: ${data['S_RE_MEMO']}"),
-                    Text("S_TIME: ${data['S_TIME']}"),
+              return Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(width: 20),
+                        Container(
+                          width: 80,
+                          height: 110, // 원하는 높이 설정
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Image.asset(
+                            'assets/storePageIMG/BEKMIWOO2.jpeg',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
 
-                  ],
-                ),
-                value: document.id, // 선택된 값을 Document ID로 설정
-                groupValue: _selectUser,
-                onChanged: (value) {
+                        SizedBox(width: 13),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            InkWell(
+                              child:Column(
+                                children: [
+                                  Text(
+                                    '${data['S_NAME']}',
+                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                  ),
+                                  Text('${data['S_SILPLEMONO']}'),
+                                  Row(
+                                    children: [
+                                      Icon(Icons.star, size: 25, color: Colors.yellow[600]),
+                                      Text(
+                                        '4.7',
+                                        style: TextStyle(
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      SizedBox(width: 8),
+                                      Text(
+                                        '(123)',
+                                        style: TextStyle(fontSize: 11, color: Colors.grey),
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                    '${data['S_ADDR1']} ${data['S_ADDR2']} ${data['S_ADDR3']}',
+                                    style: TextStyle(fontSize: 11, color: Colors.grey),
+                                  ),
+                                  Text(
+                                    '${data['S_TIME']}',
+                                    style: TextStyle(fontSize: 11, color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                              onTap: (){
+                              },
+                            ),
+                            SizedBox(height: 20),
+                            Row(
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
 
-                },
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: const Color(0xFFFF6347),
+                                    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                                  ),
+                                  child: Text('13:00'),
+                                ),
+                                SizedBox(width: 6),
+                                ElevatedButton(
+                                  onPressed: () {
+
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: const Color(0xFFFF6347),
+                                    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                                  ),
+                                  child: Text('18:00'),
+                                ),
+                                SizedBox(width: 6),
+                                ElevatedButton(
+                                  onPressed: () {
+
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: const Color(0xFFFF6347),
+                                    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                                  ),
+                                  child: Text('21:00'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  Text("KEYWORD1: ${data['KEYWORD1']}"),
+                  Text("KEYWORD2: ${data['KEYWORD2']}"),
+                  Text("S_ADDR1: ${data['S_ADDR1']}"),
+                  Text("S_ADDR2: ${data['S_ADDR2']}"),
+                  Text("S_ADDR3: ${data['S_ADDR3']}"),
+                  Text("S_BREAKTIME: ${data['S_BREAKTIME']}"),
+                  Text("S_HOMEPAGE: ${data['S_HOMEPAGE']}"),
+                  Text("S_ID: ${data['S_ID']}"),
+                  Text("S_PWD: ${data['S_PWD']}"),
+                  Text("S_IMG: ${data['S_IMG']}"),
+                  Text("S_INFO1: ${data['S_INFO1']}"),
+                  Text("S_MEMO: ${data['S_MEMO']}"),
+                  Text("S_NUMBER: ${data['S_NUMBER']}"),
+                  Text("S_NAME: ${data['S_NAME']}"),
+                  Text("S_PAY: ${data['S_PAY']}"),
+                  Text("S_RE_MEMO: ${data['S_RE_MEMO']}"),
+                  Text("S_TIME: ${data['S_TIME']}"),
+                  Text("S_SILPLEMONO: ${data['S_SILPLEMONO']}"),
+                ],
               );
             },
           ).toList(),
         );
+
       },
     );
   }
 
-  Widget _textFieldRow(List<Widget> textFields) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: textFields,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -204,8 +297,10 @@ class _MyAppState extends State<MyApp> {
                     _textfield(_name,'가게이름'),
                     _textfield(_pay,'평균 가격 ex) 5~10만원'),
                     _textfield(_noshow,'노쇼 경고'),
+
                   ],
                 ),
+                _textfield(_silplemono,'간단한 가게설명'),
                 _textfield(_time,'운영시간 ex) 10:00 ~ 21:00'),
                 ElevatedButton(
                   onPressed: _addBoard,
