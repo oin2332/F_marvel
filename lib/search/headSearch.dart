@@ -7,6 +7,7 @@ import 'package:food_marvel/search/ImportRestaurant.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:food_marvel/search/ImportSuddenpopular.dart';
 import '../firebase/firebase_options.dart';
+import 'ImportSearchResult.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -64,6 +65,10 @@ class _SearchState extends State<Search> {
   void _onSearchSubmitted(String value) async {
     String searchText = _searchController.text;
     setState(() {
+
+      if (recentSearches.contains(searchText)) {
+        recentSearches.remove(searchText);
+      }
       recentSearches.insert(0, searchText);
       if (recentSearches.length > 6) {
         recentSearches.removeAt(6);
@@ -225,9 +230,15 @@ class _SearchState extends State<Search> {
               ],
             ),
             SizedBox(height: 10, child: Container(color: Colors.grey)),
+            if (searchQuery.isNotEmpty) ImportSearchResult(),
             if (searchQuery.isNotEmpty) ImportEmptySearch(searchQuery: searchQuery),
-            ImportSuddenPopular(), // 관심급상승음식점부분 임포트
-            ImportRestaurant(), // 어떤맛집찾으세요부분 임포트
+            if (searchQuery.isEmpty)
+              Column(
+                children: [
+                  ImportSuddenPopular(),
+                  ImportRestaurant(),
+                ],
+              ),
           ],
         ),
       ),

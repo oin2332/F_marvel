@@ -20,7 +20,6 @@ class ImportEmptySearch extends StatelessWidget {
                 fontSize: 20, // 폰트 크기 조정
                 fontWeight: FontWeight.bold,
               ),
-
             ),
           ),
           SizedBox(height: 50,),
