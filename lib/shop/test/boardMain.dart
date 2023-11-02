@@ -136,7 +136,7 @@ class _MyAppState extends State<MyApp> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: Image.asset(
-                            'assets/storePageIMG/BEKMIWOO2.jpeg',
+                            'assets/storePageIMG/${data['S_IMG']}',
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -148,6 +148,7 @@ class _MyAppState extends State<MyApp> {
                           children: [
                             InkWell(
                               child:Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     '${data['S_NAME']}',
@@ -226,24 +227,6 @@ class _MyAppState extends State<MyApp> {
                       ],
                     ),
                   ),
-                  Text("KEYWORD1: ${data['KEYWORD1']}"),
-                  Text("KEYWORD2: ${data['KEYWORD2']}"),
-                  Text("S_ADDR1: ${data['S_ADDR1']}"),
-                  Text("S_ADDR2: ${data['S_ADDR2']}"),
-                  Text("S_ADDR3: ${data['S_ADDR3']}"),
-                  Text("S_BREAKTIME: ${data['S_BREAKTIME']}"),
-                  Text("S_HOMEPAGE: ${data['S_HOMEPAGE']}"),
-                  Text("S_ID: ${data['S_ID']}"),
-                  Text("S_PWD: ${data['S_PWD']}"),
-                  Text("S_IMG: ${data['S_IMG']}"),
-                  Text("S_INFO1: ${data['S_INFO1']}"),
-                  Text("S_MEMO: ${data['S_MEMO']}"),
-                  Text("S_NUMBER: ${data['S_NUMBER']}"),
-                  Text("S_NAME: ${data['S_NAME']}"),
-                  Text("S_PAY: ${data['S_PAY']}"),
-                  Text("S_RE_MEMO: ${data['S_RE_MEMO']}"),
-                  Text("S_TIME: ${data['S_TIME']}"),
-                  Text("S_SILPLEMONO: ${data['S_SILPLEMONO']}"),
                 ],
               );
             },

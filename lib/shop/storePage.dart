@@ -34,190 +34,140 @@ class StorePage extends StatefulWidget {
 
 class _StorePageState extends State<StorePage> {
 
-
-
-
-
-
-  List<Map<String, dynamic>> myMap = [ //이건 db 연결전 더미데이터
-    {
-      '사진' : '44.jfif',
-      '이름' : '가게제목',
-      '설명' : '간단한설명',
-      '별점' : '4.9',
-      '주소' : '주소 ',
-      '시간' : '시간 ',
-      '예약1' : '10 : 00 ',
-      '예약2' : '13 : 00 ',
-      '예약3' : '16 : 00',
-    },
-    {
-      '사진' : '44.jfif',
-      '이름' : '가게제목',
-      '설명' : '간단한설명',
-      '별점' : '대충별점',
-      '주소' : '주소 ',
-      '시간' : '시간 ',
-      '예약1' : '10 : 00 ',
-      '예약2' : '13 : 00 ',
-      '예약3' : '16 : 00',
-    },
-    {
-      '사진' : '44.jfif',
-      '이름' : '가게제목',
-      '설명' : '간단한설명',
-      '별점' : '대충별점',
-      '주소' : '주소 ',
-      '시간' : '시간 ',
-      '예약1' : '10 : 00 ',
-      '예약2' : '13 : 00 ',
-      '예약3' : '16 : 00',
-    },
-    {
-      '사진' : '44.jfif',
-      '이름' : '가게제목',
-      '설명' : '간단한설명',
-      '별점' : '대충별점',
-      '주소' : '주소 ',
-      '시간' : '시간 ',
-      '예약1' : '10 : 00 ',
-      '예약2' : '13 : 00 ',
-      '예약3' : '16 : 00',
-    },
-    {
-      '사진' : '44.jfif',
-      '이름' : '가게제목',
-      '설명' : '간단한설명',
-      '별점' : '대충별점',
-      '주소' : '주소 ',
-      '시간' : '시간 ',
-      '예약1' : '10 : 00 ',
-      '예약2' : '13 : 00 ',
-      '예약3' : '16 : 00',
-    },    {
-      '사진' : '44.jfif',
-      '이름' : '가게제목',
-      '설명' : '간단한설명',
-      '별점' : '대충별점',
-      '주소' : '주소 ',
-      '시간' : '시간 ',
-      '예약1' : '10 : 00 ',
-      '예약2' : '13 : 00 ',
-      '예약3' : '16 : 00',
-    },
-  ];
-
-  Widget _testlist() { // 가게 리스트 출력부분 
-    return Expanded(
-      child: ListView.builder(
-        itemCount: myMap.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-            margin: EdgeInsets.symmetric(vertical: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(width: 20),
-                Container(
-                  width: 80,
-                  height: 110, // 원하는 높이 설정
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Image.asset(
-                    'assets/${myMap[index]['사진']}',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-
-                SizedBox(width: 13),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    InkWell(
-                      child:Column(
-                          children: [
-                            Text(
-                            myMap[index]['이름'],
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          Text(myMap[index]['설명']),
-                          Row(
-                            children: [
-                              Icon(Icons.star, size: 25, color: Colors.yellow[600]),
-                              Text(
-                                myMap[index]['별점'],
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(width: 8),
-                              Text(
-                                '(123)',
-                                style: TextStyle(fontSize: 11, color: Colors.grey),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            myMap[index]['주소'],
-                            style: TextStyle(fontSize: 11, color: Colors.grey),
-                          ),
-                          Text(
-                            myMap[index]['시간'],
-                            style: TextStyle(fontSize: 11, color: Colors.grey),
-                          ),
-                        ],
-                      ),
-                      onTap: (){
-                         Navigator.push(context, MaterialPageRoute(builder: (_) => DetailPage()));
-                      },
-                    ),
-                    SizedBox(height: 20),
-                    Row(
+  Widget _listUser() {
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance.collection("T3_STORE_TBL").orderBy("timestamp", descending: true).snapshots(),
+      ///////////////////users/////////////////////
+      //게시글 정렬 후 출력 (orderBy(descending: ,))
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap){
+        if(!snap.hasData) {
+          return Transform.scale(
+            scale: 0.1,
+            child: CircularProgressIndicator(strokeWidth: 20),
+          );
+        }
+        return ListView(
+          children: snap.data!.docs.map(
+                (DocumentSnapshot document) {
+              Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+              return Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            _showModalBottomSheet();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: const Color(0xFFFF6347),
-                            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                        SizedBox(width: 20),
+                        Container(
+                          width: 80,
+                          height: 110, // 원하는 높이 설정
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
                           ),
-                          child: Text(myMap[index]['예약1']),
-                        ),
-                        SizedBox(width: 6),
-                        ElevatedButton(
-                          onPressed: () {
-                            _showModalBottomSheet();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: const Color(0xFFFF6347),
-                            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                          child: Image.asset(
+                            'assets/storePageIMG/${data['S_IMG']}',
+                            fit: BoxFit.cover,
                           ),
-                          child: Text(myMap[index]['예약2']),
                         ),
-                        SizedBox(width: 6),
-                        ElevatedButton(
-                          onPressed: () {
-                            _showModalBottomSheet();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: const Color(0xFFFF6347),
-                            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                          ),
-                          child: Text(myMap[index]['예약3']),
-                        ),
+
+                        SizedBox(width: 13),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 280, // 원하는 너비 설정
+                              child: InkWell(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${data['S_NAME']}',
+                                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                    ),
+                                    Text('${data['S_SILPLEMONO']}'),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.star, size: 25, color: Colors.yellow[600]),
+                                        Text(
+                                          '4.7',
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(width: 8),
+                                        Text(
+                                          '(123)',
+                                          style: TextStyle(fontSize: 11, color: Colors.grey),
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                      '${data['S_ADDR1']} ${data['S_ADDR2']} ${data['S_ADDR3']}',
+                                      style: TextStyle(fontSize: 11, color: Colors.grey),
+                                    ),
+                                    Text(
+                                      '${data['S_TIME']}',
+                                      style: TextStyle(fontSize: 11, color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                                onTap: () {
+                                  // onTap 이벤트 핸들러 추가
+                                },
+                              ),
+                            ),
+
+                            SizedBox(height: 20),
+                            Row(
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: const Color(0xFFFF6347),
+                                    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                                  ),
+                                  child: Text('13:00'),
+                                ),
+                                SizedBox(width: 6),
+                                ElevatedButton(
+                                  onPressed: () {
+
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: const Color(0xFFFF6347),
+                                    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                                  ),
+                                  child: Text('18:00'),
+                                ),
+                                SizedBox(width: 6),
+                                ElevatedButton(
+                                  onPressed: () {
+
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: const Color(0xFFFF6347),
+                                    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
+                                  ),
+                                  child: Text('21:00'),
+                                ),
+                              ],
+                            ),
+                          ],
+                        )
                       ],
                     ),
-                  ],
-                )
-              ],
-            ),
-          );
-        },
-      ),
+                  ),
+                ],
+              );
+            },
+          ).toList(),
+        );
+
+      },
     );
   }
 
@@ -376,7 +326,7 @@ class _StorePageState extends State<StorePage> {
               ),
             ),
             SizedBox(height: 10,),
-            _testlist(),
+            Expanded(child: _listUser())
           ],
         ),
       ),
