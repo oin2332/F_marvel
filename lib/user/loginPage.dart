@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; // 필요한 패키지를 추가합니다.
+import 'package:food_marvel/user/userMain.dart';
 import 'package:food_marvel/user/userModel.dart';
 import 'package:provider/provider.dart';
 import 'join.dart';
@@ -88,6 +89,8 @@ class _LoginPageState extends State<LoginPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('성공적으로 로그인되었습니다!')),
       );
+      // 로그인 성공 시 usermain으로 이동
+      Navigator.push(context, MaterialPageRoute(builder: (context) => UserMain()));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('아이디나 패스워드를 다시 확인해주세요.')),

@@ -9,6 +9,7 @@ import '../map/maptotal.dart';
 import '../search/headSearch.dart';
 import '../search/navSearch.dart';
 import 'detailpage.dart';
+import 'list.dart';
 
 class ModalData extends ChangeNotifier {
 
@@ -35,176 +36,6 @@ class StorePage extends StatefulWidget {
 }
 
 class _StorePageState extends State<StorePage> {
-
-  double average = 0.0; // STAR 평균값을 저장할 변수
-  List<int> starLengthValues = []; // STAR 길이 숫자를 저장할 변수
-
-  Future<void> calculateStarAverage() async {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    DocumentSnapshot starSnapshot = await firestore.collection("T3_STORE_TBL").doc("STAR").get();
-
-    if (starSnapshot.exists) {
-      Map<String, dynamic> starData = starSnapshot.data() as Map<String, dynamic>;
-
-      String starValues = starData['starValues'];
-      List<int> starList = starValues.split('').map(int.parse).toList();
-
-      // STAR 값의 평균 계산
-      for (int value in starList) {
-        average += value;
-      }
-      average /= starList.length;
-
-      // STAR 길이만큼 변수에 저장
-      starLengthValues = List.generate(starList.length, (index) => index + 1);
-    } else {
-      print("STAR 문서가 존재하지 않습니다.");
-    }
-  }
-
-
-
-  Widget _listUser() {
-    return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection("T3_STORE_TBL").orderBy("timestamp", descending: true).snapshots(),
-      ///////////////////users/////////////////////
-      //게시글 정렬 후 출력 (orderBy(descending: ,))
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap){
-        if(!snap.hasData) {
-          return Transform.scale(
-            scale: 0.1,
-            child: CircularProgressIndicator(strokeWidth: 20),
-          );
-        }
-        return ListView(
-          children: snap.data!.docs.map(
-                (DocumentSnapshot document) {
-              Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-              return Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: 10),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(width: 20),
-                        Container(
-                          width: 80,
-                          height: 110, // 원하는 높이 설정
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          child: Image.asset(
-                            'assets/storePageIMG/${data['S_IMG']}',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-
-                        SizedBox(width: 13),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 280, // 원하는 너비 설정
-                              child: InkWell(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '${data['S_NAME']}',
-                                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                    ),
-                                    Text('${data['S_SILPLEMONO']}'),
-                                    Row(
-                                      children: [
-                                        Icon(Icons.star, size: 25, color: Colors.yellow[600]),
-                                        Text(
-                                          '4.7',
-                                          style: TextStyle(
-                                            fontSize: 17,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        SizedBox(width: 8),
-                                        Text(
-                                          '(123)',
-                                          style: TextStyle(fontSize: 11, color: Colors.grey),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      '${data['S_ADDR1']} ${data['S_ADDR2']} ${data['S_ADDR3']}',
-                                      style: TextStyle(fontSize: 11, color: Colors.grey),
-                                    ),
-                                    Text(
-                                      '${data['S_TIME']}',
-                                      style: TextStyle(fontSize: 11, color: Colors.grey),
-                                    ),
-                                  ],
-                                ),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => DetailPage()),
-                                  );
-                                },
-                              ),
-                            ),
-
-                            SizedBox(height: 20),
-                            Row(
-                              children: [
-                                ElevatedButton(
-                                  onPressed: () {
-
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    primary: const Color(0xFFFF6347),
-                                    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                                  ),
-                                  child: Text('13:00'),
-                                ),
-                                SizedBox(width: 6),
-                                ElevatedButton(
-                                  onPressed: () {
-
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    primary: const Color(0xFFFF6347),
-                                    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                                  ),
-                                  child: Text('18:00'),
-                                ),
-                                SizedBox(width: 6),
-                                ElevatedButton(
-                                  onPressed: () {
-
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    primary: const Color(0xFFFF6347),
-                                    padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                                  ),
-                                  child: Text('21:00'),
-                                ),
-                              ],
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              );
-            },
-          ).toList(),
-        );
-
-      },
-    );
-  }
-
-
 
   void _showModalBottomSheet() {
     showModalBottomSheet(
@@ -361,7 +192,7 @@ class _StorePageState extends State<StorePage> {
               ),
             ),
             SizedBox(height: 10,),
-            Expanded(child: _listUser())
+            Expanded(child: list())
           ],
         ),
       ),
