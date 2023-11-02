@@ -5,11 +5,13 @@ import 'package:flutter/foundation.dart';
 import 'package:food_marvel/shop/reservationPage.dart';
 import 'package:food_marvel/shop/tabBar.dart';
 
+import '../map/maptotal.dart';
 import '../search/headSearch.dart';
 import '../search/navSearch.dart';
 import 'detailpage.dart';
 
 class ModalData extends ChangeNotifier {
+
 
   int currentStep = 1;
   String selectedValue = '';
@@ -33,6 +35,34 @@ class StorePage extends StatefulWidget {
 }
 
 class _StorePageState extends State<StorePage> {
+
+  double average = 0.0; // STAR 평균값을 저장할 변수
+  List<int> starLengthValues = []; // STAR 길이 숫자를 저장할 변수
+
+  Future<void> calculateStarAverage() async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    DocumentSnapshot starSnapshot = await firestore.collection("T3_STORE_TBL").doc("STAR").get();
+
+    if (starSnapshot.exists) {
+      Map<String, dynamic> starData = starSnapshot.data() as Map<String, dynamic>;
+
+      String starValues = starData['starValues'];
+      List<int> starList = starValues.split('').map(int.parse).toList();
+
+      // STAR 값의 평균 계산
+      for (int value in starList) {
+        average += value;
+      }
+      average /= starList.length;
+
+      // STAR 길이만큼 변수에 저장
+      starLengthValues = List.generate(starList.length, (index) => index + 1);
+    } else {
+      print("STAR 문서가 존재하지 않습니다.");
+    }
+  }
+
+
 
   Widget _listUser() {
     return StreamBuilder(
@@ -114,7 +144,10 @@ class _StorePageState extends State<StorePage> {
                                   ],
                                 ),
                                 onTap: () {
-                                  // onTap 이벤트 핸들러 추가
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => DetailPage()),
+                                  );
                                 },
                               ),
                             ),
@@ -203,6 +236,8 @@ class _StorePageState extends State<StorePage> {
 
   //----------------------------------------------------------
 
+
+
   Widget underlineBox(x) {
     return SizedBox(
       width: double.infinity,
@@ -268,7 +303,7 @@ class _StorePageState extends State<StorePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [// 지도 / 카테고리(옵션) 변경 아이콘
-                IconButton(onPressed: (){}, icon:  Icon(Icons.map_outlined),), //지도
+                IconButton(onPressed: (){   Navigator.push(context, MaterialPageRoute(builder: (context) => GooGleMap()));}, icon:  Icon(Icons.map_outlined),), //지도
                 IconButton(onPressed: (){}, icon: Icon(Icons.tune_rounded)), // 옵션변경(카테고리)
                 SingleChildScrollView( // 스크롤 가능한 버튼 리스트
                   scrollDirection: Axis.horizontal, // 수평 스크롤
