@@ -32,20 +32,27 @@ class _ProfileEditState extends State<ProfileEdit> {
           .get();
 
       if (userSnapshot.docs.isNotEmpty) {
-        Map<String, dynamic> userData = userSnapshot.docs[0].data() as Map<String, dynamic>;
-        String nickname = userData['nickname']; // 'nickname'은 사용자 닉네임 필드입니다. 필드 이름을 실제로 사용하는 필드로 바꿔주세요.
-        String intro = userData['intro']; // 'intro'는 사용자 자기소개 필드입니다. 필드 이름을 실제로 사용하는 필드로 바꿔주세요.
-        String location = userData['area']; // 'location'은 사용자 활동지역 필드입니다. 필드 이름을 실제로 사용하는 필드로 바꿔주세요.
+        for (QueryDocumentSnapshot doc in userSnapshot.docs) {
+          Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
+          String? nickname = userData['nickname'];
+          String? intro = userData['intro'];
+          String? location = userData['area'];
 
-        // 사용자 정보를 각 컨트롤러에 할당
-        _nicknameController.text = nickname;
-        _introController.text = intro;
-        _areaController.text = location;
+          if (nickname != null && intro != null && location != null) {
+            // 사용자 정보를 각 컨트롤러에 할당
+            _nicknameController.text = nickname;
+            _introController.text = intro;
+            _areaController.text = location;
+          } else {
+            print('사용자 정보가 누락되었습니다.');
+          }
+        }
       } else {
         print('해당 사용자를 찾을 수 없습니다.');
       }
     } catch (e) {
       print('데이터를 불러오는 중 오류가 발생했습니다: $e');
+      throw e; // 오류를 다시 던져서 상위 레벨에서 처리하도록 합니다.
     }
   }
 
