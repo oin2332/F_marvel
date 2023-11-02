@@ -48,6 +48,7 @@ dependencies:
   permission_handler:
   vertical_barchart: ^2.0.0+2
   url_launcher:
+  carousel_slider:
 
 
 
