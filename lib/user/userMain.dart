@@ -215,6 +215,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
           ),
         ],
       ),
+      bottomNavigationBar: BottomAppBar(),
     );
   }
 }

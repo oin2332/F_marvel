@@ -5,10 +5,12 @@ import 'package:food_marvel/search/navSearch.dart';
 import 'package:food_marvel/shop/bestPage.dart';
 import 'dart:async';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
 
 import '../firebase/firebase_options.dart';
 import '../search/headSearch.dart';
 import '../shop/storePage.dart';
+import '../user/userModel.dart';
 import '../user/userSetting.dart';
 import '13_tapBar.dart';
 import '20_Move.dart';
@@ -20,7 +22,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => UserModel(),
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

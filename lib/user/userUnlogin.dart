@@ -1,41 +1,9 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:food_marvel/board/timeLine.dart';
-import 'package:food_marvel/firebase/imageUpload.dart';
 import 'package:food_marvel/user/join.dart';
 import 'package:food_marvel/user/loginPage.dart';
 import 'package:food_marvel/user/userMain.dart';
-import 'package:food_marvel/user/userModel.dart';
-import 'package:food_marvel/user/userSetting.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:path/path.dart';
-import 'package:provider/provider.dart';
-
-import '../firebase/firebase_options.dart';
-
-
-// void main() async {
-//   WidgetsFlutterBinding.ensureInitialized();
-//   await Firebase.initializeApp(
-//     options: DefaultFirebaseOptions.currentPlatform,
-//   );
-//   runApp(
-//       ChangeNotifierProvider<UserModel>(
-//         create: (context) => UserModel(),
-//         child: MaterialApp(
-//           home: UserUnlogin(),
-//         ),
-//       )
-//   );
-// }
-
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return UserUnlogin();
-//   }
-// }
+import 'package:food_marvel/main/importbottomBar.dart';
 
 class UserUnlogin extends StatefulWidget {
   const UserUnlogin({super.key});
@@ -116,18 +84,7 @@ class _UserUnloginState extends State<UserUnlogin> {
               ],
           ),
         ),
-        bottomNavigationBar: BottomAppBar(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              IconButton(onPressed: (){}, icon: Icon(Icons.home)),
-              IconButton(onPressed: (){}, icon: Icon(Icons.search)),
-              IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => TimeLine()));}, icon: Icon(Icons.chat)),
-              IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => ImageUpload()));}, icon: Icon(Icons.calendar_today_outlined)),
-              IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => UserMain()));}, icon: Icon(Icons.person))
-            ],
-          ),
-        ),
+        bottomNavigationBar: BottomNavBar(),
       ),
     );
   }
