@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_marvel/main/importbottomBar.dart';
 import 'package:food_marvel/main/mainPage.dart';
+import 'package:food_marvel/search/ImportEmptySearch.dart';
 import 'package:food_marvel/search/ImportRestaurant.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:food_marvel/search/ImportSuddenpopular.dart';
@@ -29,6 +30,7 @@ class _SearchState extends State<Search> {
   final FirebaseFirestore _searchval = FirebaseFirestore.instance;
   TextEditingController _searchController = TextEditingController();
   List<String> recentSearches = [];
+  String searchQuery = "";
 
 
   @override
@@ -73,13 +75,16 @@ class _SearchState extends State<Search> {
         'searchvalue': _searchController.text,
         'timestamp': FieldValue.serverTimestamp(),
       });
-
-
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: $e')),
       );
     }
+
+    setState(() {
+      searchQuery = searchText;
+    });
+
     _searchController.clear();
   }
 
@@ -174,6 +179,7 @@ class _SearchState extends State<Search> {
                 Spacer(),
               ],
             ),
+
             Wrap(
               children: [
                 for (var search in recentSearches)
@@ -218,11 +224,13 @@ class _SearchState extends State<Search> {
                   ),
               ],
             ),
+            SizedBox(height: 10, child: Container(color: Colors.grey)),
+            if (searchQuery.isNotEmpty) ImportEmptySearch(searchQuery: searchQuery),
             ImportSuddenPopular(), // 관심급상승음식점부분 임포트
             ImportRestaurant(), // 어떤맛집찾으세요부분 임포트
           ],
         ),
-      ),//
+      ),
       resizeToAvoidBottomInset: false,
       bottomNavigationBar: BottomNavBar(), // 바텀바 부분 임포트
     );
