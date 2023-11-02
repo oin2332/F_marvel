@@ -28,8 +28,8 @@ class Place {
 //   Place(name: '크라이치즈버거', address: '경기도 부천시 원미구 심곡2동 신흥로52번길 35'),
 //   Place(name: '타키', address: '인천광역시 서구 신석로77번길 12'),
 //   // 다른 더미 데이터들도 동일한 방식으로 추가할 수 있음
-// ];
-
+// ];  //작업완료 11/1;
+//ㅁㄴㅇㅁㄴㅇ
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -68,26 +68,46 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _getCurrentMyLocation(); // Get current location when the app starts
-    _addMarkers();
+
+    _addMarkers(); // 마커 추가
   }
 
   Future<void> _addMarkers() async {
     List<Place> places = await getData();
+    _circles.add(getCircleBoundary(_center, 600)); // 원을 초기화하고 추가
+    if (_circles.isEmpty) {
+      print('Circle is not available.');
+      return; // _circles Set이 비어있으면 함수 종료
+    }
+
+    LatLng circleCenter = _circles.first.center;
+    double circleRadius = _circles.first.radius;
+
     for (var place in places) {
       LatLng? location = await place.location;
       if (location != null) {
-        _markers.add(
-          Marker(
-            markerId: MarkerId(place.name),
-            position: location,
-            infoWindow: InfoWindow(
-              title: place.name,
-              snippet: place.address,
-            ),
-          ),
+        double distance = Geolocator.distanceBetween(
+          circleCenter.latitude,
+          circleCenter.longitude,
+          location.latitude,
+          location.longitude,
         );
+
+        if (distance <= circleRadius) {
+          _markers.add(
+            Marker(
+              markerId: MarkerId(place.name),
+              position: location,
+              infoWindow: InfoWindow(
+                title: place.name,
+                snippet: place.address,
+              ),
+            ),
+          );
+        }
       }
     }
+
     setState(() {}); // 마커를 추가한 후 화면을 갱신하여 지도에 마커를 표시
   }
 
@@ -134,9 +154,11 @@ class _MyAppState extends State<MyApp> {
 
         // 사용자 위치 주변에 원을 표시
         Circle circleBoundary =
-            getCircleBoundary(myLocation, 200); // 반지름 2000m의 원
+            getCircleBoundary(myLocation, 500); // 반지름 500m의 원
         _circles.clear(); // 원을 추가하기 전에 기존 원을 지움
         _circles.add(circleBoundary);
+        print('Circle Center: ${circleBoundary.center}, Radius: ${circleBoundary.radius}');
+
 
         setState(() {}); // 위젯을 리빌드하여 마커를 지도에 표시
       } catch (e) {
