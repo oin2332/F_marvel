@@ -4,6 +4,7 @@ import 'package:food_marvel/main/importbottomBar.dart';
 import 'package:food_marvel/search/navSearch.dart';
 import 'package:food_marvel/shop/bestPage.dart';
 import 'dart:async';
+import 'package:carousel_slider/carousel_slider.dart';
 
 import '../firebase/firebase_options.dart';
 import '../search/headSearch.dart';
@@ -257,18 +258,16 @@ class _MainPageState extends State<MainPage> {
               Container(
                 height: 250,
                 width: double.infinity,
-                child: PageView.builder(
-                    itemCount: images.length,
-                    controller: _pageController,
-                    itemBuilder: (context, index) {
+                child: CarouselSlider(
+                  items: images.map((image) {
                       return InkWell(
                           onTap: (){
-                            navigateEventPage(index);
+
                           },
                           child: Stack(
                             children: [
                               Image.asset(
-                                images[index],
+                                image,
                                 height: 250.0,
                                 fit: BoxFit.cover,),
                               Positioned(
@@ -303,7 +302,38 @@ class _MainPageState extends State<MainPage> {
                             ],
                           )
                       );
-                    }),
+                    }).toList(),
+                  options: CarouselOptions(
+                    height: 250,
+                    aspectRatio: 16/9,
+                    viewportFraction: 1.0,
+                    enableInfiniteScroll: true,
+                    autoPlay: true,
+                    autoPlayInterval: Duration(seconds: 5),
+                    onPageChanged: (index, reason){
+                      setState(() {
+                        _currentPage = index;
+                      });
+                    },
+                  ),
+              ),
+              ),
+              SizedBox(height: 10,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: images.asMap().entries.map((entry){
+                  return Container(
+                    width: 8.0,
+                    height: 8.0,
+                    margin: EdgeInsets.symmetric(horizontal: 4.0),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _currentPage == entry.key
+                          ? Colors.red
+                          : Colors.grey,
+                    ),
+                  );
+                }).toList(),
               ),
               SizedBox(height: 20,),
               GridView.builder(
