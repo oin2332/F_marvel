@@ -1,11 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_marvel/reservation/visit_completed_page.dart';
 import 'package:food_marvel/reservation/visit_schedule_page.dart';
 
+import '../board/boardView.dart';
 import '../main/importbottomBar.dart';
+import '../shop/storePage.dart';
 import 'cancel_noshow_page.dart';
 
-void main() {
+void main() async  {
   runApp(const MyApp());
 }
 
@@ -15,7 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const ResTabBar(),
+      home: ResTabBar(),
     );
   }
 }
