@@ -105,7 +105,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
                 onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => ProfileEdit()));
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => ProfileEdit(userId: userId)));
                 },
                 style: ButtonStyle(
                   fixedSize: MaterialStateProperty.all<Size>(
