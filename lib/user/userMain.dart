@@ -4,7 +4,9 @@ import 'package:food_marvel/user/following.dart';
 import 'package:food_marvel/user/newCollection.dart';
 import 'package:food_marvel/user/notification.dart';
 import 'package:food_marvel/user/profileEdit.dart';
+import 'package:food_marvel/user/userModel.dart';
 import 'package:food_marvel/user/userSetting.dart';
+import 'package:provider/provider.dart';
 
 import 'bdayRegister.dart';
 import 'myCollection.dart';
@@ -47,6 +49,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context) {
+    String? userId = Provider.of<UserModel>(context).userId; // UserModel에서 사용자 아이디 받아오기
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
