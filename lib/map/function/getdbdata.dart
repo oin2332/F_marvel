@@ -24,15 +24,15 @@ Future<List<Place>> getData() async {
 }
 
 
-
-Future<void> saveDataToFirestore(String name, String address, String category) async {
-  CollectionReference placesCollection = FirebaseFirestore.instance.collection('son_test').doc("store1").collection('places');
-
-  await placesCollection.add({
-    'name': name,
-    'address': address,
-    'category': category,
-  });
-
-  print('Place added to Firestore: $name, $address, $category');
-}
+//
+// Future<void> saveDataToFirestore(String name, String address, String category) async {
+//   CollectionReference placesCollection = FirebaseFirestore.instance.collection('son_test').doc("store1").collection('places');
+//
+//   await placesCollection.add({
+//     'name': name,
+//     'address': address,
+//     'category': category,
+//   });
+//
+//   print('Place added to Firestore: $name, $address, $category');
+// }

@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_marvel/main/importbottomBar.dart';
+import 'package:food_marvel/map/maptotal.dart';
 import 'package:food_marvel/search/navSearch.dart';
 import 'package:food_marvel/shop/bestPage.dart';
 import 'dart:async';
@@ -392,7 +393,7 @@ class _MainPageState extends State<MainPage> {
                   child: Row(
                     children: [
                       buildIconWithText('assets/main/gps-removebg-preview.png', '내주변', () {
-                        navigatePlacePage(5);
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => GooGleMap()));
                       }),
                       buildIconWithText('assets/main/incheon.jpg', '인천/부평', () {
                         navigatePlacePage(0);

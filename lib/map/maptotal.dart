@@ -7,58 +7,35 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import '../firebase/firebase_options.dart'; // Firebase Core 패키지를 import 합니다.
-
+import '../firebase/firebase_options.dart';
 
 class Place {
   final String name;
   final String address;
-  final Future<LatLng?> location; // 위치를 비동기로 받음
+  final Future<LatLng?> location;
 
   Place({required this.name, required this.address, required String category})
       : location = getLocationFromAddress(address);
-
-  get category => null;
 }
 
-// List<Place> places = [
-//   Place(name: '칸다소바', address: '인천 부평구 부평대로36번길 5'),
-//   Place(name: '인브스키친', address: '인천 부평구 부평대로 39-6'),
-//   Place(name: '에픽', address: '인천 부평구 경원대로1363번길 8'),
-//   Place(name: '크라이치즈버거', address: '경기도 부천시 원미구 심곡2동 신흥로52번길 35'),
-//   Place(name: '타키', address: '인천광역시 서구 신석로77번길 12'),
-//   // 다른 더미 데이터들도 동일한 방식으로 추가할 수 있음
-// ];  //작업완료 11/1;
-//ㅁㄴㅇㅁㄴㅇ
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  ); // Firebase 초기화 함수를 호출합니다.
-  List<Place> places = await getData();
-  for (Place place in places) {
-    print('Name: ${place.name}, Address: ${place.address}, Category: ${place.category}');
-  }
-  runApp(MyApp()); // 앱을 실행합니다.
-}
-
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+class GooGleMap extends StatefulWidget {
+  const GooGleMap({Key? key}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<GooGleMap> {
   late GoogleMapController mapController;
-  LatLng _center = LatLng(37.4895, 126.7220); // 초기 지도 중심 좌표 및 확대 수준 설정
-  double _zoomLevel = 14.0; // 줌 레벨 변수 추가 및 초기값 설정
+  LatLng _center = LatLng(37.4895, 126.7220);
+  double _zoomLevel = 14.0;
+  LatLng? _selectedLocation;
 
   Set<Marker> _markers = {};
-  Set<Circle> _circles = {}; // 원을 표시하기 위한 Set 변수 추가
+  Set<Circle> _circles = {};
 
-  String _searchQuery = ""; // 검색어를 저장할 변수
-  String _selectedCategory = ''; // 선택된 카테고리를 저장하는 변수
+  String _searchQuery = "";
+  String _selectedCategory = '';
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -67,17 +44,22 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _getCurrentMyLocation(); // Get current location when the app starts
-
-    _addMarkers(); // 마커 추가
+    _getCurrentMyLocation();
+    _addMarkers();
   }
 
   Future<void> _addMarkers() async {
     List<Place> places = await getData();
-    _circles.add(getCircleBoundary(_center, 600)); // 원을 초기화하고 추가
+    for (Place place in places) {
+      print(
+          'Name: ${place.name}, Address: ${place.address}');
+    }
+
+    _circles.add(getCircleBoundary(_center, 600));
+
     if (_circles.isEmpty) {
       print('Circle is not available.');
-      return; // _circles Set이 비어있으면 함수 종료
+      return;
     }
 
     LatLng circleCenter = _circles.first.center;
@@ -108,14 +90,13 @@ class _MyAppState extends State<MyApp> {
       }
     }
 
-    setState(() {}); // 마커를 추가한 후 화면을 갱신하여 지도에 마커를 표시
+    setState(() {});
   }
 
-  // 검색어를 사용하여 장소를 필터링하는 함수
   void _filterPlaces(String query) {
     setState(() {
       _searchQuery = query;
-      _addMarkers(); // 검색어가 변경될 때마다 장소를 다시 필터링하여 마커를 추가합니다.
+      _addMarkers();
     });
   }
 
@@ -133,18 +114,17 @@ class _MyAppState extends State<MyApp> {
           CameraUpdate.newCameraPosition(
             CameraPosition(
               target: myLocation,
-              zoom: 17.0, // 현재 줌 레벨 사용
+              zoom: 17.0,
             ),
           ),
         );
 
-        // 추가: 사용자의 위치를 마커로 표시
         _markers.add(
           Marker(
             markerId: MarkerId('my_location'),
             position: myLocation,
             icon: BitmapDescriptor.defaultMarkerWithHue(
-                BitmapDescriptor.hueBlue), // 파란색 마커 아이콘 사용
+                BitmapDescriptor.hueBlue),
             infoWindow: InfoWindow(
               title: 'My Location',
               snippet: 'Lat: ${position.latitude}, Lng: ${position.longitude}',
@@ -152,204 +132,241 @@ class _MyAppState extends State<MyApp> {
           ),
         );
 
-        // 사용자 위치 주변에 원을 표시
-        Circle circleBoundary =
-            getCircleBoundary(myLocation, 500); // 반지름 500m의 원
-        _circles.clear(); // 원을 추가하기 전에 기존 원을 지움
+        Circle circleBoundary = getCircleBoundary(myLocation, 500);
+        _circles.clear();
         _circles.add(circleBoundary);
-        print('Circle Center: ${circleBoundary.center}, Radius: ${circleBoundary.radius}');
+        print(
+            'Circle Center: ${circleBoundary.center}, Radius: ${circleBoundary.radius}');
 
-
-        setState(() {}); // 위젯을 리빌드하여 마커를 지도에 표시
+        setState(() {});
       } catch (e) {
         print('Error: $e');
       }
     } else {
-      // 위치 권한이 거부된 경우
       print('User denied permissions to access the device\'s location.');
+    }
+  }
+
+  void _showMarkersAroundSelectedLocation() async {
+    if (_selectedLocation != null) {
+      List<Place> places = await getData();
+      _markers.clear();
+      _circles.clear();
+
+      _circles.add(getCircleBoundary(
+          _selectedLocation!, 600));
+
+      LatLng circleCenter = _selectedLocation!;
+      double circleRadius = 600;
+
+      for (var place in places) {
+        LatLng? location = await place.location;
+        if (location != null) {
+          double distance = Geolocator.distanceBetween(
+            circleCenter.latitude,
+            circleCenter.longitude,
+            location.latitude,
+            location.longitude,
+          );
+
+          if (distance <= circleRadius) {
+            _markers.add(
+              Marker(
+                markerId: MarkerId(place.name),
+                position: location,
+                infoWindow: InfoWindow(
+                  title: place.name,
+                  snippet: place.address,
+                ),
+              ),
+            );
+          }
+        }
+      }
+
+      setState(() {});
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Stack(
-          children: <Widget>[
-            GoogleMap(
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: _center,
-                zoom: _zoomLevel,
-              ),
-              markers: _markers,
-              circles: _circles,
+    return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          GoogleMap(
+            onMapCreated: _onMapCreated,
+            initialCameraPosition: CameraPosition(
+              target: _center,
+              zoom: _zoomLevel,
             ),
-            Positioned(
-              top: 50.0,
-              left: 0.0,
-              right: 20.0,
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.arrow_back),
-                        onPressed: () {
-                          // 뒤로가기 버튼을 눌렀을 때 수행할 동작을 구현하세요.
-                        },
-                      ),
-                      Expanded(
-                        child: Container(
-                          color: Colors.white,
-                          child: TextField(
-                            onChanged: _filterPlaces,
-                            decoration: InputDecoration(
-                              hintText: '장소 검색...',
-                              border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.all(8.0),
-                            ),
+            markers: _markers,
+            circles: _circles,
+          ),
+          Positioned(
+            top: 50.0,
+            left: 0.0,
+            right: 20.0,
+            child: Column(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.arrow_back),
+                      onPressed: () {
+                        // Handle back button press
+                        Navigator.pop(context);
+                      },
+                    ),
+                    Expanded(
+                      child: Container(
+                        color: Colors.white,
+                        child: TextField(
+                          onChanged: _filterPlaces,
+                          decoration: InputDecoration(
+                            hintText: '장소 검색...',
+                            border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.all(8.0),
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 5.0), // 간격 추가
-
-                  // 카테고리 버튼들
-                  // 카테고리 버튼들을 스크롤 가능하게 만듭니다.
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 30.0),
-                      child: Row(
-                        children: <Widget>[
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                _selectedCategory = '한식';
-                              });
-                            },
-                            child: Text(
-                              '한식',
-                              style: TextStyle(
+                    ),
+                  ],
+                ),
+                SizedBox(height: 5.0),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 30.0),
+                    child: Row(
+                      children: <Widget>[
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _selectedCategory = '한식';
+                            });
+                          },
+                          child: Text(
+                            '한식',
+                            style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 16.0,
-                                fontWeight: FontWeight.w400
-                              ), // 텍스트 색상을 검은색으로 설정
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.white, // 버튼 배경색을 흰색으로 설정
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0), // 버튼 모서리를 더 둥글게 만듭니다.
-                                side: BorderSide(color: Colors.grey), // 버튼 테두리를 회색으로 설정
-                              ),
-                              elevation: 5, // 그림자 효과를 추가합니다.
-                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // 버튼 내부 패딩을 조절합니다.
-                            ),
+                                fontWeight: FontWeight.w400),
                           ),
-                          SizedBox(width: 10.0), // 버튼 간의 간격을 조절합니다.
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                _selectedCategory = '중식';
-                              });
-                            },
-                            child: Text(
-                              '중식',
-                              style: TextStyle(color: Colors.black), // 텍스트 색상을 검은색으로 설정
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              side: BorderSide(color: Colors.grey),
                             ),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.white, // 버튼 배경색을 흰색으로 설정
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0), // 버튼 모서리를 더 둥글게 만듭니다.
-                                side: BorderSide(color: Colors.grey), // 버튼 테두리를 회색으로 설정
-                              ),
-                              elevation: 5, // 그림자 효과를 추가합니다.
-                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // 버튼 내부 패딩을 조절합니다.
-                            ),
+                            elevation: 5,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
                           ),
-                          SizedBox(width: 10.0), // 버튼 간의 간격을 조절합니다.
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                _selectedCategory = '일식';
-                              });
-                            },
-                            child: Text(
-                              '일식',
-                              style: TextStyle(color: Colors.black), // 텍스트 색상을 검은색으로 설정
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.white, // 버튼 배경색을 흰색으로 설정
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0), // 버튼 모서리를 더 둥글게 만듭니다.
-                                side: BorderSide(color: Colors.grey), // 버튼 테두리를 회색으로 설정
-                              ),
-                              elevation: 5, // 그림자 효과를 추가합니다.
-                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // 버튼 내부 패딩을 조절합니다.
-                            ),
+                        ),
+                        SizedBox(width: 10.0),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _selectedCategory = '중식';
+                            });
+                          },
+                          child: Text(
+                            '중식',
+                            style: TextStyle(color: Colors.black),
                           ),
-                          SizedBox(width: 10.0), // 버튼 간의 간격을 조절합니다.
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                _selectedCategory = '카페';
-                              });
-                            },
-                            child: Text(
-                              '카페',
-                              style: TextStyle(color: Colors.black), // 텍스트 색상을 검은색으로 설정
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              side: BorderSide(color: Colors.grey),
                             ),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.white, // 버튼 배경색을 흰색으로 설정
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0), // 버튼 모서리를 더 둥글게 만듭니다.
-                                side: BorderSide(color: Colors.grey), // 버튼 테두리를 회색으로 설정
-                              ),
-                              elevation: 5, // 그림자 효과를 추가합니다.
-                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // 버튼 내부 패딩을 조절합니다.
-                            ),
+                            elevation: 5,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
                           ),
-                          SizedBox(width: 10.0), // 버튼 간의 간격을 조절합니다.
-                          ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                _selectedCategory = '포장마차';
-                              });
-                            },
-                            child: Text(
-                              '포장마차',
-                              style: TextStyle(color: Colors.black), // 텍스트 색상을 검은색으로 설정
-                            ),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.white, // 버튼 배경색을 흰색으로 설정
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0), // 버튼 모서리를 더 둥글게 만듭니다.
-                                side: BorderSide(color: Colors.grey), // 버튼 테두리를 회색으로 설정
-                              ),
-                              elevation: 5, // 그림자 효과를 추가합니다.
-                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10), // 버튼 내부 패딩을 조절합니다.
-                            ),
+                        ),
+                        SizedBox(width: 10.0),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _selectedCategory = '일식';
+                            });
+                          },
+                          child: Text(
+                            '일식',
+                            style: TextStyle(color: Colors.black),
                           ),
-                          SizedBox(width: 10.0), // 버튼 간의 간격을 조절합니다.
-                        ],
-
-                      ),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              side: BorderSide(color: Colors.grey),
+                            ),
+                            elevation: 5,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                          ),
+                        ),
+                        SizedBox(width: 10.0),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _selectedCategory = '카페';
+                            });
+                          },
+                          child: Text(
+                            '카페',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              side: BorderSide(color: Colors.grey),
+                            ),
+                            elevation: 5,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                          ),
+                        ),
+                        SizedBox(width: 10.0),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _selectedCategory = '포장마차';
+                            });
+                          },
+                          child: Text(
+                            '포장마차',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              side: BorderSide(color: Colors.grey),
+                            ),
+                            elevation: 5,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                          ),
+                        ),
+                        SizedBox(width: 10.0),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
+          ),
         ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _getCurrentMyLocation,
-          child: Icon(Icons.my_location),
-          backgroundColor: Colors.blue[700],
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _getCurrentMyLocation,
+        child: Icon(Icons.my_location),
+        backgroundColor: Colors.blue[700],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
   }
 }
