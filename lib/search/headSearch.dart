@@ -44,9 +44,12 @@ class _SearchState extends State<Search> {
     setState(() {
       recentSearches.remove(search);
     });
+
     _searchval.collection('T3_SEARCH_TBL').where('searchvalue', isEqualTo: search).get().then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
-        doc.reference.delete().then((value) => _loadRecentSearches());
+        if (doc['searchvalue'] == search) {
+          doc.reference.delete().then((value) => _loadRecentSearches());
+        }
       });
     }).catchError((error) {
       print("Error removing document: $error");
@@ -65,11 +68,11 @@ class _SearchState extends State<Search> {
   void _onSearchSubmitted(String value) async {
     String searchText = _searchController.text;
     setState(() {
-
       if (recentSearches.contains(searchText)) {
         recentSearches.remove(searchText);
       }
       recentSearches.insert(0, searchText);
+
       if (recentSearches.length > 6) {
         recentSearches.removeAt(6);
       }
@@ -111,6 +114,7 @@ class _SearchState extends State<Search> {
       if (loadedSearches.length > 6) {
         loadedSearches = loadedSearches.sublist(0, 6);
       }
+      loadedSearches = loadedSearches.toSet().toList();
       setState(() {
         recentSearches = loadedSearches;
       });
