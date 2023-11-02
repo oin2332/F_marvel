@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_marvel/main/mainPage.dart';
 import 'package:food_marvel/search/navSearch.dart';
+import 'package:food_marvel/user/userUnlogin.dart';
 
 import '../reservation/RtabBar.dart';
 import '../user/userMain.dart';
@@ -32,7 +33,7 @@ class BottomNavBar extends StatelessWidget {
               Navigator.push(context, MaterialPageRoute(builder: (context) => ResTabBar()));
             }, child: Icon(Icons.calendar_today_rounded)),
             InkWell(onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => UserMain()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => UserUnlogin()));
             }, child: Icon(Icons.person)),
           ],
         ),

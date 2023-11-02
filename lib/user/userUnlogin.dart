@@ -15,20 +15,20 @@ import 'package:provider/provider.dart';
 import '../firebase/firebase_options.dart';
 
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(
-      ChangeNotifierProvider<UserModel>(
-        create: (context) => UserModel(),
-        child: MaterialApp(
-          home: UserUnlogin(),
-        ),
-      )
-  );
-}
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp(
+//     options: DefaultFirebaseOptions.currentPlatform,
+//   );
+//   runApp(
+//       ChangeNotifierProvider<UserModel>(
+//         create: (context) => UserModel(),
+//         child: MaterialApp(
+//           home: UserUnlogin(),
+//         ),
+//       )
+//   );
+// }
 
 // class MyApp extends StatelessWidget {
 //   @override
@@ -57,7 +57,9 @@ class _UserUnloginState extends State<UserUnlogin> {
             children: [
               SizedBox(height: 130),
               TextButton(
-                onPressed: ()  {},
+                onPressed: ()  {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => UserMain()));
+                },
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.zero, // 패딩을 제거하여 이미지에 꽉 차게 합니다.
                 ),
