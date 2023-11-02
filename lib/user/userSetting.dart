@@ -5,12 +5,15 @@ import 'package:food_marvel/user/connectNumber.dart';
 import 'package:food_marvel/user/notificationSetting.dart';
 import 'package:food_marvel/user/profileEdit.dart';
 import 'package:food_marvel/user/userInfoEdit.dart';
+import 'package:food_marvel/user/userModel.dart';
+import 'package:provider/provider.dart';
 
 class UserSetting extends StatelessWidget {
   const UserSetting({super.key});
 
   @override
   Widget build(BuildContext context) {
+    String? userId = Provider.of<UserModel>(context).userId; // UserModel에서 사용자 아이디 받아오기
     return Scaffold(
         appBar: AppBar(title: Text('설정')),
         body: ListView(
@@ -18,7 +21,7 @@ class UserSetting extends StatelessWidget {
               Text('내 정보', style: TextStyle(color: Colors.grey[600]!),),
               TextButton(
                 onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => ProfileEdit()));},
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => ProfileEdit(userId: userId)));},
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
