@@ -11,7 +11,6 @@ import 'package:provider/provider.dart';
 import '../firebase/firebase_options.dart';
 import '../search/headSearch.dart';
 import '../shop/storePage.dart';
-import '../shop/test/test.dart';
 import '../user/userModel.dart';
 import '../user/userSetting.dart';
 import '13_tapBar.dart';
@@ -36,7 +35,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Test(),
+      home: MainPage(),
     );
   }
 }
