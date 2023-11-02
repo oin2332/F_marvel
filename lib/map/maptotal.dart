@@ -134,6 +134,9 @@ class _MyAppState extends State<GooGleMap> {
         print(
             'Circle Center: ${circleBoundary.center}, Radius: ${circleBoundary.radius}');
 
+        // 위치 정보 프린트
+        print('My Location: Lat: ${position.latitude}, Lng: ${position.longitude}');
+
         setState(() {});
       } catch (e) {
         print('Error: $e');
