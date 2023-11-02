@@ -14,7 +14,7 @@ Future<List<Place>> getData() async {
       String address = doc['address'];
       Place place = Place(name: name, address: address, category: '');
       places.add(place);
-      print('Fetched Place: $name, $address');
+      //print('Fetched Place: $name, $address');
     });
   } catch (e) {
     print('Error fetching data: $e');

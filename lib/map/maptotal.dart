@@ -30,10 +30,12 @@ class _MyAppState extends State<GooGleMap> {
   LatLng _center = LatLng(37.4895, 126.7220);
   double _zoomLevel = 14.0;
   LatLng? _selectedLocation;
-  String _searchQuery = "";
-  String _selectedCategory = '';
+
   Set<Marker> _markers = {};
   Set<Circle> _circles = {};
+
+  String _searchQuery = "";
+  String _selectedCategory = '';
 
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
@@ -43,15 +45,11 @@ class _MyAppState extends State<GooGleMap> {
   void initState() {
     super.initState();
     _getCurrentMyLocation();
-
+    _addMarkers();
   }
 
   Future<void> _addMarkers() async {
     List<Place> places = await getData();
-    for (Place place in places) {
-      print(
-          'Name: ${place.name}, Address: ${place.address}');
-    }
 
     _circles.add(getCircleBoundary(_center, 600));
 
@@ -108,7 +106,7 @@ class _MyAppState extends State<GooGleMap> {
 
         LatLng myLocation = LatLng(position.latitude, position.longitude);
 
-        mapController?.animateCamera(
+        mapController.animateCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(
               target: myLocation,
@@ -136,9 +134,7 @@ class _MyAppState extends State<GooGleMap> {
         print(
             'Circle Center: ${circleBoundary.center}, Radius: ${circleBoundary.radius}');
 
-        setState(() {
-          _addMarkers();
-        });
+        setState(() {});
       } catch (e) {
         print('Error: $e');
       }
