@@ -2,10 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_marvel/main/importbottomBar.dart';
 import 'package:food_marvel/main/mainPage.dart';
+import 'package:food_marvel/search/ImportEmptySearch.dart';
 import 'package:food_marvel/search/ImportRestaurant.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:food_marvel/search/ImportSuddenpopular.dart';
 import '../firebase/firebase_options.dart';
+import 'ImportSearchResult.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +31,7 @@ class _SearchState extends State<Search> {
   final FirebaseFirestore _searchval = FirebaseFirestore.instance;
   TextEditingController _searchController = TextEditingController();
   List<String> recentSearches = [];
+  String searchQuery = "";
 
 
   @override
@@ -41,9 +44,12 @@ class _SearchState extends State<Search> {
     setState(() {
       recentSearches.remove(search);
     });
+
     _searchval.collection('T3_SEARCH_TBL').where('searchvalue', isEqualTo: search).get().then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
-        doc.reference.delete().then((value) => _loadRecentSearches());
+        if (doc['searchvalue'] == search) {
+          doc.reference.delete().then((value) => _loadRecentSearches());
+        }
       });
     }).catchError((error) {
       print("Error removing document: $error");
@@ -62,7 +68,11 @@ class _SearchState extends State<Search> {
   void _onSearchSubmitted(String value) async {
     String searchText = _searchController.text;
     setState(() {
+      if (recentSearches.contains(searchText)) {
+        recentSearches.remove(searchText);
+      }
       recentSearches.insert(0, searchText);
+
       if (recentSearches.length > 6) {
         recentSearches.removeAt(6);
       }
@@ -73,13 +83,16 @@ class _SearchState extends State<Search> {
         'searchvalue': _searchController.text,
         'timestamp': FieldValue.serverTimestamp(),
       });
-
-
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: $e')),
       );
     }
+
+    setState(() {
+      searchQuery = searchText;
+    });
+
     _searchController.clear();
   }
 
@@ -101,6 +114,7 @@ class _SearchState extends State<Search> {
       if (loadedSearches.length > 6) {
         loadedSearches = loadedSearches.sublist(0, 6);
       }
+      loadedSearches = loadedSearches.toSet().toList();
       setState(() {
         recentSearches = loadedSearches;
       });
@@ -174,6 +188,7 @@ class _SearchState extends State<Search> {
                 Spacer(),
               ],
             ),
+
             Wrap(
               children: [
                 for (var search in recentSearches)
@@ -218,11 +233,19 @@ class _SearchState extends State<Search> {
                   ),
               ],
             ),
-            ImportSuddenPopular(), // 관심급상승음식점부분 임포트
-            ImportRestaurant(), // 어떤맛집찾으세요부분 임포트
+            SizedBox(height: 10, child: Container(color: Colors.grey)),
+            if (searchQuery.isNotEmpty) ImportSearchResult(),
+            if (searchQuery.isNotEmpty) ImportEmptySearch(searchQuery: searchQuery),
+            if (searchQuery.isEmpty)
+              Column(
+                children: [
+                  ImportSuddenPopular(),
+                  ImportRestaurant(),
+                ],
+              ),
           ],
         ),
-      ),//
+      ),
       resizeToAvoidBottomInset: false,
       bottomNavigationBar: BottomNavBar(), // 바텀바 부분 임포트
     );
