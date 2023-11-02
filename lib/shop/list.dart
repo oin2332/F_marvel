@@ -11,7 +11,10 @@ class list extends StatefulWidget {
 }
 
 class _listState extends State<list> {
-  Widget _listUser() {
+
+
+  @override
+  Widget build(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseFirestore.instance.collection("T3_STORE_TBL").orderBy("timestamp", descending: true).snapshots(),
       ///////////////////users/////////////////////
@@ -148,17 +151,6 @@ class _listState extends State<list> {
         );
 
       },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          _listUser()
-        ],
-      ),
     );
   }
 }
