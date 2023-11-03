@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../user/userModel.dart';
+import 'detailpage.dart';
 
 
 
@@ -72,24 +73,13 @@ class _TestState extends State<ListsShop> {
           if (y > 0) {
             x = x / y;
           }
-
-
-
-          // storeData에 'STAR' 키를 사용하여 starDataList 추가
           storeData['STARlength'] = y;
           storeData['STARage'] = x.toStringAsFixed(1);
           storeData['STARlist'] = starList;
-          print( storeData['STARlength']);
-          print(storeData['STARage']);
-          print( storeData['STARlist']);
-
           userDataList.add(storeData);
-
-
         }
         setState(() {
 
-          // 데이터가 추가된 userDataList를 화면에 반영
         });
       } else {
         print('상점 데이터를 찾을 수 없습니다.');
@@ -173,9 +163,53 @@ class _TestState extends State<ListsShop> {
                               ),
                             ],
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => DetailPage()));
+                          },
                         ),
                       ),
+                      SizedBox(height: 20),
+                      Row(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: const Color(0xFFFF6347),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 10),
+                            ),
+                            child: Text('13:00'),
+                          ),
+                          SizedBox(width: 6),
+                          ElevatedButton(
+                            onPressed: () {
+
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: const Color(0xFFFF6347),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 10),
+                            ),
+                            child: Text('18:00'),
+                          ),
+                          SizedBox(width: 6),
+                          ElevatedButton(
+                            onPressed: () {
+
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: const Color(0xFFFF6347),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15, vertical: 10),
+                            ),
+                            child: Text('21:00'),
+                          ),
+                        ],
+                      ),
+
+
 
 
                     ],
