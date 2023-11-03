@@ -235,7 +235,7 @@ class _SearchState extends State<Search> {
             ),
             SizedBox(height: 10, child: Container(color: Colors.grey)),
             if (searchQuery.isNotEmpty) ImportSearchResult(),
-
+            ListsShop(),
             if (searchQuery.isNotEmpty) ImportEmptySearch(searchQuery: searchQuery),
             if (searchQuery.isEmpty)
               Column(
