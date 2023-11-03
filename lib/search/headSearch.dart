@@ -81,6 +81,7 @@ class _SearchState extends State<Search> {
       }
     });
 
+
     try {
       await _searchval.collection('T3_SEARCH_TBL').add({
         'S_SEARCHVALURE': _searchController.text,
@@ -94,13 +95,12 @@ class _SearchState extends State<Search> {
 
     QuerySnapshot userSnapshot = await FirebaseFirestore.instance
         .collection('T3_STORE_TBL')
-        .where('S_ADDR1', isEqualTo: searchText)
         .get();
 
     List<Map<String, dynamic>> results = [];
-    if (userSnapshot.docs.isNotEmpty) {
-      for (var doc in userSnapshot.docs) {
-        Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
+    for (var doc in userSnapshot.docs) {
+      Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
+      if (matchesSearchText(userData, searchText)) {
         results.add(userData);
       }
     }
@@ -109,7 +109,19 @@ class _SearchState extends State<Search> {
       searchQuery = searchText;
       searchResults = results;
     });
+
     _searchController.clear();
+  }
+
+
+  bool matchesSearchText(Map<String, dynamic> userData, String searchText) {
+    List<String> searchFields = ['S_ADDR1', 'S_ADDR2', 'S_ADDR3', 'S_INFO1', 'S_NAME'];
+    for (String field in searchFields) {
+      if (userData[field] != null && userData[field].toString().contains(searchText)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @override
@@ -248,17 +260,14 @@ class _SearchState extends State<Search> {
               ],
             ),
             SizedBox(height: 10, child: Container(color: Colors.grey)),
-
+            if (searchQuery.isNotEmpty) ImportSearchResult(),
             if (searchResults.isNotEmpty) (
             Container(
             height: 500,
             child: ListsShop(searchResults: searchResults),
             )
-            )else (
-            ImportEmptySearch(searchQuery: searchQuery)
-            ),
-            if (searchQuery.isNotEmpty) ImportSearchResult(),
-            if (searchQuery.isNotEmpty) ImportEmptySearch(searchQuery: searchQuery),
+            )else if(searchQuery.isNotEmpty)
+              ImportEmptySearch(searchQuery: searchQuery),
             if (searchQuery.isEmpty)
               Column(
                 children: [
