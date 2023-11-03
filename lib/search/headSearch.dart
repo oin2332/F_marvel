@@ -6,6 +6,7 @@ import 'package:food_marvel/search/ImportEmptySearch.dart';
 import 'package:food_marvel/search/ImportRestaurant.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:food_marvel/search/ImportSuddenpopular.dart';
+import 'package:food_marvel/shop/list.dart';
 import '../firebase/firebase_options.dart';
 import 'ImportSearchResult.dart';
 
@@ -45,9 +46,9 @@ class _SearchState extends State<Search> {
       recentSearches.remove(search);
     });
 
-    _searchval.collection('T3_SEARCH_TBL').where('searchvalue', isEqualTo: search).get().then((QuerySnapshot querySnapshot) {
+    _searchval.collection('T3_SEARCH_TBL').where('S_SEARCHVALURE', isEqualTo: search).get().then((QuerySnapshot querySnapshot) {
       querySnapshot.docs.forEach((doc) {
-        if (doc['searchvalue'] == search) {
+        if (doc['S_SEARCHVALURE'] == search) {
           doc.reference.delete().then((value) => _loadRecentSearches());
         }
       });
@@ -80,8 +81,8 @@ class _SearchState extends State<Search> {
 
     try {
       await _searchval.collection('T3_SEARCH_TBL').add({
-        'searchvalue': _searchController.text,
-        'timestamp': FieldValue.serverTimestamp(),
+        'S_SEARCHVALURE': _searchController.text,
+        'S_TIMESTAMP': FieldValue.serverTimestamp(),
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -92,7 +93,6 @@ class _SearchState extends State<Search> {
     setState(() {
       searchQuery = searchText;
     });
-
     _searchController.clear();
   }
 
@@ -106,11 +106,11 @@ class _SearchState extends State<Search> {
 
   Future<void> _loadRecentSearches() async {
     final snapshot = await _searchval.collection('T3_SEARCH_TBL')
-        .orderBy('timestamp', descending: true)
+        .orderBy('S_TIMESTAMP', descending: true)
         .get();
 
     if (snapshot.docs.isNotEmpty) {
-      List<String> loadedSearches = snapshot.docs.map((doc) => doc['searchvalue'].toString()).toList();
+      List<String> loadedSearches = snapshot.docs.map((doc) => doc['S_SEARCHVALURE'].toString()).toList();
       if (loadedSearches.length > 6) {
         loadedSearches = loadedSearches.sublist(0, 6);
       }
@@ -235,6 +235,7 @@ class _SearchState extends State<Search> {
             ),
             SizedBox(height: 10, child: Container(color: Colors.grey)),
             if (searchQuery.isNotEmpty) ImportSearchResult(),
+
             if (searchQuery.isNotEmpty) ImportEmptySearch(searchQuery: searchQuery),
             if (searchQuery.isEmpty)
               Column(
