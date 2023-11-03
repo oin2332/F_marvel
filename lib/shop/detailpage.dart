@@ -6,24 +6,13 @@ import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../main.dart';
-
-
-
-
 class DetailPage extends StatefulWidget {
-
   DetailPage({Key? key}) : super(key: key);
-
   @override
   State<DetailPage> createState() => _DetailPageState();
 }
-
-
-
 class _DetailPageState extends State<DetailPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -193,17 +182,11 @@ class _DetailPageState extends State<DetailPage> {
                       ],
                     ),
                   ),
-
-
                   underlineBox(5.0),
                   //예약 일시 부분
-
                   ReservationAdd(),
-
                   underlineBox(5.0),
-
                   //홈 메뉴 사진 리뷰
-
                   Container(
                     child: Column(
                       children: [

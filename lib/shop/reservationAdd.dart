@@ -3,6 +3,7 @@ import 'package:food_marvel/shop/underlindeBox.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+
 class ReservationAdd extends StatefulWidget {
   const ReservationAdd({super.key});
 
@@ -17,19 +18,29 @@ class _ReservationAddState extends State<ReservationAdd> {
     // TODO: implement initState
     super.initState();
 
+
+
   }
-
-
-  DateTime? selectedDay;
   DateTime? _selectedDay;
+  DateTime _focusedDay = DateTime.now();
   int? selectedNumber;
-
 
   Map<CalendarFormat, String> _availableCalendarFormats = {
     CalendarFormat.month: '월',
     CalendarFormat.twoWeeks: '2주',
     CalendarFormat.week: '주',
   };
+
+  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+    if (!isSameDay(_selectedDay, selectedDay)) {
+      setState(() {
+        _selectedDay = selectedDay;
+        _focusedDay = focusedDay;
+      });
+
+
+    }
+  }
 
   void _showModalBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -39,84 +50,92 @@ class _ReservationAddState extends State<ReservationAdd> {
             topLeft: Radius.circular(30), topRight: Radius.circular(30)),
       ),
       builder: (BuildContext context) {
-        return SizedBox(
-          height: 900,
-          child: Container(
-            child: Column(
-              children: [
-                TableCalendar(
-                  availableCalendarFormats: _availableCalendarFormats,
-                  focusedDay: DateTime.now(),
-                  firstDay: DateTime(1800),
-                  lastDay: DateTime(3000),
-                  headerStyle: HeaderStyle(
-                    formatButtonVisible: false,
-                    titleCentered: true,
-                    titleTextStyle: TextStyle(fontWeight: FontWeight.w700),
-                  ),
-                  onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
-                    setState(() {
-                      _selectedDay = selectedDay;
-                    });
-                  },
-                  selectedDayPredicate: (DateTime date) {
-                    if (_selectedDay == null) {
-                      return false;
-                    }
-                    return date.year == _selectedDay!.year &&
-                        date.month == _selectedDay!.month &&
-                        date.day == _selectedDay!.day;
-                  },
-                  calendarFormat: CalendarFormat.month,
-                  // 초기 달력 형식을 월로 설정
-                  enabledDayPredicate: (DateTime date) {
-                    // 이전 날짜는 비활성화
-                    return date.isAfter(DateTime.now());
-                  },
-                  locale: 'ko_KR',
-                  calendarStyle: CalendarStyle(
-                    weekendTextStyle: TextStyle(color: Colors.blue),
-                  ),
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return SizedBox(
+              height: 900,
+              child: Container(
+                child: Column(
+                  children: [
+                    TableCalendar(
+                      availableCalendarFormats: _availableCalendarFormats,
+                      focusedDay: DateTime.now(),
+                      firstDay: DateTime(1800),
+                      lastDay: DateTime(3000),
+                      headerStyle: HeaderStyle(
+                        formatButtonVisible: false,
+                        titleCentered: true,
+                        titleTextStyle: TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                      onDaySelected: _onDaySelected,
+
+                      selectedDayPredicate: (DateTime date) {
+                        if (_selectedDay == null) {
+                          return false;
+                        }
+                        return date.year == _selectedDay!.year &&
+                            date.month == _selectedDay!.month &&
+                            date.day == _selectedDay!.day;
+                      },
+                      onPageChanged: (focusedDay) {
+                        _focusedDay = focusedDay;
+                      },
+
+
+                      calendarFormat: CalendarFormat.month,
+                      // 초기 달력 형식을 월로 설정
+                      enabledDayPredicate: (DateTime date) {
+                        // 이전 날짜는 비활성화
+                        return date.isAfter(DateTime.now());
+                      },
+                      locale: 'ko_KR',
+                      calendarStyle: CalendarStyle(
+                        weekendTextStyle: TextStyle(color: Colors.blue),
+                      ),
+                    ),
+
+
+                    SizedBox(height: 15
+                      ,),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          SizedBox(width: 12,),
+                          _numberpeople('1'), SizedBox(width: 6,),
+                          _numberpeople('2'), SizedBox(width: 6,),
+                          _numberpeople('3'), SizedBox(width: 6,),
+                          _numberpeople('4'), SizedBox(width: 6,),
+                          _numberpeople('5'), SizedBox(width: 6,),
+                          _numberpeople('6'), SizedBox(width: 6,),
+                          _numberpeople('7'), SizedBox(width: 6,),
+                          _numberpeople('8'), SizedBox(width: 6,),
+                          _numberpeople('9'), SizedBox(width: 6,),
+                          _numberpeople('10'),
+
+                        ],
+                      ),
+                    ),
+
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(); // 모달 닫기
+                        if (_selectedDay != null && selectedNumber != null) {
+                          // 예약 일시 및 인원을 사용하여 작업 수행
+                          // 예: 예약 일시 및 인원을 API 호출 등에 사용
+                        }
+                      },
+                      child: Text('확인'),
+                    ),
+                  ],
                 ),
-
-
-                SizedBox(height: 15
-                  ,),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      SizedBox(width: 12,),
-                      _numberpeople('1'),
-                      SizedBox(width: 6,),
-                      _numberpeople('2'), SizedBox(width: 6,),
-                      _numberpeople('3'), SizedBox(width: 6,),
-                      _numberpeople('4'), SizedBox(width: 6,),
-                      _numberpeople('5'), SizedBox(width: 6,),
-                      _numberpeople('6'), SizedBox(width: 6,),
-                      _numberpeople('7'), SizedBox(width: 6,),
-                      _numberpeople('8'), SizedBox(width: 6,),
-                      _numberpeople('9'), SizedBox(width: 6,),
-                      _numberpeople('10'),
-
-                    ],
-                  ),
-                ),
-
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(); // 모달 닫기
-                  },
-                  child: Text('확인'),
-                ),
-              ],
-            ),
-          ),
+              ),
+            );
+          }
         );
       },
     );
   }
-
 
   Widget _numberpeople(String num) {
     bool isSelected = selectedNumber == int.parse(num); // 현재 숫자가 선택된 숫자와 같은지 확인
