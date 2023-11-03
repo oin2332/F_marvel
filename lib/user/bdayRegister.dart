@@ -11,14 +11,58 @@ class BdayRegister extends StatelessWidget {
           backgroundColor: Colors.white,
           iconTheme: IconThemeData(color: Colors.black),
           title: Text('생일/기념일 등록하기', style: TextStyle(color: Colors.black)), elevation: 0),
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          IconButton(onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (_) => BdayRegisterDetail()));
-          }, icon: Icon(Icons.add_circle)),
-          Text('기념일 추가하기')
-        ],
+      body: Container(
+        color: Colors.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (_) => BdayRegisterDetail()));
+            }, icon: Icon(Icons.add_circle, color: Colors.deepOrange[400]!,)),
+            Text('기념일 추가하기')
+          ],
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[200]!,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: SizedBox(
+            height: 100,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.warning_outlined, color: Colors.deepOrange[400]!, size: 14),
+                      SizedBox(width: 10),
+                      Text('기념일은 나만 볼 수 있어요', style: TextStyle(fontSize: 15, color: Colors.deepOrange, fontWeight: FontWeight.bold))
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Icon(Icons.circle, size: 6),
+                      SizedBox(width: 15),
+                      Text('등록한 기념일은 마이페이지에서 나만 볼 수 있어요.', style: TextStyle())
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.circle, size: 6),
+                      SizedBox(width: 15),
+                      Text('등록한 기념일이 다가오면 푸드마블에서 알려드려요.', style: TextStyle())
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
