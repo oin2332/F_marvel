@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:food_marvel/shop/reservationPage.dart';
 import 'package:food_marvel/shop/tabBar.dart';
+import 'package:food_marvel/shop/test/asd.dart';
 
 import '../map/maptotal.dart';
 import '../search/headSearch.dart';
@@ -29,7 +30,7 @@ class ModalData extends ChangeNotifier {
 }
 
 class StorePage extends StatefulWidget {
-  const StorePage({super.key});
+  StorePage({super.key});
 
   @override
   State<StorePage> createState() => _StorePageState();
@@ -192,7 +193,7 @@ class _StorePageState extends State<StorePage> {
               ),
             ),
             SizedBox(height: 10,),
-            Expanded(child: list())
+            Expanded(child: ListsShop())
           ],
         ),
       ),
