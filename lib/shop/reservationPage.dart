@@ -1,130 +1,160 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
+import 'package:table_calendar/table_calendar.dart';
+
 
 class ReservationPage extends StatefulWidget {
-  const ReservationPage({super.key});
-
   @override
   State<ReservationPage> createState() => _ReservationPageState();
 }
 
 class _ReservationPageState extends State<ReservationPage> {
   int selectedNumber = 2;
-  String selectedTime = '12';
+  Map<CalendarFormat, String> _availableCalendarFormats = {
+    CalendarFormat.month: '월',
+    CalendarFormat.twoWeeks: '2주',
+    CalendarFormat.week: '주',
+  };
+
+  DateTime? selectedDay;
+  DateTime? _selectedDay;
+
+  @override
+  void initState() {
+    super.initState();
+    initializeDateFormatting('ko_KR', null);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('가게이름 예약가능 날짜'),),
+      appBar: AppBar(
+        title: Text('예약 일정'),
+        backgroundColor: Color(0xFFFF6347),
+      ),
       body: SingleChildScrollView(
-        child:  Container(
-            child: Column(
-              children: [
-                Container(
-                  height: 60,
-                  child: InkWell(
-                    onTap: (){
-                      _showModalBottomSheet(context);
-                    },
-                    child:Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+        child: Container(
+          child: Column(
+            children: [
+              Container(
+                height: 60,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Text(
+                      _selectedDay != null
+                          ? DateFormat('yyyy-MM-dd (E)', 'ko_KR').format(_selectedDay!) // 한국어 로케일로 설정
+                          : '날짜를 선택하세요', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold), // 날짜 선택 전에는 표시되지 않음
+                    ),
+
+                    Row(
                       children: [
                         Icon(Icons.person),
-                        SizedBox(width: 3,),
-                        Text('$selectedNumber인'), // 이 부분을 선택된 인원수로 업데이트
-                        Icon(Icons.keyboard_arrow_down_sharp,size: 18,color: Color(0xFFFF6347),),
-                        SizedBox(width: 13,),
+                        SizedBox(width: 3),
+                        Text('$selectedNumber인'),
+                        IconButton(
+                          onPressed: () {
+                            _showModalBottomSheet(context);
+                          },
+                          icon: Icon(
+                            Icons.keyboard_arrow_down_sharp,
+                            size: 25,
+                            color: Color(0xFFFF6347),
+                          ),
+                        ),
+                        SizedBox(width: 13),
                       ],
                     ),
-                  ),
-                ),
-                underlineBox(0.9),
-
-                Container(
-                  padding: EdgeInsets.all(30),
-                  child: Column(
-                    children: [
-                      Container(
-                        child: Row(
-                          children: [
-                            Text('오늘',style: TextStyle(color: Color(0xFFFF6347), fontSize: 18),),
-                            SizedBox(width: MediaQuery.of(context).size.width * 0.30,),
-                            IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios_sharp)),
-                            Text('10월 3주차'),
-                            IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios_sharp)),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 20,),
-                      _dayTimes('일'),
-                      SizedBox(height: 20,),
-                      _dayTimes('월'),
-                      SizedBox(height: 20,),
-                      _dayTimes('화'),
-                      SizedBox(height: 20,),
-                      _dayTimes('수'),
-                      SizedBox(height: 20,),
-                      _dayTimes('목'),
-                      SizedBox(height: 20,),
-                      _dayTimes('금'),
-                      SizedBox(height: 20,),
-                      _dayTimes('토'),
-                      SizedBox(height: 20,),
-
-
-
-                    ],
-                  ),
-                )
-
-
-              ],
-            ),
-          ),
-      ),
-    );
-  }
-  Widget _dayTimes(String day) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Row(
-        children: [
-          Padding(
-              padding:
-              const EdgeInsets.only(left: 10.0, bottom: 10.0),
-              child: Text(day,style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),)
-          ),
-          SizedBox(width: 10),
-
-          SizedBox(width: 10),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.only(left: 20),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    _numberTime('12'),
-                    SizedBox(width: 8,),
-                    _numberTime('13'),
-                    SizedBox(width: 8,),
-                    _numberTime('14'),
-                    SizedBox(width: 8,),
-                    _numberTime('15'),
-                    SizedBox(width: 8,),
-                    _numberTime('18'),
-                    SizedBox(width: 8,),
-                    _numberTime('19'),
-                    SizedBox(width: 8,),
-                    _numberTime('20'),
-                    SizedBox(width: 8,),
-                    _numberTime('21'),
-                    SizedBox(width: 8,),
                   ],
                 ),
               ),
-            ),
+              underlineBox(0.9),
+              Container(
+                padding: EdgeInsets.all(30),
+                child: Column(
+                  children: [
+                    // 달력 추가
+                    TableCalendar(
+                      availableCalendarFormats: _availableCalendarFormats,
+                      focusedDay: DateTime.now(),
+                      firstDay: DateTime(1800),
+                      lastDay: DateTime(3000),
+                      headerStyle: HeaderStyle(
+                        formatButtonVisible: false,
+                        titleCentered: true,
+                        titleTextStyle: TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                      onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
+                        setState(() {
+                          _selectedDay = selectedDay;
+                        });
+                      },
+                      selectedDayPredicate: (DateTime date) {
+                        if (_selectedDay == null) {
+                          return false;
+                        }
+                        return date.year == _selectedDay!.year &&
+                            date.month == _selectedDay!.month &&
+                            date.day == _selectedDay!.day;
+                      },
+                      calendarFormat: CalendarFormat.month,
+                      // 초기 달력 형식을 월로 설정
+                      enabledDayPredicate: (DateTime date) {
+                        // 이전 날짜는 비활성화
+                        return date.isAfter(DateTime.now());
+                      },
+                      locale: 'ko_KR',
+                      calendarStyle: CalendarStyle(
+                        weekendTextStyle: TextStyle(color: Colors.blue),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 80,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+
+                    },
+                    style: ButtonStyle(
+                      minimumSize: MaterialStateProperty.all(Size(150, 50)), // 버튼 크기 설정
+                      side: MaterialStateProperty.all(BorderSide(color: Colors.black, width: 1)), // 테두리 색 및 너비 설정
+                      backgroundColor: MaterialStateProperty.all(Colors.transparent), // 배경색 설정 (투명으로 설정하여 테두리만 보이게 함)
+                    ),
+                    child: Text(
+                      '취소',
+                      style: TextStyle(
+                        color: Colors.black, // 글자색을 검은색으로 설정
+                      ),
+                    ),
+                  )
+                  ,
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(날짜 인원수 저장되게);
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Color(0xFFFF6347)), // 배경색 설정
+                      minimumSize: MaterialStateProperty.all(Size(150, 50)), // 버튼 크기 설정
+                    ),
+                    child: Text(
+                      '예약하기',
+                      style: TextStyle(
+                        color: Colors.white, // 글자색을 흰색으로 설정
+                      ),
+                    ),
+                  ),
+                ],
+              )
+
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -145,7 +175,10 @@ class _ReservationPageState extends State<ReservationPage> {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+        ),
       ),
       builder: (BuildContext context) {
         return SizedBox(
@@ -155,9 +188,8 @@ class _ReservationPageState extends State<ReservationPage> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  SizedBox(width: 12,),
-                  for (int i = 1; i <= 10; i++)
-                    _numberpeople(i.toString()),
+                  SizedBox(width: 12),
+                  for (int i = 1; i <= 10; i++) _numberpeople(i.toString()),
                 ],
               ),
             ),
@@ -168,7 +200,8 @@ class _ReservationPageState extends State<ReservationPage> {
   }
 
   Widget _numberpeople(String num) {
-    bool isSelected = selectedNumber == int.parse(num); // 현재 숫자가 선택된 숫자와 같은지 확인
+    bool isSelected = selectedNumber == int.parse(num);
+
     return Container(
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -179,6 +212,7 @@ class _ReservationPageState extends State<ReservationPage> {
                 setState(() {
                   selectedNumber = int.parse(num);
                 });
+                Navigator.of(context).pop();
               },
               child: Padding(
                 padding: const EdgeInsets.all(0.0),
@@ -212,60 +246,4 @@ class _ReservationPageState extends State<ReservationPage> {
       ),
     );
   }
-
-
-  Widget _numberTime(String num) {
-    bool isSelected = selectedTime == num;
-
-    return Container(
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  selectedTime = num;
-                });
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: Text(
-                  '$num:00',
-                  style: TextStyle(
-                    color: Colors.white, // 글자색을 흰색으로 설정
-                  ),
-                ),
-              ),
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                ),
-                minimumSize: MaterialStateProperty.all(Size(60, 40)),
-                backgroundColor: MaterialStateProperty.all(
-                  isSelected ? Color(0xFFFF6347) : Color(0xFFFF6347), // 선택되었을 때와 선택되지 않았을 때 모두 Color(0xFFFF6347)
-                ),
-                side: MaterialStateProperty.all(
-                  BorderSide(
-                    color: Colors.black,
-                    width: 1,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-
-
-
-
-
-
-
 }

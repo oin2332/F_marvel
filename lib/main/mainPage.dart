@@ -25,12 +25,17 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => UserModel(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserModel()),
+        ChangeNotifierProvider(create: (context) => ModalData()),
+
+      ],
       child: MyApp(),
     ),
   );
 }
+
 
 class MyApp extends StatelessWidget {
   @override

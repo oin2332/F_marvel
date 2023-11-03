@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:food_marvel/shop/reservationPage.dart';
 import 'package:food_marvel/shop/tabBar.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../map/maptotal.dart';
 import '../search/headSearch.dart';
@@ -13,9 +15,9 @@ import 'list.dart';
 
 class ModalData extends ChangeNotifier {
 
-
   int currentStep = 1;
   String selectedValue = '';
+  int numberOfPeople = 2; // 기본값 설정
 
   void setCurrentStep(int step) {
     currentStep = step;
@@ -24,6 +26,11 @@ class ModalData extends ChangeNotifier {
 
   void setSelectedValue(String value) {
     selectedValue = value;
+    notifyListeners();
+  }
+
+  void setNumberOfPeople(int value) {
+    numberOfPeople = value;
     notifyListeners();
   }
 }
@@ -36,131 +43,20 @@ class StorePage extends StatefulWidget {
 }
 
 class _StorePageState extends State<StorePage> {
-
   @override
   void initState() {
     super.initState();
-    fetchAllUserData();
+    final now = DateTime.now();
+    currentTime = DateFormat.H().format(now);
   }
 
-  List<Map<String, dynamic>> userDataList = [];
-
-  void fetchAllUserData() async {
-    try {
-      QuerySnapshot storeSnapshot = await FirebaseFirestore.instance
-          .collection('T3_STORE_TBL')
-          .get();
-
-
-      if (storeSnapshot.docs.isNotEmpty) {
-        for (var storeDoc in storeSnapshot.docs) {
-          Map<String, dynamic> storeData = storeDoc.data() as Map<String, dynamic>;
-          String docId = storeDoc.id;
-
-          // 해당 상점의 별점 정보 가져오기
-          QuerySnapshot starSnapshot = await FirebaseFirestore.instance
-              .collection('T3_STORE_TBL')
-              .doc(docId)
-              .collection('T3_STAR_TBL')
-              .get();
-
-          List<String> starList = [];
-          double x = 0;
-          int y = 0;
-
-          if (starSnapshot.docs.isNotEmpty) {
-            for (var starDoc in starSnapshot.docs) {
-              Map<String, dynamic> starData = starDoc.data() as Map<String, dynamic>;
-
-              starData.forEach((key, value) {
-                if (value is String) {
-                  // 문자열을 숫자로 변환하여 평균을 계산합니다
-                  double numericValue = double.parse(value);
-                  if (numericValue != null) {
-                    starList.add(value);
-                    x += numericValue;
-                    y++;
-                  }
-                }
-              });
-            }
-          } else {
-            starList.add('0');
-          }
-
-          if (y > 0) {
-            x = x / y;
-          }
-          storeData['STARlength'] = y;
-          storeData['STARage'] = x.toStringAsFixed(1);
-          storeData['STARlist'] = starList;
-          userDataList.add(storeData);
-        }
-        setState(() {
-
-        });
-      } else {
-        print('상점 데이터를 찾을 수 없습니다.');
-
-      }
-    } catch (e) {
-      print('데이터를 불러오는 중 오류가 발생했습니다: $e');
-
-    }
-  }
-  bool isSortedByRating = false;
-  void sortListByRating() {
-    if (isSortedByRating) {
-      // 이미 정렬되어 있다면, 역순으로 정렬합니다.
-      userDataList.sort((a, b) {
-        double ratingA = double.parse(a['STARage'] ?? '0');
-        double ratingB = double.parse(b['STARage'] ?? '0');
-        return ratingB.compareTo(ratingA);
-      });
-    } else {
-      // 정렬되어 있지 않다면, 별점순으로 정렬합니다.
-      userDataList.sort((a, b) {
-        double ratingA = double.parse(a['STARage'] ?? '0');
-        double ratingB = double.parse(b['STARage'] ?? '0');
-        return ratingA.compareTo(ratingB);
-      });
-    }
-    isSortedByRating = !isSortedByRating; // 토글 상태 업데이트
+  String getWeekdayFromDate(DateTime date) {
+    final weekdays = ['월', '화', '수', '목', '금', '토', '일'];
+    final weekdayIndex = date.weekday - 1; // 요일은 1부터 7까지이므로 인덱스로 변환
+    return weekdays[weekdayIndex];
   }
 
-  void _showModalBottomSheet() {
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30)),
-      ),
-      builder: (BuildContext context) {
-        return SizedBox(
-          height: 900, // 원하는 높이로 설정
-          child: Container(
-            child: Column(
-              children: [
-                Text('이곳에 모달 내용을 원하는 형식으로 배치합니다.'),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(); // 모달 닫기
-                  },
-                  child: Text('닫기'),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-
-
-
-  //----------------------------------------------------------
-
-
+  String currentTime = '';
 
   Widget underlineBox(x) {
     return SizedBox(
@@ -207,40 +103,66 @@ class _StorePageState extends State<StorePage> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => ReservationPage()));
 
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(width: 20),
-                  Icon(Icons.calendar_today_outlined),
-                  SizedBox(width: 30),
-                  Text('날짜'),
-                  SizedBox(width: 30),
-                  Text('시간'),
-                  SizedBox(width: 30),
-                  Text('2명'),
-                  SizedBox(width: 100),
-                  IconButton(onPressed: () {}, icon: Icon(Icons.keyboard_arrow_down)),
-                ],
+              child: Container(
+                height: 50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(width: 20),
+                    Icon(Icons.calendar_today_outlined),
+                    SizedBox(width: 30),
+                    Text('날짜: ${DateFormat.Md().format(DateTime.now())}'),
+                    SizedBox(width: 30),
+                    Text('시간: $currentTime : 00'), // 현재 시간 표시
+                    SizedBox(width: 30),
+                    Text('인원: ${Provider.of<ModalData>(context).numberOfPeople}명'), // 인원 수 표시
+                    Icon(Icons.keyboard_arrow_down),
+
+                  ],
+                ),
               ),
             ),
             underlineBox(0.8),
 
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [// 지도 / 카테고리(옵션) 변경 아이콘
-                IconButton(onPressed: (){   Navigator.push(context, MaterialPageRoute(builder: (context) => GooGleMap()));}, icon:  Icon(Icons.map_outlined),), //지도
-                IconButton(onPressed: (){}, icon: Icon(Icons.tune_rounded)), // 옵션변경(카테고리)
-                SingleChildScrollView( // 스크롤 가능한 버튼 리스트
-                  scrollDirection: Axis.horizontal, // 수평 스크롤
-                  child: Row(
-                    children: [
-                      _menubutton('내주변'),
-                      SizedBox(width: 20),
-                      _menubutton('지역'),
-                      SizedBox(width: 20),
-                      _menubutton('다른 버튼'),
-                      // 필요한 만큼 버튼 추가
-                    ],
+              children: [
+                Padding(
+                    padding:
+                    const EdgeInsets.only(left: 10.0, bottom: 10.0),
+                    child: Container(
+                      height: 24,
+                      child: Row(
+                          children :[
+                            IconButton(onPressed: (){   Navigator.push(context, MaterialPageRoute(builder: (context) => GooGleMap()));}, icon:  Icon(Icons.map_outlined),),
+                            SizedBox(width: 5,),
+                            IconButton(onPressed: (){}, icon: Icon(Icons.tune_rounded)),
+                          ]
+                      ),
+                    )
+                ),
+
+
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.only(left: 20),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          _menubutton('내주변'),
+                          SizedBox(width: 20),
+                          _menubutton('지역'),
+                          SizedBox(width: 20),
+                          _menubutton('몰라'),
+                          SizedBox(width: 20),
+                          _menubutton('test'),
+                          SizedBox(width: 20),
+                          _menubutton('test'),
+                          SizedBox(width: 20),
+                          _menubutton('test'),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ],
