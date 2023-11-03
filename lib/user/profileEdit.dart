@@ -245,8 +245,6 @@ class _ProfileEditState extends State<ProfileEdit> {
             ],
           ),
         ),
-
-
       );
     }
   }
