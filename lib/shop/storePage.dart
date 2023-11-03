@@ -37,6 +37,97 @@ class StorePage extends StatefulWidget {
 
 class _StorePageState extends State<StorePage> {
 
+  @override
+  void initState() {
+    super.initState();
+    fetchAllUserData();
+  }
+
+  List<Map<String, dynamic>> userDataList = [];
+
+  void fetchAllUserData() async {
+    try {
+      QuerySnapshot storeSnapshot = await FirebaseFirestore.instance
+          .collection('T3_STORE_TBL')
+          .get();
+
+
+      if (storeSnapshot.docs.isNotEmpty) {
+        for (var storeDoc in storeSnapshot.docs) {
+          Map<String, dynamic> storeData = storeDoc.data() as Map<String, dynamic>;
+          String docId = storeDoc.id;
+
+          // 해당 상점의 별점 정보 가져오기
+          QuerySnapshot starSnapshot = await FirebaseFirestore.instance
+              .collection('T3_STORE_TBL')
+              .doc(docId)
+              .collection('T3_STAR_TBL')
+              .get();
+
+          List<String> starList = [];
+          double x = 0;
+          int y = 0;
+
+          if (starSnapshot.docs.isNotEmpty) {
+            for (var starDoc in starSnapshot.docs) {
+              Map<String, dynamic> starData = starDoc.data() as Map<String, dynamic>;
+
+              starData.forEach((key, value) {
+                if (value is String) {
+                  // 문자열을 숫자로 변환하여 평균을 계산합니다
+                  double numericValue = double.parse(value);
+                  if (numericValue != null) {
+                    starList.add(value);
+                    x += numericValue;
+                    y++;
+                  }
+                }
+              });
+            }
+          } else {
+            starList.add('0');
+          }
+
+          if (y > 0) {
+            x = x / y;
+          }
+          storeData['STARlength'] = y;
+          storeData['STARage'] = x.toStringAsFixed(1);
+          storeData['STARlist'] = starList;
+          userDataList.add(storeData);
+        }
+        setState(() {
+
+        });
+      } else {
+        print('상점 데이터를 찾을 수 없습니다.');
+
+      }
+    } catch (e) {
+      print('데이터를 불러오는 중 오류가 발생했습니다: $e');
+
+    }
+  }
+  bool isSortedByRating = false;
+  void sortListByRating() {
+    if (isSortedByRating) {
+      // 이미 정렬되어 있다면, 역순으로 정렬합니다.
+      userDataList.sort((a, b) {
+        double ratingA = double.parse(a['STARage'] ?? '0');
+        double ratingB = double.parse(b['STARage'] ?? '0');
+        return ratingB.compareTo(ratingA);
+      });
+    } else {
+      // 정렬되어 있지 않다면, 별점순으로 정렬합니다.
+      userDataList.sort((a, b) {
+        double ratingA = double.parse(a['STARage'] ?? '0');
+        double ratingB = double.parse(b['STARage'] ?? '0');
+        return ratingA.compareTo(ratingB);
+      });
+    }
+    isSortedByRating = !isSortedByRating; // 토글 상태 업데이트
+  }
+
   void _showModalBottomSheet() {
     showModalBottomSheet(
       context: context,
@@ -63,6 +154,8 @@ class _StorePageState extends State<StorePage> {
       },
     );
   }
+
+
 
 
   //----------------------------------------------------------
@@ -111,7 +204,8 @@ class _StorePageState extends State<StorePage> {
             SizedBox(height: 10),
             InkWell( // InkWell을 사용하여 터치 이벤트 처리
               onTap:(){
-                //날짜 검색 페이지 로갔따가 돌아오기
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ReservationPage()));
+
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -153,7 +247,7 @@ class _StorePageState extends State<StorePage> {
             ),
             SizedBox(height: 5,),
             underlineBox(5.0),
-            Container(
+            /*Container( 나중에 당장 급한게 많다 나중에 시간남으면 확인
               height: 50,
               child: Row(
                 children: [
@@ -174,7 +268,7 @@ class _StorePageState extends State<StorePage> {
                       children: [
                         InkWell(
                           onTap: (){
-                            //검색 추천순 만들기
+                            sortListByRating();
                           },
                           child: Row(
                             children: [
@@ -190,7 +284,7 @@ class _StorePageState extends State<StorePage> {
                   ),
                 ],
               ),
-            ),
+            ),*/
             SizedBox(height: 10,),
             Expanded(child: ListsShop(searchResults: [],))
           ],
