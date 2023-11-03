@@ -95,10 +95,6 @@ class _SearchState extends State<Search> {
 
     QuerySnapshot userSnapshot = await FirebaseFirestore.instance
         .collection('T3_STORE_TBL')
-        .where('S_ADDR1', isEqualTo: searchText)
-        .where('S_ADDR2', isEqualTo: searchText)
-        .where('S_ADDR3', isEqualTo: searchText)
-        .where('S_INFO1', isEqualTo: searchText)
         .get();
 
     List<Map<String, dynamic>> results = [];
