@@ -15,7 +15,6 @@ class _teeeState extends State<teee> {
   void initState() {
     super.initState();
     fetchAllUserData1();
-    fetchAllUserData2();
   }
 
 
