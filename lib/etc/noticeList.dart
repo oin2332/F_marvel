@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_marvel/etc/conditionList.dart';
 import 'package:food_marvel/etc/versionInfo.dart';
+import 'package:food_marvel/user/notification.dart';
 
 class NoticeList extends StatelessWidget {
   const NoticeList({super.key});
@@ -8,11 +9,16 @@ class NoticeList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('공지사항 및 이용약관')),
+      appBar: AppBar(
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black),
+          title: Text('공지사항 및 이용약관', style: TextStyle(color: Colors.black)), elevation: 0),
       body: ListView(
         children: [
           TextButton(
-            onPressed: (){},
+            onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (_) => NotificationPage()));
+            },
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(

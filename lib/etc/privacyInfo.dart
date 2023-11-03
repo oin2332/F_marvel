@@ -7,9 +7,9 @@ class PrivacyInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('개인정보 처리방침'),
+        title: Text('개인정보 처리방침', style: TextStyle(color: Colors.black)), backgroundColor: Colors.white,elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.close), // "X" 아이콘
+          icon: Icon(Icons.close, color: Colors.black), // "X" 아이콘
           onPressed: () {
             Navigator.pop(context);
           },

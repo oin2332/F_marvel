@@ -7,7 +7,10 @@ class BdayRegister extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('생일/기념일 등록하기')),
+      appBar: AppBar(
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black),
+          title: Text('생일/기념일 등록하기', style: TextStyle(color: Colors.black)), elevation: 0),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

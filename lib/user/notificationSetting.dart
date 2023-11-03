@@ -29,7 +29,11 @@ class _NotificationSettingState extends State<NotificationSetting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('알림 설정')),
+      appBar: AppBar(
+          leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {Navigator.pop(context);},
+          ),
+          title: Text('알림 설정', style: TextStyle(color: Colors.black)), backgroundColor: Colors.white,elevation: 0),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: ListView(

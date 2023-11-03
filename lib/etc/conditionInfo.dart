@@ -7,9 +7,9 @@ class ConditionInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("'푸드 마블' 서비스 이용약관"),
+        title: Text("'푸드 마블' 서비스 이용약관", style: TextStyle(color: Colors.black)), backgroundColor: Colors.white,elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.close), // "X" 아이콘
+          icon: Icon(Icons.close, color: Colors.black), // "X" 아이콘
           onPressed: () {
             Navigator.pop(context);
           },

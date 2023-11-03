@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import '../board/boardAdd.dart';
 import '../firebase/firebase_options.dart';
+import 'loginPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,16 +29,23 @@ class _JoinState extends State<Join> {
   final TextEditingController _pwd2 = TextEditingController();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _phone = TextEditingController();
+  final TextEditingController _nickname = TextEditingController();
+  final TextEditingController _area = TextEditingController();
+  final TextEditingController _intro = TextEditingController();
+
+
 
   void _register() async {
+    if (!_idChecked) {
+      return; // 중복 아이디 확인이 성공하지 않은 경우, 가입을 중단
+    }
+
     if (_pwd.text != _pwd2.text) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('패스워드 다르자너')),
       );
       return;
     }
-
-    // Firestore에서 중복 아이디 체크
 
     try {
       await _fs.collection('T3_USER_TBL').add({
@@ -52,6 +60,9 @@ class _JoinState extends State<Join> {
         'third' : isThirdAgree,
         'select' : isSelectedAgree,
         'event' : isEventAgree,
+        'nickname' : _nickname.text,
+        'area' : _area.text,
+        'intro' : _intro.text,
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -63,11 +74,53 @@ class _JoinState extends State<Join> {
       _pwd.clear();
       _pwd2.clear();
       _phone.clear();
+      _nickname.clear();
+
+      // 가입 성공 시 로그인 페이지로 이동
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => LoginPage()),
+      );
+
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: $e')),
       );
     }
+  }
+
+  // 아이디 중복 체크
+  bool? _isIdAvailable; // 아이디 사용 가능 여부를 나타내는 변수
+  bool _idChecked = false; // 아이디 중복 여부 확인 여부를 나타내는 변수
+
+  void _checkDuplicateId() async {
+    // String id = _id.text;
+    String id = _id.text.trim();
+
+    // Firestore에서 해당 아이디를 가진 사용자가 있는지 확인
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('T3_USER_TBL')
+        .where('id', isEqualTo: id)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      // 해당 아이디가 이미 존재하는 경우
+      setState(() {
+        _isIdAvailable = false; // 아이디 사용 불가능
+      });
+    } else {
+      // 해당 아이디가 사용 가능한 경우
+      setState(() {
+        _isIdAvailable = true; // 아이디 사용 가능
+      });
+    }
+  }
+
+  // 가입 버튼 비활성화
+  bool _canRegister() {
+    return isAgeAgree && isUseAgree && isPrivacyAgree &&
+        isThirdAgree && _id.text.isNotEmpty && _pwd.text.isNotEmpty &&
+        _pwd2.text.isNotEmpty && _name.text.isNotEmpty && _phone.text.isNotEmpty;
   }
 
   //checkbox value 변수
@@ -105,6 +158,10 @@ class _JoinState extends State<Join> {
             Text('아이디', style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 5),
             TextField(
+              onChanged: (value) {
+                  _checkDuplicateId();
+
+              },
               controller: _id,
               decoration: InputDecoration(
                 filled: true,
@@ -115,6 +172,16 @@ class _JoinState extends State<Join> {
               ),
               style: TextStyle(fontSize: 13),
             ),
+            SizedBox(height: 5),if (_isIdAvailable == false)
+              Text(
+                '이미 사용 중인 아이디입니다.',
+                style: TextStyle(color: Colors.red),
+              ),
+            if (_isIdAvailable == true)
+              Text(
+                '사용 가능한 아이디입니다.',
+                style: TextStyle(color: Colors.blue),
+              ),
             SizedBox(height: 30),
             Text('비밀번호', style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 5),
@@ -128,6 +195,7 @@ class _JoinState extends State<Join> {
                 border: InputBorder.none, // 밑줄 없애기
               ),
               style: TextStyle(fontSize: 13),
+              obscureText: true, // 비밀번호 숨기기
             ),
             SizedBox(height: 30),
             Text('비밀번호 확인', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -142,6 +210,7 @@ class _JoinState extends State<Join> {
                 border: InputBorder.none, // 밑줄 없애기
               ),
               style: TextStyle(fontSize: 13),
+              obscureText: true, // 비밀번호 숨기기
             ),
             SizedBox(height: 30),
             Text('이름', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -177,7 +246,7 @@ class _JoinState extends State<Join> {
             Text('닉네임 (선택)', style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 5),
             TextField(
-              controller: _email,
+              controller: _nickname,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.grey[200]!, // 배경색 설정
@@ -424,44 +493,9 @@ class _JoinState extends State<Join> {
                 Icon(Icons.keyboard_arrow_right, color: Colors.black)
               ],
             ),
-            // Row(
-            //   children: [
-            //     Row(
-            //       children: [
-            //         Checkbox(
-            //           value: true, // 사용자가 동의했는지 여부를 저장하는 변수와 연결해야 합니다.
-            //           onChanged: (bool? value) {
-            //             // 사용자가 체크박스를 선택했을 때의 로직을 추가하세요.
-            //           },
-            //         ),
-            //         Text('푸시 알림')
-            //       ],
-            //     ),
-            //     Row(
-            //       children: [
-            //         Checkbox(
-            //           value: true, // 사용자가 동의했는지 여부를 저장하는 변수와 연결해야 합니다.
-            //           onChanged: (bool? value) {
-            //             // 사용자가 체크박스를 선택했을 때의 로직을 추가하세요.
-            //           },
-            //         ),
-            //         Text('SMS 알림')
-            //       ],
-            //     ),
-            //     Row(
-            //       children: [
-            //         Checkbox(
-            //           value: true, // 사용자가 동의했는지 여부를 저장하는 변수와 연결해야 합니다.
-            //           onChanged: (bool? value) {
-            //             // 사용자가 체크박스를 선택했을 때의 로직을 추가하세요.
-            //           },
-            //         ),
-            //         Text('이메일 수신')
-            //       ],),
-            //   ],
-            // ),
+
             ElevatedButton(
-              onPressed: _register,
+              onPressed: _canRegister() ? _register : null, // 가입 버튼 활성화 여부 확인
               child: Text('가입'),
             ),
           ],

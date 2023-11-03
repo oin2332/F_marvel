@@ -11,7 +11,10 @@ class _CustomerSuggestState extends State<CustomerSuggest> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('개선 제안하기')),
+      appBar: AppBar(
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black),
+          title: Text('개선 제안하기', style: TextStyle(color: Colors.black)), elevation: 0),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: ListView(

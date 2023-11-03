@@ -9,7 +9,10 @@ class ConditionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('약관 및 정책')),
+      appBar: AppBar(
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black),
+          title: Text('약관 및 정책', style: TextStyle(color: Colors.black)), elevation: 0),
       body: ListView(
         children: [
           TextButton(

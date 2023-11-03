@@ -6,7 +6,11 @@ class PwdEdit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('비밀번호 설정')),
+      appBar: AppBar(
+          leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {Navigator.pop(context);},
+          ),
+          title: Text('비밀번호 설정', style: TextStyle(color: Colors.black)), backgroundColor: Colors.white,elevation: 0),
       body: Container(
         margin: EdgeInsets.all(20.0), // 여백 추가
         child: Column(

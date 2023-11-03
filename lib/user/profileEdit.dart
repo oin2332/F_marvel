@@ -74,7 +74,7 @@ class _ProfileEditState extends State<ProfileEdit> {
         appBar: AppBar(
             backgroundColor: Colors.white,
             iconTheme: IconThemeData(color: Colors.black),
-            title: Text('프로필 수정', style: TextStyle(color: Colors.black),)),
+            title: Text('프로필 수정', style: TextStyle(color: Colors.black)), elevation: 0),
         body: Padding(
           padding: const EdgeInsets.all(13.0),
           child: ListView(
@@ -129,9 +129,9 @@ class _ProfileEditState extends State<ProfileEdit> {
                     child: TextField(
                         controller: _nicknameController,
                         decoration: InputDecoration(
-                          labelText: '닉네임을 설정해주세요.',
+                          hintText: '닉네임을 설정해주세요.',
                           alignLabelWithHint: true,
-                          labelStyle: TextStyle(color: Colors.grey[400]!,
+                          hintStyle: TextStyle(color: Colors.grey[400]!,
                               fontSize: 14),
                           border: OutlineInputBorder(
                               borderSide: BorderSide(
@@ -152,9 +152,9 @@ class _ProfileEditState extends State<ProfileEdit> {
                     child: TextField(
                         controller: _introController,
                         decoration: InputDecoration(
-                          labelText: '자신을 알릴 수 있는 소개글을 작성해주세요.',
+                          hintText: '자신을 알릴 수 있는 소개글을 작성해주세요.',
                           alignLabelWithHint: true,
-                          labelStyle: TextStyle(color: Colors.grey[400]!,
+                          hintStyle: TextStyle(color: Colors.grey[400]!,
                             fontSize: 14,),
                           contentPadding: EdgeInsets.symmetric(vertical: 40),
                           border: OutlineInputBorder(
@@ -175,9 +175,9 @@ class _ProfileEditState extends State<ProfileEdit> {
                     child: TextField(
                         controller: _areaController,
                         decoration: InputDecoration(
-                          labelText: '활동지역을 자유롭게 입력해주세요.',
+                          hintText: '활동지역을 자유롭게 입력해주세요.',
                           alignLabelWithHint: true,
-                          labelStyle: TextStyle(color: Colors.grey[400]!,
+                          hintStyle: TextStyle(color: Colors.grey[400]!,
                               fontSize: 14),
                           border: OutlineInputBorder(
                             borderSide: BorderSide(color: Colors.red,
