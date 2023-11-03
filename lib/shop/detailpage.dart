@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_marvel/map/mini.dart';
 import 'package:food_marvel/shop/reservationAdd.dart';
 import 'package:food_marvel/shop/tabBar.dart';
 import 'package:intl/intl.dart';
@@ -621,6 +622,11 @@ class _DetailPageState extends State<DetailPage> {
                                 children: [
                                   Text('지도', style: TextStyle(fontSize: 20,
                                       fontWeight: FontWeight.bold),),
+                                  SizedBox(
+                                    width: 300,
+                                    height: 300,
+                                    child: GoogleMapPage(initialAddress: storeList.first['주소']), // 여기에 함수를 호출하여 내용을 표시
+                                  ),
                                 ],
                               )
                             ],
@@ -783,7 +789,7 @@ class _DetailPageState extends State<DetailPage> {
       '제목': '가게이름',
       '별점': '4.8',
       '설명': '가게가 착하고 사장님이 맛있어요\n 가게가 착하고 사장님이 맛있어요',
-      '주소': '성수',
+      '주소': '인천광역시 부평구 부평1동 부흥로 264 동아웰빙타운관리단 9층',
       '카테고리': '레스토랑'
     }
   ];
