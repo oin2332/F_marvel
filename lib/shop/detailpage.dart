@@ -615,7 +615,7 @@ class _DetailPageState extends State<DetailPage> {
                         underlineBox(5.0),
                         //지도
                         Container(
-                          padding: EdgeInsets.all(30),
+                          padding: EdgeInsets.all(5),
                           child: Row(
                             children: [
                               Column(
@@ -623,8 +623,8 @@ class _DetailPageState extends State<DetailPage> {
                                   Text('지도', style: TextStyle(fontSize: 20,
                                       fontWeight: FontWeight.bold),),
                                   SizedBox(
-                                    width: 300,
-                                    height: 300,
+                                    width: 400,
+                                    height: 400,
                                     child: GoogleMapPage(initialAddress: storeList.first['주소']), // 여기에 함수를 호출하여 내용을 표시
                                   ),
                                 ],

@@ -56,9 +56,6 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Google 지도'),
-      ),
       body: GoogleMap(
         onMapCreated: (controller) {
           mapController = controller;

@@ -192,7 +192,7 @@ class _StorePageState extends State<StorePage> {
               ),
             ),
             SizedBox(height: 10,),
-            Expanded(child: ListsShop())
+            Expanded(child: ListsShop(searchResults: [],))
           ],
         ),
       ),

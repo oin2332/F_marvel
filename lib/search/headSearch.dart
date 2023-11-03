@@ -33,6 +33,7 @@ class _SearchState extends State<Search> {
   TextEditingController _searchController = TextEditingController();
   List<String> recentSearches = [];
   String searchQuery = "";
+  List<Map<String, dynamic>> searchResults = [];
 
 
   @override
@@ -66,8 +67,9 @@ class _SearchState extends State<Search> {
   }
 
 
-  void _onSearchSubmitted(String value) async {
+  Future<void> _onSearchSubmitted(String value) async {
     String searchText = _searchController.text;
+    searchResults = [];
     setState(() {
       if (recentSearches.contains(searchText)) {
         recentSearches.remove(searchText);
@@ -90,8 +92,22 @@ class _SearchState extends State<Search> {
       );
     }
 
+    QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+        .collection('T3_STORE_TBL')
+        .where('S_ADDR1', isEqualTo: searchText)
+        .get();
+
+    List<Map<String, dynamic>> results = [];
+    if (userSnapshot.docs.isNotEmpty) {
+      for (var doc in userSnapshot.docs) {
+        Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
+        results.add(userData);
+      }
+    }
+
     setState(() {
       searchQuery = searchText;
+      searchResults = results;
     });
     _searchController.clear();
   }
@@ -119,8 +135,6 @@ class _SearchState extends State<Search> {
         recentSearches = loadedSearches;
       });
     }
-
-
   }
 
 
@@ -234,8 +248,16 @@ class _SearchState extends State<Search> {
               ],
             ),
             SizedBox(height: 10, child: Container(color: Colors.grey)),
+
+            if (searchResults.isNotEmpty) (
+            Container(
+            height: 500,
+            child: ListsShop(searchResults: searchResults),
+            )
+            )else (
+            ImportEmptySearch(searchQuery: searchQuery)
+            ),
             if (searchQuery.isNotEmpty) ImportSearchResult(),
-            ListsShop(),
             if (searchQuery.isNotEmpty) ImportEmptySearch(searchQuery: searchQuery),
             if (searchQuery.isEmpty)
               Column(
@@ -244,6 +266,8 @@ class _SearchState extends State<Search> {
                   ImportRestaurant(),
                 ],
               ),
+
+
           ],
         ),
       ),

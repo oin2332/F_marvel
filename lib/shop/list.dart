@@ -9,7 +9,7 @@ import '../../user/userModel.dart';
 
 
 class ListsShop extends StatefulWidget {
-  ListsShop({super.key});
+  ListsShop({super.key, required List<Map<String, dynamic>> searchResults});
 
 
   @override
