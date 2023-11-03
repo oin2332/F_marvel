@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import '../firebase/firebase_options.dart';
 import '../search/headSearch.dart';
 import '../shop/storePage.dart';
+import '../shop/test/boardMain.dart';
 import '../user/userModel.dart';
 import '../user/userSetting.dart';
 import '13_tapBar.dart';
@@ -396,7 +397,7 @@ class _MainPageState extends State<MainPage> {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => GooGleMap()));
                       }),
                       buildIconWithText('assets/main/incheon.jpg', '인천/부평', () {
-                        navigatePlacePage(0);
+                       Navigator.push(context, MaterialPageRoute(builder: (context) => BoardMain()));
                       }),
                       buildIconWithText('assets/main/incheon2.jpg', '인천/연수', () {
                         navigatePlacePage(1);

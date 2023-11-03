@@ -5,22 +5,15 @@ import 'package:flutter/material.dart';
 import '../../board/boardView.dart';
 import '../../firebase/firebase_options.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(const MyApp());
-}
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class BoardMain extends StatefulWidget {
+  const BoardMain({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<BoardMain> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<BoardMain> {
   final TextEditingController _id = TextEditingController();
   final TextEditingController _pwd = TextEditingController();
   final TextEditingController _img = TextEditingController();
