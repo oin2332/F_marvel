@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../user/userModel.dart';
+import 'detailpage.dart';
 
 
 
@@ -123,7 +124,9 @@ class _TestState extends State<ListsShop> {
                             ),
                           ],
                         ),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => DetailPage()));
+                        },
                       ),
                       SizedBox(height: 20),
                       Row(
