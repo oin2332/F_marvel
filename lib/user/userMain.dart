@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_marvel/user/allCollection.dart';
 import 'package:food_marvel/user/follower.dart';
 import 'package:food_marvel/user/following.dart';
 import 'package:food_marvel/user/newCollection.dart';
@@ -28,7 +29,7 @@ class UserMain extends StatefulWidget {
 
 class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
   String? description;
-   String? collectionName;
+  String? collectionName;
   bool? isPublic;
   late TabController _tabController;
 
@@ -86,7 +87,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
                       TextButton(
                           onPressed: (){
                             Navigator.push(context, MaterialPageRoute(builder: (_) => Following()));
-                            },
+                          },
                           child: Text('팔로잉 |',style: TextStyle(color: Colors.grey),)),
                       Divider(color: Colors.black, thickness: 5, height: 50),
                       TextButton(
@@ -104,26 +105,26 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => ProfileEdit(userId: userId)));
-                },
-                style: ButtonStyle(
-                  fixedSize: MaterialStateProperty.all<Size>(
-                    Size(double.infinity, 50), // 버튼의 너비와 높이를 조절
-                  ),
-                  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(10.0)),
-                  minimumSize: MaterialStateProperty.all<Size>(Size(double.infinity, 0)),
-                  backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                  elevation: MaterialStateProperty.all<double>(0),
-                  overlayColor: MaterialStateProperty.all<Color>(Colors.grey[200]!), // 터치 효과 색상
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.grey), // border 색상 black
-                      borderRadius: BorderRadius.circular(30), // 버튼 테두리 모양 조정
-                    ),
+              onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (_) => ProfileEdit(userId: userId)));
+              },
+              style: ButtonStyle(
+                fixedSize: MaterialStateProperty.all<Size>(
+                  Size(double.infinity, 50), // 버튼의 너비와 높이를 조절
+                ),
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(10.0)),
+                minimumSize: MaterialStateProperty.all<Size>(Size(double.infinity, 0)),
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                elevation: MaterialStateProperty.all<double>(0),
+                overlayColor: MaterialStateProperty.all<Color>(Colors.grey[200]!), // 터치 효과 색상
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.grey), // border 색상 black
+                    borderRadius: BorderRadius.circular(30), // 버튼 테두리 모양 조정
                   ),
                 ),
-                child: Text('프로필 수정', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),),
+              ),
+              child: Text('프로필 수정', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),),
             ),
           ),
           SizedBox(height: 20),
@@ -165,7 +166,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
               Tab(text: '리뷰'),
             ],
           ),
-          SizedBox(height: 20),
+          SizedBox(height: 10),
           Container(
             height: 300,
             padding: EdgeInsets.all(10),
@@ -176,23 +177,30 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
                   children: [
                     GestureDetector(
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => MyCollection(
+                        Navigator.push(context, MaterialPageRoute(builder: (_) => AllCollection(
                           collectionName: collectionName,
                           description: description,
                           isPublic: isPublic,
                         )));
                       },
-                      child:Text('컬렉션', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
+                      child:Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('컬렉션', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),),
+                          Text('전체보기 > ', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12,color: Colors.grey),)
+                        ],
+                      ),
+
                     ),
                     SizedBox(height: 20),
                     GestureDetector(
                       onTap: (){
                         Navigator.push(context, MaterialPageRoute(builder: (_) => MyCollection(
-                              collectionName: collectionName,
-                              description: description,
-                              isPublic: isPublic,
-                            ),
-                          ),
+                          collectionName: collectionName,
+                          description: description,
+                          isPublic: isPublic,
+                        ),
+                        ),
                         );
                       },
                       child: Row(
@@ -201,7 +209,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
                             children: [
                               Container(
                                 height: 70,
-                                width: 150,
+                                width: 180,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.vertical(
                                     top: Radius.circular(10.0),
@@ -223,7 +231,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
                               SizedBox(height: 1),
                               Container(
                                 height: 30,
-                                width: 150,
+                                width: 180,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.vertical(
                                     bottom: Radius.circular(10.0),
