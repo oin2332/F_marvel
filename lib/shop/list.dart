@@ -10,22 +10,21 @@ import 'detailpage.dart';
 
 
 class ListsShop extends StatefulWidget {
-  ListsShop({super.key, required List<Map<String, dynamic>> searchResults});
+  final List<Map<String, dynamic>> searchResults;
 
+  ListsShop({required this.searchResults}) : super();
 
   @override
   State<ListsShop> createState() => _TestState();
 }
 
 class _TestState extends State<ListsShop> {
-
+  List<Map<String, dynamic>> userDataList = [];
   @override
+
   void initState() {
     super.initState();
-    fetchAllUserData();
   }
-
-  List<Map<String, dynamic>> userDataList = [];
 
   void fetchAllUserData() async {
     try {
@@ -95,15 +94,11 @@ class _TestState extends State<ListsShop> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: userDataList.length,
+      itemCount: widget.searchResults.length,
       itemBuilder: (context, index) {
-        final documentData = userDataList[index];
+        final documentData = widget.searchResults[index];
 
-        // documentData['S_INFO1'] == '양식'
-        if (true) {
-
-
-          return ListTile(
+        return ListTile(
             title: Container(
               margin: EdgeInsets.symmetric(vertical: 10),
               child: Row(
@@ -219,7 +214,7 @@ class _TestState extends State<ListsShop> {
               ),
             ),
           );
-        }
+
       },
     );
   }

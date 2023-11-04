@@ -67,7 +67,7 @@ class _SearchState extends State<Search> {
   }
 
 
-  Future<void> _onSearchSubmitted(String value) async {
+  void _onSearchSubmitted(String value) async {
     String searchText = _searchController.text;
     searchResults = [];
     setState(() {
@@ -115,13 +115,18 @@ class _SearchState extends State<Search> {
 
 
   bool matchesSearchText(Map<String, dynamic> userData, String searchText) {
+    if (searchText.isEmpty) {
+      return true;
+    }
+
     List<String> searchFields = ['S_ADDR1', 'S_ADDR2', 'S_ADDR3', 'S_INFO1', 'S_NAME'];
+
     for (String field in searchFields) {
       if (userData[field] != null && userData[field].toString().contains(searchText)) {
-        return true;
+        return true; // 검색어와 일치하는 필드가 있으면 true 반환
       }
     }
-    return false;
+    return false; // 모든 필드에서 일치하는 값이 없을 경우 false 반환
   }
 
   @override
@@ -129,8 +134,6 @@ class _SearchState extends State<Search> {
     super.initState();
     _loadRecentSearches();
   }
-
-
 
   Future<void> _loadRecentSearches() async {
     final snapshot = await _searchval.collection('T3_SEARCH_TBL')
@@ -148,9 +151,6 @@ class _SearchState extends State<Search> {
       });
     }
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -264,7 +264,11 @@ class _SearchState extends State<Search> {
             if (searchResults.isNotEmpty) (
             Container(
             height: 500,
-            child: ListsShop(searchResults: searchResults),
+            child: ListsShop(
+              searchResults: searchResults
+                .where((result) => matchesSearchText(result, searchQuery))
+                .toList(),
+            ),
             )
             )else if(searchQuery.isNotEmpty)
               ImportEmptySearch(searchQuery: searchQuery),
@@ -275,8 +279,6 @@ class _SearchState extends State<Search> {
                   ImportRestaurant(),
                 ],
               ),
-
-
           ],
         ),
       ),
