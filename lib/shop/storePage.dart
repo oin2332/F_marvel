@@ -19,6 +19,7 @@ class ModalData extends ChangeNotifier {
   String selectedValue = '';
   int numberOfPeople = 2; // 기본값 설정
 
+
   void setCurrentStep(int step) {
     currentStep = step;
     notifyListeners();
@@ -43,11 +44,23 @@ class StorePage extends StatefulWidget {
 }
 
 class _StorePageState extends State<StorePage> {
+
+  String? setTime; // 선택된 시간
+  String? setday; // 선택된 날짜
+  String? setperson; // 선택된 인원 수
+
+
   @override
   void initState() {
     super.initState();
+
     final now = DateTime.now();
     currentTime = DateFormat.H().format(now);
+
+    // 이곳에서 변수를 초기화합니다.
+    setTime = ''; // 초기에는 빈 문자열
+    setday = ''; // 초기에는 빈 문자열
+    setperson = ''; // 초기에는 빈 문자열
   }
 
   String getWeekdayFromDate(DateTime date) {
@@ -99,9 +112,16 @@ class _StorePageState extends State<StorePage> {
           children: [
             SizedBox(height: 10),
             InkWell( // InkWell을 사용하여 터치 이벤트 처리
-              onTap:(){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ReservationPage()));
-
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ReservationPage())).then((data) {
+                  if (data != null) {
+                    setState(() {
+                      setTime = data['selectedDate'];
+                      setday = data['selectedTime'];
+                      setperson = data['selectedNumber'];
+                    });
+                  }
+                });
               },
               child: Container(
                 height: 50,
@@ -111,11 +131,11 @@ class _StorePageState extends State<StorePage> {
                     SizedBox(width: 20),
                     Icon(Icons.calendar_today_outlined),
                     SizedBox(width: 30),
-                    Text('날짜: ${DateFormat.Md().format(DateTime.now())}'),
+                    Text('날짜: ${setday ?? '날짜를 선택하세요'}'),
                     SizedBox(width: 30),
-                    Text('시간: $currentTime : 00'), // 현재 시간 표시
+                    Text('시간: $setTime : 00'), // 현재 시간 표시
                     SizedBox(width: 30),
-                    Text('인원: ${Provider.of<ModalData>(context).numberOfPeople}명'), // 인원 수 표시
+                    Text('인원: $setperson명'), // 인원 수 표시
                     Icon(Icons.keyboard_arrow_down),
 
                   ],

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_marvel/map/mini.dart';
 import 'package:food_marvel/shop/reservationAdd.dart';
@@ -8,11 +9,77 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../main.dart';
 class DetailPage extends StatefulWidget {
-  DetailPage({Key? key}) : super(key: key);
+
+  final String docId; // docId를 받을 변수 추가
+
+  DetailPage({required this.docId});
+
   @override
   State<DetailPage> createState() => _DetailPageState();
 }
 class _DetailPageState extends State<DetailPage> {
+
+  List<Map<String, dynamic>> userDataList = [];
+
+  void fetchAllUserData() async {
+    try {
+      DocumentSnapshot storeSnapshot = await FirebaseFirestore.instance
+          .collection('T3_STORE_TBL')
+          .doc(widget.docId)
+          .get();
+
+      if (storeSnapshot.exists) {
+        Map<String, dynamic> storeData = storeSnapshot.data() as Map<String, dynamic>;
+
+        // 해당 상점의 별점 정보 가져오기
+        QuerySnapshot starSnapshot = await FirebaseFirestore.instance
+            .collection('T3_STORE_TBL')
+            .doc(widget.docId)
+            .collection('T3_STAR_TBL')
+            .get();
+
+        List<String> starList = [];
+        double x = 0;
+        int y = 0;
+
+        if (starSnapshot.docs.isNotEmpty) {
+          for (var starDoc in starSnapshot.docs) {
+            Map<String, dynamic> starData = starDoc.data() as Map<String, dynamic>;
+
+            starData.forEach((key, value) {
+              if (value is String) {
+                double? numericValue = double.tryParse(value); // 수정: double.tryParse를 사용하여 오류 처리
+                if (numericValue != null) {
+                  starList.add(value);
+                  x += numericValue;
+                  y++;
+                }
+              }
+            });
+          }
+        } else {
+          starList.add('0');
+        }
+
+        if (y > 0) {
+          x = x / y;
+        }
+        storeData['STARlength'] = y;
+        storeData['STARage'] = x.toStringAsFixed(1);
+        storeData['STARlist'] = starList;
+        storeData['docId'] = widget.docId; // 수정: docId를 사용하여 값을 설정
+        userDataList.add(storeData);
+        print(userDataList);
+      } else {
+        print('해당 문서를 찾을 수 없습니다.');
+      }
+    } catch (e) {
+      print('데이터를 불러오는 중 오류가 발생했습니다: $e');
+    }
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +102,7 @@ class _DetailPageState extends State<DetailPage> {
           ],
         ),
         body: ListView.builder(
-            itemCount: storeList.length,
+            itemCount: userDataList.length,
             itemBuilder: (BuildContext context, int index) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,16 +161,16 @@ class _DetailPageState extends State<DetailPage> {
                       children: [
                         Row(
                           children: [
-                            Text('${storeList[index]['카테고리']}   l',
+                            Text('${userDataList[index]['S_NAME']}   l',
                               style: TextStyle(fontSize: 10, color: Colors
                                   .grey),),
                             SizedBox(width: 8,),
-                            Text('${storeList[index]['주소']}',
+                            Text('${userDataList[index]['주소']}',
                                 style: TextStyle(fontSize: 10, color: Colors
                                     .grey)),
                           ],
                         ),
-                        Text('${storeList[index]['제목']}'),
+                        Text('${userDataList[index]['제목']}'),
                         Row(
                           children: [
                             Icon(
@@ -117,7 +184,7 @@ class _DetailPageState extends State<DetailPage> {
                             Icon(Icons.star_half, color: Colors.yellow[600],
                               size: 17,),
                             SizedBox(width: 7,),
-                            Text('${storeList[index]['별점']}',
+                            Text('${widget.docId}',
                               style: TextStyle(fontWeight: FontWeight.bold),),
                             SizedBox(width: 3,),
                             Text('@개의 리뷰',
@@ -125,7 +192,7 @@ class _DetailPageState extends State<DetailPage> {
                                     .grey)),
                           ],
                         ),
-                        Text('${storeList[index]['설명']}'),
+                        Text(''),
                         SizedBox(height: 15,),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -351,7 +418,7 @@ class _DetailPageState extends State<DetailPage> {
                             children: [
                               Column(
                                 children: [
-                                  Text('${storeList[index]['카테고리']} 공지',
+                                  Text(' 공지',
                                     style: TextStyle(fontSize: 20,
                                         fontWeight: FontWeight.bold),),
                                 ],
@@ -608,7 +675,7 @@ class _DetailPageState extends State<DetailPage> {
                                   SizedBox(
                                     width: 400,
                                     height: 400,
-                                    child: GoogleMapPage(initialAddress: storeList.first['주소']), // 여기에 함수를 호출하여 내용을 표시
+                                    child: GoogleMapPage(initialAddress: '서울특별시 강변역'), // 여기에 함수를 호출하여 내용을 표시
                                   ),
                                 ],
                               )
@@ -704,6 +771,7 @@ class _DetailPageState extends State<DetailPage> {
     super.initState();
     _pageController.addListener(_onPageChanged); // 페이지 변경 리스너 추가
     initializeDateFormatting("ko_KR", null);
+    fetchAllUserData();
   }
 
   void _onPageChanged() {

@@ -261,6 +261,7 @@ class _ReservationAddState extends State<ReservationAdd> {
                               children: [
                                 Text('가게이름',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
                                 Text('주소/카테고리',style: TextStyle(fontSize: 12,color: Colors.grey),),
+                                SizedBox(height: 20,),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
@@ -272,7 +273,10 @@ class _ReservationAddState extends State<ReservationAdd> {
                                           child: Image.asset('assets/amenities/1.png'),
                                         ),
                                         Text(
-                                          '${_selectedDay != null ? DateFormat('yyyy-MM-dd (E)', 'ko_KR').format(_selectedDay!) : '날짜를 선택하지 않았습니다'}'
+                                          '${_selectedDay != null ? DateFormat('yyyy-MM-dd (E)', 'ko_KR').format(_selectedDay!) : '날짜 선택 필수'}',
+                                          style: TextStyle(
+                                            color: _selectedDay != null ? Colors.black : Colors.red,
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -297,7 +301,13 @@ class _ReservationAddState extends State<ReservationAdd> {
                                           height: 50, // 원하는 세로 높이 설정 (옵션)
                                           child: Image.asset('assets/amenities/3.png'),
                                         ),
-                                        Text('${selectedNumber}명')
+                                        Text(
+                                          '${selectedNumber != null ? '$selectedNumber명' : '0명'}',
+                                          style: TextStyle(
+                                            color: selectedNumber != null && selectedNumber == 0 ? Colors.red : Colors.black,
+                                          ),
+                                        )
+
                                       ],
                                     ),
 
