@@ -8,16 +8,12 @@ import 'package:provider/provider.dart';
 
 
 class ProfileEdit extends StatefulWidget {
-
   final String? userId; // 사용자 ID를 받아오는 변수 추가
   ProfileEdit({required this.userId}); // 생성자 추가
-
 
   @override
   State<ProfileEdit> createState() => _ProfileEditState();
 }
-
-
 
 class _ProfileEditState extends State<ProfileEdit> {
   final TextEditingController _nicknameController = TextEditingController(); // 닉네임
@@ -56,11 +52,23 @@ class _ProfileEditState extends State<ProfileEdit> {
     }
   }
 
+  void updateNicknameInFirestore(String userId, String newNickname) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('T3_USER_TBL')
+          .doc(userId)
+          .update({'nickname': newNickname}); // 파이어스토어 업데이트
+    } catch (e) {
+      print('닉네임 업데이트 중 오류 발생: $e');
+      // 오류 처리 코드 추가 (예: 사용자에게 알리거나 다른 작업 수행)
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     Future.microtask(() {
-      String? userId = Provider.of<UserModel>(context, listen: false).userId; // 변경된 부분
+      String? userId = Provider.of<UserModel>(context, listen: false).userId;
       if (userId != null) {
         fetchUserData(userId);
       }
@@ -128,6 +136,11 @@ class _ProfileEditState extends State<ProfileEdit> {
                     height: 50, //TextField 높이 설정
                     child: TextField(
                         controller: _nicknameController,
+                        onChanged: (newNickname) {
+                          // 닉네임이 변경될 때 호출되는 함수
+                          String userId = widget.userId ?? ''; // 사용자 ID가 없는 경우를 대비하여 빈 문자열로 초기화
+                          updateNicknameInFirestore(userId, newNickname); // 파이어스토어에 업데이트된 닉네임 전달
+                        },
                         decoration: InputDecoration(
                           hintText: '닉네임을 설정해주세요.',
                           alignLabelWithHint: true,
