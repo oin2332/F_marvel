@@ -9,6 +9,7 @@ import 'package:food_marvel/user/userModel.dart';
 import 'package:food_marvel/user/userSetting.dart';
 import 'package:provider/provider.dart';
 
+import '../main/importbottomBar.dart';
 import 'bdayRegister.dart';
 import 'myCollection.dart';
 
@@ -302,7 +303,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
           ),
         ],
       ),
-      bottomNavigationBar: BottomAppBar(),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }
