@@ -6,7 +6,7 @@ import 'package:food_marvel/search/ImportEmptySearch.dart';
 import 'package:food_marvel/search/ImportRestaurant.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:food_marvel/search/ImportSuddenpopular.dart';
-import 'package:food_marvel/shop/list.dart';
+import 'package:food_marvel/search/ImportSearchlist.dart';
 import '../firebase/firebase_options.dart';
 import 'ImportSearchResult.dart';
 
@@ -264,7 +264,7 @@ class _SearchState extends State<Search> {
             if (searchResults.isNotEmpty) (
             Container(
             height: 500,
-            child: ListsShop(
+            child: SearchListShop(
               searchResults: searchResults
                 .where((result) => matchesSearchText(result, searchQuery))
                 .toList(),
