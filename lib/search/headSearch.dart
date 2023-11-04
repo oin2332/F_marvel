@@ -156,7 +156,7 @@ class _SearchState extends State<Search> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFFFF7070),
+        backgroundColor: Colors.deepOrange[400],
         leading: GestureDetector(
           onTap: () {
             Navigator.of(context).pop(

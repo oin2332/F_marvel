@@ -89,11 +89,11 @@ class _NavSearchState extends State<NavSearch> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.deepOrange[400],
         title: Text(
           "검색하기",
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
       ),

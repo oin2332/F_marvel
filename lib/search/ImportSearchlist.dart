@@ -153,7 +153,12 @@ class _SearchListShop extends State<SearchListShop> {
                           ],
                         ),
                         onTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => DetailPage()));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DetailPage(docId: documentData['yourDocId']),
+                            ),
+                          );
                         },
                       ),
                     ),
