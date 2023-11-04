@@ -26,6 +26,64 @@ class _ReservationPageState extends State<ReservationPage> {
     initializeDateFormatting('ko_KR', null);
   }
 
+  String selectedTime = ''; // 선택된 시간을 문자열로 저장, 초기에는 빈 문자열
+
+  Widget _timelist() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          _buildTimeButton('11:00'),
+          _buildTimeButton('12:00'),
+          _buildTimeButton('13:00'),
+          _buildTimeButton('14:00'),
+          _buildTimeButton('15:00'),
+          _buildTimeButton('16:00'),
+          _buildTimeButton('17:00'),
+          _buildTimeButton('18:00'),
+          _buildTimeButton('19:00'),
+          _buildTimeButton('20:00'),
+          _buildTimeButton('21:00'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTimeButton(String time) {
+    bool isSelected = time == selectedTime; // 선택된 시간인 경우 true, 아니면 false
+
+    return TextButton(
+      onPressed: () {
+        setState(() {
+          selectedTime = isSelected ? '' : time; // 이미 선택된 시간인 경우 해제, 아니면 선택
+        });
+      },
+      child: Container(
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: isSelected ? Color(0xFFFF6347) : Colors.white,
+          // 배경색 선택적으로 변경
+          border: Border.all(
+            color: Colors.black, // 테두리는 검정
+          ),
+          borderRadius: BorderRadius.circular(5), // 테두리 레디우스는 5
+        ),
+        child: Text(
+          time,
+          style: TextStyle(
+            color: isSelected ? Colors.white : Colors.black,
+            // 글자색 선택적으로 변경
+          ),
+        ),
+      ),
+    );
+  }
+
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,6 +170,8 @@ class _ReservationPageState extends State<ReservationPage> {
                   ],
                 ),
               ),
+
+              _timelist(),
               SizedBox(height: 80,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
