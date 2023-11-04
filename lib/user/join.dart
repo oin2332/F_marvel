@@ -148,8 +148,10 @@ class _JoinState extends State<Join> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('회원가입'),
+      appBar:AppBar(
+        backgroundColor: Colors.white,elevation: 0,
+        iconTheme: IconThemeData(color: Colors.black),
+        title: Text('회원가입',style: TextStyle(color: Colors.black),),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -269,6 +271,7 @@ class _JoinState extends State<Join> {
                       isInterlock = value ?? false; // checkbox selected value 업데이트
                     });
                   },
+                  activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
                 ),
                 Text('연동하기'),
               ],
@@ -308,6 +311,7 @@ class _JoinState extends State<Join> {
                   onChanged: (value) {
                     _updateAllCheckboxes(value!);
                   },
+                  activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
                 ),
                 TextButton(
                   onPressed: (){},
@@ -337,6 +341,7 @@ class _JoinState extends State<Join> {
                       }
                     });
                   },
+                  activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
                 ),
                 TextButton(
                   onPressed: (){},
@@ -365,6 +370,7 @@ class _JoinState extends State<Join> {
                       }
                     });
                   },
+                  activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
                 ),
                 TextButton(
                   onPressed: (){},
@@ -393,6 +399,7 @@ class _JoinState extends State<Join> {
                       }
                     });
                   },
+                  activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
                 ),
                 TextButton(
                   onPressed: (){},
@@ -421,6 +428,7 @@ class _JoinState extends State<Join> {
                       }
                     });
                   },
+                  activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
                 ),
                 TextButton(
                   onPressed: (){},
@@ -449,6 +457,7 @@ class _JoinState extends State<Join> {
                       }
                     });
                   },
+                  activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
                 ),
                 TextButton(
                   onPressed: (){},
@@ -477,6 +486,7 @@ class _JoinState extends State<Join> {
                       }
                     });
                   },
+                  activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
                 ),
                 TextButton(
                   onPressed: (){},
@@ -493,11 +503,20 @@ class _JoinState extends State<Join> {
                 Icon(Icons.keyboard_arrow_right, color: Colors.black)
               ],
             ),
-
             ElevatedButton(
-              onPressed: _canRegister() ? _register : null, // 가입 버튼 활성화 여부 확인
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.disabled)) {
+                      return Colors.grey[300]!; // 비활성화 상태일 때 배경색을 회색으로 지정
+                    }
+                    return Colors.deepOrange[400]!; // 활성화 상태일 때 배경색을 주황색으로 지정
+                  },
+                ),
+              ),
+              onPressed: _canRegister() ? _register : null,
               child: Text('가입'),
-            ),
+            )
           ],
         ),
       ),

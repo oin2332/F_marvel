@@ -50,20 +50,19 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SizedBox(height: 80),
-            Column(
-              children: [
-                ElevatedButton(
-                  onPressed: _login,
-                  child: Text('로그인'),
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => Join()));
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                      (Set<MaterialState> states) {
+                    if (states.contains(MaterialState.disabled)) {
+                      return Colors.grey[300]!; // 비활성화 상태일 때 배경색을 회색으로 지정
+                    }
+                    return Colors.deepOrange[400]!; // 활성화 상태일 때 배경색을 주황색으로 지정
                   },
-                  child: Text('회원가입'),
                 ),
-              ],
+              ),
+              onPressed: _login,
+              child: Text('로그인'),
             ),
           ],
         ),
@@ -80,10 +79,16 @@ class _LoginPageState extends State<LoginPage> {
         .where('pwd', isEqualTo: password).get();
 
     if (userDocs.docs.isNotEmpty) {
-      Provider.of<UserModel>(context,listen: false).login(id);
+      DocumentSnapshot userDoc = userDocs.docs.first;
+
+      String nickname = userDoc['nickname']; // 파이어스토어에서 닉네임 가져오기
+      Provider.of<UserModel>(context, listen: false).login(id, nickname); // UserModel에 저장
+      //Provider.of<UserModel>(context,listen: false).login(id);
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('성공적으로 로그인되었습니다!')),
       );
+
       // 로그인 성공 시 usermain으로 이동
       Navigator.push(context, MaterialPageRoute(builder: (context) => UserMain()));
     } else {

@@ -17,11 +17,14 @@ class UserMain extends StatefulWidget {
   final String? description;
   final bool? isPublic;
 
+
   const UserMain({
     super.key,
     this.collectionName, // NewCollection 화면에서 전달된 데이터
     this.description, // NewCollection 화면에서 전달된 데이터
-    this.isPublic,});
+    this.isPublic,
+
+  });
 
   @override
   State<UserMain> createState() => _UserMainState();
@@ -32,6 +35,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
   String? collectionName;
   bool? isPublic;
   late TabController _tabController;
+  late String? nickname; // 추가
 
   @override
   void initState() {
@@ -40,6 +44,9 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
     isPublic = widget.isPublic;
     collectionName = widget.collectionName;
     _tabController = TabController(length: 2, vsync: this);
+
+    UserModel userModel = Provider.of<UserModel>(context, listen: false);
+    nickname = userModel.nickname; // UserModel에서 닉네임 가져오기
   }
 
   @override
@@ -51,6 +58,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
   @override
   Widget build(BuildContext context) {
     String? userId = Provider.of<UserModel>(context).userId; // UserModel에서 사용자 아이디 받아오기
+    String? nickname = Provider.of<UserModel>(context).nickname;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -81,7 +89,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
               ),
               Column(
                 children: [
-                  Text('고독한 미식가_11909', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
+                  Text('$nickname', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),),
                   Row(
                     children: [
                       TextButton(

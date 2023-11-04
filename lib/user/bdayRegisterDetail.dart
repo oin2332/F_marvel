@@ -98,6 +98,7 @@ class _BdayRegisterDetailState extends State<BdayRegisterDetail> {
             SizedBox(height: 10),
             Text('기념일 유형'),
             ElevatedButton(
+              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.deepOrange[300]!)),
               onPressed: _showTypeDialog,
               child: Container(
                 width: double.infinity, // 버튼의 너비를 화면 너비로 설정
@@ -108,6 +109,7 @@ class _BdayRegisterDetailState extends State<BdayRegisterDetail> {
             SizedBox(height: 20),
             Text('날짜'),
             ElevatedButton(
+              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.deepOrange[300]!)),
               onPressed: _showDatePickerDialog,
               child: Container(
                 width: double.infinity, // 버튼의 너비를 화면 너비로 설정
