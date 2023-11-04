@@ -54,10 +54,20 @@ class _ProfileEditState extends State<ProfileEdit> {
 
   void updateNicknameInFirestore(String userId, String newNickname) async {
     try {
-      await FirebaseFirestore.instance
+      // 'T3_USER_TBL' 컬렉션에서 'id'가 userId인 문서를 찾습니다.
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
           .collection('T3_USER_TBL')
-          .doc(userId)
-          .update({'nickname': newNickname}); // 파이어스토어 업데이트
+          .where('id', isEqualTo: userId)
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        // 문서가 존재한다면 해당 문서의 'nickname' 필드를 업데이트합니다.
+        QueryDocumentSnapshot doc = userSnapshot.docs.first;
+        await doc.reference.update({'nickname': newNickname});
+        print('닉네임이 업데이트되었습니다.');
+      } else {
+        print('해당 사용자를 찾을 수 없습니다.');
+      }
     } catch (e) {
       print('닉네임 업데이트 중 오류 발생: $e');
       // 오류 처리 코드 추가 (예: 사용자에게 알리거나 다른 작업 수행)
