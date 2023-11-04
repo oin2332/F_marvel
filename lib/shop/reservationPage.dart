@@ -196,8 +196,12 @@ class _ReservationPageState extends State<ReservationPage> {
                   ,
                   TextButton(
                     onPressed: () {
-                      // 예약하기 버튼을 누를 때 날짜와 인원 수를 저장하고 화면을 닫음
-                      Navigator.pop(context, {'selectedDate': _selectedDay, 'selectedNumber': selectedNumber});
+                      // 예약하기 버튼을 누를 때 날짜와 시간을 저장하고 화면을 닫음
+                      Navigator.pop(context, {
+                        'selectedDate': _selectedDay,
+                        'selectedTime': selectedTime,
+                        'selectedNumber': selectedNumber,
+                      });
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Color(0xFFFF6347)),
@@ -210,6 +214,7 @@ class _ReservationPageState extends State<ReservationPage> {
                       ),
                     ),
                   )
+
 
                 ],
               )

@@ -136,7 +136,7 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  void navigateToPage(int index) {
+  void navigateToPage(int index) { // 카테고리 버튼 인덱스
     final pages = [
       BestPage(),
       Sample4(),
@@ -155,7 +155,7 @@ class _MainPageState extends State<MainPage> {
       StorePage(),
     ];
 
-    if (index >= 0 && index < pages.length) {
+    if (index >= 0 && index < pages.length) { //카테고리 버튼
       Navigator.push(context, MaterialPageRoute(builder: (context) => pages[index]));
     }
   }

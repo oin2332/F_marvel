@@ -76,6 +76,7 @@ class _TestState extends State<ListsShop> {
           storeData['STARlength'] = y;
           storeData['STARage'] = x.toStringAsFixed(1);
           storeData['STARlist'] = starList;
+          storeData['docId'] = docId;
           userDataList.add(storeData);
         }
         setState(() {
@@ -165,7 +166,7 @@ class _TestState extends State<ListsShop> {
                             ],
                           ),
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => DetailPage()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => DetailPage(docId: documentData['docId'])));
                           },
                         ),
                       ),
