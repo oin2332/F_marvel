@@ -1,4 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:food_marvel/user/bdayRegister.dart';
 import 'package:food_marvel/user/flavorChoice.dart';
@@ -11,6 +14,7 @@ class ProfileEdit extends StatefulWidget {
   final String? userId; // 사용자 ID를 받아오는 변수 추가
   ProfileEdit({required this.userId}); // 생성자 추가
 
+
   @override
   State<ProfileEdit> createState() => _ProfileEditState();
 }
@@ -20,6 +24,9 @@ class _ProfileEditState extends State<ProfileEdit> {
   final TextEditingController _introController = TextEditingController(); // 자기 소개
   final TextEditingController _areaController = TextEditingController(); // 활동 지역
 
+  ImagePicker _picker = ImagePicker();
+
+  // 유저 정보 출력
   void fetchUserData(String userId) async {
     try {
       QuerySnapshot userSnapshot = await FirebaseFirestore.instance
@@ -74,6 +81,83 @@ class _ProfileEditState extends State<ProfileEdit> {
     }
   }
 
+  // 유저 프로필 이미지 출력
+  Future<String?> fetchProfileImageUrl(String userId) async {
+    try {
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('T3_USER_TBL')
+          .where('id', isEqualTo: userId)
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        for (QueryDocumentSnapshot doc in userSnapshot.docs) {
+          Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
+          return userData['profile_image'];
+        }
+      } else {
+        print('해당 사용자를 찾을 수 없습니다.');
+      }
+    } catch (e) {
+      print('데이터를 불러오는 중 오류가 발생했습니다: $e');
+      throw e;
+    }
+
+    return null;
+  }
+
+  //프로필 사진을 선택하는 부분에 대한 로직
+  void _pickImage() async {
+    ImagePicker _picker = ImagePicker(); // ImagePicker 객체 선언 및 초기화
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      // 이미지를 Firebase Storage에 업로드하고 URL을 받아옵니다.
+      String imageUrl = await uploadImageToStorage(pickedFile);
+
+      // Firestore에 이미지 URL을 저장합니다.
+      updateProfileImageInFirestore(imageUrl);
+    }
+  }
+
+  // Firebase Storage에 이미지를 업로드하는 함수
+  Future<String> uploadImageToStorage(XFile pickedFile) async {
+    try {
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString() + '.jpg'; // 현재시간기준으로 파일 이름 자동생성
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('user') // 선택된 이미지 파일을 저장할 Firebase Storage 폴더 이름
+          .child(fileName);
+
+      await ref.putFile(File(pickedFile.path));
+
+      String downloadURL = await ref.getDownloadURL();
+      return downloadURL;
+    } catch (e) {
+      print('이미지 업로드 중 오류 발생: $e');
+      throw e;
+    }
+  }
+
+  // Firestore에 이미지 URL을 업데이트하는 함수
+  void updateProfileImageInFirestore(String imageUrl) async {
+    try {
+      String userId = widget.userId ?? '';
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('T3_USER_TBL')
+          .where('id', isEqualTo: userId)
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        QueryDocumentSnapshot doc = userSnapshot.docs.first;
+        await doc.reference.update({'profile_image': imageUrl});
+        print('프로필 이미지가 업데이트되었습니다.');
+      } else {
+        print('해당 사용자를 찾을 수 없습니다.');
+      }
+    } catch (e) {
+      print('프로필 이미지 업데이트 중 오류 발생: $e');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -86,6 +170,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   }
 
 
+  //화면
     @override
     Widget build(BuildContext context) {
       return Scaffold(
@@ -111,9 +196,18 @@ class _ProfileEditState extends State<ProfileEdit> {
                                 ListTile(
                                   leading: Icon(Icons.photo),
                                   title: Text('앨범에서 선택'),
-                                  onTap: () {
-                                    // 앨범에서 선택하는 로직을 추가하세요
-                                    // 예를 들어, 이미지 선택 코드를 넣어주세요.
+                                  onTap: () async {
+                                    _pickImage();
+                                    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+                                    if (pickedFile != null) {
+                                      // 이미지를 Firebase Storage에 업로드하고 URL을 받아옵니다.
+                                      String imageUrl = await uploadImageToStorage(pickedFile);
+
+                                      // Firestore에 이미지 URL을 저장합니다.
+                                      updateProfileImageInFirestore(imageUrl);
+
+                                      Navigator.pop(context); // 모달 바텀 시트 닫기
+                                    }
                                     Navigator.pop(context); // 모달 바텀 시트 닫기
                                   },
                                 ),

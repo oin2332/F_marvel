@@ -35,7 +35,7 @@ class _JoinState extends State<Join> {
   String? gender;
 
   void _register() async {
-    if (!_idChecked) {
+    if(_idChecked) {
       return; // 중복 아이디 확인이 성공하지 않은 경우, 가입을 중단
     }
 

@@ -103,7 +103,7 @@ class _BdayRegisterDetailState extends State<BdayRegisterDetail> {
               child: Container(
                 width: double.infinity, // 버튼의 너비를 화면 너비로 설정
                 padding: EdgeInsets.symmetric(horizontal: 20.0), // 좌우 패딩을 추가
-                child: Text(selectedType),
+                child: Text(selectedType, textAlign: TextAlign.center),
               ),
             ),
             SizedBox(height: 20),
@@ -114,12 +114,28 @@ class _BdayRegisterDetailState extends State<BdayRegisterDetail> {
               child: Container(
                 width: double.infinity, // 버튼의 너비를 화면 너비로 설정
                 padding: EdgeInsets.symmetric(horizontal: 20.0), // 좌우 패딩을 추가
-                child: Text(selectedDate.isNotEmpty ? selectedDate : '날짜를 선택해주세요', style: TextStyle(),),
+                child: Text(selectedDate.isNotEmpty ? selectedDate : '날짜를 선택해주세요', style: TextStyle(), textAlign: TextAlign.center),
               ),
             ),
             SizedBox(height: 20),
             Text('메모'),
             TextField(decoration: InputDecoration(labelText: '기념일에 대한 내용을 적어주세요')),
+            SizedBox(height: 20),
+            ElevatedButton(
+              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.deepOrange[400]!)),
+              onPressed: (){
+                String type = selectedType;
+                String date = selectedDate;
+
+                // 데이터를 전달하고자 하는 경우, Navigator로 화면을 닫음과 동시에 데이터를 전달합니다.
+                Navigator.pop(context, {'type': type, 'date': date});
+              },
+              child: Container(
+                width: double.infinity, // 버튼의 너비를 화면 너비로 설정
+                padding: EdgeInsets.symmetric(horizontal: 20.0), // 좌우 패딩을 추가
+                child: Text('등록', textAlign: TextAlign.center,),
+                ),
+            )
           ],
         ),
       )
