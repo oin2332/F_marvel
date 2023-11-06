@@ -69,7 +69,6 @@ class _DetailPageState extends State<DetailPage> {
         storeData['STARlist'] = starList;
         storeData['docId'] = widget.docId; // 수정: docId를 사용하여 값을 설정
         userDataList.add(storeData);
-        print(userDataList);
       } else {
         print('해당 문서를 찾을 수 없습니다.');
       }
@@ -613,17 +612,17 @@ class _DetailPageState extends State<DetailPage> {
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Image.asset(
-                                          'assets/storePageIMG/BEKMIWOO/BEKMIWOO1.jpeg',
+                                          'assets/storePageIMG/BEKMIWOO1.jpeg',
                                           width: 125,
                                         ),
                                         SizedBox(width: 3,),
                                         Image.asset(
-                                          'assets/storePageIMG/BEKMIWOO/BEKMIWOO2.jpeg',
+                                          'assets/storePageIMG/BEKMIWOO2.jpeg',
                                           width: 125,
                                         ),
                                         SizedBox(width: 3,),
                                         Image.asset(
-                                          'assets/storePageIMG/BEKMIWOO/BEKMIWOO3.jpeg',
+                                          'assets/storePageIMG/BEKMIWOO3.jpeg',
                                           width: 125,
                                         ),
                                       ],
@@ -633,17 +632,17 @@ class _DetailPageState extends State<DetailPage> {
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Image.asset(
-                                          'assets/storePageIMG/BEKMIWOO/BEKMIWOO4.jpeg',
+                                          'assets/storePageIMG/BEKMIWOO4.jpeg',
                                           width: 125,
                                         ),
                                         SizedBox(width: 3,),
                                         Image.asset(
-                                          'assets/storePageIMG/BEKMIWOO/BEKMIWOO5.jpeg',
+                                          'assets/storePageIMG/BEKMIWOO5.jpeg',
                                           width: 125,
                                         ),
                                         SizedBox(width: 3,),
                                         Image.asset(
-                                          'assets/storePageIMG/BEKMIWOO/BEKMIWOO6.jpeg',
+                                          'assets/storePageIMG/BEKMIWOO6.jpeg',
                                           width: 125,
                                         ),
                                       ],

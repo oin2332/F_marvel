@@ -68,6 +68,7 @@ class _SearchListShop extends State<SearchListShop> {
           storeData['STARlength'] = y;
           storeData['STARage'] = x.toStringAsFixed(1);
           storeData['STARlist'] = starList;
+          storeData['docId'] = docId;
           userDataList.add(storeData);
         }
         setState(() {
@@ -157,7 +158,7 @@ class _SearchListShop extends State<SearchListShop> {
                             //주석
                             context,
                             MaterialPageRoute(
-                              builder: (context) => DetailPage(docId: documentData['yourDocId']),
+                              builder: (context) => DetailPage(docId: documentData['docId'])
                             ),
                           );
                         },
