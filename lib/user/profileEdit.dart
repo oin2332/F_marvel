@@ -44,12 +44,12 @@ class _ProfileEditState extends State<ProfileEdit> {
           String? nickname = userData['nickname'];
           String? intro = userData['intro'];
           String? area = userData['area'];
-
-          if (nickname != null && intro != null && area != null) {
+          print('nickname: $nickname, intro: $intro, area: $area');
+          if (nickname != null || intro != null || area != null) {
             // 사용자 정보를 각 컨트롤러에 할당
-            _nicknameController.text = nickname;
-            _introController.text = intro;
-            _areaController.text = area;
+            _nicknameController.text = nickname!;
+            _introController.text = intro!;
+            _areaController.text = area!;
           } else {
             print('사용자 정보가 누락되었습니다.');
           }
@@ -63,29 +63,63 @@ class _ProfileEditState extends State<ProfileEdit> {
     }
   }
 
-  void updateNicknameInFirestore(String userId, String newNickname, String newArea, String newIntro) async {
+  void updateNicknameInFirestore(String userId, String newNickname) async {
     try {
-      // 'T3_USER_TBL' 컬렉션에서 'id'가 userId인 문서를 찾습니다.
+
       QuerySnapshot userSnapshot = await FirebaseFirestore.instance
           .collection('T3_USER_TBL')
           .where('id', isEqualTo: userId)
           .get();
 
       if (userSnapshot.docs.isNotEmpty) {
-        // 문서가 존재한다면 해당 문서의 'nickname' 필드를 업데이트합니다.
         QueryDocumentSnapshot doc = userSnapshot.docs.first;
-        await doc.reference.update({
-          'nickname': newNickname,
-          'area' : newArea,
-          'intro' : newIntro,
-        });
+        await doc.reference.update({'nickname': newNickname});
         print('닉네임이 업데이트되었습니다.');
       } else {
         print('해당 사용자를 찾을 수 없습니다.');
       }
     } catch (e) {
       print('닉네임 업데이트 중 오류 발생: $e');
-      // 오류 처리 코드 추가 (예: 사용자에게 알리거나 다른 작업 수행)
+    }
+  }
+
+  void updateAreaInFirestore(String userId, String newArea) async {
+    try {
+
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('T3_USER_TBL')
+          .where('id', isEqualTo: userId)
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        QueryDocumentSnapshot doc = userSnapshot.docs.first;
+        await doc.reference.update({'area': newArea});
+        print('활동지역이 업데이트되었습니다.');
+      } else {
+        print('해당 사용자를 찾을 수 없습니다.');
+      }
+    } catch (e) {
+      print('활동지역 업데이트 중 오류 발생: $e');
+    }
+  }
+
+  void updateIntroInFirestore(String userId, String newIntro) async {
+    try {
+
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('T3_USER_TBL')
+          .where('id', isEqualTo: userId)
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        QueryDocumentSnapshot doc = userSnapshot.docs.first;
+        await doc.reference.update({'intro': newIntro});
+        print('자기소개가 업데이트되었습니다.');
+      } else {
+        print('해당 사용자를 찾을 수 없습니다.');
+      }
+    } catch (e) {
+      print('자기소개 업데이트 중 오류 발생: $e');
     }
   }
 
@@ -251,7 +285,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                         onChanged: (newNickname) {
                           // 닉네임이 변경될 때 호출되는 함수
                           String userId = widget.userId ?? ''; // 사용자 ID가 없는 경우를 대비하여 빈 문자열로 초기화
-                          updateNicknameInFirestore(userId, newNickname, newArea, newIntro); // 파이어스토어에 업데이트된 닉네임 전달
+                          updateNicknameInFirestore(userId, newNickname); // 파이어스토어에 업데이트된 닉네임 전달
                         },
                         decoration: InputDecoration(
                           hintText: '닉네임을 설정해주세요.',
@@ -279,7 +313,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                         onChanged: (newIntro) {
                           // 자기소개 변경될 때 호출되는 함수
                           String userId = widget.userId ?? ''; // 사용자 ID가 없는 경우를 대비하여 빈 문자열로 초기화
-                          updateNicknameInFirestore(userId, newNickname, newArea, newIntro); // 파이어스토어에 업데이트된 닉네임 전달
+                          updateIntroInFirestore(userId, newIntro);// 파이어스토어에 업데이트된 닉네임 전달
                         },
                         decoration: InputDecoration(
                           hintText: '자신을 알릴 수 있는 소개글을 작성해주세요.',
@@ -304,6 +338,11 @@ class _ProfileEditState extends State<ProfileEdit> {
                     height: 50, //TextField 높이 설정
                     child: TextField(
                         controller: _areaController,
+                        onChanged: (newArea) {
+                          // 활동 지역 변경 호출 함수
+                          String userId = widget.userId ?? ''; // 사용자 ID가 없는 경우를 대비하여 빈 문자열로 초기화
+                          updateAreaInFirestore(userId, newArea);
+                        },
                         decoration: InputDecoration(
                           hintText: '활동지역을 자유롭게 입력해주세요.',
                           alignLabelWithHint: true,

@@ -16,7 +16,7 @@ class UserModel with ChangeNotifier {
   String? get area => _area;
   String? get intro => _intro;
 
-  void setProfile(String? nickname, area, intro) {
+  void setProfile(String? nickname, String? area, String? intro) {
     _nickname = nickname;
     _area = area;
     _intro = intro;
