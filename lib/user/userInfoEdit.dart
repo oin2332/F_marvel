@@ -6,7 +6,7 @@ import 'package:food_marvel/user/phoneEdit.dart';
 import 'package:food_marvel/user/pwdEdit.dart';
 import 'package:food_marvel/user/userModel.dart';
 import 'package:food_marvel/user/userUnlogin.dart';
-
+import 'package:provider/provider.dart';
 class UserInfoEdit extends StatefulWidget {
   const UserInfoEdit({super.key});
 
@@ -17,8 +17,6 @@ class UserInfoEdit extends StatefulWidget {
 class _UserInfoEditState extends State<UserInfoEdit> {
   List<String> genderOptions = ['남성', '여성', '선택안함'];
   String selectedGender = '선택안함'; // 추가: 선택된 성별을 저장할 변수
-
-  UserModel userModel = UserModel();
 
   void _selectGender(BuildContext context) {
     showModalBottomSheet(
@@ -47,6 +45,7 @@ class _UserInfoEditState extends State<UserInfoEdit> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel userModel = Provider.of<UserModel>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
           leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.black),
