@@ -1,4 +1,5 @@
 import 'package:food_marvel/user/myCollectionEdit.dart';
+import 'package:food_marvel/user/newStore.dart';
 import 'package:food_marvel/user/userMain.dart';
 import 'package:flutter/material.dart';
 
@@ -182,7 +183,7 @@ class _MyCollectionState extends State<MyCollection> {
           SizedBox(height: 20,),
           ElevatedButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => NewCollection()));
+              Navigator.push(context, MaterialPageRoute(builder: (_) => NewStore()));
               // 이 버튼을 클릭했을 때 수행할 동작을 여기에 추가하세요.
             },
             style: ButtonStyle(
@@ -194,7 +195,7 @@ class _MyCollectionState extends State<MyCollection> {
                 Size(350, 45), // 버튼의 너비와 높이를 설정
               ),
             ),
-            child: Text('+ 레스토랑 추가하기'),
+            child: Text('+ 스토어 추가하기'),
           ),
         ],
       ),

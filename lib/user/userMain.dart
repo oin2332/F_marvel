@@ -214,64 +214,69 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
                       },
                       child: Row(
                         children: [
-                          Column(
-                            children: [
-                              Container(
-                                height: 70,
-                                width: 180,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(10.0),
-                                  ),
-                                  gradient: LinearGradient(
-                                    colors: [Colors.white10, Colors.grey],
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                  ),
-                                  border: Border.all(color: Colors.grey),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'FOOD MARVEL',
-                                    style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold, fontSize: 14),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 1),
-                              Container(
-                                height: 30,
-                                width: 180,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.vertical(
-                                    bottom: Radius.circular(10.0),
-                                  ),
-                                  border: Border.all(color: Colors.grey),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('  $description', style: TextStyle(color: Colors.deepOrange)),
-                                    Icon(
-                                      Icons.turned_in_not_outlined,
-                                      color: Colors.deepOrange,
+                          if (description != null)
+                            Column(
+                              children: [
+                                Container(
+                                  height: 70,
+                                  width: 180,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(10.0),
                                     ),
-                                  ],
+                                    gradient: LinearGradient(
+                                      colors: [Colors.white10, Colors.grey],
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                    ),
+                                    border: Border.all(color: Colors.grey),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'FOOD MARVEL',
+                                      style: TextStyle(color: Colors.black38, fontWeight: FontWeight.bold, fontSize: 14),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
+                                SizedBox(height: 1),
+                                Container(
+                                  height: 30,
+                                  width: 180,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.vertical(
+                                      bottom: Radius.circular(10.0),
+                                    ),
+                                    border: Border.all(color: Colors.grey),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text('  $description', style: TextStyle(color: Colors.deepOrange)),
+                                      Icon(
+                                        Icons.turned_in_not_outlined,
+                                        color: Colors.deepOrange,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          if (description == null)
+                            Text('컬렉션이 존재하지 않습니다.', style: TextStyle(color: Colors.grey)),
                         ],
                       ),
                     ),
                     SizedBox(height: 5,),
                     Row(
-                      children: [
+                      children: isPublic == true
+                          ? [
                         Icon(
-                          isPublic == true ? Icons.lock_open : Icons.lock_outline,
+                          Icons.lock_open,
                           color: Colors.black, // 색상을 조정하세요.
                         ),
-                        Text(' $collectionName',style: TextStyle(fontWeight: FontWeight.bold),),
-                      ],
+                        Text(' $collectionName', style: TextStyle(fontWeight: FontWeight.bold)),
+                      ]
+                          : [], // isPublic이 true인 경우에만 표시
                     ),
 
                     ElevatedButton(
