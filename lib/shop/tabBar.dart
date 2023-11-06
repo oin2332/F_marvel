@@ -248,7 +248,7 @@ class _TabBarExState extends State<TabBarEx> {
                                     _showImageDialog(context, 'assets/storePageIMG/BEKMIWOO/${menuImg[index]['img1']}');
                                   },
                                   child: Image.asset(
-                                    'assets/storePageIMG/BEKMIWOO/${menuImg[index]['img1']}',
+                                    'assets/storePageIMG/${menuImg[index]['img1']}',
                                     width: 250,
                                     height: 330,
                                   ),
@@ -256,10 +256,10 @@ class _TabBarExState extends State<TabBarEx> {
                                 GestureDetector(
                                   onTap: () {
                                     // 이미지 클릭 시 다이얼로그 표시
-                                    _showImageDialog(context, 'assets/storePageIMG/BEKMIWOO/${menuImg[index]['img2']}');
+                                    _showImageDialog(context, 'assets/storePageIMG/${menuImg[index]['img2']}');
                                   },
                                   child: Image.asset(
-                                    'assets/storePageIMG/BEKMIWOO/${menuImg[index]['img2']}',
+                                    'assets/storePageIMG/${menuImg[index]['img2']}',
                                     width: 250,
                                     height: 330,
                                   ),
@@ -267,10 +267,10 @@ class _TabBarExState extends State<TabBarEx> {
                                 GestureDetector(
                                   onTap: () {
                                     // 이미지 클릭 시 다이얼로그 표시
-                                    _showImageDialog(context, 'assets/storePageIMG/BEKMIWOO/${menuImg[index]['img3']}');
+                                    _showImageDialog(context, 'assets/storePageIMG/${menuImg[index]['img3']}');
                                   },
                                   child: Image.asset(
-                                    'assets/storePageIMG/BEKMIWOO/${menuImg[index]['img3']}',
+                                    'assets/storePageIMG/${menuImg[index]['img3']}',
                                     width: 250,
                                     height: 330,
                                   ),
@@ -278,10 +278,10 @@ class _TabBarExState extends State<TabBarEx> {
                                 GestureDetector(
                                   onTap: () {
                                     // 이미지 클릭 시 다이얼로그 표시
-                                    _showImageDialog(context, 'assets/storePageIMG/BEKMIWOO/${menuImg[index]['img4']}');
+                                    _showImageDialog(context, 'assets/storePageIMG/${menuImg[index]['img4']}');
                                   },
                                   child: Image.asset(
-                                    'assets/storePageIMG/BEKMIWOO/${menuImg[index]['img4']}',
+                                    'assets/storePageIMG/${menuImg[index]['img4']}',
                                     width: 250,
                                     height: 330,
                                   ),
@@ -379,7 +379,7 @@ class _TabBarExState extends State<TabBarEx> {
                               content: Container(
                                 width: double.maxFinite, // 화면 너비에 맞게 설정
                                 child: Image.asset(
-                                  'assets/storePageIMG/BEKMIWOO/${Path[index]}',
+                                  'assets/storePageIMG/${Path[index]}',
                                   fit: BoxFit.contain, // 이미지를 화면에 꽉 채워 표시
                                 ),
                               ),
@@ -391,7 +391,7 @@ class _TabBarExState extends State<TabBarEx> {
                       child: Container(
                         padding: EdgeInsets.all(5),
                         child: Image.asset(
-                          'assets/storePageIMG/BEKMIWOO/${Path[index]}',
+                          'assets/storePageIMG/${Path[index]}',
                           fit: BoxFit.cover,
                         ),
                       ),

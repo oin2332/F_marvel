@@ -38,6 +38,12 @@ class _DetailPageState extends State<DetailPage> {
             .collection('T3_STAR_TBL')
             .get();
 
+        QuerySnapshot storeImgList = await FirebaseFirestore.instance
+            .collection('T3_STORE_TBL')
+            .doc(widget.docId)
+            .collection('T3_STOREIMG_TBL')
+            .get();
+
         List<String> starList = [];
         double x = 0;
         int y = 0;
@@ -56,6 +62,11 @@ class _DetailPageState extends State<DetailPage> {
                 }
               }
             });
+          }
+          for (var storeImgDoc in storeImgList.docs) {
+            Map<String, dynamic> storeImgData = storeImgDoc.data() as Map<String, dynamic>;
+            List<String> imgList = storeImgData.values.cast<String>().toList();
+            imagePaths.addAll(imgList);
           }
         } else {
           starList.add('0');
@@ -160,16 +171,16 @@ class _DetailPageState extends State<DetailPage> {
                       children: [
                         Row(
                           children: [
-                            Text('${userDataList[index]['S_NAME']}   l',
+                            Text('${userDataList[index]['KEYWORD1']}   l',
                               style: TextStyle(fontSize: 10, color: Colors
                                   .grey),),
                             SizedBox(width: 8,),
-                            Text('${userDataList[index]['주소']}',
+                            Text('${userDataList[index]['S_ADDR2']}',
                                 style: TextStyle(fontSize: 10, color: Colors
                                     .grey)),
                           ],
                         ),
-                        Text('${userDataList[index]['제목']}'),
+                        Text('${userDataList[index]['S_NAME']}',style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
                         Row(
                           children: [
                             Icon(
@@ -183,10 +194,10 @@ class _DetailPageState extends State<DetailPage> {
                             Icon(Icons.star_half, color: Colors.yellow[600],
                               size: 17,),
                             SizedBox(width: 7,),
-                            Text('${widget.docId}',
+                            Text('${userDataList[index]['STARage']}',
                               style: TextStyle(fontWeight: FontWeight.bold),),
                             SizedBox(width: 3,),
-                            Text('@개의 리뷰',
+                            Text('(${userDataList[index]['STARlength']})',
                                 style: TextStyle(fontSize: 10, color: Colors
                                     .grey)),
                           ],
@@ -846,9 +857,6 @@ class _DetailPageState extends State<DetailPage> {
 
   final PageController _pageController = PageController();
   final List<String> imagePaths = [ //음식점 사진 리스트
-    'assets/33.jpg',
-    'assets/33.jpg',
-    'assets/44.jfif',
   ];
 
 
