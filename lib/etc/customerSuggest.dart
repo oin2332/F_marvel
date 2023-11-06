@@ -45,12 +45,14 @@ class _CustomerSuggestState extends State<CustomerSuggest> {
                   onChanged: (bool? value) {
                     // 사용자가 체크박스를 선택했을 때의 로직을 추가하세요.
                   },
+                  activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
                 ),
                 Text('위 내용에 동의합니다.'),
               ],
             ),
             SizedBox(height: 60),
             ElevatedButton(
+              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.deepOrange[300]!)),
               onPressed: () {
                 // 여기에 제출 로직 추가
               },

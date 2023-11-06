@@ -27,13 +27,12 @@ class _JoinState extends State<Join> {
   final TextEditingController _name = TextEditingController();
   final TextEditingController _pwd = TextEditingController();
   final TextEditingController _pwd2 = TextEditingController();
-  final TextEditingController _email = TextEditingController();
   final TextEditingController _phone = TextEditingController();
   final TextEditingController _nickname = TextEditingController();
   final TextEditingController _area = TextEditingController();
   final TextEditingController _intro = TextEditingController();
 
-
+  String? gender;
 
   void _register() async {
     if (!_idChecked) {
@@ -53,6 +52,7 @@ class _JoinState extends State<Join> {
         'name' : _name.text,
         'pwd': _pwd.text,
         'phone': _phone.text,
+        'gender' : gender,
         'reservation' : isInterlock,
         'under14' : isAgeAgree,
         'use' : isUseAgree,
