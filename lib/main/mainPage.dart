@@ -8,7 +8,7 @@ import 'package:food_marvel/shop/bestPage.dart';
 import 'dart:async';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
-
+import 'package:food_marvel/reservation/RtabBar.dart';
 import '../firebase/firebase_options.dart';
 import '../search/headSearch.dart';
 import '../shop/recommendPage.dart';
@@ -31,6 +31,8 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => UserModel()),
         ChangeNotifierProvider(create: (context) => ModalData()),
+        ChangeNotifierProvider(create: (context) => ReservationDataProvider()),
+
 
       ],
       child: MyApp(),

@@ -184,7 +184,7 @@ class _TestState extends State<ListsShop> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => reservation(
+                                  builder: (context) => ReservationPage(
                                       storeInfo: storeInfo)
                                 ),
                               );

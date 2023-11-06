@@ -1,27 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_marvel/reservation/visit_completed_page.dart';
 import 'package:food_marvel/reservation/visit_schedule_page.dart';
+import 'package:provider/provider.dart';
 
 import '../board/boardView.dart';
 import '../main/importbottomBar.dart';
 import '../shop/storePage.dart';
 import 'cancel_noshow_page.dart';
 
-void main() async  {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: ResTabBar(),
-    );
-  }
-}
 
 class ResTabBar extends StatefulWidget {
   const ResTabBar({Key? key}) : super(key: key);
@@ -30,8 +18,73 @@ class ResTabBar extends StatefulWidget {
   State<ResTabBar> createState() => _ResTabBarState();
 }
 
+class ReservationData {
+  final String storeName;
+  final String storeAddress;
+  // 다른 예약 정보 필드들도 추가할 수 있습니다.
+
+  ReservationData({required this.storeName, required this.storeAddress});
+}
+
+class ReservationDataProvider with ChangeNotifier {
+  List<ReservationData> _reservations = [];
+
+  List<ReservationData> get reservations => _reservations;
+
+  Future<void> fetchReservations() async {
+    QuerySnapshot<Map<String, dynamic>> querySnapshot =
+    await FirebaseFirestore.instance.collection('reser_test').get();
+
+    _reservations = querySnapshot.docs
+        .map((doc) => ReservationData(
+      storeName: doc['storeName'] ?? '',
+      storeAddress: doc['storeAddress'] ?? '',
+      // 다른 예약 정보 필드들도 추가할 수 있습니다.
+    ))
+        .toList();
+
+    notifyListeners();
+
+    // 예약 정보 리스트 출력
+    _reservations.forEach((reservation) {
+      print('Store Name: ${reservation.storeName}');
+      print('Store Address: ${reservation.storeAddress}');
+      // 다른 예약 정보 필드들도 출력할 수 있습니다.
+    });
+  }
+}
+
+class ReservationListWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final reservationProvider =
+    Provider.of<ReservationDataProvider>(context, listen: false);
+    reservationProvider.fetchReservations();
+
+    return Consumer<ReservationDataProvider>(
+      builder: (context, provider, child) {
+        final reservations = provider.reservations;
+
+        return ListView.builder(
+          itemCount: reservations.length,
+          itemBuilder: (context, index) {
+            final reservation = reservations[index];
+            return ListTile(
+              title: Text(reservation.storeName),
+              subtitle: Text(reservation.storeAddress),
+              // 다른 예약 정보 필드들도 여기에 추가할 수 있습니다.
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+
 class _ResTabBarState extends State<ResTabBar> {
   int selectedIndex = 0;
+
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +126,7 @@ class _ResTabBarState extends State<ResTabBar> {
               ),
             ),
             // 나의 알림
-            Container(),
+            Center(child: ReservationListWidget()),
           ],
         ),
         bottomNavigationBar: BottomNavBar(),
