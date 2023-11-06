@@ -157,7 +157,7 @@ class _SearchListShop extends State<SearchListShop> {
                             //주석
                             context,
                             MaterialPageRoute(
-                              builder: (context) => DetailPage(docId: documentData['yourDocId']),
+                                builder: (context) => DetailPage(docId: documentData['yourDocId']),
                             ),
                           );
                         },

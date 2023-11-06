@@ -700,7 +700,7 @@ class _DetailPageState extends State<DetailPage> {
                                     SizedBox(
                                       width: 400,
                                       height: 400,
-                                      child: GoogleMapPage(initialAddress: '서울특별시 강변역'), // 여기에 함수를 호출하여 내용을 표시
+                                      child: GoogleMapPage(initialAddress: '${userDataList[index]['S_ADDR1']} ${userDataList[index]['S_ADDR2']}${userDataList[index]['S_ADDR3']}'), // 여기에 함수를 호출하여 내용을 표시
                                     ),
                                   ],
                                 )

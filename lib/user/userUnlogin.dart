@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:food_marvel/user/join.dart';
 import 'package:food_marvel/user/loginPage.dart';
+import 'package:food_marvel/user/storejoin.dart';
 import 'package:food_marvel/user/userMain.dart';
 import 'package:food_marvel/main/importbottomBar.dart';
 
@@ -88,7 +89,14 @@ class _UserUnloginState extends State<UserUnlogin> {
                     child: Text('회원 가입 ', style: TextStyle(decoration: TextDecoration.underline, color: Colors.black38,),
 
                     )
+                ),
+                TextButton(
+                    onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (_) => StoreJoin()));},
+                    child: Text('가게 등록 ', style: TextStyle(decoration: TextDecoration.underline, color: Colors.black38,),
+
+                    )
                 )
+
               ],
             ),
           ],
