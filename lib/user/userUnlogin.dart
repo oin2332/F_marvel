@@ -101,7 +101,6 @@ class _UserUnloginState extends State<UserUnlogin> {
             ),
           ],
         ),
-        bottomNavigationBar: BottomNavBar(),
       ),
     );
   }
