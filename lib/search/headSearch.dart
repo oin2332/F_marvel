@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_marvel/main/importbottomBar.dart';
 import 'package:food_marvel/main/mainPage.dart';
@@ -42,6 +43,32 @@ class _SearchState extends State<Search> {
     super.dispose();
   }
 
+
+  Future<String> getUserIdFromT3UserTable() async {
+    try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        String userId = user.uid;
+        print('로그인한 사용자의 ID: $userId');
+
+        await _searchval.collection('T3_SEARCH_TBL').add({
+          'S_SEARCHVALURE': _searchController.text,
+          'S_TIMESTAMP': FieldValue.serverTimestamp(),
+          'S_USERID': userId,
+        });
+
+        return userId;
+
+      } else {
+        return '사용자가 로그인되지 않았습니다';
+      }
+    } catch (e) {
+      print('사용자 ID를 가져오는 중 에러 발생: $e');
+      return '에러가 발생했습니다';
+    }
+  }
+
   void _removeSearch(String search) {
     setState(() {
       recentSearches.remove(search);
@@ -69,6 +96,7 @@ class _SearchState extends State<Search> {
 
   void _onSearchSubmitted(String value) async {
     String searchText = _searchController.text;
+    String userId = await getUserIdFromT3UserTable();
     searchResults = [];
     setState(() {
       if (recentSearches.contains(searchText)) {
@@ -82,16 +110,19 @@ class _SearchState extends State<Search> {
     });
 
 
+
     try {
       await _searchval.collection('T3_SEARCH_TBL').add({
         'S_SEARCHVALURE': _searchController.text,
         'S_TIMESTAMP': FieldValue.serverTimestamp(),
+        'S_USERID': userId,
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
+        SnackBar(content: Text('오류: $e')),
       );
     }
+
 
     QuerySnapshot userSnapshot = await FirebaseFirestore.instance
         .collection('T3_STORE_TBL')
@@ -262,14 +293,14 @@ class _SearchState extends State<Search> {
             SizedBox(height: 10, child: Container(color: Colors.grey)),
             if (searchQuery.isNotEmpty) ImportSearchResult(),
             if (searchResults.isNotEmpty) (
-            Container(
-            height: 500,
-            child: SearchListShop(
-              searchResults: searchResults
-                .where((result) => matchesSearchText(result, searchQuery))
-                .toList(),
-            ),
-            )
+                Container(
+                  height: 500,
+                  child: SearchListShop(
+                    searchResults: searchResults
+                        .where((result) => matchesSearchText(result, searchQuery))
+                        .toList(),
+                  ),
+                )
             )else if(searchQuery.isNotEmpty)
               ImportEmptySearch(searchQuery: searchQuery),
             if (searchQuery.isEmpty)
