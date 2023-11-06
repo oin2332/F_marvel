@@ -50,13 +50,28 @@ class _JoinState extends State<StoreJoin> {
         'KEYWORD1': _keyword1.text,
         'KEYWORD2': _keyword2.text,
         'S_ADDR1': _addr1.text,
-        // 나머지 필드 추가
+        'S_ADDR2': _addr2.text,
+        'S_ADDR3': _addr3.text,
+        'S_BREAKTIME': _baerktime.text,
+        'S_HOMEPAGE': _homepage.text,
+        'S_ID': _id.text,
+        'S_PWD': _pwd.text,
+        'S_IMG': _img.text,
+        'S_INFO1': _info.text,
+        'S_MEMO': _memo.text,
+        'S_NUMBER': _number.text,
+        'S_NAME': _name.text,
+        'S_PAY': _pay.text,
+        'S_RE_MEMO': _noshow.text,
+        'S_TIME': _time.text,
+        'S_SILPLEMONO': _silplemono.text,
 
         'timestamp': FieldValue.serverTimestamp(),
       });
 
       // newDocRef.id를 StoreJoin2로 전달하거나 다른 방식으로 활용할 수 있습니다
       String documentId = newDocRef.id;
+      print(documentId);
 
       _id.clear();
       _pwd.clear();
@@ -77,10 +92,10 @@ class _JoinState extends State<StoreJoin> {
       _time.clear();
       _silplemono.clear();
 
-      /*Navigator.push(
+      Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => StoreJoin2(documentId)),
-      );*/
+        MaterialPageRoute(builder: (context) => StoreJoin2(storeDocumentId: documentId))
+      );
     } else {
       print("제목 또는 내용을 입력해주세요.");
     }

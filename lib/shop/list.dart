@@ -35,7 +35,6 @@ class _TestState extends State<ListsShop> {
           .collection('T3_STORE_TBL')
           .get();
 
-
       if (storeSnapshot.docs.isNotEmpty) {
         for (var storeDoc in storeSnapshot.docs) {
           Map<String, dynamic> storeData = storeDoc.data() as Map<String, dynamic>;
@@ -75,24 +74,27 @@ class _TestState extends State<ListsShop> {
           if (y > 0) {
             x = x / y;
           }
-          storeData['STARlength'] = y;
-          storeData['STARage'] = x.toStringAsFixed(1);
-          storeData['STARlist'] = starList;
-          storeData['docId'] = docId;
-          userDataList.add(storeData);
+
+          // S_INFO1 필드가 '양식'인 경우에만 userDataList에 추가
+          if (storeData['S_INFO1'] == '스테이크') {
+            storeData['STARlength'] = y;
+            storeData['STARage'] = x.toStringAsFixed(1);
+            storeData['STARlist'] = starList;
+            storeData['docId'] = docId;
+            userDataList.add(storeData);
+          }
         }
         setState(() {
-
+          // 상태 업데이트 등 다른 작업 수행
         });
       } else {
         print('상점 데이터를 찾을 수 없습니다.');
-
       }
     } catch (e) {
       print('데이터를 불러오는 중 오류가 발생했습니다: $e');
-
     }
   }
+
 
 
   @override

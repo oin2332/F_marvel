@@ -1,13 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:food_marvel/user/storejoin.dart';
 import '../board/boardAdd.dart';
 import '../firebase/firebase_options.dart';
 import 'loginPage.dart';
 
 class StoreJoin2 extends StatefulWidget {
-  final String storeDocumentId;
-  StoreJoin2(String documentId, {super.key, required this.storeDocumentId});
+  final String storeDocumentId; // docId를 받을 변수 추가
+
+  StoreJoin2({required this.storeDocumentId});
+
 
   @override
   State<StoreJoin2> createState() => _JoinState();
@@ -29,17 +32,25 @@ class _JoinState extends State<StoreJoin2> {
 
 
   String? gender;
+
   void _addcollection() async {
-    if (S_MENU1.text.isNotEmpty && _FLOOR.text.isNotEmpty) {
-      FirebaseFirestore fs = FirebaseFirestore.instance;
-      DocumentReference storeDocument = fs.collection("T3_STORE_TBL").doc(widget.storeDocumentId);
+    if (widget.storeDocumentId != null && widget.storeDocumentId.isNotEmpty) {
 
-      // 서브컬렉션 생성
-      CollectionReference CONVENIENCE = storeDocument.collection("T3_CONVENIENCE_TBL");
-      CollectionReference TIME = storeDocument.collection("T3_TIME_TBL");
-      CollectionReference MENU = storeDocument.collection("T3_MENU_TBL");
+      CollectionReference CONVENIENCE = FirebaseFirestore.instance
+          .collection('T3_STORE_TBL')
+          .doc(widget.storeDocumentId)
+          .collection('T3_CONVENIENCE_TBL');
 
-      // 이제 CONVENIENCE, TIME, MENU 컬렉션에 데이터를 추가할 수 있습니다.
+      CollectionReference TIME = FirebaseFirestore.instance
+          .collection('T3_STORE_TBL')
+          .doc(widget.storeDocumentId)
+          .collection('T3_TIME_TBL');
+
+      CollectionReference MENU = FirebaseFirestore.instance
+          .collection('T3_STORE_TBL')
+          .doc(widget.storeDocumentId)
+          .collection('T3_MENU_TBL');
+
       await CONVENIENCE.add({
         'S_ELEVA': S_ELEVA,
         'S_FLOOR': _S_FLOOR,
@@ -50,7 +61,7 @@ class _JoinState extends State<StoreJoin2> {
         'S_STAIRS': _S_STAIRS,
         'S_TOILET': _S_TOILET,
         'S_WR': _S_WR,
-        'S_FLOORtext': _FLOOR,
+        'S_FLOORtext': _FLOOR.text,
       });
 
       await TIME.add({
@@ -71,17 +82,23 @@ class _JoinState extends State<StoreJoin2> {
         'S_RE_TIME15' : _Time15,
 
       });
-      await MENU.add({
-        'S_MENU1' : S_MENU1,
-        'S_MENU1-1' : S_MENU1_1,
-        'S_MENU2' : S_MENU2,
-        'S_MENU2-1' : S_MENU2_1,
-        'S_MENU3' : S_MENU3,
-        'S_MENU3-1' : S_MENU3_1,
-        'S_MENU4' : S_MENU4,
-        'S_MENU4-1' : S_MENU4_1,
 
+      await MENU.add({
+        'S_MENU1' : S_MENU1.text,
+        'S_MENU1-1' : S_MENU1_1.text,
+        'S_MENU2' : S_MENU2.text,
+        'S_MENU2-1' : S_MENU2_1.text,
+        'S_MENU3' : S_MENU3.text,
+        'S_MENU3-1' : S_MENU3_1.text,
+        'S_MENU4' : S_MENU4.text,
+        'S_MENU4-1' : S_MENU4_1.text,
       });
+
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => StoreJoin())
+      );
+
     } else {
       print("제목 또는 내용을 입력해주세요.");
     }

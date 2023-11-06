@@ -23,6 +23,7 @@ class _ReservationAddState extends State<ReservationAdd> {
   DateTime? _selectedDay;
   DateTime _focusedDay = DateTime.now();
   int? selectedNumber;
+  String? timeSet;
 
   Map<CalendarFormat, String> _availableCalendarFormats = {
     CalendarFormat.month: '월',
@@ -182,24 +183,52 @@ class _ReservationAddState extends State<ReservationAdd> {
     );
   }
 
-  Widget _clockbutton(colock) {
+  Widget _clockbutton(String time) {
+    bool isSelected = time == timeSet;
+
     return Container(
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  if (isSelected) {
+                    timeSet = null; // 이미 선택된 경우 선택 해제
+                  } else {
+                    timeSet = time; // 선택되지 않은 경우 선택
+                  }
+                });
+              },
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10.0), // 넓이 조절
-                child: Text(colock, style: TextStyle(color: Colors.white),),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: Text(
+                  time,
+                  style: TextStyle(
+                    color: isSelected ? Colors.white : Colors.black,
+                  ),
+                ),
               ),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
-                  Color(0xFFFF6347),), // 배경색을 흰색으로 설정
+                  isSelected ? Color(0xFFFF6347) : Colors.white,
+                ),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                ),
+                side: MaterialStateProperty.all(
+                  isSelected
+                      ? BorderSide.none // 선택된 경우 테두리 없음
+                      : BorderSide(
+                    color: Colors.black, // 선택되지 않은 경우 검은색 테두리
+                    width: 1, // 테두리 두께
+                  ),
+                ),
               ),
-            )
-
+            ),
           ],
         ),
       ),
@@ -289,7 +318,7 @@ class _ReservationAddState extends State<ReservationAdd> {
                                           height: 50, // 원하는 세로 높이 설정 (옵션)
                                           child: Image.asset('assets/amenities/2.png'),
                                         ),
-                                        Text('13 : 00')
+                                        Text(timeSet != null ? timeSet! : '선택 안 됨')
                                       ],
                                     ),
                                     SizedBox(width: 30,),
