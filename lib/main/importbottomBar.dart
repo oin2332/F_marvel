@@ -9,11 +9,19 @@ import '../reservation/RtabBar.dart';
 import '../user/userMain.dart';
 import '../user/userModel.dart';
 
-class BottomNavBar extends StatelessWidget {
+class BottomNavBar extends StatefulWidget {
+  const BottomNavBar({super.key});
+
+  @override
+  State<BottomNavBar> createState() => _BottomNavBarState();
+}
+
+class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
-    // 로그인 세션
     UserModel userModel = Provider.of<UserModel>(context);
+    bool isMainPage = ModalRoute.of(context)?.settings.name == '/mainPage';
+
     return BottomAppBar(
       child: Container(
         height: 50,
@@ -23,29 +31,37 @@ class BottomNavBar extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
+                if (!isMainPage) {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
+                }
               },
-              child: Icon(Icons.home,size: 30,),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: isMainPage ? Colors.grey : Colors.transparent, // 배경색 변경
+                ),
+                child: Icon(isMainPage ? Icons.home : Icons.home_outlined, size: 30),
+              ),
             ),
             InkWell(
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => NavSearch()));
               },
-              child: Icon(Icons.search,size: 30),
+              child: Icon(Icons.search_outlined,size: 30),
             ),
             InkWell(onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => TimeLine()));
-            }, child: Icon(Icons.message,size: 30)),
+            }, child: Icon(Icons.message_outlined,size: 28)),
             InkWell(onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => ResTabBar()));
-            }, child: Icon(Icons.calendar_today_rounded,size: 30)),
+            }, child: Icon(Icons.calendar_today_outlined,size: 28)),
             InkWell(onTap: () {
               if (userModel.isLogin) {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => UserMain()));
               } else {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => UserUnlogin()));
               }
-            }, child: Icon(Icons.person,size: 30)),
+            }, child: Icon(Icons.person_outline_outlined,size: 30)),
           ],
         ),
       ),

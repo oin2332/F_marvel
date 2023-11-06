@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../firebase/firebase_options.dart';
 import '../search/headSearch.dart';
+import '../shop/recommendPage.dart';
 import '../shop/storePage.dart';
 import '../shop/test/boardMain.dart';
 import '../user/userModel.dart';
@@ -28,7 +29,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => UserModel()),
+        ChangeNotifierProvider(create: (context) => UserModel()),
         ChangeNotifierProvider(create: (context) => ModalData()),
 
       ],
@@ -139,7 +140,7 @@ class _MainPageState extends State<MainPage> {
   void navigateToPage(int index) { // 카테고리 버튼 인덱스
     final pages = [
       BestPage(),
-      Sample4(),
+      RecommenedPage(),
       StorePage(),
       StorePage(),
       StorePage(),
@@ -275,49 +276,49 @@ class _MainPageState extends State<MainPage> {
                 width: double.infinity,
                 child: CarouselSlider(
                   items: images.map((image) {
-                      return InkWell(
-                          onTap: (){
+                    return InkWell(
+                        onTap: (){
 
-                          },
-                          child: Stack(
-                            children: [
-                              Image.asset(
-                                image,
-                                height: 250.0,
-                                fit: BoxFit.cover,),
-                              Positioned(
-                                  top: 20,
-                                  left: 20,
-                                  child: Container(
-                                    color: Colors.white.withAlpha(150),
-                                    padding: EdgeInsets.all(8),
-                                    child: Text(
-                                      'BEST & NEW', style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    ),
-                                  )
-                              ),Positioned(
-                                  top: 50,
-                                  left: 20,
-                                  child: Container(
-                                    color: Colors.black54,
-                                    padding: EdgeInsets.all(8),
-                                    child: Text(
-                                      '이번주의 맛집 칼럼을 확인하세요', style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    ),
-                                  )
-                              ),
-                            ],
-                          )
-                      );
-                    }).toList(),
+                        },
+                        child: Stack(
+                          children: [
+                            Image.asset(
+                              image,
+                              height: 250.0,
+                              fit: BoxFit.cover,),
+                            Positioned(
+                                top: 20,
+                                left: 20,
+                                child: Container(
+                                  color: Colors.white.withAlpha(150),
+                                  padding: EdgeInsets.all(8),
+                                  child: Text(
+                                    'BEST & NEW', style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  ),
+                                )
+                            ),Positioned(
+                                top: 50,
+                                left: 20,
+                                child: Container(
+                                  color: Colors.black54,
+                                  padding: EdgeInsets.all(8),
+                                  child: Text(
+                                    '이번주의 맛집 칼럼을 확인하세요', style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  ),
+                                )
+                            ),
+                          ],
+                        )
+                    );
+                  }).toList(),
                   options: CarouselOptions(
                     height: 250,
                     aspectRatio: 16/9,
@@ -331,7 +332,7 @@ class _MainPageState extends State<MainPage> {
                       });
                     },
                   ),
-              ),
+                ),
               ),
               SizedBox(height: 10,),
               Row(
@@ -383,7 +384,6 @@ class _MainPageState extends State<MainPage> {
               Container(height: 5, width: 400, color: Colors.grey[300]!),
               SizedBox(height: 20,),
               Row(
-
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(width: 15,),
@@ -393,7 +393,7 @@ class _MainPageState extends State<MainPage> {
               ),
               SizedBox(height: 10,),
               Container(
-                height: 200,
+                height: 150,
                 width: double.infinity,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -403,7 +403,7 @@ class _MainPageState extends State<MainPage> {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => GooGleMap()));
                       }),
                       buildIconWithText('assets/main/incheon.jpg', '인천/부평', () {
-                       Navigator.push(context, MaterialPageRoute(builder: (context) => BoardMain()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => BoardMain()));
                       }),
                       buildIconWithText('assets/main/incheon2.jpg', '인천/연수', () {
                         navigatePlacePage(1);
@@ -420,10 +420,20 @@ class _MainPageState extends State<MainPage> {
                     ],
                   ),
                 ),
-              )
-
+              ),
+              Container(height: 5, width: 400, color: Colors.grey[300]!),
+              SizedBox(height: 20,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(width: 15,),
+                  Text("타임라인 게시판",
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black)),
+                ],
+              ),
             ],
           ),
+
         ],
       ),
       bottomNavigationBar: BottomNavBar(),
