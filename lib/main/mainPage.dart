@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_marvel/main/importbottomBar.dart';
-import 'package:food_marvel/map/function/reservationEx.dart';
+import 'package:food_marvel/reservation/reservationEx.dart';
 import 'package:food_marvel/map/maptotal.dart';
 import 'package:food_marvel/search/navSearch.dart';
 import 'package:food_marvel/shop/bestPage.dart';
@@ -151,7 +151,7 @@ class _MainPageState extends State<MainPage> {
       StorePage(),
       StorePage(),
       StorePage(),
-      TableEventsExample(),
+      StorePage(),
       StorePage(),
     ];
 

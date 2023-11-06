@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:food_marvel/reservation/soloreservation.dart';
 import 'package:provider/provider.dart';
 
 import '../../user/userModel.dart';
@@ -18,6 +19,7 @@ class ListsShop extends StatefulWidget {
 }
 
 class _TestState extends State<ListsShop> {
+
 
   @override
   void initState() {
@@ -173,16 +175,31 @@ class _TestState extends State<ListsShop> {
                       SizedBox(height: 20),
                       Row(
                         children: [
-                          ElevatedButton(
-                            onPressed: () {
-
+                          GestureDetector(
+                            onTap: () {
+                              StoreInfo storeInfo = StoreInfo(
+                                name: documentData['S_NAME'],
+                                address: '${documentData['S_ADDR1']} ${documentData['S_ADDR2']} ${documentData['S_ADDR3']}',
+                              );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => reservation(
+                                      storeInfo: storeInfo)
+                                ),
+                              );
                             },
-                            style: ElevatedButton.styleFrom(
-                              primary: const Color(0xFFFF6347),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 10),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFF6347),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                              child: Text(
+                                '예약하기',
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
-                            child: Text('13:00'),
                           ),
                           SizedBox(width: 6),
                           ElevatedButton(
@@ -224,5 +241,4 @@ class _TestState extends State<ListsShop> {
       },
     );
   }
-
 }
