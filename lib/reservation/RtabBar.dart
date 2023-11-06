@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_marvel/reservation/visit_completed_page.dart';
 import 'package:food_marvel/reservation/visit_schedule_page.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../board/boardView.dart';
@@ -21,9 +22,27 @@ class ResTabBar extends StatefulWidget {
 class ReservationData {
   final String storeName;
   final String storeAddress;
+  final String Peopleid;
+  final int numberOfPeople;
+  final int reservationYear;
+  final int reservationMonth;
+  final int reservationDay;
+  final int reservationMinute;
+  final int reservationHour;
+
   // 다른 예약 정보 필드들도 추가할 수 있습니다.
 
-  ReservationData({required this.storeName, required this.storeAddress});
+  ReservationData({
+    required this.storeName,
+    required this.storeAddress,
+    required this.Peopleid,
+    required this.numberOfPeople,
+    required this.reservationYear,
+    required this.reservationMonth,
+    required this.reservationDay,
+    required this.reservationMinute,
+    required this.reservationHour,
+  });
 }
 
 class ReservationDataProvider with ChangeNotifier {
@@ -31,51 +50,72 @@ class ReservationDataProvider with ChangeNotifier {
 
   List<ReservationData> get reservations => _reservations;
 
-  Future<void> fetchReservations() async {
-    QuerySnapshot<Map<String, dynamic>> querySnapshot =
-    await FirebaseFirestore.instance.collection('reser_test').get();
 
-    _reservations = querySnapshot.docs
-        .map((doc) => ReservationData(
-      storeName: doc['storeName'] ?? '',
-      storeAddress: doc['storeAddress'] ?? '',
-      // 다른 예약 정보 필드들도 추가할 수 있습니다.
-    ))
-        .toList();
-
-    notifyListeners();
-
-    // 예약 정보 리스트 출력
-    _reservations.forEach((reservation) {
-      print('Store Name: ${reservation.storeName}');
-      print('Store Address: ${reservation.storeAddress}');
-      // 다른 예약 정보 필드들도 출력할 수 있습니다.
-    });
-  }
 }
 
 class ReservationListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final reservationProvider =
-    Provider.of<ReservationDataProvider>(context, listen: false);
-    reservationProvider.fetchReservations();
-
-    return Consumer<ReservationDataProvider>(
-      builder: (context, provider, child) {
-        final reservations = provider.reservations;
-
-        return ListView.builder(
-          itemCount: reservations.length,
-          itemBuilder: (context, index) {
-            final reservation = reservations[index];
-            return ListTile(
-              title: Text(reservation.storeName),
-              subtitle: Text(reservation.storeAddress),
-              // 다른 예약 정보 필드들도 여기에 추가할 수 있습니다.
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('reser_test').snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return Center(child: Text('No reservations available.'));
+        } else {
+          List<ReservationData> reservations = snapshot.data!.docs.map((doc) {
+            Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+            return ReservationData(
+              storeName: data['storeName'] ?? '',
+              storeAddress: data['storeAddress'] ?? '',
+              Peopleid: data['Peopleid'] ?? '',
+              numberOfPeople: data['numberOfPeople'] ?? '',
+              reservationYear: data['reservationYear'] ?? '',
+              reservationMonth: data['reservationMonth'] ?? '',
+              reservationDay: data['reservationDay'] ?? '',
+              reservationMinute: data['reservationMinute'] ?? '',
+              reservationHour: data['reservationHour'] ?? '',
+              // 다른 예약 정보 필드들도 추가할 수 있습니다.
             );
-          },
-        );
+          }).toList();
+
+          return ListView.builder(
+            itemCount: reservations.length,
+            itemBuilder: (context, index) {
+              final reservation = reservations[index];
+              return ListTile(
+                //leading: Image.network(reservation.storeImageUrl), // 가게 이미지 표시
+                title: Text('가게 이름: ${reservation.storeName}'),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('예약 날짜: ${reservation.reservationYear.toString()}년 '
+                        '${reservation.reservationMonth.toString()}월 '
+                        '${reservation.reservationDay.toString()}일'),
+                    Text('예약 시간 : ${reservation.reservationHour.toString()}시'
+                        '${reservation.reservationMinute.toString()}분'),
+                    Text('예약자: ${reservation.Peopleid}'),
+
+                    Text('예약 인원: ${reservation.numberOfPeople}명'),
+
+                    Text('가게 주소: ${reservation.storeAddress}'),
+
+                  ],
+                ),
+                trailing: ElevatedButton(
+                  onPressed: () {
+                    // 예약 취소 로직을 여기에 추가
+                    //_cancelReservation(reservation.id);
+                  },
+                  child: Text('예약 취소'),
+                ),
+              );
+            },
+          );
+        }
       },
     );
   }
