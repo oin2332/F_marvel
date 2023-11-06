@@ -4,6 +4,8 @@ import 'package:food_marvel/user/nameEdit.dart';
 import 'package:food_marvel/user/notificationSetting.dart';
 import 'package:food_marvel/user/phoneEdit.dart';
 import 'package:food_marvel/user/pwdEdit.dart';
+import 'package:food_marvel/user/userModel.dart';
+import 'package:food_marvel/user/userUnlogin.dart';
 
 class UserInfoEdit extends StatefulWidget {
   const UserInfoEdit({super.key});
@@ -15,6 +17,8 @@ class UserInfoEdit extends StatefulWidget {
 class _UserInfoEditState extends State<UserInfoEdit> {
   List<String> genderOptions = ['남성', '여성', '선택안함'];
   String selectedGender = '선택안함'; // 추가: 선택된 성별을 저장할 변수
+
+  UserModel userModel = UserModel();
 
   void _selectGender(BuildContext context) {
     showModalBottomSheet(
@@ -193,15 +197,19 @@ class _UserInfoEditState extends State<UserInfoEdit> {
             Container(height: 6, width: 180, color: Colors.grey[400]!, margin: EdgeInsets.only(left: 2.0)
             ),
             SizedBox(height: 20),
-            Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  alignment: Alignment.centerLeft,
-                  child: TextButton(
-                      onPressed: (){},
-                      child: Text('로그아웃', style: TextStyle(color: Colors.grey[400]!))),
-                )
+            Container(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                  onPressed: (){
+                    userModel.logout();
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (_) => UserUnlogin()),
+                    );
+                  },
+                  child: Text('로그아웃', style: TextStyle(color: Colors.grey[400]!))),
             ),
+            SizedBox(height: 20),
             Container(height: 6, width: 180, color: Colors.grey[400]!, margin: EdgeInsets.only(left: 2.0)
             ),
             Row(

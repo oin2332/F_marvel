@@ -28,7 +28,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => UserModel()),
+        ChangeNotifierProvider(create: (_) => UserModel()),
         ChangeNotifierProvider(create: (context) => ModalData()),
 
       ],

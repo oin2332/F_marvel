@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_marvel/board/boardAdd.dart';
 import 'package:food_marvel/user/allCollection.dart';
 import 'package:food_marvel/user/follower.dart';
 import 'package:food_marvel/user/following.dart';
@@ -11,6 +12,7 @@ import 'package:provider/provider.dart';
 
 import '../main/importbottomBar.dart';
 import 'bdayRegister.dart';
+import 'loginPage.dart';
 import 'myCollection.dart';
 
 class UserMain extends StatefulWidget {
@@ -46,8 +48,18 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
     collectionName = widget.collectionName;
     _tabController = TabController(length: 2, vsync: this);
 
+
+    checkLoginStatus(); // 페이지 진입 시 로그인 상태 체크
+  }
+
+  void checkLoginStatus() {
+    print("세션확인");
     UserModel userModel = Provider.of<UserModel>(context, listen: false);
-    nickname = userModel.nickname; // UserModel에서 닉네임 가져오기
+    if (!userModel.isLogin) {
+      // 로그인 상태가 아니라면 로그인 페이지로 이동
+      print("로그인 필요함");
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => LoginPage()));
+    }
   }
 
   @override
@@ -58,8 +70,10 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
 
   @override
   Widget build(BuildContext context) {
+    UserModel userModel = Provider.of<UserModel>(context);
     String? userId = Provider.of<UserModel>(context).userId; // UserModel에서 사용자 아이디 받아오기
     String? nickname = Provider.of<UserModel>(context).nickname;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -302,7 +316,12 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
                     Text('요즘 많이 저장하는 레스토랑을 확인해보세요.', style: TextStyle(color: Colors.grey[400]!),textAlign: TextAlign.center,),
                   ],
                 ),
-                Text('등록된 리뷰가 없습니다', style: TextStyle(color: Colors.grey[400]!),textAlign: TextAlign.center,)
+                Column(
+                  children: [
+                    Text('등록된 리뷰가 없습니다', style: TextStyle(color: Colors.grey[400]!),textAlign: TextAlign.center,),
+                    TextButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (_) => BoardAdd()));}, child: Text('리뷰작성'))
+                  ],
+                ),
               ],
             ),
           ),
