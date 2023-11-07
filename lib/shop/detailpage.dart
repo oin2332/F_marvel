@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:food_marvel/map/mini.dart';
 import 'package:food_marvel/shop/reservationAdd.dart';
 import 'package:food_marvel/shop/tabBar.dart';
+import 'package:food_marvel/shop/test.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -22,7 +23,6 @@ class _DetailPageState extends State<DetailPage> {
   @override
   void initState() {
     super.initState();
-    _pageController.addListener(_onPageChanged); // 페이지 변경 리스너 추가
     initializeDateFormatting("ko_KR", null);
     _fetchAllUserData(widget.docId);
   }
@@ -71,11 +71,6 @@ class _DetailPageState extends State<DetailPage> {
               }
             });
           }
-          for (var storeImgDoc in storeImgList.docs) {
-            Map<String, dynamic> storeImgData = storeImgDoc.data() as Map<String, dynamic>;
-            List<String> imgList = storeImgData.values.cast<String>().toList();
-            imagePaths.addAll(imgList);
-          }
         } else {
           starList.add('0');
         }
@@ -95,6 +90,10 @@ class _DetailPageState extends State<DetailPage> {
       print('데이터를 불러오는 중 오류가 발생했습니다: $e');
     }
   }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -135,52 +134,11 @@ class _DetailPageState extends State<DetailPage> {
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Stack(
-                        children: [
-                          Container(
-                            height: 400,
-                            child: PageView.builder(
-                              controller: _pageController,
-                              itemCount: imagePaths.length,
-                              itemBuilder: (context, index) {
-                                return Image.asset(
-                                  'assets/storePageIMG/${imagePaths[index]}',
-                                  width: 400,
-                                  height: 200,
-                                  fit: BoxFit.cover,
-                                );
-                              },
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 10,
-                            right: 10,
-                            child: Center(
-                              child: Container(
-                                height: 30,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  border: Border.all(color: Colors.white, width: 1),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Center(
-                                    child: Text(
-                                      '${currentPage + 1}/${imagePaths.length}',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                            ,
-                          ),
-                        ],
+                      Container(
+                        height: 300,
+                        child: Testimg(docId: widget.docId,), //이미지 슬라이더
                       ),
+
 
                       Container(
                         padding: EdgeInsets.all(30),
@@ -770,7 +728,7 @@ class _DetailPageState extends State<DetailPage> {
 
 
 
-  int currentPage = 0; // 현재 페이지 번호
+
   String peopleCount = '2';
 
   Map<CalendarFormat, String> _availableCalendarFormats = {
@@ -802,18 +760,8 @@ class _DetailPageState extends State<DetailPage> {
 
 
 
-  void _onPageChanged() {
-    setState(() {
-      currentPage = _pageController.page!.toInt(); // 현재 페이지 업데이트
-    });
-  }
 
-/*  @override
-  void dispose() {
-    _pageController.removeListener(_onPageChanged); // 리스너 제거
-    _pageController.dispose();
-    super.dispose();
-  }*/
+
 
   Widget underlineBox(x) {
     return SizedBox(
@@ -873,9 +821,6 @@ class _DetailPageState extends State<DetailPage> {
     }
   ];
 
-  final PageController _pageController = PageController();
-  final List<String> imagePaths = [ //음식점 사진 리스트
-  ];
 
 
 }
