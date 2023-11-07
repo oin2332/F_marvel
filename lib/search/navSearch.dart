@@ -4,6 +4,14 @@ import 'package:food_marvel/search/headSearch.dart';
 import 'package:food_marvel/shop/bestPage.dart';
 import 'package:food_marvel/search/ImportRestaurant.dart';
 import 'package:food_marvel/search/ImportSuddenpopular.dart';
+import 'package:provider/provider.dart';
+
+import '../board/timeLine.dart';
+import '../main/mainPage.dart';
+import '../reservation/RtabBar.dart';
+import '../user/userMain.dart';
+import '../user/userModel.dart';
+import '../user/userUnlogin.dart';
 
 void main() => runApp(MaterialApp(
   title: 'NavSearch',
@@ -87,6 +95,7 @@ class _NavSearchState extends State<NavSearch> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel userModel = Provider.of<UserModel>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepOrange[400],
@@ -228,9 +237,39 @@ class _NavSearchState extends State<NavSearch> {
         ),
       ),
       resizeToAvoidBottomInset: false,
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar:  BottomAppBar(
+        child: Container(
+          height: 50,
+          color: Color.fromRGBO(255, 255, 255, 1.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              InkWell(
+                onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
+                  },child: Icon(Icons.home_outlined,size: 30),),
+              InkWell(
+                onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => NavSearch()));},
+                child: Icon(Icons.search, size: 30),),
+              InkWell(onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => TimeLine()));
+              },  child: Icon(Icons.message_outlined, size: 28),),
+              InkWell(onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ResTabBar()));
+              }, child: Icon(Icons.calendar_today_outlined, size: 28),),
+              InkWell(onTap: () {
+                if (userModel.isLogin) {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => UserMain()));
+                } else {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => UserUnlogin()));
+                }
+              }, child: Icon(Icons.person_outline_outlined, size: 30),),
+            ],
+          ),
+        ),
+      ),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
+
   }
 }

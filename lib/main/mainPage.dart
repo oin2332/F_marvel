@@ -11,13 +11,16 @@ import 'dart:async';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
 import 'package:food_marvel/reservation/RtabBar.dart';
+import '../board/timeLine.dart';
 import '../firebase/firebase_options.dart';
 import '../search/headSearch.dart';
 import '../shop/recommendPage.dart';
 import '../shop/storePage.dart';
 
+import '../user/userMain.dart';
 import '../user/userModel.dart';
 import '../user/userSetting.dart';
+import '../user/userUnlogin.dart';
 import '13_tapBar.dart';
 import '20_Move.dart';
 import '4_NameCard.dart';
@@ -63,6 +66,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel userModel = Provider.of<UserModel>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor:  Colors.white,
@@ -148,7 +152,36 @@ class _MainPageState extends State<MainPage> {
 
         ],
       ),
-      bottomNavigationBar: BottomNavBar(),
+      bottomNavigationBar: BottomAppBar(
+        child: Container(
+          height: 50,
+          color: Color.fromRGBO(255, 255, 255, 1.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              InkWell(
+                onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));},
+                  child: Icon(Icons.home,size: 30),),
+              InkWell(
+                onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => NavSearch()));
+                }, child: Icon(Icons.search_outlined, size: 30),),
+              InkWell(onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => TimeLine()));
+              },  child: Icon(Icons.message_outlined, size: 28),),
+              InkWell(onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ResTabBar()));
+              }, child: Icon(Icons.calendar_today_outlined, size: 28),),
+              InkWell(onTap: () {
+                if (userModel.isLogin) {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => UserMain()));
+                } else {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => UserUnlogin()));
+                }
+              }, child: Icon(Icons.person_outline_outlined, size: 30),),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
