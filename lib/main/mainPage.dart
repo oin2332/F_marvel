@@ -2,29 +2,19 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:food_marvel/main/ImportEvent.dart';
 import 'package:food_marvel/main/ImportIcons.dart';
-import 'package:food_marvel/main/importbottomBar.dart';
 import 'package:food_marvel/reservation/function/deleteReservation.dart';
-import 'package:food_marvel/reservation/reservationEx.dart';
-import 'package:food_marvel/map/maptotal.dart';
 import 'package:food_marvel/search/navSearch.dart';
-import 'package:food_marvel/shop/bestPage.dart';
-import 'dart:async';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
 import 'package:food_marvel/reservation/RtabBar.dart';
 import '../board/timeLine.dart';
 import '../firebase/firebase_options.dart';
 import '../search/headSearch.dart';
-import '../shop/recommendPage.dart';
 import '../shop/storePage.dart';
 
 import '../user/userMain.dart';
 import '../user/userModel.dart';
 import '../user/userSetting.dart';
 import '../user/userUnlogin.dart';
-import '13_tapBar.dart';
-import '20_Move.dart';
-import '4_NameCard.dart';
 import 'ImportWhere.dart';
 
 
@@ -126,7 +116,7 @@ class _MainPageState extends State<MainPage> {
         children: [
           Column(
             children: [
-              SizedBox(height: 10,),
+              SizedBox(height: 5,),
               ImportEvent(),
 
               SizedBox(height: 10,),

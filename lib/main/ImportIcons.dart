@@ -72,22 +72,6 @@ class _ImportIconsState extends State<ImportIcons> {
   Widget build(BuildContext context) {
     return  Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: images.asMap().entries.map((entry){
-            return Container(
-              width: 8.0,
-              height: 8.0,
-              margin: EdgeInsets.symmetric(horizontal: 4.0),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: _currentPage == entry.key
-                    ? Colors.red
-                    : Colors.grey,
-              ),
-            );
-          }).toList(),
-        ),
         SizedBox(height: 20,),
         GridView.builder(
             shrinkWrap: true,
