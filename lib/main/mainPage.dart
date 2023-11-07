@@ -43,7 +43,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: MainPage(),
-      theme: ThemeData(fontFamily: 'GmarketSansTTFMedium'),
+      //theme: ThemeData(fontFamily: 'GmarketSansTTFMedium'),
+      themeMode: ThemeMode.system,
     );
   }
 }

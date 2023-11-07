@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:food_marvel/board/boardView.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../user/userModel.dart';
 
@@ -15,7 +16,6 @@ class BoardAdd extends StatefulWidget {
 }
 
 class _BoardAddState extends State<BoardAdd> {
-
 
   // 입력 데이터 변수
   final TextEditingController _title = TextEditingController();
@@ -138,22 +138,15 @@ class _BoardAddState extends State<BoardAdd> {
     }
   }
 
-  // 별점
-  FlutterRatingBar _ratingBar() {
-    double rating = 0;
-    return FlutterRatingBar(
-      initialRating: rating,
-      itemSize: 40,
-      fillColor: Colors.amber,
-      borderColor: Colors.amber.withAlpha(50),
-      allowHalfRating: true,
-      onRatingUpdate: (value) {
-        setState(() {
-          rating = value;
-        });
-      },
-    );
+  // 별점 기능
+  double _rating = 0.0; // 초기 별점 설정
+
+  void _onRatingUpdate(double rating) {
+    setState(() {
+      _rating = rating;
+    });
   }
+
 
 
   @override
@@ -253,6 +246,22 @@ class _BoardAddState extends State<BoardAdd> {
                         Icon(Icons.arrow_forward_ios, color: Colors.black)
                       ],
                     )),
+                RatingBar(
+                  initialRating: _rating,
+                  itemSize: 40,
+                  glowColor: Colors.amber,
+                  allowHalfRating: true,
+                  onRatingUpdate: (value) {
+                    setState(() {
+                      _rating = value;
+                    });
+                  },
+                  ratingWidget: RatingWidget(
+                    full: Icon(Icons.star),
+                    half: Icon(Icons.star_half),
+                    empty: Icon(Icons.star_border),
+                  ),
+                ),
                 ElevatedButton(
                   onPressed: isContentValid ? _addBoard : null, // 입력값이 유효할 때만 버튼 활성화
                   child: Text("작성 완료"),
@@ -278,4 +287,5 @@ class _BoardAddState extends State<BoardAdd> {
     );
   }
 }
+
 

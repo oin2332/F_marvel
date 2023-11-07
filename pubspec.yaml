@@ -52,7 +52,8 @@ dependencies:
   carousel_slider:
   modal_bottom_sheet:
   cached_network_image:
-  flutter_rating_bar:
+  flutter_rating_stars: ^1.0.3+4
+  flutter_rating_bar: ^4.0.1
 
 
 
@@ -80,6 +81,7 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
+  uses-material-design: true
   assets:
     - assets/
     - assets/kakao/
@@ -89,15 +91,15 @@ flutter:
     - assets/storePageIMG/
     - assets/searchIMG/
   fonts:
-   - family: GmarketSans
+   - family: GmarketSansTTF
      fonts:
        - asset: Fonts/GmarketSansTTFMedium.ttf
        - asset: Fonts/GmarketSansTTFBold.ttf
        - asset: Fonts/GmarketSansTTFLight.ttf
+         weight: 700
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
-  uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
   # assets:
