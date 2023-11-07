@@ -53,14 +53,14 @@ class _JoinState extends State<StoreJoin2> {
 
       await CONVENIENCE.add({
         'S_ELEVA': S_ELEVA,
-        'S_FLOOR': _S_FLOOR,
-        'S_GROUP': _S_GROUP,
-        'S_KID': _S_KID,
-        'S_NOKID': _S_NOKID,
-        'S_PARKING': _S_PARKING,
-        'S_STAIRS': _S_STAIRS,
-        'S_TOILET': _S_TOILET,
-        'S_WR': _S_WR,
+        'S_FLOOR': S_FLOOR,
+        'S_GROUP': S_GROUP,
+        'S_KID': S_KID,
+        'S_NOKID': S_NOKID,
+        'S_PARKING': S_PARKING,
+        'S_STAIRS': S_STAIRS,
+        'S_TOILET': S_TOILET,
+        'S_WR': S_WR,
         'S_FLOORtext': _FLOOR.text,
       });
 
@@ -196,6 +196,8 @@ class _JoinState extends State<StoreJoin2> {
       ],
     );
   }
+
+
 
 
 

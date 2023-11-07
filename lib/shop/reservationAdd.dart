@@ -479,7 +479,7 @@ class _ReservationAddState extends State<ReservationAdd> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           SizedBox(width: 3,),
-                          Text('예약가능 날짜 찾기', style: TextStyle(color: Color(
+                          Text('예약하러가기', style: TextStyle(color: Color(
                               0xFFFF6347)),),
                           Icon(Icons.keyboard_arrow_right,
                             color: Color(0xFFFF6347),)

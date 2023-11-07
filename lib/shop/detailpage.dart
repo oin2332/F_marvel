@@ -46,11 +46,18 @@ class _DetailPageState extends State<DetailPage> {
             .collection('T3_STAR_TBL')
             .get();
 
-        QuerySnapshot storeImgList = await FirebaseFirestore.instance
+        //아이콘이름 가져오기
+        QuerySnapshot convenienceSnapshot = await FirebaseFirestore.instance
             .collection('T3_STORE_TBL')
             .doc(docId)
-            .collection('T3_STOREIMG_TBL')
+            .collection('T3_CONVENIENCE_TBL')
             .get();
+
+
+        storeData['convenience'] = convenienceSnapshot.docs.first.data() as Map<String, dynamic>;
+        print(storeData);
+
+
 
         List<String> starList = [];
         double x = 0;
@@ -59,7 +66,6 @@ class _DetailPageState extends State<DetailPage> {
         if (starSnapshot.docs.isNotEmpty) {
           for (var starDoc in starSnapshot.docs) {
             Map<String, dynamic> starData = starDoc.data() as Map<String, dynamic>;
-
             starData.forEach((key, value) {
               if (value is String) {
                 double? numericValue = double.tryParse(value);
@@ -70,7 +76,12 @@ class _DetailPageState extends State<DetailPage> {
                 }
               }
             });
+
+
           }
+
+
+
         } else {
           starList.add('0');
         }
@@ -78,11 +89,13 @@ class _DetailPageState extends State<DetailPage> {
         if (y > 0) {
           x = x / y;
         }
+
         storeData['STARlength'] = y;
         storeData['STARage'] = x.toStringAsFixed(1);
         storeData['STARlist'] = starList;
         storeData['docId'] = docId;
         userDataList.add(storeData);
+
       } else {
         print('해당 문서를 찾을 수 없습니다.');
       }
@@ -131,6 +144,7 @@ class _DetailPageState extends State<DetailPage> {
               return ListView.builder(
                 itemCount: userDataList.length,
                 itemBuilder: (BuildContext context, int index) {
+
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -147,6 +161,7 @@ class _DetailPageState extends State<DetailPage> {
                           children: [
                             Row(
                               children: [
+                               
                                 Text('${userDataList[index]['KEYWORD1']}   l',
                                   style: TextStyle(fontSize: 10, color: Colors
                                       .grey),),
@@ -403,10 +418,32 @@ class _DetailPageState extends State<DetailPage> {
                               child: Row(
                                 children: [
                                   Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(' 공지',
+                                      Text('공지',
                                         style: TextStyle(fontSize: 20,
                                             fontWeight: FontWeight.bold),),
+                                    SizedBox(height: 10,),
+                                    Container(
+                                        width: 300,
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Flexible(
+                                                child: RichText(
+                                                  overflow: TextOverflow.ellipsis,
+                                                  maxLines: 5,
+                                                  strutStyle: StrutStyle(fontSize: 16.0),
+                                                  text: TextSpan(
+                                                      text: '${userDataList[index]['S_MEMO']}',
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          height: 1.4,
+                                                          fontSize: 12.0,
+                                                          fontFamily: 'NanumSquareRegular')),
+                                                )),
+                                          ],
+                                        ))
                                     ],
                                   )
                                 ],
@@ -419,97 +456,102 @@ class _DetailPageState extends State<DetailPage> {
 
                             Container(
                               padding: EdgeInsets.all(30),
-                              child: Row(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                  Text(
+                                    '편의시설',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 32),
+                                  Wrap(
+                                    spacing: 4, // 가로 방향의 마진
+                                    runSpacing: 4, // 세로 방향의 마진
                                     children: [
-                                      Text('편의시설', style: TextStyle(fontSize: 20,
-                                          fontWeight: FontWeight.bold),),
-                                      SizedBox(height: 32,),
-                                      Row(
-                                        children: [
-                                          //계단
-                                          if(true)
-                                            Column(children: [
-                                              Image.asset(
-                                                  'assets/amenities/stairs.png',
-                                                  width: 50, fit: BoxFit.contain),
+                                      if (userDataList[index] == 'stairs.png')
+                                        Container(
+                                          margin: EdgeInsets.all(4), // 각 아이콘과 텍스트의 마진
+                                          child: Column(
+                                            children: [
+                                              Image.asset('assets/amenities/stairs.png', width: 50, fit: BoxFit.contain),
                                               Text('계단 있어요'),
-                                            ],),
-                                          SizedBox(width: 34,),
-                                          if(false)
-                                            Column(children: [
-                                              Image.asset(
-                                                  'assets/amenities/stairs.png',
-                                                  width: 50, fit: BoxFit.contain),
+                                            ],
+                                          ),
+                                        ),
+                                      if (userDataList[index]['conven'] != 'stairs.png')
+                                        Container(
+                                          margin: EdgeInsets.all(4),
+                                          child: Column(
+                                            children: [
+                                              Image.asset('assets/amenities/stairs.png', width: 50, fit: BoxFit.contain),
                                               Text('계단 없어요'),
-                                            ],),
-
-                                          Column(children: [
-                                            Image.asset(
-                                                'assets/amenities/floor.png',
-                                                width: 50, fit: BoxFit.contain),
-                                            Text('3층'),
-                                          ],),
-                                          SizedBox(width: 34,),
-
-                                          if(false)
-                                            Column(children: [
-                                              Image.asset(
-                                                  'assets/amenities/kid.png',
-                                                  width: 50, fit: BoxFit.contain),
-                                              Text('키즈존'),
-                                            ],),
-                                          if(true)
-                                            Column(children: [
-                                              Image.asset(
-                                                  'assets/amenities/nokid.png',
-                                                  width: 50, fit: BoxFit.contain),
-                                              Text('NO키즈존'),
-                                            ],),
-                                          SizedBox(width: 34,),
-
-                                          Column(children: [
-                                            Image.asset(
-                                                'assets/amenities/parking.png',
-                                                width: 50, fit: BoxFit.contain),
-                                            Text('주차'),
-                                          ],),
-
-                                        ],
+                                            ],
+                                          ),
+                                        ),
+                                      Container(
+                                        margin: EdgeInsets.all(4),
+                                        child: Column(
+                                          children: [
+                                            Image.asset('assets/amenities/floor.png', width: 50, fit: BoxFit.contain),
+                                            Text('asdf'),
+                                          ],
+                                        ),
                                       ),
-                                      SizedBox(height: 35,),
-                                      Row(
-                                        children: [
-                                          Column(children: [
-                                            Image.asset(
-                                                'assets/amenities/toilet.png',
-                                                width: 50, fit: BoxFit.contain),
+                                      if (userDataList[index]['S_KID'] != 'S_KID')
+                                        Container(
+                                          margin: EdgeInsets.all(4),
+                                          child: Column(
+                                            children: [
+                                              Image.asset('assets/amenities/kid.png', width: 50, fit: BoxFit.contain),
+                                              Text('키즈존'),
+                                            ],
+                                          ),
+                                        ),
+                                      if (true)
+                                        Container(
+                                          margin: EdgeInsets.all(4),
+                                          child: Column(
+                                            children: [
+                                              Image.asset('assets/amenities/nokid.png', width: 50, fit: BoxFit.contain),
+                                              Text('NO키즈존'),
+                                            ],
+                                          ),
+                                        ),
+                                      Container(
+                                        margin: EdgeInsets.all(4),
+                                        child: Column(
+                                          children: [
+                                            Image.asset('assets/amenities/parking.png', width: 50, fit: BoxFit.contain),
+                                            Text('주차'),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.all(4),
+                                        child: Column(
+                                          children: [
+                                            Image.asset('assets/amenities/toilet.png', width: 50, fit: BoxFit.contain),
                                             Text('화장실'),
-                                          ],),
-                                          SizedBox(width: 34,),
-
-                                          Column(children: [
-                                            Image.asset(
-                                                'assets/amenities/elevator.png',
-                                                width: 50, fit: BoxFit.contain),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.all(4),
+                                        child: Column(
+                                          children: [
+                                            Image.asset('assets/amenities/elevator.png', width: 50, fit: BoxFit.contain),
                                             Text('엘리베이터'),
-                                            SizedBox(width: 34,),
-                                          ],),
-
-                                        ],
-                                      )
-
-
+                                          ],
+                                        ),
+                                      ),
                                     ],
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
-                            //계단정보
-
-                            //주차정보
 
                             underlineBox(5.0),
                             //메뉴--------------------
