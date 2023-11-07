@@ -95,67 +95,94 @@ class _ImportEventState extends State<ImportEvent> {
   @override
   Widget build(BuildContext context) {
     return Container(
-
-      height: 250,
+      height: 260,
       width: double.infinity,
-      child: CarouselSlider(
-        items: images.map((image) {
-          return InkWell(
-              onTap: (){
-
-              },
-              child: Stack(
-                children: [
-                  Image.asset(
-                    image,
-                    height: 250.0,
-                    fit: BoxFit.cover,),
-                  Positioned(
-                      top: 20,
-                      left: 20,
-                      child: Container(
-                        color: Colors.white.withAlpha(150),
-                        padding: EdgeInsets.all(8),
-                        child: Text(
-                          'BEST & NEW', style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        ),
-                      )
-                  ),Positioned(
-                      top: 50,
-                      left: 20,
-                      child: Container(
-                        color: Colors.black54,
-                        padding: EdgeInsets.all(8),
-                        child: Text(
-                          '이번주의 맛집 칼럼을 확인하세요', style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        ),
-                      )
-                  ),
-                ],
-              )
+      child: Column(
+        children: [
+      CarouselSlider(
+      items: images.map((image) {
+    return Padding(
+        padding: EdgeInsets.symmetric(horizontal: 3.0),
+        child: InkWell(
+          onTap: () {
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(5.0), // 원하는 borderRadius 값을 설정
+            child: Stack(
+            children: [
+            Image.asset(
+            image,
+            height: 300.0,
+            fit: BoxFit.cover,
+          ),
+          Positioned(
+          top: 17,
+          left: 40,
+          child: Container(
+          color: Colors.white.withAlpha(150),
+          padding: EdgeInsets.all(8),
+          child: Text(
+          'BEST & NEW',
+          style: TextStyle(
+          color: Colors.red,
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+          ),
+          ),
+          ),
+          ),
+          Positioned(
+          top: 50,
+          left: 40,
+          child: Container(
+          color: Colors.black54,
+          padding: EdgeInsets.all(8),
+          child: Text(
+          '이번주 매거진을 확인하세요',
+          style: TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          ),
+          ),
+          ),
+          ),
+          ],
+          ),
+          ),
+          ),
           );
-        }).toList(),
-        options: CarouselOptions(
-          height: 250,
-          aspectRatio: 16/9,
-          viewportFraction: 1.0,
+          }).toList(),
+          options: CarouselOptions(
+          height: 240,
+          aspectRatio: 16 / 9,
+          enlargeCenterPage: false, // 가운데 페이지 확대
           enableInfiniteScroll: true,
           autoPlay: true,
-          autoPlayInterval: Duration(seconds: 5),
-          onPageChanged: (index, reason){
-            setState(() {
-              _currentPage = index;
-            });
+          autoPlayInterval: Duration(seconds: 7),
+          onPageChanged: (index, reason) {
+          setState(() {
+          _currentPage = index;
+          });
           },
-        ),
+          ),
+          ),
+          SizedBox(height: 5,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: images.asMap().entries.map((entry) {
+              return Container(
+                width: 8.0,
+                height: 8.0,
+                margin: EdgeInsets.symmetric(horizontal: 4.0),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: _currentPage == entry.key ? Colors.red : Colors.grey,
+                ),
+              );
+            }).toList(),
+          ),
+        ],
       ),
     );
   }
