@@ -19,7 +19,7 @@ class UserSetting extends StatelessWidget {
             leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.black),
               onPressed: () {Navigator.pop(context);},
             ),
-            title: Text('알림', style: TextStyle(color: Colors.black)), backgroundColor: Colors.white,elevation: 0),
+            title: Text('설정', style: TextStyle(color: Colors.black)), backgroundColor: Colors.white,elevation: 0),
         body: Container(
           color: Colors.white,
           child: Padding(

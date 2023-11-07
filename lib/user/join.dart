@@ -5,13 +5,13 @@ import '../board/boardAdd.dart';
 import '../firebase/firebase_options.dart';
 import 'loginPage.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(MyApp());
-}
+// void main() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp(
+//     options: DefaultFirebaseOptions.currentPlatform,
+//   );
+//   runApp(MyApp());
+// }
 
 class Join extends StatefulWidget {
   const Join({super.key});
@@ -153,371 +153,374 @@ class _JoinState extends State<Join> {
         iconTheme: IconThemeData(color: Colors.black),
         title: Text('회원가입',style: TextStyle(color: Colors.black),),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            Text('아이디', style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(height: 5),
-            TextField(
-              onChanged: (value) {
-                  _checkDuplicateId();
+      body: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ListView(
+            children: [
+              Text('아이디', style: TextStyle(fontWeight: FontWeight.bold)),
+              SizedBox(height: 5),
+              TextField(
+                onChanged: (value) {
+                    _checkDuplicateId();
 
-              },
-              controller: _id,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.grey[200]!, // 배경색 설정
-                hintText: '아이디',
-                hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
-                border: InputBorder.none, // 밑줄 없애기
-              ),
-              style: TextStyle(fontSize: 13),
-            ),
-            SizedBox(height: 5),if (_isIdAvailable == false)
-              Text(
-                '이미 사용 중인 아이디입니다.',
-                style: TextStyle(color: Colors.red),
-              ),
-            if (_isIdAvailable == true)
-              Text(
-                '사용 가능한 아이디입니다.',
-                style: TextStyle(color: Colors.blue),
-              ),
-            SizedBox(height: 30),
-            Text('비밀번호', style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(height: 5),
-            TextField(
-              controller: _pwd,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.grey[200]!, // 배경색 설정
-                hintText: '비밀번호',
-                hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
-                border: InputBorder.none, // 밑줄 없애기
-              ),
-              style: TextStyle(fontSize: 13),
-              obscureText: true, // 비밀번호 숨기기
-            ),
-            SizedBox(height: 30),
-            Text('비밀번호 확인', style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(height: 5),
-            TextField(
-              controller: _pwd2,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.grey[200]!, // 배경색 설정
-                hintText: '비밀번호 확인',
-                hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
-                border: InputBorder.none, // 밑줄 없애기
-              ),
-              style: TextStyle(fontSize: 13),
-              obscureText: true, // 비밀번호 숨기기
-            ),
-            SizedBox(height: 30),
-            Text('이름', style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(height: 5),
-            TextField(
-              controller: _name,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.grey[200]!, // 배경색 설정
-                hintText: '이름',
-                hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
-                border: InputBorder.none, // 밑줄 없애기
-              ),
-              style: TextStyle(fontSize: 13),
-            ),
-            SizedBox(height: 5),
-            Text('레스토랑을 예약할 때 사용할 이름이므로 꼭 실명을 사용해 주세요.', style: TextStyle(color: Colors.black54, fontSize: 10)),
-            SizedBox(height: 30),
-            Text('휴대폰 번호', style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(height: 5),
-            TextField(
-              controller: _phone,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.grey[200]!, // 배경색 설정
-                hintText: '휴대폰 번호',
-                hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
-                border: InputBorder.none, // 밑줄 없애기
-              ),
-              style: TextStyle(fontSize: 13),
-            ),
-            SizedBox(height: 30),
-            Text('닉네임 (선택)', style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(height: 5),
-            TextField(
-              controller: _nickname,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.grey[200]!, // 배경색 설정
-                hintText: '닉네임 작성은 선택 사항 입니다.',
-                hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
-                border: InputBorder.none, // 밑줄 없애기
-              ),
-              style: TextStyle(fontSize: 13),
-            ),
-            SizedBox(height: 30),
-            Text('전화,링크 예약 앱에 연동하기 (선택)', style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(height: 5),
-            Row(
-              children: [
-                Checkbox(
-                  value: isInterlock, // 사용자가 동의했는지 여부를 저장하는 변수와 연결해야 합니다.
-                  onChanged: (bool? value) {
-                    // 사용자가 체크박스를 선택했을 때의 로직을 추가하세요.
-                    setState(() {
-                      isInterlock = value ?? false; // checkbox selected value 업데이트
-                    });
-                  },
-                  activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
+                },
+                controller: _id,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[200]!, // 배경색 설정
+                  hintText: '아이디',
+                  hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
+                  border: InputBorder.none, // 밑줄 없애기
                 ),
-                Text('연동하기'),
-              ],
-            ),
-            SizedBox(height: 16),
-            Container(
-              color: Colors.grey[200]!,
-              height: 200,
-              width: double.infinity,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('예약 연동이란?', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
-                    SizedBox(height: 10),
-                    Text('`- 전화 또는 예약 링크로 한 예약을 앱에서 관리할 수 있게 하는 기능입니다. 예약에`', style: TextStyle(fontSize: 10)),
-                    Text('` 사용한 휴대폰 번호로 방문예정일을 불러올 수 있어요!`', style: TextStyle(fontSize: 10)),
-                    SizedBox(height: 10),
-                    Text('`- 푸드마블 가맹점 예약만 연동 가능하며,`', style: TextStyle(fontSize: 10)),
-                    Text('` 연동하기 활성화 이전에 방문했던 전화 예약 내역은 불러올 수 없습니다.`', style: TextStyle(fontSize: 10)),
-                    SizedBox(height: 10),
-                    Text('`- 전화 또는 예약 링크로 한 예약은 각 레스토랑의 운영 정책에 따라 앱에서 예약 취소 및`', style: TextStyle(fontSize: 10)),
-                    Text('` 변경이 불가능할 수 있습니다.`', style: TextStyle(fontSize: 10)),
-                    SizedBox(height: 10),
-                    Text('`- 예약 링크는 푸드마블 가맹점을 예약할 수 있는 웹페이지 링크를 말합니다.`', style: TextStyle(fontSize: 10)),
-                    SizedBox(height: 30),
-                  ],
-                ),
+                style: TextStyle(fontSize: 13),
               ),
-            ),
-            SizedBox(height: 30),
-            Row(
-              children: [
-                Checkbox(
-                  value: isAllAgree, // 사용자가 동의했는지 여부를 저장하는 변수와 연결해야 합니다.
-                  onChanged: (value) {
-                    _updateAllCheckboxes(value!);
-                  },
-                  activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
+              SizedBox(height: 5),if (_isIdAvailable == false)
+                Text(
+                  '이미 사용 중인 아이디입니다.',
+                  style: TextStyle(color: Colors.red),
                 ),
-                TextButton(
-                  onPressed: (){},
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('이용자 약관 전체 동의', style: TextStyle(color: Colors.black)),
-                      ],
-                    ),
+              if (_isIdAvailable == true)
+                Text(
+                  '사용 가능한 아이디입니다.',
+                  style: TextStyle(color: Colors.blue),
+                ),
+              SizedBox(height: 30),
+              Text('비밀번호', style: TextStyle(fontWeight: FontWeight.bold)),
+              SizedBox(height: 5),
+              TextField(
+                controller: _pwd,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[200]!, // 배경색 설정
+                  hintText: '비밀번호',
+                  hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
+                  border: InputBorder.none, // 밑줄 없애기
+                ),
+                style: TextStyle(fontSize: 13),
+                obscureText: true, // 비밀번호 숨기기
+              ),
+              SizedBox(height: 30),
+              Text('비밀번호 확인', style: TextStyle(fontWeight: FontWeight.bold)),
+              SizedBox(height: 5),
+              TextField(
+                controller: _pwd2,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[200]!, // 배경색 설정
+                  hintText: '비밀번호 확인',
+                  hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
+                  border: InputBorder.none, // 밑줄 없애기
+                ),
+                style: TextStyle(fontSize: 13),
+                obscureText: true, // 비밀번호 숨기기
+              ),
+              SizedBox(height: 30),
+              Text('이름', style: TextStyle(fontWeight: FontWeight.bold)),
+              SizedBox(height: 5),
+              TextField(
+                controller: _name,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[200]!, // 배경색 설정
+                  hintText: '이름',
+                  hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
+                  border: InputBorder.none, // 밑줄 없애기
+                ),
+                style: TextStyle(fontSize: 13),
+              ),
+              SizedBox(height: 5),
+              Text('레스토랑을 예약할 때 사용할 이름이므로 꼭 실명을 사용해 주세요.', style: TextStyle(color: Colors.black54, fontSize: 10)),
+              SizedBox(height: 30),
+              Text('휴대폰 번호', style: TextStyle(fontWeight: FontWeight.bold)),
+              SizedBox(height: 5),
+              TextField(
+                controller: _phone,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[200]!, // 배경색 설정
+                  hintText: '휴대폰 번호',
+                  hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
+                  border: InputBorder.none, // 밑줄 없애기
+                ),
+                style: TextStyle(fontSize: 13),
+              ),
+              SizedBox(height: 30),
+              Text('닉네임 (선택)', style: TextStyle(fontWeight: FontWeight.bold)),
+              SizedBox(height: 5),
+              TextField(
+                controller: _nickname,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[200]!, // 배경색 설정
+                  hintText: '닉네임 작성은 선택 사항 입니다.',
+                  hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
+                  border: InputBorder.none, // 밑줄 없애기
+                ),
+                style: TextStyle(fontSize: 13),
+              ),
+              SizedBox(height: 30),
+              Text('전화,링크 예약 앱에 연동하기 (선택)', style: TextStyle(fontWeight: FontWeight.bold)),
+              SizedBox(height: 5),
+              Row(
+                children: [
+                  Checkbox(
+                    value: isInterlock, // 사용자가 동의했는지 여부를 저장하는 변수와 연결해야 합니다.
+                    onChanged: (bool? value) {
+                      // 사용자가 체크박스를 선택했을 때의 로직을 추가하세요.
+                      setState(() {
+                        isInterlock = value ?? false; // checkbox selected value 업데이트
+                      });
+                    },
+                    activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
+                  ),
+                  Text('연동하기'),
+                ],
+              ),
+              SizedBox(height: 16),
+              Container(
+                color: Colors.grey[200]!,
+                height: 200,
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('예약 연동이란?', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
+                      SizedBox(height: 10),
+                      Text('`- 전화 또는 예약 링크로 한 예약을 앱에서 관리할 수 있게 하는 기능입니다. 예약에`', style: TextStyle(fontSize: 10)),
+                      Text('` 사용한 휴대폰 번호로 방문예정일을 불러올 수 있어요!`', style: TextStyle(fontSize: 10)),
+                      SizedBox(height: 10),
+                      Text('`- 푸드마블 가맹점 예약만 연동 가능하며,`', style: TextStyle(fontSize: 10)),
+                      Text('` 연동하기 활성화 이전에 방문했던 전화 예약 내역은 불러올 수 없습니다.`', style: TextStyle(fontSize: 10)),
+                      SizedBox(height: 10),
+                      Text('`- 전화 또는 예약 링크로 한 예약은 각 레스토랑의 운영 정책에 따라 앱에서 예약 취소 및`', style: TextStyle(fontSize: 10)),
+                      Text('` 변경이 불가능할 수 있습니다.`', style: TextStyle(fontSize: 10)),
+                      SizedBox(height: 10),
+                      Text('`- 예약 링크는 푸드마블 가맹점을 예약할 수 있는 웹페이지 링크를 말합니다.`', style: TextStyle(fontSize: 10)),
+                      SizedBox(height: 30),
+                    ],
                   ),
                 ),
-                Icon(Icons.keyboard_arrow_right, color: Colors.black)
-              ],
-            ),
-            Container(height: 1, width: 250, color: Colors.grey),
-            Row(
-              children: [
-                Checkbox(
-                  value: isAgeAgree,
-                  onChanged: (value) {
-                    setState(() {
-                      isAgeAgree = value!;
-                      if (!value) {
-                        isAllAgree = false;
+              ),
+              SizedBox(height: 30),
+              Row(
+                children: [
+                  Checkbox(
+                    value: isAllAgree, // 사용자가 동의했는지 여부를 저장하는 변수와 연결해야 합니다.
+                    onChanged: (value) {
+                      _updateAllCheckboxes(value!);
+                    },
+                    activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
+                  ),
+                  TextButton(
+                    onPressed: (){},
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('이용자 약관 전체 동의', style: TextStyle(color: Colors.black)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Icon(Icons.keyboard_arrow_right, color: Colors.black)
+                ],
+              ),
+              Container(height: 1, width: 250, color: Colors.grey),
+              Row(
+                children: [
+                  Checkbox(
+                    value: isAgeAgree,
+                    onChanged: (value) {
+                      setState(() {
+                        isAgeAgree = value!;
+                        if (!value) {
+                          isAllAgree = false;
+                        }
+                      });
+                    },
+                    activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
+                  ),
+                  TextButton(
+                    onPressed: (){},
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('[필수] 만 14세 이상입니다.', style: TextStyle(color: Colors.black)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Icon(Icons.keyboard_arrow_right, color: Colors.black)
+                ],
+              ),
+              Row(
+                children: [
+                  Checkbox(
+                    value: isUseAgree, // 사용자가 동의했는지 여부를 저장하는 변수와 연결해야 합니다.
+                    onChanged: (value) {
+                      setState(() {
+                        isUseAgree = value!;
+                        if (!value) {
+                          isAllAgree = false;
+                        }
+                      });
+                    },
+                    activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
+                  ),
+                  TextButton(
+                    onPressed: (){},
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('[필수] 푸드마블 이용약관 동의', style: TextStyle(color: Colors.black)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Icon(Icons.keyboard_arrow_right, color: Colors.black)
+                ],
+              ),
+              Row(
+                children: [
+                  Checkbox(
+                    value: isPrivacyAgree, // 사용자가 동의했는지 여부를 저장하는 변수와 연결해야 합니다.
+                    onChanged: (value) {
+                      setState(() {
+                        isPrivacyAgree = value!;
+                        if (!value) {
+                          isAllAgree = false;
+                        }
+                      });
+                    },
+                    activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
+                  ),
+                  TextButton(
+                    onPressed: (){},
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('[필수] 개인정보 수집 및 이용 약관 동의', style: TextStyle(color: Colors.black)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Icon(Icons.keyboard_arrow_right, color: Colors.black)
+                ],
+              ),
+              Row(
+                children: [
+                  Checkbox(
+                    value: isThirdAgree, // 사용자가 동의했는지 여부를 저장하는 변수와 연결해야 합니다.
+                    onChanged:(value) {
+                      setState(() {
+                        isThirdAgree = value!;
+                        if (!value) {
+                          isAllAgree = false;
+                        }
+                      });
+                    },
+                    activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
+                  ),
+                  TextButton(
+                    onPressed: (){},
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('[필수] 개인정보 제3자 제공 동의', style: TextStyle(color: Colors.black)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Icon(Icons.keyboard_arrow_right, color: Colors.black)
+                ],
+              ),
+              Row(
+                children: [
+                  Checkbox(
+                    value: isSelectedAgree, // 사용자가 동의했는지 여부를 저장하는 변수와 연결해야 합니다.
+                    onChanged: (value) {
+                      setState(() {
+                        isSelectedAgree = value!;
+                        if (!value) {
+                          isAllAgree = false;
+                        }
+                      });
+                    },
+                    activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
+                  ),
+                  TextButton(
+                    onPressed: (){},
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('[선택] 개인정보 제공 동의', style: TextStyle(color: Colors.black)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Icon(Icons.keyboard_arrow_right, color: Colors.black)
+                ],
+              ),
+              Row(
+                children: [
+                  Checkbox(
+                    value: isEventAgree, // 사용자가 동의했는지 여부를 저장하는 변수와 연결해야 합니다.
+                    onChanged: (value) {
+                      setState(() {
+                        isEventAgree = value!;
+                        if (!value) {
+                          isAllAgree = false;
+                        }
+                      });
+                    },
+                    activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
+                  ),
+                  TextButton(
+                    onPressed: (){},
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('[선택] 이벤트 알림 서비스 동의', style: TextStyle(color: Colors.black)),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Icon(Icons.keyboard_arrow_right, color: Colors.black)
+                ],
+              ),
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.disabled)) {
+                        return Colors.grey[300]!; // 비활성화 상태일 때 배경색을 회색으로 지정
                       }
-                    });
-                  },
-                  activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
-                ),
-                TextButton(
-                  onPressed: (){},
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('[필수] 만 14세 이상입니다.', style: TextStyle(color: Colors.black)),
-                      ],
-                    ),
+                      return Colors.deepOrange[400]!; // 활성화 상태일 때 배경색을 주황색으로 지정
+                    },
                   ),
                 ),
-                Icon(Icons.keyboard_arrow_right, color: Colors.black)
-              ],
-            ),
-            Row(
-              children: [
-                Checkbox(
-                  value: isUseAgree, // 사용자가 동의했는지 여부를 저장하는 변수와 연결해야 합니다.
-                  onChanged: (value) {
-                    setState(() {
-                      isUseAgree = value!;
-                      if (!value) {
-                        isAllAgree = false;
-                      }
-                    });
-                  },
-                  activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
-                ),
-                TextButton(
-                  onPressed: (){},
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('[필수] 푸드마블 이용약관 동의', style: TextStyle(color: Colors.black)),
-                      ],
-                    ),
-                  ),
-                ),
-                Icon(Icons.keyboard_arrow_right, color: Colors.black)
-              ],
-            ),
-            Row(
-              children: [
-                Checkbox(
-                  value: isPrivacyAgree, // 사용자가 동의했는지 여부를 저장하는 변수와 연결해야 합니다.
-                  onChanged: (value) {
-                    setState(() {
-                      isPrivacyAgree = value!;
-                      if (!value) {
-                        isAllAgree = false;
-                      }
-                    });
-                  },
-                  activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
-                ),
-                TextButton(
-                  onPressed: (){},
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('[필수] 개인정보 수집 및 이용 약관 동의', style: TextStyle(color: Colors.black)),
-                      ],
-                    ),
-                  ),
-                ),
-                Icon(Icons.keyboard_arrow_right, color: Colors.black)
-              ],
-            ),
-            Row(
-              children: [
-                Checkbox(
-                  value: isThirdAgree, // 사용자가 동의했는지 여부를 저장하는 변수와 연결해야 합니다.
-                  onChanged:(value) {
-                    setState(() {
-                      isThirdAgree = value!;
-                      if (!value) {
-                        isAllAgree = false;
-                      }
-                    });
-                  },
-                  activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
-                ),
-                TextButton(
-                  onPressed: (){},
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('[필수] 개인정보 제3자 제공 동의', style: TextStyle(color: Colors.black)),
-                      ],
-                    ),
-                  ),
-                ),
-                Icon(Icons.keyboard_arrow_right, color: Colors.black)
-              ],
-            ),
-            Row(
-              children: [
-                Checkbox(
-                  value: isSelectedAgree, // 사용자가 동의했는지 여부를 저장하는 변수와 연결해야 합니다.
-                  onChanged: (value) {
-                    setState(() {
-                      isSelectedAgree = value!;
-                      if (!value) {
-                        isAllAgree = false;
-                      }
-                    });
-                  },
-                  activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
-                ),
-                TextButton(
-                  onPressed: (){},
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('[선택] 개인정보 제공 동의', style: TextStyle(color: Colors.black)),
-                      ],
-                    ),
-                  ),
-                ),
-                Icon(Icons.keyboard_arrow_right, color: Colors.black)
-              ],
-            ),
-            Row(
-              children: [
-                Checkbox(
-                  value: isEventAgree, // 사용자가 동의했는지 여부를 저장하는 변수와 연결해야 합니다.
-                  onChanged: (value) {
-                    setState(() {
-                      isEventAgree = value!;
-                      if (!value) {
-                        isAllAgree = false;
-                      }
-                    });
-                  },
-                  activeColor: Colors.deepOrange[300]!, // 체크된 상태일 때의 색상을 여기서 변경
-                ),
-                TextButton(
-                  onPressed: (){},
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('[선택] 이벤트 알림 서비스 동의', style: TextStyle(color: Colors.black)),
-                      ],
-                    ),
-                  ),
-                ),
-                Icon(Icons.keyboard_arrow_right, color: Colors.black)
-              ],
-            ),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.disabled)) {
-                      return Colors.grey[300]!; // 비활성화 상태일 때 배경색을 회색으로 지정
-                    }
-                    return Colors.deepOrange[400]!; // 활성화 상태일 때 배경색을 주황색으로 지정
-                  },
-                ),
-              ),
-              onPressed: _canRegister() ? _register : null,
-              child: Text('가입'),
-            )
-          ],
+                onPressed: _canRegister() ? _register : null,
+                child: Text('가입'),
+              )
+            ],
+          ),
         ),
       ),
     );

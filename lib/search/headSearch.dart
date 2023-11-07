@@ -55,7 +55,7 @@ class _SearchState extends State<Search> {
 
         QuerySnapshot userTableSnapshot = await FirebaseFirestore.instance
             .collection('T3_USER_TBL')
-            .where('userID', isEqualTo: user.uid) // 사용자 ID로 필터링
+            .where('id', isEqualTo: user.uid) // 사용자 ID로 필터링
             .get();
 
         if (userTableSnapshot.docs.isNotEmpty) {
@@ -67,7 +67,7 @@ class _SearchState extends State<Search> {
 
           // T3_USER_TBL 컬렉션의 문서 ID를 사용하여 필드 업데이트
           await FirebaseFirestore.instance.collection('T3_USER_TBL').doc(userIdFromT3UserTable).set({
-            'userID': userIdFromT3UserTable,
+            'id': userIdFromT3UserTable,
             // 다른 필드들을 추가하거나 업데이트할 수 있습니다.
           }, SetOptions(merge: true));
 
@@ -227,6 +227,7 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepOrange[400],

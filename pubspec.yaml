@@ -52,6 +52,7 @@ dependencies:
   carousel_slider:
   modal_bottom_sheet:
   cached_network_image:
+  flutter_rating_bar:
 
 
 

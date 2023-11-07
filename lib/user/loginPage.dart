@@ -19,52 +19,56 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('로그인'),
+        backgroundColor: Colors.white,elevation: 0,
+        iconTheme: IconThemeData(color: Colors.black),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            Image.asset('assets/main/loading.png'),
-            SizedBox(height: 30),
-            TextField(
-              controller: _id,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.grey[200]!,
-                hintText: '아이디',
-                hintStyle: TextStyle(color: Colors.black38),
-                border: InputBorder.none, // 밑줄 없애기
-              ),
-            ),
-            SizedBox(height: 15),
-            TextField(
-              controller: _pwd,
-              obscureText: true,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.grey[200]!,
-                hintText: '패스워드',
-                hintStyle: TextStyle(color: Colors.black38),
-                border: InputBorder.none, // 밑줄 없애기
-              ),
-            ),
-            SizedBox(height: 80),
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.disabled)) {
-                      return Colors.grey[300]!; // 비활성화 상태일 때 배경색을 회색으로 지정
-                    }
-                    return Colors.deepOrange[400]!; // 활성화 상태일 때 배경색을 주황색으로 지정
-                  },
+      body: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ListView(
+            children: [
+              Image.asset('assets/main/loading.png'),
+              SizedBox(height: 30),
+              TextField(
+                controller: _id,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[100]!,
+                  hintText: '아이디',
+                  hintStyle: TextStyle(color: Colors.black38),
+                  border: InputBorder.none, // 밑줄 없애기
                 ),
               ),
-              onPressed: _login,
-              child: Text('로그인'),
-            ),
-          ],
+              SizedBox(height: 15),
+              TextField(
+                controller: _pwd,
+                obscureText: true,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Colors.grey[100]!,
+                  hintText: '패스워드',
+                  hintStyle: TextStyle(color: Colors.black38),
+                  border: InputBorder.none, // 밑줄 없애기
+                ),
+              ),
+              SizedBox(height: 80),
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                        (Set<MaterialState> states) {
+                      if (states.contains(MaterialState.disabled)) {
+                        return Colors.grey[300]!; // 비활성화 상태일 때 배경색을 회색으로 지정
+                      }
+                      return Colors.deepOrange[400]!; // 활성화 상태일 때 배경색을 주황색으로 지정
+                    },
+                  ),
+                ),
+                onPressed: _login,
+                child: Text('로그인'),
+              ),
+            ],
+          ),
         ),
       ),
     );
