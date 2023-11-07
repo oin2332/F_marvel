@@ -135,7 +135,12 @@ class _AllCollectionState extends State<AllCollection> {
                       SizedBox(width: 10,),
                       Column(
                         children: [
-
+                          if (description == null || collectionName == null)
+                            Text(
+                              '컬렉션이 존재하지 않습니다.',
+                              style: TextStyle(color: Colors.grey),
+                            )
+                          else
                           Container(
                             height: 70,
                             width: 180,
@@ -158,6 +163,7 @@ class _AllCollectionState extends State<AllCollection> {
                             ),
                           ),
                           SizedBox(height: 1),
+                          if (description != null && collectionName != null)
                           Container(
                             height: 30,
                             width: 180,
@@ -178,6 +184,7 @@ class _AllCollectionState extends State<AllCollection> {
                               ],
                             ),
                           ),
+                          if (description != null && collectionName != null)
                           Row(
                             children: [
                               Icon(
@@ -187,11 +194,8 @@ class _AllCollectionState extends State<AllCollection> {
                               Text(' ${widget.collectionName}',style: TextStyle(fontWeight: FontWeight.bold),),
                             ],
                           ),
-
                         ],
-
                       ),
-
                     ],
                   ),
                 ),
