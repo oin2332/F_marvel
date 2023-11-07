@@ -180,18 +180,23 @@ class _SearchState extends State<Search> {
 
   Future<void> _loadRecentSearches() async {
     UserModel userModel = Provider.of<UserModel>(context, listen: false);
-
     String? userId = userModel.userId;
+
     print('후아아아아 $userId');
 
 
     final snapshot = await _searchval.collection('T3_SEARCH_TBL')
         .where('S_USERID', isEqualTo: userId)
-        .orderBy('S_TIMESTAMP', descending: false)
         .get();
 
     if (snapshot.docs.isNotEmpty) {
-      List<String> loadedSearches = snapshot.docs.map((doc) => doc['S_SEARCHVALURE'].toString()).toList();
+      List<DocumentSnapshot> sortedDocs = snapshot.docs..sort((a, b) {
+        final aTimestamp = a['S_TIMESTAMP'] as Timestamp;
+        final bTimestamp = b['S_TIMESTAMP'] as Timestamp;
+        return bTimestamp.compareTo(aTimestamp);
+      });
+
+      List<String> loadedSearches = sortedDocs.map((doc) => doc['S_SEARCHVALURE'].toString()).toList();
       if (loadedSearches.length > 6) {
         loadedSearches = loadedSearches.sublist(0, 6);
       }
