@@ -76,19 +76,21 @@ class _TestimgState extends State<Testimg> {
             return Scaffold(
               body: Stack(
                 children: [
-                  Container(
-                    height: 400,
-                    child: PageView.builder(
-                      controller: _pageController,
-                      itemCount: imagePaths.length,
-                      itemBuilder: (context, index) {
-                        return Image.asset(
-                          'assets/storePageIMG/${imagePaths[index]}',
-                          width: 400,
-                          height: 200,
-                          fit: BoxFit.cover,
-                        );
-                      },
+                  Center(
+                    child: Container(
+                      height: 400,
+                      child: PageView.builder(
+                        controller: _pageController,
+                        itemCount: imagePaths.length,
+                        itemBuilder: (context, index) {
+                          return Image.asset(
+                            'assets/storePageIMG/${imagePaths[index]}',
+                            width: 400,
+                            height: 200,
+                            fit: BoxFit.cover,
+                          );
+                        },
+                      ),
                     ),
                   ),
                   Positioned(

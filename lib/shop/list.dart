@@ -86,7 +86,14 @@ class _TestState extends State<ListsShop> {
             storeData['STARlist'] = starList;
             storeData['docId'] = docId;
             userDataList.add(storeData);
+          }else{
+            storeData['STARlength'] = y;
+            storeData['STARage'] = x.toStringAsFixed(1);
+            storeData['STARlist'] = starList;
+            storeData['docId'] = docId;
+            userDataList.add(storeData);
           }
+
         }
         setState(() {
           // 상태 업데이트 등 다른 작업 수행

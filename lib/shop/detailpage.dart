@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../main.dart';
+
 class DetailPage extends StatefulWidget {
 
   final String docId; // docId를 받을 변수 추가
@@ -24,10 +24,12 @@ class _DetailPageState extends State<DetailPage> {
   void initState() {
     super.initState();
     initializeDateFormatting("ko_KR", null);
-    _fetchAllUserData(widget.docId);
   }
 
   List<Map<String, dynamic>> userDataList = [];
+  Map<String, dynamic> memuMap = {};
+  Map<String, dynamic> icon = {};
+
 
   Future<List<Widget>?> _fetchAllUserData(String docId) async {
     try {
@@ -52,11 +54,20 @@ class _DetailPageState extends State<DetailPage> {
             .doc(docId)
             .collection('T3_CONVENIENCE_TBL')
             .get();
+        if (convenienceSnapshot.docs.isNotEmpty) {
+          icon = convenienceSnapshot.docs.first.data() as Map<String, dynamic>;
+        }
 
 
-        storeData['convenience'] = convenienceSnapshot.docs.first.data() as Map<String, dynamic>;
-        print(storeData);
-
+        //메뉴 가져오기
+        QuerySnapshot menuSnapshot = await FirebaseFirestore.instance
+            .collection('T3_STORE_TBL')
+            .doc(docId)
+            .collection('T3_MENU_TBL')
+            .get();
+        if (menuSnapshot.docs.isNotEmpty) {
+          memuMap = menuSnapshot.docs.first.data() as Map<String, dynamic>;
+        }
 
 
         List<String> starList = [];
@@ -76,8 +87,6 @@ class _DetailPageState extends State<DetailPage> {
                 }
               }
             });
-
-
           }
 
 
@@ -89,12 +98,13 @@ class _DetailPageState extends State<DetailPage> {
         if (y > 0) {
           x = x / y;
         }
-
+        print('4 $storeData');
         storeData['STARlength'] = y;
         storeData['STARage'] = x.toStringAsFixed(1);
         storeData['STARlist'] = starList;
         storeData['docId'] = docId;
         userDataList.add(storeData);
+        print('길이 : ${userDataList.length}');
 
       } else {
         print('해당 문서를 찾을 수 없습니다.');
@@ -144,7 +154,6 @@ class _DetailPageState extends State<DetailPage> {
               return ListView.builder(
                 itemCount: userDataList.length,
                 itemBuilder: (BuildContext context, int index) {
-
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -152,8 +161,6 @@ class _DetailPageState extends State<DetailPage> {
                         height: 300,
                         child: Testimg(docId: widget.docId,), //이미지 슬라이더
                       ),
-
-
                       Container(
                         padding: EdgeInsets.all(30),
                         child: Column(
@@ -161,7 +168,7 @@ class _DetailPageState extends State<DetailPage> {
                           children: [
                             Row(
                               children: [
-                               
+
                                 Text('${userDataList[index]['KEYWORD1']}   l',
                                   style: TextStyle(fontSize: 10, color: Colors
                                       .grey),),
@@ -193,7 +200,6 @@ class _DetailPageState extends State<DetailPage> {
                                         .grey)),
                               ],
                             ),
-                            Text(''),
                             SizedBox(height: 15,),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -468,10 +474,10 @@ class _DetailPageState extends State<DetailPage> {
                                   ),
                                   SizedBox(height: 32),
                                   Wrap(
-                                    spacing: 4, // 가로 방향의 마진
-                                    runSpacing: 4, // 세로 방향의 마진
+                                    spacing: 10, // 가로 방향의 마진
+                                    runSpacing: 10, // 세로 방향의 마진
                                     children: [
-                                      if (userDataList[index] == 'stairs.png')
+                                      if (icon['S_STAIRS'] == true)
                                         Container(
                                           margin: EdgeInsets.all(4), // 각 아이콘과 텍스트의 마진
                                           child: Column(
@@ -481,7 +487,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ],
                                           ),
                                         ),
-                                      if (userDataList[index]['conven'] != 'stairs.png')
+                                      if(icon['S_STAIRS'] == false)
                                         Container(
                                           margin: EdgeInsets.all(4),
                                           child: Column(
@@ -491,16 +497,17 @@ class _DetailPageState extends State<DetailPage> {
                                             ],
                                           ),
                                         ),
+                                      if(icon['S_FLOOR'])
                                       Container(
                                         margin: EdgeInsets.all(4),
                                         child: Column(
                                           children: [
                                             Image.asset('assets/amenities/floor.png', width: 50, fit: BoxFit.contain),
-                                            Text('asdf'),
+                                            Text('${icon['S_FLOORtext']}'),
                                           ],
                                         ),
                                       ),
-                                      if (userDataList[index]['S_KID'] != 'S_KID')
+                                      if (icon['S_KID'])
                                         Container(
                                           margin: EdgeInsets.all(4),
                                           child: Column(
@@ -510,7 +517,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ],
                                           ),
                                         ),
-                                      if (true)
+                                      if (icon['S_NOKID'])
                                         Container(
                                           margin: EdgeInsets.all(4),
                                           child: Column(
@@ -520,6 +527,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ],
                                           ),
                                         ),
+                                      if(icon['S_PARKING'])
                                       Container(
                                         margin: EdgeInsets.all(4),
                                         child: Column(
@@ -529,6 +537,7 @@ class _DetailPageState extends State<DetailPage> {
                                           ],
                                         ),
                                       ),
+                                      if(icon['S_TOILET'])
                                       Container(
                                         margin: EdgeInsets.all(4),
                                         child: Column(
@@ -538,6 +547,7 @@ class _DetailPageState extends State<DetailPage> {
                                           ],
                                         ),
                                       ),
+                                      if(icon['S_ELEVA'])
                                       Container(
                                         margin: EdgeInsets.all(4),
                                         child: Column(
@@ -547,6 +557,27 @@ class _DetailPageState extends State<DetailPage> {
                                           ],
                                         ),
                                       ),
+                                      if(icon['S_GROUP'])
+                                        Container(
+                                          margin: EdgeInsets.all(4),
+                                          child: Column(
+                                            children: [
+                                              Image.asset('assets/amenities/group.png', width: 50, fit: BoxFit.contain),
+                                              Text('단체가능'),
+                                            ],
+                                          ),
+                                        ),
+                                      if(icon['S_WR'])
+                                        Container(
+                                          margin: EdgeInsets.all(4),
+                                          child: Column(
+                                            children: [
+                                              Image.asset('assets/amenities/takeout.png', width: 50, fit: BoxFit.contain),
+                                              Text('포장가능'),
+                                            ],
+                                          ),
+                                        ),
+
                                     ],
                                   ),
                                 ],
@@ -555,6 +586,7 @@ class _DetailPageState extends State<DetailPage> {
 
                             underlineBox(5.0),
                             //메뉴--------------------
+                            //if(usermenulist != null && usermenulist['S_MENU1'] != null)
                             Container(
 
                               child: Column(
@@ -579,9 +611,9 @@ class _DetailPageState extends State<DetailPage> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('Food', style: TextStyle(fontSize: 15,
+                                        Text(memuMap['S_MENU1'], style: TextStyle(fontSize: 15,
                                             fontWeight: FontWeight.bold),),
-                                        TextButton(onPressed: (){}, child: Text('9,000~ 4,0000원',style: TextStyle(fontSize: 15,color: Colors.grey),))
+                                        TextButton(onPressed: (){}, child: Text(memuMap['S_MENU1-1'],style: TextStyle(fontSize: 15,color: Colors.grey),))
                                       ],
                                     ),
                                   ),
@@ -591,9 +623,9 @@ class _DetailPageState extends State<DetailPage> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('멀봐 ', style: TextStyle(fontSize: 15,
+                                        Text(memuMap['S_MENU2'], style: TextStyle(fontSize: 15,
                                             fontWeight: FontWeight.bold),),
-                                        TextButton(onPressed: (){}, child: Text('6816351원',style: TextStyle(fontSize: 15,color: Colors.grey),))
+                                        TextButton(onPressed: (){}, child: Text(memuMap['S_MENU2-1'],style: TextStyle(fontSize: 15,color: Colors.grey),))
                                       ],
                                     ),
                                   ),
@@ -603,15 +635,73 @@ class _DetailPageState extends State<DetailPage> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text('멀봐 ', style: TextStyle(fontSize: 15,
+                                        Text(memuMap['S_MENU3'], style: TextStyle(fontSize: 15,
                                             fontWeight: FontWeight.bold),),
-                                        TextButton(onPressed: (){}, child: Text('6816351원',style: TextStyle(fontSize: 15,color: Colors.grey),))
+                                        TextButton(onPressed: (){}, child: Text(memuMap['S_MENU3-1'],style: TextStyle(fontSize: 15,color: Colors.grey),))
                                       ],
                                     ),
                                   ),
                                 ],
                               ),
                             ),
+                         /*   if(usermenulist == null && usermenulist!['S_MENU1'] == null)
+                              Container(
+
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(30),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('메뉴', style: TextStyle(fontSize: 20,
+                                              fontWeight: FontWeight.bold),),
+                                          TextButton(onPressed: (){
+                                            Navigator.push(context, MaterialPageRoute(
+                                                builder: (_) => TabBarEx(initialTabIndex: 1)));
+                                          }, child: Text('전체보기 >',style: TextStyle(fontSize: 12,color: Colors.grey),))
+                                        ],
+                                      ),
+                                    ),
+                                    underlineBox(2.0),
+                                    Container(
+                                      padding: EdgeInsets.only(left: 30,top: 10,right: 30,bottom: 10),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(userDataList[index]['menu']['S_MENU1'], style: TextStyle(fontSize: 15,
+                                              fontWeight: FontWeight.bold),),
+                                          TextButton(onPressed: (){}, child: Text('9,000~ 4,0000원',style: TextStyle(fontSize: 15,color: Colors.grey),))
+                                        ],
+                                      ),
+                                    ),
+                                    underlineBox(1.0),
+                                    Container(
+                                      padding: EdgeInsets.only(left: 30,top: 10,right: 30,bottom: 10),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('멀봐 ', style: TextStyle(fontSize: 15,
+                                              fontWeight: FontWeight.bold),),
+                                          TextButton(onPressed: (){}, child: Text('6816351원',style: TextStyle(fontSize: 15,color: Colors.grey),))
+                                        ],
+                                      ),
+                                    ),
+                                    underlineBox(1.0),
+                                    Container(
+                                      padding: EdgeInsets.only(left: 30,top: 10,right: 30,bottom: 10),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('멀봐 ', style: TextStyle(fontSize: 15,
+                                              fontWeight: FontWeight.bold),),
+                                          TextButton(onPressed: (){}, child: Text('6816351원',style: TextStyle(fontSize: 15,color: Colors.grey),))
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),*/
                             underlineBox(5.0),
 
                             //사진--------------------
@@ -692,6 +782,7 @@ class _DetailPageState extends State<DetailPage> {
 
                             underlineBox(5.0),
                             //지도
+
                             Container(
                               padding: EdgeInsets.all(5),
                               child: Row(
@@ -718,6 +809,7 @@ class _DetailPageState extends State<DetailPage> {
                               child: Row(
                                 children: [
                                   Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text('상세정보', style: TextStyle(fontSize: 20,
@@ -726,21 +818,60 @@ class _DetailPageState extends State<DetailPage> {
                                       Container(
                                         padding: EdgeInsets.all(20),
                                         child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text('주저리주저리'),
-                                            Text('주저리주저리'),
-                                            Text('주저리주저리'),
-                                            Text('주저리주저리'),
-                                            Text('주저리주저리'),
-                                            Text('주저리주저리'),
-                                            Text('주저리주저리'),
-                                            Text('주저리주저리'),
-                                            Text('주저리주저리'),
-                                            Text('주저리주저리'),
-                                            Text('주저리주저리'),
-                                            Text('주저리주저리'),
-                                            Text('주저리주저리'),
-                                            Text('주저리주저리'),
+                                            Text('전화번호',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),SizedBox(height: 5,),
+                                            Text('${userDataList[index]['S_NUMBER']}'),
+                                            SizedBox(height: 25,),
+
+                                            Text('매장소개',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),SizedBox(height: 5,),
+                                            Container(
+                                                width: 300,
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    Flexible(
+                                                        child: RichText(
+                                                          overflow: TextOverflow.ellipsis,
+                                                          maxLines: 5,
+                                                          strutStyle: StrutStyle(fontSize: 16.0),
+                                                          text: TextSpan(
+                                                              text: '${userDataList[index]['S_MEMO']}',
+                                                              style: TextStyle(
+                                                                  color: Colors.black,
+                                                                  height: 1.4,
+                                                                  fontSize: 12.0,
+                                                                  fontFamily: 'NanumSquareRegular')),
+                                                        )),
+                                                  ],
+                                                )),SizedBox(height: 25,),
+
+                                            Text('안내 및 유의사항',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),SizedBox(height: 5,),
+                                            Container(
+                                                width: 300,
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    Flexible(
+                                                        child: RichText(
+                                                          overflow: TextOverflow.ellipsis,
+                                                          maxLines: 5,
+                                                          strutStyle: StrutStyle(fontSize: 16.0),
+                                                          text: TextSpan(
+                                                              text: '${userDataList[index]['S_RE_MEMO']}',
+                                                              style: TextStyle(
+                                                                  color: Colors.black,
+                                                                  height: 1.4,
+                                                                  fontSize: 12.0,
+                                                                  fontFamily: 'NanumSquareRegular')),
+                                                        )),
+                                                  ],
+                                                )),SizedBox(height: 25,),
+
+                                            Text('홈페이지',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),SizedBox(height: 5,),
+                                            Text('${userDataList[index]['S_HOMEPAGE']}'),
+
+
                                           ],
                                         ),
                                       ),
