@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_marvel/main/importbottomBar.dart';
 import 'package:food_marvel/main/mainPage.dart';
@@ -8,7 +7,9 @@ import 'package:food_marvel/search/ImportRestaurant.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:food_marvel/search/ImportSuddenpopular.dart';
 import 'package:food_marvel/search/ImportSearchlist.dart';
+import 'package:provider/provider.dart';
 import '../firebase/firebase_options.dart';
+import '../user/userModel.dart';
 import 'ImportSearchResult.dart';
 
 void main() async {
@@ -18,8 +19,6 @@ void main() async {
   );
   runApp(MyApp());
 }
-
-
 
 class Search extends StatefulWidget {
   const Search({super.key});
@@ -43,120 +42,39 @@ class _SearchState extends State<Search> {
     super.dispose();
   }
 
-  Future<void> updateT3UserTable() async {
-    try {
-      User? user = FirebaseAuth.instance.currentUser;
-
-      if (user != null) {
-        String userId = user.uid;
-
-        // T3_USER_TBL 컬렉션에서 'id' 필드 값을 가져옴
-        String userIdFromT3UserTable = '';
-
-        QuerySnapshot userTableSnapshot = await FirebaseFirestore.instance
-            .collection('T3_USER_TBL')
-            .where('id', isEqualTo: user.uid) // 사용자 ID로 필터링
-            .get();
-
-        if (userTableSnapshot.docs.isNotEmpty) {
-          userIdFromT3UserTable = userTableSnapshot.docs.first['id'];
-        }
-
-        if (userIdFromT3UserTable.isNotEmpty) {
-          print('T3_USER_TBL에서 가져온 사용자 ID: $userIdFromT3UserTable');
-
-          // T3_USER_TBL 컬렉션의 문서 ID를 사용하여 필드 업데이트
-          await FirebaseFirestore.instance.collection('T3_USER_TBL').doc(userIdFromT3UserTable).set({
-            'id': userIdFromT3UserTable,
-            // 다른 필드들을 추가하거나 업데이트할 수 있습니다.
-          }, SetOptions(merge: true));
-
-          print('T3_USER_TBL에 ID 필드 업데이트 완료');
-        } else {
-          print('T3_USER_TBL에서 사용자 ID를 찾을 수 없습니다.');
-        }
-      } else {
-        print('사용자가 로그인되지 않았습니다');
-      }
-    } catch (e) {
-      print('사용자 ID 업데이트 중 에러 발생: $e');
-    }
-  }
-
-  void _onSearchSubmitted(String value) async {
-    String searchText = _searchController.text;
-    String userId = await getUserIdFromT3UserTable();
-    searchResults = [];
-    setState(() {
-      if (recentSearches.contains(searchText)) {
-        recentSearches.remove(searchText);
-      }
-      recentSearches.insert(0, searchText);
-
-      if (recentSearches.length > 6) {
-        recentSearches.removeAt(6);
-      }
-    });
-
-    try {
-      await _searchval.collection('T3_SEARCH_TBL').add({
-        'S_SEARCHVALURE': _searchController.text,
-        'S_TIMESTAMP': FieldValue.serverTimestamp(),
-        'S_USERID': userId,
-      });
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('오류: $e')),
-      );
-    }
-
-    QuerySnapshot userSnapshot = await FirebaseFirestore.instance
-        .collection('T3_STORE_TBL')
-        .get();
-
-    List<Map<String, dynamic>> results = [];
-    for (var doc in userSnapshot.docs) {
-      Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
-      if (matchesSearchText(userData, searchText)) {
-        results.add(userData);
-      }
-    }
-
-    setState(() {
-      searchQuery = searchText;
-      searchResults = results;
-    });
-
-    _searchController.clear();
-    await updateT3UserTable();
-  }
-
   Future<String> getUserIdFromT3UserTable() async {
+
     try {
-      User? user = FirebaseAuth.instance.currentUser;
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('T3_USER_TBL')
+          .get();
 
-      if (user != null) {
-        String userId = user.uid;
-        print('로그인한 사용자의 ID: $userId');
+      if (userSnapshot.docs.isNotEmpty) {
+        UserModel userModel = Provider.of<UserModel>(context, listen: false);
+        String? userId = userModel.userId;
+        print('$userId');
 
-        QuerySnapshot userTableSnapshot = await FirebaseFirestore.instance
-            .collection('T3_USER_TBL')
-            .where('id', isEqualTo: userId)
-            .get();
-
-        if (userTableSnapshot.docs.isNotEmpty) {
-          String userIdFromT3UserTable = userTableSnapshot.docs.first.id;
-          return userIdFromT3UserTable;
-        } else {
-          return 'T3_USER_TBL에서 사용자 ID를 찾을 수 없습니다';
+        if (userId != null) {
+          print('아이디를알려조: $userId');
         }
+
+
+
+        await _searchval.collection('T3_SEARCH_TBL').add({
+          'S_SEARCHVALURE': _searchController.text,
+          'S_TIMESTAMP': FieldValue.serverTimestamp(),
+          'S_USERID': userId,
+        });
+        print('아니시발 왜되는데 $userId');
+        return userId ?? '미확인 사용자';
       } else {
-        return '사용자가 로그인되지 않았습니다';
+        return '기본 사용자 ID';
       }
     } catch (e) {
       print('사용자 ID를 가져오는 중 에러 발생: $e');
-      return '에러가 발생했습니다';
+      return '에러 발생';
     }
+
   }
 
   void _removeSearch(String search) {
@@ -185,6 +103,58 @@ class _SearchState extends State<Search> {
 
 
 
+  void _onSearchSubmitted(String value) async {
+    String searchText = _searchController.text;
+    UserModel userModel = Provider.of<UserModel>(context, listen: false);
+    String? userId = userModel.userId;
+    searchResults = [];
+    setState(() {
+      if (recentSearches.contains(searchText)) {
+        recentSearches.remove(searchText);
+      }
+      recentSearches.insert(0, searchText);
+
+      if (recentSearches.length > 6) {
+        recentSearches.removeAt(6);
+      }
+    });
+    if (userId == null || userId == "미확인 사용자") {
+      return;
+    }
+
+    try {
+      await _searchval.collection('T3_SEARCH_TBL').add({
+        'S_SEARCHVALURE': _searchController.text,
+        'S_TIMESTAMP': FieldValue.serverTimestamp(),
+        'S_USERID': userId,
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('오류: $e')),
+      );
+    }
+
+
+
+    QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+        .collection('T3_STORE_TBL')
+        .get();
+
+    List<Map<String, dynamic>> results = [];
+    for (var doc in userSnapshot.docs) {
+      Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
+      if (matchesSearchText(userData, searchText)) {
+        results.add(userData);
+      }
+    }
+
+    setState(() {
+      searchQuery = searchText;
+      searchResults = results;
+    });
+
+    _searchController.clear();
+  }
 
 
   bool matchesSearchText(Map<String, dynamic> userData, String searchText) {
@@ -196,10 +166,10 @@ class _SearchState extends State<Search> {
 
     for (String field in searchFields) {
       if (userData[field] != null && userData[field].toString().contains(searchText)) {
-        return true;
+        return true; // 검색어와 일치하는 필드가 있으면 true 반환
       }
     }
-    return false;
+    return false; // 모든 필드에서 일치하는 값이 없을 경우 false 반환
   }
 
   @override
@@ -209,8 +179,15 @@ class _SearchState extends State<Search> {
   }
 
   Future<void> _loadRecentSearches() async {
+    UserModel userModel = Provider.of<UserModel>(context, listen: false);
+
+    String? userId = userModel.userId;
+    print('후아아아아 $userId');
+
+
     final snapshot = await _searchval.collection('T3_SEARCH_TBL')
-        .orderBy('S_TIMESTAMP', descending: true)
+        .where('S_USERID', isEqualTo: userId)
+        .orderBy('S_TIMESTAMP', descending: false)
         .get();
 
     if (snapshot.docs.isNotEmpty) {
@@ -227,7 +204,6 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepOrange[400],
