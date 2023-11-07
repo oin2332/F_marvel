@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:food_marvel/reservation/function/deleteReservation.dart';
+import 'package:food_marvel/user/userModel.dart';
+import 'package:provider/provider.dart';
 
 class ReservationData {
   final String id;
@@ -42,8 +44,19 @@ class ReservationDataProvider with ChangeNotifier {
 class ReservationListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var userModel = Provider.of<UserModel>(context); // UserModel 인스턴스 가져오기
+    String? userId = userModel.userId; // 현재 사용자의 ID 가져오기
+
+    if (userId == null) {
+      // 사용자가 로그인하지 않은 경우 로그인 화면 또는 다른 처리를 표시할 수 있습니다.
+      return Center(child: Text('로그인이 필요합니다.'));
+    }
+
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('reser_test').snapshots(),
+      stream: FirebaseFirestore.instance
+                .collection('reser_test')
+                .where('Peopleid', isEqualTo: userId) // 사용자 ID와 일치하는 예약만 가져오기
+                .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -103,10 +116,29 @@ class ReservationListWidget extends StatelessWidget {
                           actions: <Widget>[
                             TextButton(
                               child: Text('확인'),
-                              onPressed: () {
+                              onPressed: () async {
                                 Navigator.of(context).pop(); // 다이얼로그 닫기
                                 // 예약 취소 로직을 여기에 추가
-                                cancelReservation(reservation.id);
+                                await cancelReservation(reservation.id);
+
+                                // 예약이 성공적으로 취소되었음을 알리는 다이얼로그 표시
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('예약 취소 완료'),
+                                      content: Text('예약이 성공적으로 취소되었습니다.'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          child: Text('확인'),
+                                          onPressed: () {
+                                            Navigator.of(context).pop(); // 추가 다이얼로그 닫기
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
                               },
                             ),
                             TextButton(
