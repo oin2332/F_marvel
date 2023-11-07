@@ -62,7 +62,7 @@ class _TestState extends State<ListsShop> {
               starData.forEach((key, value) {
                 if (value is String) {
                   // 문자열을 숫자로 변환하여 평균을 계산합니다
-                  double numericValue = double.parse(value);
+                  double? numericValue = double.tryParse(value);
                   if (numericValue != null) {
                     starList.add(value);
                     x += numericValue;
@@ -79,21 +79,21 @@ class _TestState extends State<ListsShop> {
             x = x / y;
           }
 
-          // S_INFO1 필드가 '양식'인 경우에만 userDataList에 추가
+          // userDataList에 상점 데이터 추가
+
           if (storeData['S_INFO1'] == widget.category) {
             storeData['STARlength'] = y;
             storeData['STARage'] = x.toStringAsFixed(1);
             storeData['STARlist'] = starList;
             storeData['docId'] = docId;
             userDataList.add(storeData);
-          }else{
+          }/*else{// 에뮬진짜 개느려요
             storeData['STARlength'] = y;
             storeData['STARage'] = x.toStringAsFixed(1);
             storeData['STARlist'] = starList;
             storeData['docId'] = docId;
             userDataList.add(storeData);
-          }
-
+          }*/
         }
         setState(() {
           // 상태 업데이트 등 다른 작업 수행
@@ -105,6 +105,7 @@ class _TestState extends State<ListsShop> {
       print('데이터를 불러오는 중 오류가 발생했습니다: $e');
     }
   }
+
 
 
 

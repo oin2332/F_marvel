@@ -1,15 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_marvel/shop/underlindeBox.dart';
-import 'package:flutter/material.dart';
 import 'package:vertical_barchart/vertical-barchart.dart';
 import 'package:vertical_barchart/vertical-barchartmodel.dart';
 
-import 'averageChart.dart';
-import 'detailpage.dart';
 
 class TabBarEx extends StatefulWidget {
   final int initialTabIndex;
-  TabBarEx({required this.initialTabIndex});
+  final String docId;
+  TabBarEx({
+    required this.initialTabIndex,
+    required this.docId,
+  });
+
 
   @override
   _TabBarExState createState() => _TabBarExState();
@@ -28,6 +31,8 @@ class _TabBarExState extends State<TabBarEx> {
       }
     }
 
+
+
     double total = 0.0; // 숫자를 더할 변수
 
     for (var value in starlist[0].values) {
@@ -39,53 +44,133 @@ class _TabBarExState extends State<TabBarEx> {
         }
       }
     }
-
     average = total / Star.length;
-    countOfOnly5Stars = Star.where((star) => star == '5').length.toDouble();
-    countOfOnly4Stars = Star.where((star) => star == '4').length.toDouble();
-    countOfOnly3Stars = Star.where((star) => star == '3').length.toDouble();
-    countOfOnly2Stars = Star.where((star) => star == '2').length.toDouble();
-    countOfOnly1Stars = Star.where((star) => star == '1').length.toDouble();
+
+    List<String> num5 = Star.where((element) => element == '5').toList();
+    List<String> num4 = Star.where((element) => element == '4').toList();
+    List<String> num3 = Star.where((element) => element == '3').toList();
+    List<String> num2 = Star.where((element) => element == '2').toList();
+    List<String> num1 = Star.where((element) => element == '1').toList();
+      
+    double cnt5 = num5.length.toDouble();
+    double cnt4 = num4.length.toDouble();
+    double cnt3 = num3.length.toDouble();
+    double cnt2 = num2.length.toDouble();
+    double cnt1 = num1.length.toDouble();
 
     bardata = [
       VBarChartModel(
         index: 0,
         label: "5점",
         colors: [Colors.orange, Colors.deepOrange],
-        jumlah: countOfOnly5Stars,
-        tooltip: "${countOfOnly5Stars}",
+        jumlah: cnt5,
+        tooltip: "(${num5.length})",
 
       ),
       VBarChartModel(
         index: 1,
         label: "4점",
         colors: [Colors.orange, Colors.deepOrange],
-        jumlah: countOfOnly4Stars,
-        tooltip: "${countOfOnly4Stars}",
+        jumlah: cnt4,
+        tooltip: "(${num4.length})",
       ),
       VBarChartModel(
         index: 2,
         label: "3점",
         colors: [Colors.orange, Colors.deepOrange],
-        jumlah: countOfOnly3Stars,
-        tooltip: "${countOfOnly3Stars}",
+        jumlah: cnt3,
+        tooltip: "(${num3.length})",
       ),
       VBarChartModel(
         index: 3,
         label: "2점",
         colors: [Colors.orange, Colors.deepOrange],
-        jumlah: countOfOnly2Stars,
-        tooltip: "${countOfOnly2Stars}",
+        jumlah: cnt2,
+        tooltip: "(${num2.length})",
       ),
       VBarChartModel(
         index: 4,
         label: "1점",
         colors: [Colors.orange, Colors.deepOrange],
-        jumlah: countOfOnly1Stars,
-        tooltip: "${countOfOnly1Stars}",
+        jumlah: cnt1,
+        tooltip: "(${num1.length})",
       ),
     ];
 
+  }
+
+  List<Map<String, dynamic>> userDataList = [];
+  Map<String, dynamic> memuMap = {};
+
+  Future<List<Widget>?> _fetchAllUserData(String docId) async {
+    try {
+      DocumentSnapshot storeSnapshot = await FirebaseFirestore.instance
+          .collection('T3_STORE_TBL')
+          .doc(docId)
+          .get();
+
+      if (storeSnapshot.exists) {
+        Map<String, dynamic> storeData = storeSnapshot.data() as Map<String, dynamic>;
+
+        // 해당 상점의 별점 정보 가져오기
+        QuerySnapshot starSnapshot = await FirebaseFirestore.instance
+            .collection('T3_STORE_TBL')
+            .doc(docId)
+            .collection('T3_STAR_TBL')
+            .get();
+
+        //메뉴 가져오기
+        QuerySnapshot menuSnapshot = await FirebaseFirestore.instance
+            .collection('T3_STORE_TBL')
+            .doc(docId)
+            .collection('T3_MENU_TBL')
+            .get();
+        if (menuSnapshot.docs.isNotEmpty) {
+          memuMap = menuSnapshot.docs.first.data() as Map<String, dynamic>;
+        }
+
+
+        List<String> starList = [];
+        double x = 0;
+        int y = 0;
+
+        if (starSnapshot.docs.isNotEmpty) {
+          for (var starDoc in starSnapshot.docs) {
+            Map<String, dynamic> starData = starDoc.data() as Map<String, dynamic>;
+            starData.forEach((key, value) {
+              if (value is String) {
+                double? numericValue = double.tryParse(value);
+                if (numericValue != null) {
+                  starList.add(value);
+                  x += numericValue;
+                  y++;
+                }
+              }
+            });
+          }
+
+
+
+        } else {
+          starList.add('0');
+        }
+
+        if (y > 0) {
+          x = x / y;
+        }
+        print('4 $storeData');
+        storeData['STARlength'] = y;
+        storeData['STARage'] = x.toStringAsFixed(1);
+        storeData['STARlist'] = starList;
+        storeData['docId'] = docId;
+        userDataList.add(storeData);
+        Star.addAll(starList);
+      } else {
+        print('해당 문서를 찾을 수 없습니다.');
+      }
+    } catch (e) {
+      print('데이터를 불러오는 중 오류가 발생했습니다: $e');
+    }
   }
 
   List<Map<String, dynamic>> menuImg = [
@@ -149,11 +234,10 @@ class _TabBarExState extends State<TabBarEx> {
   double countOfOnly4Stars  = 0;
   double countOfOnly3Stars  = 0;
   double countOfOnly2Stars  = 0;
-  double countOfOnly1Stars  = 12;
+  double countOfOnly1Stars  = 0;
   List<String> Path = [];
   List<String> Star = [];
   double average = 0.0;
-
 
   Widget _buildGrafik(List<VBarChartModel> bardata) {
     return Container(
@@ -163,6 +247,8 @@ class _TabBarExState extends State<TabBarEx> {
       child: VerticalBarchart(
         maxX: Star.length.toDouble(),
         data: bardata,
+        labelColor: Color(0xFFFF6347),
+        tooltipColor: Color(0xff8e97a0),
         showLegend: true,
         showBackdrop: true,
         barStyle: BarStyle.DEFAULT,
@@ -170,7 +256,6 @@ class _TabBarExState extends State<TabBarEx> {
       ),
     );
   }
-
 
   void _showImageDialog(BuildContext context, String imagePath) {
     showDialog(
@@ -182,9 +267,6 @@ class _TabBarExState extends State<TabBarEx> {
       },
     );
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -212,151 +294,152 @@ class _TabBarExState extends State<TabBarEx> {
                 fontWeight: FontWeight.bold, // 글씨 굵기 설정
               ),
               tabs: [
-                Tab(text: '홈'),
+                Tab(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('홈',style: TextStyle(color: Colors.grey,fontSize: 15,fontWeight: FontWeight.bold),),
+                  ),
+                ),
                 Tab(text: '메뉴'),
                 Tab(text: '사진 ${Path.length}'),
                 Tab(text: '리뷰 ${Star.length}'),
-
-
-
-
-
-
-
-
-                              ],
+             ],
             ),
           ),
           body: TabBarView(
             children: [
               Text("홍"),
               // 메뉴 ---------------------------------------------------------//
-              ListView.builder(
-                  itemCount: menuImg.length,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    // 이미지 클릭 시 다이얼로그 표시
-                                    _showImageDialog(context, 'assets/storePageIMG/BEKMIWOO/${menuImg[index]['img1']}');
-                                  },
-                                  child: Image.asset(
-                                    'assets/storePageIMG/${menuImg[index]['img1']}',
-                                    width: 250,
-                                    height: 330,
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    // 이미지 클릭 시 다이얼로그 표시
-                                    _showImageDialog(context, 'assets/storePageIMG/${menuImg[index]['img2']}');
-                                  },
-                                  child: Image.asset(
-                                    'assets/storePageIMG/${menuImg[index]['img2']}',
-                                    width: 250,
-                                    height: 330,
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    // 이미지 클릭 시 다이얼로그 표시
-                                    _showImageDialog(context, 'assets/storePageIMG/${menuImg[index]['img3']}');
-                                  },
-                                  child: Image.asset(
-                                    'assets/storePageIMG/${menuImg[index]['img3']}',
-                                    width: 250,
-                                    height: 330,
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    // 이미지 클릭 시 다이얼로그 표시
-                                    _showImageDialog(context, 'assets/storePageIMG/${menuImg[index]['img4']}');
-                                  },
-                                  child: Image.asset(
-                                    'assets/storePageIMG/${menuImg[index]['img4']}',
-                                    width: 250,
-                                    height: 330,
-                                  ),
-                                ),
-                                // 다른 이미지들도 동일한 방식으로 처리
-                              ],
+                  FutureBuilder<List<Widget>?>(
+                  future: _fetchAllUserData(widget.docId),
+                  builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    print('별별별 : $Star');
+
+                  return Column(
+                  children: [
+                  CircularProgressIndicator(),
+                  ],
+                  ); // Display a loading indicator if the future is not resolved yet.
+                  } else {
+                      return ListView(
+                          children: <Widget>[
+                            ListTile(
+                                title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                // 이미지 클릭 시 다이얼로그 표시
+                                                _showImageDialog(context, 'assets/storePageIMG/BEKMIWOO/${menuImg[0]['img1']}');
+                                              },
+                                              child: Image.asset(
+                                                'assets/storePageIMG/${menuImg[0]['img1']}',
+                                                width: 250,
+                                                height: 330,
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                // 이미지 클릭 시 다이얼로그 표시
+                                                _showImageDialog(context, 'assets/storePageIMG/${menuImg[0]['img2']}');
+                                              },
+                                              child: Image.asset(
+                                                'assets/storePageIMG/${menuImg[0]['img2']}',
+                                                width: 250,
+                                                height: 330,
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                // 이미지 클릭 시 다이얼로그 표시
+                                                _showImageDialog(context, 'assets/storePageIMG/${menuImg[0]['img3']}');
+                                              },
+                                              child: Image.asset(
+                                                'assets/storePageIMG/${menuImg[0]['img3']}',
+                                                width: 250,
+                                                height: 330,
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                // 이미지 클릭 시 다이얼로그 표시
+                                                _showImageDialog(context, 'assets/storePageIMG/${menuImg[0]['img4']}');
+                                              },
+                                              child: Image.asset(
+                                                'assets/storePageIMG/${menuImg[0]['img4']}',
+                                                width: 250,
+                                                height: 330,
+                                              ),
+                                            ),
+                                            // 다른 이미지들도 동일한 방식으로 처리
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 10,),
+                                    UnderLindeBox().underlineBox(1.0),
+                                    Container(
+                                      padding: EdgeInsets.all(30),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text('${memuMap['S_MENU1']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+                                          SizedBox(height: 12,),
+                                          Text('${memuMap['S_MENU1-1']}',style: TextStyle(fontSize: 20)),
+                                        ],
+                                      ),
+                                    ),
+                                    UnderLindeBox().underlineBox(1.0),
+                                    Container(
+                                      padding: EdgeInsets.all(30),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text('${memuMap['S_MENU2']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+                                          SizedBox(height: 12,),
+                                          Text('${memuMap['S_MENU2-1']}',style: TextStyle(fontSize: 20)),
+                                        ],
+                                      ),
+                                    ),
+                                    UnderLindeBox().underlineBox(1.0),
+                                    Container(
+                                      padding: EdgeInsets.all(30),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text('${memuMap['S_MENU3']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+                                          SizedBox(height: 12,),
+                                          Text('${memuMap['S_MENU3-1']}',style: TextStyle(fontSize: 20)),
+                                        ],
+                                      ),
+                                    ),
+                                    UnderLindeBox().underlineBox(1.0),
+                                    Container(
+                                      padding: EdgeInsets.all(30),
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text('${memuMap['S_MENU4']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+                                          SizedBox(height: 12,),
+                                          Text('${memuMap['S_MENU4-1']}',style: TextStyle(fontSize: 20)),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )
                             ),
-                          ),
-                        ),
-                        SizedBox(height: 10,),
-                        UnderLindeBox().underlineBox(1.0),
-                        Container(
-                          padding: EdgeInsets.all(30),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('${menuImg[index]['S_MENU1']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-                              SizedBox(height: 12,),
-                              Text('${menuImg[index]['S_MENU1-1']}',style: TextStyle(fontSize: 20)),
-                            ],
-                          ),
-                        ),
-                        UnderLindeBox().underlineBox(1.0),
-                        Container(
-                          padding: EdgeInsets.all(30),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('${menuImg[index]['S_MENU2']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-                              SizedBox(height: 12,),
-                              Text('${menuImg[index]['S_MENU2-1']}',style: TextStyle(fontSize: 20)),
-                            ],
-                          ),
-                        ),
-                        UnderLindeBox().underlineBox(1.0),
-                        Container(
-                          padding: EdgeInsets.all(30),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('${menuImg[index]['S_MENU3']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-                              SizedBox(height: 12,),
-                              Text('${menuImg[index]['S_MENU3-1']}',style: TextStyle(fontSize: 20)),
-                            ],
-                          ),
-                        ),
-                        UnderLindeBox().underlineBox(1.0),
-                        Container(
-                          padding: EdgeInsets.all(30),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('${menuImg[index]['S_MENU4']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-                              SizedBox(height: 12,),
-                              Text('${menuImg[index]['S_MENU4-1']}',style: TextStyle(fontSize: 20)),
-                            ],
-                          ),
-                        ),
-                        UnderLindeBox().underlineBox(1.0),
-                        Container(
-                          padding: EdgeInsets.all(30),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('${menuImg[index]['S_MENU5']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-                              SizedBox(height: 12,),
-                              Text('${menuImg[index]['S_MENU5-1']}',style: TextStyle(fontSize: 20)),
-                            ],
-                          ),
-                        ),
+                          ],
+                        );
+                  }}),
 
-
-                      ],
-                    );
-                  }),
 
               // 사진----------------------------------------------------------------
               Container(

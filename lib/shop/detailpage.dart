@@ -205,27 +205,22 @@ class _DetailPageState extends State<DetailPage> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 TextButton(
-                                  onPressed: () {
-                                    _makePhoneCall('tel:01012341234');
+                                  onPressed: () async{
+                                    await launch("tel: ${userDataList[index]['S_NUMBER']}");
                                   },
+                                  style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(Colors.white),
+                                    side: MaterialStateProperty.all(BorderSide(color: Colors.black, width: 1)),
+                                  ),
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 30.0), // 넓이 조절
+                                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
                                     child: Row(
                                       children: [
-                                        Icon(Icons.call, size: 18,
-                                            color: Colors.black),
-                                        SizedBox(width: 3,),
-                                        Text('전화하기',
-                                            style: TextStyle(color: Colors.black)),
+                                        Icon(Icons.call, size: 18, color: Colors.black),
+                                        SizedBox(width: 3),
+                                        Text('전화하기', style: TextStyle(color: Colors.black)),
                                       ],
                                     ),
-                                  ),
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Colors.white), // 배경색을 흰색으로 설정
-                                    side: MaterialStateProperty.all(BorderSide(
-                                        color: Colors.black, width: 1)), // 테두리 설정
                                   ),
                                 ),
                                 SizedBox(width: 5,),
@@ -274,20 +269,22 @@ class _DetailPageState extends State<DetailPage> {
                                     color: Colors.black),),),
                                 TextButton(onPressed: () {
                                   Navigator.push(context, MaterialPageRoute(
-                                      builder: (_) =>
-                                          TabBarEx(initialTabIndex: 1)));
+                                    builder: (_) => TabBarEx(initialTabIndex: 1, docId: widget.docId),
+                                  ));
                                 }, child: Text('메뉴', style: TextStyle(
                                     color: Colors.black),),),
                                 TextButton(onPressed: () {
                                   Navigator.push(context, MaterialPageRoute(
-                                      builder: (_) =>
-                                          TabBarEx(initialTabIndex: 2)));
+                                    builder: (_) => TabBarEx(initialTabIndex: 2, docId: widget.docId),
+                                  ));
+
                                 }, child: Text('사진', style: TextStyle(
                                     color: Colors.black),),),
                                 TextButton(onPressed: () {
                                   Navigator.push(context, MaterialPageRoute(
-                                      builder: (_) =>
-                                          TabBarEx(initialTabIndex: 3)));
+                                    builder: (_) => TabBarEx(initialTabIndex: 3, docId: widget.docId),
+                                  ));
+                                  ;
                                 }, child: Text('리뷰', style: TextStyle(
                                     color: Colors.black),),),
                               ],
@@ -600,7 +597,8 @@ class _DetailPageState extends State<DetailPage> {
                                             fontWeight: FontWeight.bold),),
                                         TextButton(onPressed: (){
                                           Navigator.push(context, MaterialPageRoute(
-                                              builder: (_) => TabBarEx(initialTabIndex: 1)));
+                                            builder: (_) => TabBarEx(initialTabIndex: 1, docId: widget.docId),
+                                          ));
                                         }, child: Text('전체보기 >',style: TextStyle(fontSize: 12,color: Colors.grey),))
                                       ],
                                     ),
@@ -718,7 +716,9 @@ class _DetailPageState extends State<DetailPage> {
                                             fontWeight: FontWeight.bold),),
                                         TextButton(onPressed: (){
                                           Navigator.push(context, MaterialPageRoute(
-                                              builder: (_) => TabBarEx(initialTabIndex: 2)));
+                                            builder: (_) => TabBarEx(initialTabIndex: 2, docId: widget.docId),
+                                          ));
+
                                         }, child: Text('전체보기 >',style: TextStyle(fontSize: 12,color: Colors.grey),))
                                       ],
                                     ),
