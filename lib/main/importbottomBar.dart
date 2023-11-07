@@ -20,63 +20,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
   @override
   Widget build(BuildContext context) {
     UserModel userModel = Provider.of<UserModel>(context);
-    bool isHomeSelected = true;
-    bool isSearchSelected = false;
-    bool isMessageSelected = false;
-    bool isCalendarSelected = false;
-    bool isPersonSelected = false;
-
-    void _toggleHomeIcon() {
-      setState(() {
-        isHomeSelected = true;
-        isSearchSelected = false;
-        isMessageSelected = false;
-        isCalendarSelected = false;
-        isPersonSelected = false;
-      });
-    }
-
-    void _toggleSearchIcon() {
-      setState(() {
-        isHomeSelected = false;
-        isSearchSelected = true;
-        isMessageSelected = false;
-        isCalendarSelected = false;
-        isPersonSelected = false;
-      });
-    }
-
-    void _toggleMessageIcon() {
-      setState(() {
-        isHomeSelected = false;
-        isSearchSelected = false;
-        isMessageSelected = true;
-        isCalendarSelected = false;
-        isPersonSelected = false;
-      });
-    }
-
-    void _toggleCalendarIcon() {
-      setState(() {
-        isHomeSelected = false;
-        isSearchSelected = false;
-        isMessageSelected = false;
-        isCalendarSelected = true;
-        isPersonSelected = false;
-      });
-    }
-
-    void _togglePersonIcon() {
-      setState(() {
-        isHomeSelected = false;
-        isSearchSelected = false;
-        isMessageSelected = false;
-        isCalendarSelected = false;
-        isPersonSelected = true;
-      });
-    }
-
-
     return BottomAppBar(
       child: Container(
         height: 50,
@@ -85,40 +28,25 @@ class _BottomNavBarState extends State<BottomNavBar> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             InkWell(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
-                _toggleHomeIcon();
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(isHomeSelected ? Icons.home : Icons.home_outlined, size: 30),
-              ),
-            ),
+              onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));},
+              child: Container(width:70,height:70,decoration: BoxDecoration(shape: BoxShape.rectangle,color: Colors.black12,),
+                child: Icon(Icons.home,size: 30),),),
             InkWell(
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => NavSearch()));
-                _toggleSearchIcon();
-              },
-              child: Icon(isSearchSelected ? Icons.search : Icons.search_outlined, size: 30),
-            ),
+              onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => NavSearch()));
+              }, child: Icon(Icons.search_outlined, size: 30),),
             InkWell(onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => TimeLine()));
-              _toggleMessageIcon();
-            },  child: Icon(isMessageSelected ? Icons.message : Icons.message_outlined, size: 28),),
+            },  child: Icon(Icons.message_outlined, size: 28),),
             InkWell(onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => ResTabBar()));
-              _toggleCalendarIcon();
-            }, child: Icon(isCalendarSelected ? Icons.calendar_today : Icons.calendar_today_outlined, size: 28),),
+            }, child: Icon(Icons.calendar_today_outlined, size: 28),),
             InkWell(onTap: () {
               if (userModel.isLogin) {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => UserMain()));
-                _togglePersonIcon();
               } else {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => UserUnlogin()));
               }
-            }, child: Icon(isPersonSelected ? Icons.person : Icons.person_outline_outlined, size: 30),),
+            }, child: Icon(Icons.person_outline_outlined, size: 30),),
           ],
         ),
       ),

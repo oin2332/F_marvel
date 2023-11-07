@@ -40,7 +40,7 @@ class _ImportIconsState extends State<ImportIcons> {
     ButtonData('assets/main/AsianFood.png', '아시안'),
     ButtonData('assets/main/chicken.png', '치킨'),
     ButtonData('assets/main/pizza.png', '피자'),
-    ButtonData('assets/main/burger.png', '버거'),
+    ButtonData('assets/main/burger.png', '햄버거'),
     ButtonData('assets/main/bunsick.png', '분식'),
     ButtonData('assets/main/pojang.png', '포장마차'),
   ];
