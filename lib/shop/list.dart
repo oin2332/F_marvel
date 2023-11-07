@@ -11,9 +11,11 @@ import 'detailpage.dart';
 
 
 class ListsShop extends StatefulWidget {
-  ListsShop({super.key, required List<Map<String, dynamic>> searchResults});
+  final String category;
 
+  ListsShop(this.category, {Key? key}) : super(key: key);
 
+ 
   @override
   State<ListsShop> createState() => _TestState();
 }
@@ -25,6 +27,8 @@ class _TestState extends State<ListsShop> {
   void initState() {
     super.initState();
     fetchAllUserData();
+    print(widget.category);
+
   }
 
   List<Map<String, dynamic>> userDataList = [];
@@ -76,7 +80,7 @@ class _TestState extends State<ListsShop> {
           }
 
           // S_INFO1 필드가 '양식'인 경우에만 userDataList에 추가
-          if (storeData['S_INFO1'] == '스테이크') {
+          if (storeData['S_INFO1'] == widget.category) {
             storeData['STARlength'] = y;
             storeData['STARage'] = x.toStringAsFixed(1);
             storeData['STARlist'] = starList;

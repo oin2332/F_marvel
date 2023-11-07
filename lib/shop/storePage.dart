@@ -37,7 +37,9 @@ class ModalData extends ChangeNotifier {
 }
 
 class StorePage extends StatefulWidget {
-  StorePage({super.key});
+  final String category;
+
+  StorePage(this.category, {Key? key}) : super(key: key);
 
   @override
   State<StorePage> createState() => _StorePageState();
@@ -53,7 +55,6 @@ class _StorePageState extends State<StorePage> {
   @override
   void initState() {
     super.initState();
-
     final now = DateTime.now();
     currentTime = DateFormat.H().format(now);
 
@@ -228,7 +229,7 @@ class _StorePageState extends State<StorePage> {
               ),
             ),*/
             SizedBox(height: 10,),
-            Expanded(child: ListsShop(searchResults: [],))
+            Expanded(child: ListsShop(widget.category))
           ],
         ),
       ),
