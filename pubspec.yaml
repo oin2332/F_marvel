@@ -90,13 +90,7 @@ flutter:
     - assets/amenities/
     - assets/storePageIMG/
     - assets/searchIMG/
-  fonts:
-   - family: GmarketSansTTF
-     fonts:
-       - asset: Fonts/GmarketSansTTFMedium.ttf
-       - asset: Fonts/GmarketSansTTFBold.ttf
-       - asset: Fonts/GmarketSansTTFLight.ttf
-         weight: 700
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
