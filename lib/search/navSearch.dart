@@ -249,7 +249,7 @@ class _NavSearchState extends State<NavSearch> {
                   },child: Icon(Icons.home_outlined,size: 30),),
               InkWell(
                 onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => NavSearch()));},
-                child: Icon(Icons.search, size: 30),),
+                child: Icon(Icons.saved_search, size: 30),),
               InkWell(onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => TimeLine()));
               },  child: Icon(Icons.message_outlined, size: 28),),

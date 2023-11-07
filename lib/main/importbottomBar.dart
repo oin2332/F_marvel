@@ -29,11 +29,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
           children: [
             InkWell(
               onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));},
-              child: Container(width:70,height:70,decoration: BoxDecoration(shape: BoxShape.rectangle,color: Colors.black12,),
-                child: Icon(Icons.home,size: 30),),),
+                child: Icon(Icons.home_outlined,size: 30),),
             InkWell(
               onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => NavSearch()));
-              }, child: Icon(Icons.search_outlined, size: 30),),
+              }, child: Icon(Icons.saved_search, size: 30),),
             InkWell(onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => TimeLine()));
             },  child: Icon(Icons.message_outlined, size: 28),),
