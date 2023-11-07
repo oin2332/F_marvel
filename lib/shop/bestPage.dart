@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:food_marvel/main/mainPage.dart';
 
+import 'bestList.dart';
+import 'list.dart';
+
 void main() => runApp(MaterialApp(
   title: 'Home',
   home: BestPage(),
@@ -16,7 +19,8 @@ class BestPage extends StatefulWidget {
 
 class _BestPageState extends State<BestPage> {
   void showSortingMenu(BuildContext context) {
-    final RenderBox overlay = Overlay.of(context)!.context.findRenderObject() as RenderBox;
+    final RenderBox overlay = Overlay.of(context)!.context
+        .findRenderObject() as RenderBox;
     final width = overlay.size.width;
     final position = RelativeRect.fromLTRB(
       width - 80,
@@ -40,163 +44,81 @@ class _BestPageState extends State<BestPage> {
       ],
     );
   }
-  Map<int, bool> isBookmarkedMap = {};
-
-  Widget _buildRestaurantItem(int index) {
-    final restaurant = top10Restaurants[index];
-     // 레스토랑 항목에 대한 북마크 상태를 가져옴
-    final isBookmarked = isBookmarkedMap[index] ?? false;
-
-    return InkWell(
-      onTap: () {
-        // 레스토랑 항목을 누를 때 실행할 동작 추가
-
-      },
-      child: Column(
-        children: [
-          SizedBox(height: 10),
-          Row(
-            children: [
-              SizedBox(width: 16),
-              Container(
-                width: 100,
-                height: 100,
-                child: Image.asset(restaurant['image']),
-              ),
-              SizedBox(width: 15),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(restaurant['name'], style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                  Text('위치: ${restaurant['location']}'),
-                  Text('평점: ${restaurant['rating']}'),
-                ],
-              ),
-              Spacer(),
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    isBookmarkedMap[index] = !isBookmarked;
-                  });
-                },
-                child: Image.asset(
-                  isBookmarked ? 'assets/bookmark2-removebg-preview.png' : 'assets/bookmark-removebg-preview.png',
-                  width: 50,
-                  height: 50,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  // 샘플 레스토랑 데이터
-  final List<Map<String, dynamic>> top10Restaurants = [
-    {
-      'name': '레스토랑 1',
-      'location': '위치 1',
-      'rating': 4.5,
-      'image': 'assets/2.jpg',
-    },
-    {
-      'name': '레스토랑 2',
-      'location': '위치 2',
-      'rating': 4.2,
-      'image': 'assets/2.jpg',
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 8,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("전국 BEST 맛집", style: TextStyle(fontSize: 21, fontWeight: FontWeight.bold, color: Colors.black)),
-              Row(
-                children: [
-                  Text("랭킹 기준", style: TextStyle(fontSize: 12, color: Colors.black)),
-                  GestureDetector(
-                    onTap: () => showSortingMenu(context),
-                    child: Icon(Icons.help_outline, color: Colors.black),
-                  ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Text("전국 BEST 맛집", style: TextStyle(
+            fontSize: 21, fontWeight: FontWeight.bold, color: Colors.black)),
+        leading: IconButton(
+          icon: Icon(Icons.chevron_left, color: Colors.black),
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => MainPage()));
+          },
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () => showSortingMenu(context),
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                children: [    Text("랭킹 기준", style: TextStyle(fontSize: 12, color: Colors.black)),
+                                 Icon(Icons.help_outline, color: Colors.black),
                 ],
               ),
-            ],
-          ),
-          leading: IconButton(
-            icon: Icon(Icons.chevron_left, color: Colors.black),
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
-            },
-          ),
-          bottom: TabBar(
-            isScrollable: true,
-            labelColor: Colors.black,
-            indicatorColor: Colors.black,
-            tabs: [
-              Tab(text: '전국'),
-              Tab(text: '서울'),
-              Tab(text: '인천'),
-              Tab(text: '경기'),
-              Tab(text: '제주'),
-              Tab(text: '경상도'),
-              Tab(text: '전라도'),
-              Tab(text: '충청도'),
-            ],
-          ),
-        ),
-        body: TabBarView(
-          children: [
-            ListView.builder(
-              itemCount: top10Restaurants.length,
-              itemBuilder: (context, index) {
-                return _buildRestaurantItem(index);
-              },
-            ),ListView.builder(
-              itemCount: top10Restaurants.length,
-              itemBuilder: (context, index) {
-                return _buildRestaurantItem(index);
-              },
-            ),ListView.builder(
-              itemCount: top10Restaurants.length,
-              itemBuilder: (context, index) {
-                return _buildRestaurantItem(index);
-              },
-            ),ListView.builder(
-              itemCount: top10Restaurants.length,
-              itemBuilder: (context, index) {
-                return _buildRestaurantItem(index);
-              },
-            ),ListView.builder(
-              itemCount: top10Restaurants.length,
-              itemBuilder: (context, index) {
-                return _buildRestaurantItem(index);
-              },
-            ),ListView.builder(
-              itemCount: top10Restaurants.length,
-              itemBuilder: (context, index) {
-                return _buildRestaurantItem(index);
-              },
-            ),ListView.builder(
-              itemCount: top10Restaurants.length,
-              itemBuilder: (context, index) {
-                return _buildRestaurantItem(index);
-              },
-            ),ListView.builder(
-              itemCount: top10Restaurants.length,
-              itemBuilder: (context, index) {
-                return _buildRestaurantItem(index);
-              },
             ),
-          ],
-        ),
+          )
+        ],
+
+      ),
+      body: Column(
+        children: [
+          SizedBox(height: 10,),
+          Center(
+            child: GestureDetector(
+              onTap: () {
+              },
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              decoration: BoxDecoration(
+                color: Color(0xFFFCECD8),  // 원하는 배경색 설정
+                borderRadius: BorderRadius.circular(5),  // 원하는 모양의 테두리 설정
+              ),
+              padding: EdgeInsets.all(5),  // 내부 패딩 설정
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(width: 15,),
+                      Text('푸드마블 정식 오픈!',
+                        style: TextStyle(color: Colors.black,fontSize: 20,),),
+                      Image.asset(
+                        'assets/main/쿼카-removebg-preview1.png', // 이미지 경로
+                        width: 65, // 이미지의 너비 설정
+                        height: 65, // 이미지의 높이 설정
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('전국',style: TextStyle(color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold),),
+                      SizedBox(width: 10,),
+                      Text('웨이팅 맛집 대공개!',style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red,fontSize: 20),),
+                    ],
+                  ),
+                  SizedBox(height: 10,)
+                ],
+              ),
+            ),
+          ),
+          ),
+          Expanded(child: BestListShop("전국~")),
+        ],
       ),
     );
   }
