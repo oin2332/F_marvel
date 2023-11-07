@@ -51,6 +51,7 @@ dependencies:
   url_launcher:
   carousel_slider:
   modal_bottom_sheet:
+  cached_network_image:
 
 
 

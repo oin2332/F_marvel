@@ -59,7 +59,7 @@ class _ImportIconsState extends State<ImportIcons> {
       StorePage('아시안'),
       StorePage('치킨'),
       StorePage('피자'),
-      StorePage('버거'),
+      StorePage('햄버거'),
       StorePage('분식'),
       StorePage('포장마차'),
     ];
