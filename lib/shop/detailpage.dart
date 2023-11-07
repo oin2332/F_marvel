@@ -24,6 +24,7 @@ class _DetailPageState extends State<DetailPage> {
     super.initState();
     _pageController.addListener(_onPageChanged); // 페이지 변경 리스너 추가
     initializeDateFormatting("ko_KR", null);
+    CircularProgressIndicator();
     fetchAllUserData();
   }
 
@@ -98,9 +99,7 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (userDataList.isEmpty) {
-      return Scaffold(
-        extendBodyBehindAppBar: true,
+
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           title: IconButton(
@@ -117,10 +116,8 @@ class _DetailPageState extends State<DetailPage> {
               },
             ),
           ],
-        ),
-        body: Center(child: CircularProgressIndicator()),
-      );
-    } else {
+        );
+
       return Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
@@ -771,7 +768,7 @@ class _DetailPageState extends State<DetailPage> {
           },
         ),
       );
-    }
+
   }
 
 
@@ -814,12 +811,12 @@ class _DetailPageState extends State<DetailPage> {
     });
   }
 
-  @override
+/*  @override
   void dispose() {
     _pageController.removeListener(_onPageChanged); // 리스너 제거
     _pageController.dispose();
     super.dispose();
-  }
+  }*/
 
   Widget underlineBox(x) {
     return SizedBox(
