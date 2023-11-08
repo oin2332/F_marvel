@@ -88,6 +88,39 @@ class _BoardAddState extends State<BoardAdd> {
     }
   }
 
+  // 모달창으로 전체보기
+  void _showAllImages() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('전체 이미지 미리보기'),
+          content: Container(
+            width: double.maxFinite,
+            height: 300,
+            child: GridView.count(
+              crossAxisCount: 2,
+              shrinkWrap: true,
+              children: List.generate(_selectedImages.length, (index) {
+                return Container(
+                  height: 100,
+                  child: Image.file(_selectedImages[index]),
+                );
+              }),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('닫기'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   // 별점 기능
   double _rating = 0.0; // 초기 별점 설정
@@ -130,35 +163,59 @@ class _BoardAddState extends State<BoardAdd> {
               children: [
                 Container(
                   width: double.infinity,
-                  height: 250,
+                  height: 400,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.black),
                   ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Stack(
+                    alignment: Alignment.center,
                     children: [
-                      IconButton(
-                        onPressed: _selectPics,
-                        icon: Icon(Icons.add_circle),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (_selectedImages.length < 4)
+                            IconButton(
+                              onPressed: _selectPics,
+                              icon: Icon(Icons.add_circle),
+                            ),
+                          SizedBox(height: 10),
+                          GridView.count(
+                            crossAxisCount: 2,
+                            shrinkWrap: true,
+                            children: List.generate(_selectedImages.length, (index) {
+                              return Container(
+                                height: 100,
+                                child: Image.file(
+                                  _selectedImages[index],
+                                  fit: BoxFit.cover, // 이미지를 컨테이너에 맞게 크기 조절
+                                ),
+                              );
+                            }),
+                          ),
+                          if (_selectedImages.length >= 4 && _selectedImages.length < 5)
+                            GestureDetector(
+                              onTap: _showAllImages,
+                              child: Container(
+                                height: 100,
+                                color: Colors.grey[200],
+                                child: Icon(Icons.add, size: 50),
+                              ),
+                            ),
+                        ],
                       ),
-                      SizedBox(height: 10),
-                      if (_selectedImages.isNotEmpty)
-                        GridView.count(
-                          crossAxisCount: 2,
-                          shrinkWrap: true,
-                          children: List.generate(_selectedImages.length, (index) {
-                            return Container(
-                              height: 100,
-                              child: Image.file(_selectedImages[index]),
-                            );
-                          }),
+                      if (_selectedImages.length >= 4 && _selectedImages.length < 5)
+                        Positioned(
+                          top: 0,
+                          right: 0,
+                          child: IconButton(
+                            icon: Icon(Icons.add_circle, color: Colors.black),
+                            onPressed: _showAllImages,
+                          ),
                         ),
-                      if (_selectedImages.isEmpty)
-                        Text('사진 추가'),
-                      Text('${_selectedImages.length} / 15')
                     ],
                   ),
                 ),
+
                 SizedBox(height: 10),
                 TextField(
                   controller: _content,

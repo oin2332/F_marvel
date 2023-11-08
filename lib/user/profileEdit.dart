@@ -25,10 +25,12 @@ class _ProfileEditState extends State<ProfileEdit> {
   final TextEditingController _areaController = TextEditingController(); // 활동 지역
 
   ImagePicker _picker = ImagePicker();
+  Image? _selectedImage; // 선택된 이미지를 저장하는 변수
 
-  String newNickname = '';
-  String newArea = ''; // 활동 지역 변수 추가
-  String newIntro = ''; // 자기 소개 변수 추가
+  String newNickname = ''; // 변경 할 닉네임
+  String newArea = ''; // 변경 할 활동 지역
+  String newIntro = ''; // 변경 할 자기 소개
+  String newImg = ''; // 변경 할 프로필 사진
 
   // 유저 정보 출력
   void fetchUserData(String userId) async {
@@ -44,8 +46,9 @@ class _ProfileEditState extends State<ProfileEdit> {
           String? nickname = userData['nickname'];
           String? intro = userData['intro'];
           String? area = userData['area'];
+          String? Pimg = userData['profile_image'];
           print('nickname: $nickname, intro: $intro, area: $area');
-          if (nickname != null || intro != null || area != null) {
+          if (nickname != null || intro != null || area != null || Pimg != null) {
             // 사용자 정보를 각 컨트롤러에 할당
             _nicknameController.text = nickname!;
             _introController.text = intro!;
@@ -63,6 +66,7 @@ class _ProfileEditState extends State<ProfileEdit> {
     }
   }
 
+  // 닉네임 수정
   void updateNicknameInFirestore(String userId, String newNickname) async {
     try {
 
@@ -83,6 +87,7 @@ class _ProfileEditState extends State<ProfileEdit> {
     }
   }
 
+  // 활동 지역 수정
   void updateAreaInFirestore(String userId, String newArea) async {
     try {
 
@@ -103,6 +108,7 @@ class _ProfileEditState extends State<ProfileEdit> {
     }
   }
 
+  // 자기 소개 수정
   void updateIntroInFirestore(String userId, String newIntro) async {
     try {
 
@@ -123,6 +129,28 @@ class _ProfileEditState extends State<ProfileEdit> {
     }
   }
 
+  // 프로필 사진 수정
+  void updatePimgInFirestore(String userId, String newImg) async {
+    try {
+
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('T3_USER_TBL')
+          .where('id', isEqualTo: userId)
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        QueryDocumentSnapshot doc = userSnapshot.docs.first;
+        await doc.reference.update({'intro': newImg});
+        print('프로필 사진이 업데이트 되었습니다.');
+      } else {
+        print('해당 사용자를 찾을 수 없습니다.');
+      }
+    } catch (e) {
+      print('프로필 사진 업데이트 중 오류 발생: $e');
+    }
+  }
+
+  //이미지
   // 유저 프로필 이미지 출력
   Future<String?> fetchProfileImageUrl(String userId) async {
     try {
@@ -157,7 +185,13 @@ class _ProfileEditState extends State<ProfileEdit> {
 
       // Firestore에 이미지 URL을 저장합니다.
       updateProfileImageInFirestore(imageUrl);
+
+      // 미리보기 이미지 업데이트
+      setState(() {
+        _selectedImage = Image.file(File(pickedFile.path));
+      });
     }
+    Navigator.pop(context); // 모달 바텀 시트 닫기
   }
 
   // Firebase Storage에 이미지를 업로드하는 함수
@@ -267,9 +301,28 @@ class _ProfileEditState extends State<ProfileEdit> {
                         );
                       },
                       child: Container(
-                          width: 100, // 너비 조절
-                          height: 100, // 높이 조절
-                          child: Image.asset('assets/user/userProfile.png'))
+                        width: 100,
+                        height: 100,
+                        child: ClipOval(
+                          child: FutureBuilder<String?>(
+                            future: fetchProfileImageUrl(widget.userId!),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return CircularProgressIndicator(); // 데이터를 기다리는 동안 로딩 표시
+                              } else if (snapshot.hasError) {
+                                return Text('오류 발생: ${snapshot.error}');
+                              } else {
+                                String? imageUrl = snapshot.data;
+                                if (imageUrl != null) {
+                                  return Image.network(imageUrl);
+                                } else {
+                                  return Image.asset('assets/user/userProfile.png');
+                                }
+                              }
+                            },
+                          ),
+                        ),
+                      )
                   ),
                   SizedBox(height: 1),
                   Align(
