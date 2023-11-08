@@ -109,6 +109,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        elevation: 0,
         iconTheme: IconThemeData(color: Colors.black),
         title: Text('마이페이지',style: TextStyle(color: Colors.black),),
         actions: [

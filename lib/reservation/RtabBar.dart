@@ -42,12 +42,24 @@ class _ResTabBarState extends State<ResTabBar> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("탭바 실습"),
+            iconTheme: IconThemeData(color: Colors.black),
+            title: Text('예약 관리', style: TextStyle(color: Colors.black)),
+            backgroundColor: Colors.white,
+            elevation: 0,
+            leading: IconButton(
+                onPressed: (){
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.arrow_back_ios)),
           bottom: TabBar(
             tabs: [
-              Tab(text: '나의 알림'),
-              Tab(text: '나의 예약'),
+              Tab(text: '나의 알림',),
+              Tab(text: '나의 예약',),
             ],
+            labelColor: Colors.black, // 선택된 탭의 텍스트 색상
+            labelStyle: TextStyle(fontWeight: FontWeight.bold), // 선택된 탭의 텍스트 bold
+            unselectedLabelColor: Colors.grey, // 선택되지 않은 탭의 텍스트 색상
+            indicatorColor: Colors.red, // 선택된 탭 바 색상
           ),
         ),
         body: TabBarView(
