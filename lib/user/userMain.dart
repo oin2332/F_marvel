@@ -168,8 +168,8 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
                           onPressed: (){
                             Navigator.push(context, MaterialPageRoute(builder: (_) => Following()));
                           },
-                          child: Text('팔로잉 |',style: TextStyle(color: Colors.grey),)),
-                      Divider(color: Colors.black, thickness: 5, height: 50),
+                          child: Text('팔로잉',style: TextStyle(color: Colors.grey),)),
+                      Text('|'),
                       TextButton(
                           onPressed: (){
                             Navigator.push(context, MaterialPageRoute(builder: (_) => Follower()));

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
-import 'package:food_marvel/board/boardView.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -57,6 +57,66 @@ class _BoardAddState extends State<BoardAdd> {
       print("제목 또는 내용을 입력해주세요.");
     }
   }
+
+  //프로필 사진을 선택하는 부분에 대한 로직
+  void _pickImage() async {
+    ImagePicker _picker = ImagePicker(); // ImagePicker 객체 선언 및 초기화
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      // 이미지를 Firebase Storage에 업로드하고 URL을 받아옵니다.
+      String imageUrl = await uploadImageToStorage(pickedFile);
+
+      // Firestore에 이미지 URL을 저장합니다.
+      updateProfileImageInFirestore(imageUrl);
+
+      // 미리보기 이미지 업데이트
+      setState(() {
+        _selectedImage = Image.file(File(pickedFile.path));
+      });
+    }
+    Navigator.pop(context); // 모달 바텀 시트 닫기
+  }
+
+  // Firebase Storage에 이미지를 업로드하는 함수
+  Future<String> uploadImageToStorage(XFile pickedFile) async {
+    try {
+      String fileName = 'R' + DateTime.now().millisecondsSinceEpoch.toString() + '.jpg'; // 현재시간기준으로 파일 이름 자동생성
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('review') // 선택된 이미지 파일을 저장할 Firebase Storage 폴더 이름
+          .child(fileName);
+
+      await ref.putFile(File(pickedFile.path));
+
+      String downloadURL = await ref.getDownloadURL();
+      return downloadURL;
+    } catch (e) {
+      print('이미지 업로드 중 오류 발생: $e');
+      throw e;
+    }
+  }
+
+  // Firestore에 이미지 URL을 업데이트하는 함수
+  void updateProfileImageInFirestore(String imageUrl) async {
+    try {
+      String userId = uId ?? '';
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('T3_USER_TBL')
+          .where('id', isEqualTo: userId)
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        QueryDocumentSnapshot doc = userSnapshot.docs.first;
+        await doc.reference.update({'profile_image': imageUrl});
+        print('프로필 이미지가 업데이트되었습니다.');
+      } else {
+        print('해당 사용자를 찾을 수 없습니다.');
+      }
+    } catch (e) {
+      print('프로필 이미지 업데이트 중 오류 발생: $e');
+    }
+  }
+
 
   // 이미지 선택 + 업로드 + 미리보기
   List<File> _selectedImages = []; // 선택된 이미지들을 저장하는 리스트
@@ -140,8 +200,6 @@ class _BoardAddState extends State<BoardAdd> {
     String? userId = userModel.userId;
     uId = userId;
     print('현재 로그인 아이디 : $uId');
-
-
 
     return Scaffold(
         appBar: AppBar(

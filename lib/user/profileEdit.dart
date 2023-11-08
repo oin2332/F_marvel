@@ -378,7 +378,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                           alignLabelWithHint: true,
                           hintStyle: TextStyle(color: Colors.grey[400]!,
                             fontSize: 14,),
-                          contentPadding: EdgeInsets.symmetric(vertical: 40),
+                          contentPadding: EdgeInsets.symmetric(vertical: 40, horizontal: 10),
                           border: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.red,
                                   width: 2.0)),
