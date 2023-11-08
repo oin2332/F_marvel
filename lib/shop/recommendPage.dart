@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:food_marvel/main/mainPage.dart';
+import 'package:food_marvel/shop/recommendList.dart';
 
-import 'bestList.dart';
-import 'list.dart';
+
 
 void main() => runApp(MaterialApp(
   title: 'Home',
@@ -117,7 +117,7 @@ class _RecommenedPageState extends State<RecommenedPage> {
               ),
             ),
           ),
-          Expanded(child: BestListShop("전국~")),
+          Expanded(child: RecommendListShop("유저 추천")),
         ],
       ),
     );

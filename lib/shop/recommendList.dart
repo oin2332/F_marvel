@@ -10,17 +10,17 @@ import 'detailpage.dart';
 
 
 
-class BestListShop extends StatefulWidget {
+class RecommendListShop extends StatefulWidget {
   final String category;
 
-  BestListShop(this.category, {Key? key}) : super(key: key);
+  RecommendListShop(this.category, {Key? key}) : super(key: key);
 
  
   @override
-  State<BestListShop> createState() => _BestListShopState();
+  State<RecommendListShop> createState() => _RecommendListShopShopState();
 }
 
-class _BestListShopState extends State<BestListShop> {
+class _RecommendListShopShopState extends State<RecommendListShop> {
 
 
   @override
@@ -80,25 +80,18 @@ class _BestListShopState extends State<BestListShop> {
           }
 
           // S_INFO1 필드가 '양식'인 경우에만 userDataList에 추가
-          if (storeData['S_INFO1'] == widget.category) {
             storeData['STARlength'] = y;
             storeData['STARage'] = x.toStringAsFixed(1);
             storeData['STARlist'] = starList;
             storeData['docId'] = docId;
             userDataList.add(storeData);
-          }else{
-            storeData['STARlength'] = y;
-            storeData['STARage'] = x.toStringAsFixed(1);
-            storeData['STARlist'] = starList;
-            storeData['docId'] = docId;
-            userDataList.add(storeData);
-          }
+
 
         }
         userDataList.sort((a, b) {
-          double starA = double.tryParse(a['STARage']) ?? 0;
-          double starB = double.tryParse(b['STARage']) ?? 0;
-          return starB.compareTo(starA); // 별점 내림차순으로 정렬
+          int starLengthA = int.tryParse(a['STARlength']) ?? 0;
+          int starLengthB = int.tryParse(b['STARlength']) ?? 0;
+          return starLengthB.compareTo(starLengthA); // 리뷰 수 내림차순으로 정렬
         });
 
         setState(() {
@@ -121,7 +114,6 @@ class _BestListShopState extends State<BestListShop> {
       itemBuilder: (context, index) {
         final documentData = userDataList[index];
 
-        // documentData['S_INFO1'] == '양식'
         if (true) {
             final ranking = index + 1;
             final isGrayBackground = ranking >= 4;
@@ -136,7 +128,7 @@ class _BestListShopState extends State<BestListShop> {
                     SizedBox(width: 10,),
                     SizedBox(width: 25,
                     height: 25,
-                    child: Container(           
+                    child: Container(
                       decoration: BoxDecoration(
                         color: isGrayBackground ? Colors.grey : Color(0xFFFF6347),
                         borderRadius: BorderRadius.circular(5),
