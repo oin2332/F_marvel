@@ -9,20 +9,29 @@ import '../user/userModel.dart';
 class ReservationAdd extends StatefulWidget {
   final String addr;
   final String sName;
+  final String doc;
+  final dynamic time;
 
-  ReservationAdd({required this.addr, required this.sName});
+  ReservationAdd({required this.addr, required this.sName, required this.doc, required this.time});
 
   @override
   State<ReservationAdd> createState() => _ReservationAddState();
 }
 
 class _ReservationAddState extends State<ReservationAdd> {
-
+  Map<String, dynamic> timelist = {};
   @override
   void initState() {
     // TODO: implement initState
+    _fetchAllUserData(widget.doc);
     super.initState();
+    timelist = widget.time;
+    print('dfasdfasdf$timelist');
+
+
+
   }
+
 
   DateTime? _selectedDay;
   DateTime _focusedDay = DateTime.now();
@@ -44,6 +53,47 @@ class _ReservationAddState extends State<ReservationAdd> {
     }
   }
 
+  List<Map<String, dynamic>> userDataList = [];
+
+  Future<List<Object>> _fetchAllUserData(String docId) async {
+    try {
+      // T3_STORE_TBL 컬렉션에서 문서를 가져옴
+      DocumentSnapshot storeSnapshot = await FirebaseFirestore.instance
+          .collection('T3_STORE_TBL')
+          .doc(docId)
+          .get();
+
+      // 가져온 문서의 데이터를 확인
+      if (storeSnapshot.exists) {
+        // T3_TIME_TBL 컬렉션 참조를 얻음
+        CollectionReference timeCollection = FirebaseFirestore.instance
+            .collection('T3_STORE_TBL')
+            .doc(docId)
+            .collection('T3_TIME_TBL');
+
+        // T3_TIME_TBL 컬렉션의 문서들을 가져옴
+        QuerySnapshot timeSnapshots = await timeCollection.get();
+
+        // T3_TIME_TBL 컬렉션 내의 문서들을 userDataList에 추가
+        userDataList = timeSnapshots.docs.map((timeSnapshot) {
+          return timeSnapshot.data() as Map<String, dynamic>;
+        }).toList();
+
+
+      } else {
+        print('문서가 존재하지 않습니다.');
+      }
+
+      return userDataList;
+    } catch (e) {
+      print('데이터를 불러오는 중 오류가 발생했습니다: $e');
+      return [];
+    }
+  }
+
+
+
+
   Future<void> _saveReservation(UserModel userModel) async {
     String? userId = userModel.userId;
     String? usernick = userModel.nickname;
@@ -60,7 +110,7 @@ class _ReservationAddState extends State<ReservationAdd> {
     });
 
     Navigator.of(context).pop();
-    _secondModalSheet2();
+    _secondModalSheet2(context);
 
 
 
@@ -265,7 +315,7 @@ class _ReservationAddState extends State<ReservationAdd> {
     );
   }
 
-  void _showReservationSuccessDialog(BuildContext context) {
+  void _secondModalSheet2(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -280,29 +330,6 @@ class _ReservationAddState extends State<ReservationAdd> {
               child: Text('확인'),
             ),
           ],
-        );
-      },
-    );
-  }
-
-  void _secondModalSheet2() {
-    showModalBottomSheet(
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
-      ),
-      builder: (BuildContext context) {
-        return SizedBox(
-          height: 900, // 원하는 높이로 설정
-          child: Container(
-            child: Column(
-              children: [
-                Text('kndf')
-
-
-              ],
-            ),
-          ),
         );
       },
     );
@@ -445,15 +472,23 @@ class _ReservationAddState extends State<ReservationAdd> {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () =>{
-                        _saveReservation(userModel),
-
-                      },
-                      child: Text('예약하기'),
-                      style: ElevatedButton.styleFrom(
-                        primary: const Color(0xFFFF6347), // 배경색 (Color(0xFFFF6347))
+                      onPressed: selectedNumber != null && _selectedDay != null && selectedNumber != null
+                          ? () {
+                        _saveReservation(userModel);
+                      }
+                          : null, // 버튼을 비활성화
+                      child: Text(
+                        selectedNumber != null && _selectedDay != null && selectedNumber != null
+                            ? '예약하기'
+                            : '예약 정보를 선택해 주세요', // 버튼 텍스트를 동적으로 설정
                       ),
-                    ),
+                      style: ElevatedButton.styleFrom(
+                        primary: selectedNumber != null && _selectedDay != null && selectedNumber != null
+                            ? const Color(0xFFFF6347) // 활성화된 상태일 때의 색상
+                            : Colors.grey, // 비활성화된 상태일 때의 색상 (회색)
+                      ),
+                    )
+
 
                   ],
                 ),
@@ -530,23 +565,81 @@ class _ReservationAddState extends State<ReservationAdd> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    _clockbutton('11:00'),
-                    SizedBox(width: 8,),
-                    _clockbutton('13:00'),
-                    SizedBox(width: 8,),
-                    _clockbutton('14:00'),
-                    SizedBox(width: 8,),
-                    _clockbutton('15:00'),
-                    SizedBox(width: 8,),
-                    _clockbutton('16:00'),
-                    SizedBox(width: 8,),
-                    _clockbutton('17:00'),
-                    SizedBox(width: 8,),
-                    _clockbutton('19:00'),
-                    SizedBox(width: 8,),
-                    _clockbutton('20:00'),
-                    SizedBox(width: 8,),
-                    _clockbutton('21:00'),
+                    if(timelist['S_RE_TIME1'] != null)
+                    _clockbutton(timelist['S_RE_TIME1']),
+                    if(timelist['S_RE_TIME1'] != null)
+                      SizedBox(width: 6,),
+
+                    if(timelist['S_RE_TIME2'] != null)
+                      _clockbutton(timelist['S_RE_TIME2']),
+                    if(timelist['S_RE_TIME2'] != null)
+                      SizedBox(width: 6,),
+
+                    if(timelist['S_RE_TIME3'] != null)
+                      _clockbutton(timelist['S_RE_TIME3']),
+                    if(timelist['S_RE_TIME3'] != null)
+                      SizedBox(width: 6,),
+
+                    if(timelist['S_RE_TIME4'] != null)
+                      _clockbutton(timelist['S_RE_TIME4']),
+                    if(timelist['S_RE_TIME4'] != null)
+                      SizedBox(width: 6,),
+
+                    if(timelist['S_RE_TIME5'] != null)
+                      _clockbutton(timelist['S_RE_TIME5']),
+                    if(timelist['S_RE_TIME5'] != null)
+                      SizedBox(width: 6,),
+
+                    if(timelist['S_RE_TIME6'] != null)
+                      _clockbutton(timelist['S_RE_TIME6']),
+                    if(timelist['S_RE_TIME6'] != null)
+                      SizedBox(width: 6,),
+
+                    if(timelist['S_RE_TIME7'] != null)
+                      _clockbutton(timelist['S_RE_TIME7']),
+                    if(timelist['S_RE_TIME7'] != null)
+                      SizedBox(width: 6,),
+
+                    if(timelist['S_RE_TIME8'] != null)
+                      _clockbutton(timelist['S_RE_TIME8']),
+                    if(timelist['S_RE_TIME8'] != null)
+                      SizedBox(width: 6,),
+
+                    if(timelist['S_RE_TIME9'] != null)
+                      _clockbutton(timelist['S_RE_TIME9']),
+                    if(timelist['S_RE_TIME9'] != null)
+                      SizedBox(width: 6,),
+
+                    if(timelist['S_RE_TIME10'] != null)
+                      _clockbutton(timelist['S_RE_TIME10']),
+                    if(timelist['S_RE_TIME10'] != null)
+                      SizedBox(width: 6,),
+
+                    if(timelist['S_RE_TIME11'] != null)
+                      _clockbutton(timelist['S_RE_TIME11']),
+                    if(timelist['S_RE_TIME11'] != null)
+                      SizedBox(width: 6,),
+
+                    if(timelist['S_RE_TIME12'] != null)
+                      _clockbutton(timelist['S_RE_TIME12']),
+                    if(timelist['S_RE_TIME12'] != null)
+                      SizedBox(width: 6,),
+
+                    if(timelist['S_RE_TIME13'] != null)
+                      _clockbutton(timelist['S_RE_TIME13']),
+                    if(timelist['S_RE_TIME13'] != null)
+                      SizedBox(width: 6,),
+
+                    if(timelist['S_RE_TIME14'] != null)
+                      _clockbutton(timelist['S_RE_TIME14']),
+                    if(timelist['S_RE_TIME14'] != null)
+                      SizedBox(width: 6,),
+
+
+
+
+
+
                     SizedBox(width: 8,),
                   ],
                 ),

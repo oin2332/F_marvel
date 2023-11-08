@@ -10,6 +10,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../main/mainPage.dart';
 import 'loading.dart';
 
 class DetailPage extends StatefulWidget {
@@ -32,9 +33,9 @@ class _DetailPageState extends State<DetailPage> {
   List<Map<String, dynamic>> userDataList = [];
   Map<String, dynamic> memuMap = {};
   Map<String, dynamic> icon = {};
+  Map<String, dynamic> time = {};
 
-
-  Future<List<Widget>?> _fetchAllUserData(String docId) async {
+  Future<void> _fetchAllUserData(String docId) async {
     try {
       DocumentSnapshot storeSnapshot = await FirebaseFirestore.instance
           .collection('T3_STORE_TBL')
@@ -42,7 +43,8 @@ class _DetailPageState extends State<DetailPage> {
           .get();
 
       if (storeSnapshot.exists) {
-        Map<String, dynamic> storeData = storeSnapshot.data() as Map<String, dynamic>;
+        Map<String, dynamic> storeData =
+        storeSnapshot.data() as Map<String, dynamic>;
 
         // 해당 상점의 별점 정보 가져오기
         QuerySnapshot starSnapshot = await FirebaseFirestore.instance
@@ -51,7 +53,7 @@ class _DetailPageState extends State<DetailPage> {
             .collection('T3_STAR_TBL')
             .get();
 
-        //아이콘이름 가져오기
+        // 아이콘이름 가져오기
         QuerySnapshot convenienceSnapshot = await FirebaseFirestore.instance
             .collection('T3_STORE_TBL')
             .doc(docId)
@@ -61,13 +63,27 @@ class _DetailPageState extends State<DetailPage> {
           icon = convenienceSnapshot.docs.first.data() as Map<String, dynamic>;
         }
 
+        // 시간 데이터 가져오기
+        QuerySnapshot timeSnapshot = await FirebaseFirestore.instance
+            .collection('T3_STORE_TBL')
+            .doc(docId)
+            .collection('T3_TIME_TBL')
+            .get();
 
-        //메뉴 가져오기
+
+        if (timeSnapshot.docs.isNotEmpty) {
+          time = timeSnapshot.docs.first.data() as Map<String, dynamic>;
+        }
+
+
+
+        // 메뉴 가져오기
         QuerySnapshot menuSnapshot = await FirebaseFirestore.instance
             .collection('T3_STORE_TBL')
             .doc(docId)
             .collection('T3_MENU_TBL')
             .get();
+
         if (menuSnapshot.docs.isNotEmpty) {
           memuMap = menuSnapshot.docs.first.data() as Map<String, dynamic>;
         }
@@ -91,9 +107,6 @@ class _DetailPageState extends State<DetailPage> {
               }
             });
           }
-
-
-
         } else {
           starList.add('0');
         }
@@ -101,10 +114,15 @@ class _DetailPageState extends State<DetailPage> {
         if (y > 0) {
           x = x / y;
         }
+
         storeData['STARlength'] = y;
         storeData['STARage'] = x.toStringAsFixed(1);
         storeData['STARlist'] = starList;
         storeData['docId'] = docId;
+
+        // 시간 데이터 가져오기
+
+
         userDataList.add(storeData);
 
       } else {
@@ -128,7 +146,10 @@ class _DetailPageState extends State<DetailPage> {
         title: IconButton(
           icon: Icon(Icons.home),
           onPressed: () {
-            // 뒤로 가거나 다른 작업 수행
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MainPage())
+            );
           },
         ),
         actions: [
@@ -142,7 +163,7 @@ class _DetailPageState extends State<DetailPage> {
       ),
       body:
       Container(
-        child: FutureBuilder<List<Widget>?>(
+        child: FutureBuilder<void>(
           future: _fetchAllUserData(widget.docId),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -154,11 +175,12 @@ class _DetailPageState extends State<DetailPage> {
                 ],
               ); // Display a loading indicator if the future is not resolved yet.
             } else {
+
               return ListView.builder(
                 itemCount: userDataList.length,
                 itemBuilder: (BuildContext context, int index) {
                   String addrsum = '${userDataList[index]['S_ADDR1']} ${userDataList[index]['S_ADDR2']}${userDataList[index]['S_ADDR3']}';
-
+                  print('asdasd${userDataList[index]}');
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -266,7 +288,7 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                       underlineBox(5.0),
                       //예약 일시 부분
-                      ReservationAdd(addr : addrsum, sName : userDataList[index]['S_NAME']),
+                      ReservationAdd(addr : addrsum, sName : userDataList[index]['S_NAME'],doc : widget.docId,time : time),
                       underlineBox(5.0),
                       //홈 메뉴 사진 리뷰
                       Container(
