@@ -154,7 +154,11 @@ class _StorePageState extends State<StorePage> {
                       height: 24,
                       child: Row(
                           children :[
-                            IconButton(onPressed: (){   Navigator.push(context, MaterialPageRoute(builder: (context) => GooGleMap()));}, icon:  Icon(Icons.map_outlined),),
+                            IconButton(onPressed: (){
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) => GooGleMap()));
+                              },
+                              icon:  Icon(Icons.map_outlined),),
                             SizedBox(width: 5,),
                             IconButton(onPressed: (){}, icon: Icon(Icons.tune_rounded)),
                           ]

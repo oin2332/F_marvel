@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:food_marvel/main/importbottomBar.dart';
+import 'package:food_marvel/map/maptotal.dart';
 import 'package:food_marvel/search/headSearch.dart';
 import 'package:food_marvel/shop/bestPage.dart';
 import 'package:food_marvel/search/ImportRestaurant.dart';
 import 'package:food_marvel/search/ImportSuddenpopular.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../board/timeLine.dart';
@@ -17,6 +19,7 @@ void main() => runApp(MaterialApp(
   title: 'NavSearch',
   home: NavSearch(),
   debugShowCheckedModeBanner: false,
+
 ));
 
 class NavSearch extends StatefulWidget {
@@ -58,6 +61,11 @@ class _NavSearchState extends State<NavSearch> {
               context,
               MaterialPageRoute(builder: (context) => BestPage()),
             );
+          }else if (text == '내주변') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => GooGleMap()),
+            );
           }
         },
         style: ElevatedButton.styleFrom(
@@ -80,6 +88,7 @@ class _NavSearchState extends State<NavSearch> {
     List<String> buttons = ['내주변', 'Best맛집', '음식 종류', '가격', '분위기', '몰라'];
 
     return Container(
+      color: Colors.white,
       height: 60,
       child: ListView(
         scrollDirection: Axis.horizontal,
