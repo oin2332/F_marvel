@@ -59,7 +59,7 @@ class _ReservationAddState extends State<ReservationAdd> {
                   children: [
                     TableCalendar(
                       availableCalendarFormats: _availableCalendarFormats,
-                      focusedDay: DateTime.now(),
+                      focusedDay: _focusedDay,
                       firstDay: DateTime(1800),
                       lastDay: DateTime(3000),
                       headerStyle: HeaderStyle(
@@ -67,7 +67,13 @@ class _ReservationAddState extends State<ReservationAdd> {
                         titleCentered: true,
                         titleTextStyle: TextStyle(fontWeight: FontWeight.w700),
                       ),
-                      onDaySelected: _onDaySelected,
+                      onDaySelected: (selectedDay, focusedDay) {
+                        setState(() {
+                          _selectedDay = selectedDay;
+                          _focusedDay = focusedDay;
+                          selectedNumber = null;
+                        });
+                      },
 
                       selectedDayPredicate: (DateTime date) {
                         if (_selectedDay == null) {
@@ -121,8 +127,7 @@ class _ReservationAddState extends State<ReservationAdd> {
                       onPressed: () {
                         Navigator.of(context).pop(); // 모달 닫기
                         if (_selectedDay != null && selectedNumber != null) {
-                          // 예약 일시 및 인원을 사용하여 작업 수행
-                          // 예: 예약 일시 및 인원을 API 호출 등에 사용
+
                         }
                       },
                       child: Text('확인'),
@@ -148,6 +153,8 @@ class _ReservationAddState extends State<ReservationAdd> {
               onPressed: () {
                 setState(() {
                   selectedNumber = int.parse(num);
+                  Navigator.of(context).pop();
+                  _showModalBottomSheet(context);
                 });
               },
               child: Padding(
