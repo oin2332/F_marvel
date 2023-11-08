@@ -87,13 +87,7 @@ class _TestState extends State<ListsShop> {
             storeData['STARlist'] = starList;
             storeData['docId'] = docId;
             userDataList.add(storeData);
-          }/*else{// 에뮬진짜 개느려요
-            storeData['STARlength'] = y;
-            storeData['STARage'] = x.toStringAsFixed(1);
-            storeData['STARlist'] = starList;
-            storeData['docId'] = docId;
-            userDataList.add(storeData);
-          }*/
+          }
         }
         setState(() {
           // 상태 업데이트 등 다른 작업 수행
@@ -111,14 +105,13 @@ class _TestState extends State<ListsShop> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return
+
+
+      ListView.builder(
       itemCount: userDataList.length,
       itemBuilder: (context, index) {
         final documentData = userDataList[index];
-
-        // documentData['S_INFO1'] == '양식'
-        if (true) {
-
 
           return ListTile(
             title: Container(
@@ -252,7 +245,7 @@ class _TestState extends State<ListsShop> {
             ),
           );
         }
-      },
+
     );
   }
 }

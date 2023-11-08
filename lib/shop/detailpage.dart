@@ -98,13 +98,11 @@ class _DetailPageState extends State<DetailPage> {
         if (y > 0) {
           x = x / y;
         }
-        print('4 $storeData');
         storeData['STARlength'] = y;
         storeData['STARage'] = x.toStringAsFixed(1);
         storeData['STARlist'] = starList;
         storeData['docId'] = docId;
         userDataList.add(storeData);
-        print('길이 : ${userDataList.length}');
 
       } else {
         print('해당 문서를 찾을 수 없습니다.');
