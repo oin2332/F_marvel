@@ -1,10 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+import '../user/userModel.dart';
 
 
 class ReservationAdd extends StatefulWidget {
-  const ReservationAdd({super.key});
+  final String addr;
+  final String sName;
+
+  ReservationAdd({required this.addr, required this.sName});
 
   @override
   State<ReservationAdd> createState() => _ReservationAddState();
@@ -16,10 +22,8 @@ class _ReservationAddState extends State<ReservationAdd> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
-
-
   }
+
   DateTime? _selectedDay;
   DateTime _focusedDay = DateTime.now();
   int? selectedNumber;
@@ -37,9 +41,29 @@ class _ReservationAddState extends State<ReservationAdd> {
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
       });
-
-
     }
+  }
+
+  Future<void> _saveReservation(UserModel userModel) async {
+    String? userId = userModel.userId;
+    String? usernick = userModel.nickname;
+
+    // Firebase에 예약 정보 저장
+    await FirebaseFirestore.instance.collection('T3_STORE_RESERVATION').add({
+      'storeName': widget.sName, // 가게이름
+      'storeAddress': widget.addr, // 주소
+      'reservation:' : DateFormat('yyyy-MM-dd (E)', 'ko_KR').format(_selectedDay!), // 예약일
+      'reservationHour': timeSet, // 시간
+      'numberOfPeople': selectedNumber, // 예약인원
+      'Peopleid': userId, // 유저 아이디
+      'Peoplenickname': usernick, // 유저 이름(수정)
+    });
+
+    Navigator.of(context).pop();
+    _secondModalSheet2();
+
+
+
   }
 
   void _showModalBottomSheet(BuildContext context) {
@@ -192,7 +216,6 @@ class _ReservationAddState extends State<ReservationAdd> {
 
   Widget _clockbutton(String time) {
     bool isSelected = time == timeSet;
-
     return Container(
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -242,7 +265,48 @@ class _ReservationAddState extends State<ReservationAdd> {
     );
   }
 
+  void _showReservationSuccessDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('예약 성공'),
+          content: Text('예약이 성공적으로 완료되었습니다.'),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // 다이얼로그 닫기
+              },
+              child: Text('확인'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
+  void _secondModalSheet2() {
+    showModalBottomSheet(
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+      ),
+      builder: (BuildContext context) {
+        return SizedBox(
+          height: 900, // 원하는 높이로 설정
+          child: Container(
+            child: Column(
+              children: [
+                Text('kndf')
+
+
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   void _secondModalSheet() {
     showModalBottomSheet(
@@ -251,6 +315,9 @@ class _ReservationAddState extends State<ReservationAdd> {
         borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
       ),
       builder: (BuildContext context) {
+        UserModel userModel = Provider.of<UserModel>(context);
+        String? UserId = userModel.userId;
+        String? usernick = userModel.nickname;
         return SizedBox(
           height: 900, // 원하는 높이로 설정
           child: Container(
@@ -295,8 +362,8 @@ class _ReservationAddState extends State<ReservationAdd> {
                             ),
                             child: Column(
                               children: [
-                                Text('가게이름',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-                                Text('주소/카테고리',style: TextStyle(fontSize: 12,color: Colors.grey),),
+                                Text(widget.sName,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
+                                Text(widget.addr,style: TextStyle(fontSize: 12,color: Colors.grey),),
                                 SizedBox(height: 20,),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -355,7 +422,6 @@ class _ReservationAddState extends State<ReservationAdd> {
                             ),
                           ),
                           SizedBox(height: 10,),
-
                           Text('당일취소및 노쇼는 가게뿐만 아니라 다른 고객님들께도'),
                           Text('피해가 될수 있으므로 신중히 예약 부탁드립니다. :)'),
 
@@ -365,12 +431,33 @@ class _ReservationAddState extends State<ReservationAdd> {
                   ),
                 ),
 
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(); // 모달 닫기
-                  },
-                  child: Text('닫기'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text('취소'),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.white,  // 배경색 (흰색)
+                        onPrimary: Colors.black, // 텍스트 색 (검정색)
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () =>{
+                        _saveReservation(userModel),
+
+                      },
+                      child: Text('예약하기'),
+                      style: ElevatedButton.styleFrom(
+                        primary: const Color(0xFFFF6347), // 배경색 (Color(0xFFFF6347))
+                      ),
+                    ),
+
+                  ],
                 ),
+
               ],
             ),
           ),
@@ -393,8 +480,10 @@ class _ReservationAddState extends State<ReservationAdd> {
 
 
 
+
   @override
   Widget build(BuildContext context) {
+
     return Container(
       child: Container(
         padding: const EdgeInsets.all(30.0),
@@ -502,3 +591,5 @@ class _ReservationAddState extends State<ReservationAdd> {
     );
   }
 }
+
+

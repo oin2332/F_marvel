@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:food_marvel/user/storejoin.dart';
-import '../board/boardAdd.dart';
-import '../firebase/firebase_options.dart';
+
 import 'loginPage.dart';
+
 
 class StoreJoin2 extends StatefulWidget {
   final String storeDocumentId; // docId를 받을 변수 추가
@@ -17,6 +15,12 @@ class StoreJoin2 extends StatefulWidget {
 }
 
 class _JoinState extends State<StoreJoin2> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    print(widget.storeDocumentId);
+    super.initState();
+  }
 
 
   final TextEditingController _FLOOR = TextEditingController();
@@ -50,6 +54,15 @@ class _JoinState extends State<StoreJoin2> {
           .collection('T3_STORE_TBL')
           .doc(widget.storeDocumentId)
           .collection('T3_MENU_TBL');
+      CollectionReference star = FirebaseFirestore.instance
+          .collection('T3_STORE_TBL')
+          .doc(widget.storeDocumentId)
+          .collection('T3_STAR_TBL');
+
+      await star.add({
+        'STAR' : 'a',
+
+      });
 
       await CONVENIENCE.add({
         'S_ELEVA': S_ELEVA,
@@ -96,8 +109,9 @@ class _JoinState extends State<StoreJoin2> {
 
       Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => StoreJoin())
+          MaterialPageRoute(builder: (context) => LoginPage())
       );
+
 
     } else {
       print("제목 또는 내용을 입력해주세요.");
@@ -513,7 +527,12 @@ class _JoinState extends State<StoreJoin2> {
                   },
                 ),
               ),
-              onPressed: (){_addcollection();},
+              onPressed: (){
+                setState(() {
+                  _addcollection();
+
+                });
+                },
               child: Text('다음'),
             )
           ],

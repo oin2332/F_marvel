@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:food_marvel/map/mini.dart';
 import 'package:food_marvel/shop/reservationAdd.dart';
 import 'package:food_marvel/shop/tabBar.dart';
@@ -8,6 +9,8 @@ import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'loading.dart';
 
 class DetailPage extends StatefulWidget {
 
@@ -144,14 +147,18 @@ class _DetailPageState extends State<DetailPage> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(),
+                  LoadingSpinner(),
                 ],
               ); // Display a loading indicator if the future is not resolved yet.
             } else {
               return ListView.builder(
                 itemCount: userDataList.length,
                 itemBuilder: (BuildContext context, int index) {
+                  String addrsum = '${userDataList[index]['S_ADDR1']} ${userDataList[index]['S_ADDR2']}${userDataList[index]['S_ADDR3']}';
+
                   return Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -179,16 +186,24 @@ class _DetailPageState extends State<DetailPage> {
                             Text('${userDataList[index]['S_NAME']}',style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
                             Row(
                               children: [
-                                Icon(
-                                  Icons.star, color: Colors.yellow[600], size: 17,),
-                                Icon(
-                                  Icons.star, color: Colors.yellow[600], size: 17,),
-                                Icon(
-                                  Icons.star, color: Colors.yellow[600], size: 17,),
-                                Icon(
-                                  Icons.star, color: Colors.yellow[600], size: 17,),
-                                Icon(Icons.star_half, color: Colors.yellow[600],
-                                  size: 17,),
+                                Container(
+                                  child: RatingBar.builder(
+                                    initialRating: double.parse(userDataList[index]['STARage']),
+                                    minRating: 1,
+                                    direction: Axis.horizontal,
+                                    allowHalfRating: true,
+                                    itemCount: 5,
+                                    itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                                    itemBuilder: (context, _) => Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                      size: 1,
+                                    ),
+                                    onRatingUpdate: (rating) {
+                                      print(rating);
+                                    },
+                                  ),
+                                ),
                                 SizedBox(width: 7,),
                                 Text('${userDataList[index]['STARage']}',
                                   style: TextStyle(fontWeight: FontWeight.bold),),
@@ -251,7 +266,7 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                       underlineBox(5.0),
                       //예약 일시 부분
-                      ReservationAdd(),
+                      ReservationAdd(addr : addrsum, sName : userDataList[index]['S_NAME']),
                       underlineBox(5.0),
                       //홈 메뉴 사진 리뷰
                       Container(

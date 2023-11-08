@@ -21,6 +21,7 @@ class _JoinState extends State<StoreJoin> {
   final TextEditingController _img = TextEditingController();
   final TextEditingController _keyword1 = TextEditingController();
   final TextEditingController _keyword2 = TextEditingController();
+  final TextEditingController _keyword3 = TextEditingController();
   final TextEditingController _addr1 = TextEditingController();
   final TextEditingController _addr2 = TextEditingController();
   final TextEditingController _addr3 = TextEditingController();
@@ -49,12 +50,13 @@ class _JoinState extends State<StoreJoin> {
       await newDocRef.set({
         'KEYWORD1': _keyword1.text,
         'KEYWORD2': _keyword2.text,
+        'KEYWORD3': _keyword3.text,
         'S_ADDR1': _addr1.text,
         'S_ADDR2': _addr2.text,
         'S_ADDR3': _addr3.text,
         'S_BREAKTIME': _baerktime.text,
         'S_HOMEPAGE': _homepage.text,
-        'S_ID': _id.text,
+        'S_ID': storeid+_id.text,
         'S_PWD': _pwd.text,
         'S_IMG': _img.text,
         'S_INFO1': _info.text,
@@ -78,6 +80,7 @@ class _JoinState extends State<StoreJoin> {
       _img.clear();
       _keyword1.clear();
       _keyword2.clear();
+      _keyword3.clear();
       _addr1.clear();
       _addr2.clear();
       _addr3.clear();
@@ -101,7 +104,7 @@ class _JoinState extends State<StoreJoin> {
     }
   }
 
-
+  String storeid = 'store';
 
   Widget _textfield(Controller, String txt) {
     return Container(
@@ -266,28 +269,42 @@ class _JoinState extends State<StoreJoin> {
               style: TextStyle(fontSize: 13),
             ),
             SizedBox(height: 5),
-            Text('키워드1', style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('분위기 키워드', style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 5),
             TextField(
               controller: _keyword1,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.grey[200]!, // 배경색 설정
-                hintText: '키워드1',
+                hintText: ',으로 띄워서 쓰기 ',
                 hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
                 border: InputBorder.none, // 밑줄 없애기
               ),
               style: TextStyle(fontSize: 13),
             ),
             SizedBox(height: 5),
-            Text('키워드2', style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('인기토픽 ( 메뉴 )', style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 5),
             TextField(
               controller: _keyword2,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.grey[200]!, // 배경색 설정
-                hintText: '키워드2',
+                hintText: '곱창전골, 버거 , 고기집, ',
+                hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
+                border: InputBorder.none, // 밑줄 없애기
+              ),
+              style: TextStyle(fontSize: 13),
+            ),
+            SizedBox(height: 5),
+            Text('찾는목적(키워드)', style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(height: 5),
+            TextField(
+              controller: _keyword3,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.grey[200]!, // 배경색 설정
+                hintText: '싱싱한,재방문,데이트, ',
                 hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
                 border: InputBorder.none, // 밑줄 없애기
               ),
@@ -385,7 +402,7 @@ class _JoinState extends State<StoreJoin> {
               decoration: InputDecoration(
                 filled: true,
                 fillColor: Colors.grey[200]!, // 배경색 설정
-                hintText: '상세페이지용',
+                hintText: '가게공지 ',
                 hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
                 border: InputBorder.none, // 밑줄 없애기
               ),
@@ -434,7 +451,7 @@ class _JoinState extends State<StoreJoin> {
               style: TextStyle(fontSize: 13),
             ),
             SizedBox(height: 5),
-            Text('운영시간', style: TextStyle(fontWeight: FontWeight.bold)),
+            Text('간판 간단한설명 * 길지않게', style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 5),
             TextField(
               controller: _silplemono,
