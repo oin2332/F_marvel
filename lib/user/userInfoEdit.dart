@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_marvel/user/easyLogin.dart';
 import 'package:food_marvel/user/nameEdit.dart';
@@ -17,6 +18,46 @@ class UserInfoEdit extends StatefulWidget {
 class _UserInfoEditState extends State<UserInfoEdit> {
   List<String> genderOptions = ['남성', '여성', '선택안함'];
   String selectedGender = '선택안함'; // 추가: 선택된 성별을 저장할 변수
+
+  String? uName;
+  String? uPhone;
+  String? uGender;
+
+  // 유저 정보 출력
+  void fetchUserData(String userId) async {
+    try {
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('T3_USER_TBL')
+          .where('id', isEqualTo: userId)
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        for (QueryDocumentSnapshot doc in userSnapshot.docs) {
+          Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
+          String? name = userData['name'];
+          String? phone = userData['phone'];
+          String? pwd = userData['pwd'];
+          String? gender = userData['gender'];
+          print('name: $name, phone: $phone, gender: $gender');
+          if (name != null || phone != null || gender != null) {
+            // 사용자 정보를 각 컨트롤러에 할당
+            setState(() {
+              uName = name!;
+              uPhone = phone!;
+              uGender = gender!;
+            });
+          } else {
+            print('사용자 정보가 누락되었습니다.');
+          }
+        }
+      } else {
+        print('해당 사용자를 찾을 수 없습니다.');
+      }
+    } catch (e) {
+      print('데이터를 불러오는 중 오류가 발생했습니다: $e');
+      throw e; // 오류를 다시 던져서 상위 레벨에서 처리하도록 합니다.
+    }
+  }
 
   void _selectGender(BuildContext context) {
     showModalBottomSheet(
@@ -41,6 +82,17 @@ class _UserInfoEditState extends State<UserInfoEdit> {
         );
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      String? userId = Provider.of<UserModel>(context, listen: false).userId;
+      if (userId != null) {
+        fetchUserData(userId);
+      }
+    });
   }
 
   @override
@@ -69,7 +121,7 @@ class _UserInfoEditState extends State<UserInfoEdit> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('이름(실명)을 입력해주세요', style: TextStyle(color: Colors.grey[600]!)),
-                        Text('미설정', style: TextStyle(color: Colors.grey[400]!, fontWeight: FontWeight.bold)),
+                        Text('$uName', style: TextStyle(color: Colors.grey[400]!, fontWeight: FontWeight.bold)),
                       ],
                     ),
                     Icon(Icons.keyboard_arrow_right, color: Colors.black),
@@ -91,7 +143,7 @@ class _UserInfoEditState extends State<UserInfoEdit> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('휴대폰 번호', style: TextStyle(color: Colors.grey[600]!)),
-                        Text('01000001111', style: TextStyle(color: Colors.grey[400]!, fontWeight: FontWeight.bold)),
+                        Text('$uPhone', style: TextStyle(color: Colors.grey[400]!, fontWeight: FontWeight.bold)),
                       ],
                     ),
                     Icon(Icons.keyboard_arrow_right, color: Colors.black),

@@ -9,12 +9,22 @@ class UserModel with ChangeNotifier {
   String? _area;
   String? _intro;
 
+  String? _name;
+  String? _phone;
+  String? _pwd;
+  String? _gender;
+
   String? get userId => _userId;
   bool get isLogin => _userId != null; // null이 아닐 경우 true return
 
   String? get nickname => _nickname;
   String? get area => _area;
   String? get intro => _intro;
+
+  String? get name => _name;
+  String? get phone => _phone;
+  String? get pwd => _pwd;
+  String? get gender => _gender;
 
   void setProfile(String? nickname, String? area, String? intro) {
     _nickname = nickname;
