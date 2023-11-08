@@ -314,7 +314,12 @@ class _ProfileEditState extends State<ProfileEdit> {
                               } else {
                                 String? imageUrl = snapshot.data;
                                 if (imageUrl != null) {
-                                  return Image.network(imageUrl);
+                                  return Image.network(
+                                    imageUrl,
+                                    fit: BoxFit.cover, // 이미지가 원 안에 꽉 차게 표시됩니다.
+                                    width: 100,
+                                    height: 100,
+                                  );
                                 } else {
                                   return Image.asset('assets/user/userProfile.png');
                                 }

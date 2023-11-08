@@ -15,6 +15,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _id = TextEditingController();
   final TextEditingController _pwd = TextEditingController();
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       // 로그인 성공 시 usermain으로 이동
-      Navigator.push(context, MaterialPageRoute(builder: (context) => UserMain()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => UserMain(userId: id,)));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('아이디나 패스워드를 다시 확인해주세요.')),

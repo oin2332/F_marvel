@@ -37,6 +37,7 @@ class _ResTabBarState extends State<ResTabBar> {
   @override
   Widget build(BuildContext context) {
     UserModel userModel = Provider.of<UserModel>(context);
+    String? uId = userModel.userId;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -99,7 +100,7 @@ class _ResTabBarState extends State<ResTabBar> {
                 }, child: Icon(Icons.calendar_month, size: 28),),
                 InkWell(onTap: () {
                   if (userModel.isLogin) {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => UserMain()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => UserMain(userId: uId,)));
                   } else {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => UserUnlogin()));
                   }

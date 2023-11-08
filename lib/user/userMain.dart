@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_marvel/board/boardAdd.dart';
 import 'package:food_marvel/user/allCollection.dart';
@@ -25,14 +26,16 @@ class UserMain extends StatefulWidget {
   final String? description;
   final bool? isPublic;
 
+  final String? userId; // 사용자 ID를 받아오는 변수 추가
 
-  const UserMain({
+  UserMain({
     super.key,
     this.collectionName, // NewCollection 화면에서 전달된 데이터
     this.description, // NewCollection 화면에서 전달된 데이터
     this.isPublic,
-
+    required this.userId
   });
+
 
   @override
   State<UserMain> createState() => _UserMainState();
@@ -65,6 +68,30 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
       print("로그인 필요함");
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => LoginPage()));
     }
+  }
+
+  // 유저 프로필 이미지 출력
+  Future<String?> fetchProfileImageUrl(String userId) async {
+    try {
+      QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('T3_USER_TBL')
+          .where('id', isEqualTo: userId)
+          .get();
+
+      if (userSnapshot.docs.isNotEmpty) {
+        for (QueryDocumentSnapshot doc in userSnapshot.docs) {
+          Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
+          return userData['profile_image'];
+        }
+      } else {
+        print('해당 사용자를 찾을 수 없습니다.');
+      }
+    } catch (e) {
+      print('데이터를 불러오는 중 오류가 발생했습니다: $e');
+      throw e;
+    }
+
+    return null;
   }
 
   @override
@@ -103,9 +130,34 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
           SizedBox(height: 20,),
           Row(
             children: [
-              InkWell(
-                onTap: () {},
-                child: Image.asset('assets/user/userProfile.png', width: 100, height: 100),
+              SizedBox(width: 5),
+              Container(
+                width: 100,
+                height: 100,
+                child: ClipOval(
+                  child: FutureBuilder<String?>(
+                    future: fetchProfileImageUrl(widget.userId!),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator(); // 데이터를 기다리는 동안 로딩 표시
+                      } else if (snapshot.hasError) {
+                        return Text('오류 발생: ${snapshot.error}');
+                      } else {
+                        String? imageUrl = snapshot.data;
+                        if (imageUrl != null) {
+                          return Image.network(
+                            imageUrl,
+                            fit: BoxFit.cover, // 이미지가 원 안에 꽉 차게 표시됩니다.
+                            width: 100,
+                            height: 100,
+                          );
+                        } else {
+                          return Image.asset('assets/user/userProfile.png');
+                        }
+                      }
+                    },
+                  ),
+                ),
               ),
               Column(
                 children: [
@@ -353,7 +405,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
               }, child: Icon(Icons.calendar_today_outlined, size: 28),),
               InkWell(onTap: () {
                 if (userModel.isLogin) {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => UserMain()));
+                  Navigator.pop(context);
                 } else {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => UserUnlogin()));
                 }

@@ -54,10 +54,10 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-
   @override
   Widget build(BuildContext context) {
     UserModel userModel = Provider.of<UserModel>(context);
+    String? uId = userModel.userId;
     return Scaffold(
       appBar: AppBar(
         backgroundColor:  Colors.white,
@@ -164,7 +164,7 @@ class _MainPageState extends State<MainPage> {
               }, child: Icon(Icons.calendar_today_outlined, size: 28),),
               InkWell(onTap: () {
                 if (userModel.isLogin) {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => UserMain()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => UserMain(userId: uId,)));
                 } else {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => UserUnlogin()));
                 }

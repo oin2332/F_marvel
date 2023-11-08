@@ -3,7 +3,9 @@ import 'package:food_marvel/user/follower.dart';
 import 'package:food_marvel/user/following.dart';
 import 'package:food_marvel/user/profileEdit.dart';
 import 'package:food_marvel/user/userMain.dart';
+import 'package:food_marvel/user/userModel.dart';
 import 'package:food_marvel/user/userSetting.dart';
+import 'package:provider/provider.dart';
 
 class NewCollection extends StatefulWidget {
   const NewCollection({super.key});
@@ -21,6 +23,8 @@ class _NewCollectionState extends State<NewCollection> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel userModel = Provider.of<UserModel>(context);
+    String? uId = userModel.userId;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -105,6 +109,7 @@ class _NewCollectionState extends State<NewCollection> {
                         collectionName: collectionName,
                         description: description,
                         isPublic: isPublic,
+                        userId: uId,
                       ),
                     ),
                   );
