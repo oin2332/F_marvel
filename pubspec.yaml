@@ -37,7 +37,6 @@ dependencies:
   image_picker:
   intl:
   provider:
-  kakao_flutter_sdk_user:
   path:
   page_transition: ^2.0.0
   table_calendar:
