@@ -36,16 +36,16 @@ class _ReservationPageState extends State<ReservationPage> {
 
     // Firebase에 예약 정보 저장
     await FirebaseFirestore.instance.collection('reser_test').add({
-      'storeName': widget.storeInfo.name,
-      'storeAddress': widget.storeInfo.address,
-      'reservationYear': selectedDate.year,
-      'reservationMonth': selectedDate.month,
-      'reservationDay': selectedDate.day,
-      'reservationHour': selectedHour,
-      'reservationMinute': selectedMinute,
-      'numberOfPeople': numberOfPeople,
-      'Peopleid': userId,
-      'Peoplenickname': usernick,
+      'storeName': widget.storeInfo.name, // 가게이름
+      'storeAddress': widget.storeInfo.address, //
+      'reservationYear': selectedDate.year, // 년도
+      'reservationMonth': selectedDate.month, // 달
+      'reservationDay': selectedDate.day, // 일
+      'reservationHour': selectedHour, // 시간
+      'reservationMinute': selectedMinute, // 분
+      'numberOfPeople': numberOfPeople, // 예약인원
+      'Peopleid': userId, // 유저 아이디
+      'Peoplenickname': usernick, // 유저 닉네임
     });
 
     // 예약 완료 메시지 표시

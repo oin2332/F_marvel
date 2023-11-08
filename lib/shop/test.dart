@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'loading.dart';
+
 class Testimg extends StatefulWidget {
   final String docId; // docId를 받을 변수 추가
 
@@ -68,8 +70,9 @@ class _TestimgState extends State<Testimg> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircularProgressIndicator(),
+                LoadingSpinner2(),
               ],
             ); // Display a loading indicator if the future is not resolved yet.
           } else {
