@@ -105,7 +105,7 @@ class _StorePageState extends State<StorePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('DB 카테고리 이름'),
+        title: Text('${widget.category}'),
         backgroundColor: const Color(0xFFFF6347),
       ),
       body: Container(
