@@ -184,7 +184,6 @@ class _SearchState extends State<Search> {
 
     print('후아아아아 $userId');
 
-
     final snapshot = await _searchval.collection('T3_SEARCH_TBL')
         .where('S_USERID', isEqualTo: userId)
         .get();

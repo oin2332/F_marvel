@@ -39,7 +39,7 @@ class ImportRestaurant extends StatelessWidget {
               return _buildItemWithImage(
                 image: 'assets/searchIMG/searchimg0.jpg',
                 title: "#주차가능매장",
-              );
+              );//주석
             } else if (shuffledIndex == 1) {
               return _buildItemWithImage(
                 image: 'assets/searchIMG/searchimg1.jpg',
