@@ -118,9 +118,7 @@ class _SearchState extends State<Search> {
         recentSearches.removeAt(6);
       }
     });
-    if (userId == null || userId == "미확인 사용자") {
-      return;
-    }
+
 
     try {
       await _searchval.collection('T3_SEARCH_TBL').add({
@@ -166,10 +164,10 @@ class _SearchState extends State<Search> {
 
     for (String field in searchFields) {
       if (userData[field] != null && userData[field].toString().contains(searchText)) {
-        return true; // 검색어와 일치하는 필드가 있으면 true 반환
+        return true;
       }
     }
-    return false; // 모든 필드에서 일치하는 값이 없을 경우 false 반환
+    return false;
   }
 
   @override
@@ -187,6 +185,10 @@ class _SearchState extends State<Search> {
     final snapshot = await _searchval.collection('T3_SEARCH_TBL')
         .where('S_USERID', isEqualTo: userId)
         .get();
+        if (userId == null) {
+          _searchController.clear();
+          return;
+         }
 
     if (snapshot.docs.isNotEmpty) {
       List<DocumentSnapshot> sortedDocs = snapshot.docs..sort((a, b) {

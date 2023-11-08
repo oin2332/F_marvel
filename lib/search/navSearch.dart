@@ -188,7 +188,7 @@ class _NavSearchState extends State<NavSearch> {
                             primary: Colors.blue,
                           ),
                           child: Text(
-                            "검색하기",
+                            "선택하러가기",
                             style: TextStyle(
                               color: Colors.white,
                             ),
@@ -237,37 +237,7 @@ class _NavSearchState extends State<NavSearch> {
         ),
       ),
       resizeToAvoidBottomInset: false,
-      bottomNavigationBar:  BottomAppBar(
-        child: Container(
-          height: 50,
-          color: Color.fromRGBO(255, 255, 255, 1.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              InkWell(
-                onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
-                  },child: Icon(Icons.home_outlined,size: 30),),
-              InkWell(
-                onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => NavSearch()));},
-                child: Icon(Icons.saved_search, size: 30),),
-              InkWell(onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => TimeLine()));
-              },  child: Icon(Icons.message_outlined, size: 28),),
-              InkWell(onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ResTabBar()));
-              }, child: Icon(Icons.calendar_today_outlined, size: 28),),
-              InkWell(onTap: () {
-                if (userModel.isLogin) {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => UserMain()));
-                } else {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => UserUnlogin()));
-                }
-              }, child: Icon(Icons.person_outline_outlined, size: 30),),
-            ],
-          ),
-        ),
-      ),
-
+      bottomNavigationBar: BottomNavBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
 
