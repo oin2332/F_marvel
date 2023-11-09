@@ -27,7 +27,6 @@ class _BestListShopState extends State<BestListShop> {
   @override
   void initState() {
     super.initState();
-    print(widget.category);
 
   }
 

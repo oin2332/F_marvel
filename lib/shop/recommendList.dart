@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../user/userModel.dart';
 import 'detailpage.dart';
+import 'loading.dart';
 
 
 
@@ -26,14 +27,13 @@ class _RecommendListShopShopState extends State<RecommendListShop> {
   @override
   void initState() {
     super.initState();
-    fetchAllUserData();
-    print(widget.category);
+
 
   }
 
   List<Map<String, dynamic>> userDataList = [];
 
-  void fetchAllUserData() async {
+  Future<void> fetchUserData() async {
     try {
       QuerySnapshot storeSnapshot = await FirebaseFirestore.instance
           .collection('T3_STORE_TBL')
@@ -109,127 +109,139 @@ class _RecommendListShopShopState extends State<RecommendListShop> {
 
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<void>(
+        future: fetchUserData(),
+    builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+    return LoadingSpinner(); // 로딩 스피너 표시
+    } else if (snapshot.hasError) {
+    return Text('에러 발생: ${snapshot.error}');
+    } else {
     return ListView.builder(
-      itemCount: userDataList.length,
-      itemBuilder: (context, index) {
-        final documentData = userDataList[index];
+    itemCount: userDataList.length,
+    itemBuilder: (context, index) {
+    final documentData = userDataList[index];
 
-        if (true) {
-            final ranking = index + 1;
-            final isGrayBackground = ranking >= 4;
+    if (true) {
+    final ranking = index + 1;
+    final isGrayBackground = ranking >= 4;
 
 
-            return ListTile(
-              title: Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(width: 10,),
-                    SizedBox(width: 25,
-                    height: 25,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: isGrayBackground ? Colors.grey : Color(0xFFFF6347),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Center(
-                        child: Text(
-                        '$ranking',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    ),
-                    SizedBox(width: 5,),
-                    Container(
-                      width: 80,
-                      height: 110, // 원하는 높이 설정
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: Image.asset(
-                        'assets/storePageIMG/${documentData['S_IMG']}',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    SizedBox(width: 13),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          width: 200,
-                          child: InkWell(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${documentData['S_NAME']}',
-                                  style: TextStyle(fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Text('${documentData['S_SILPLEMONO']}',
-                                  maxLines: 3, // 표시할 최대 라인 수
-                                  overflow: TextOverflow.ellipsis,), // 넘치는 부분에 "..."을 표시
-                                Row(
-                                  children: [
-                                    Icon(Icons.star, size: 25,
-                                        color: Colors.yellow[600]),
-                                    Text(
-                                      '${documentData['STARage']}', // 평균 별점 표시
-                                      style: TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      '(${documentData['STARlength']})',
-                                      // 별점 개수 표시
-                                      style: TextStyle(
-                                          fontSize: 11, color: Colors.grey),
-                                    ),
-                                  ],
-                                ),
-                                Text(
-                                  '${documentData['S_ADDR1']} ${documentData['S_ADDR2']} ${documentData['S_ADDR3']}',
-                                  style: TextStyle(
-                                      fontSize: 11, color: Colors.grey),
-                                ),
-                                Text(
-                                  '${documentData['S_TIME']}',
-                                  style: TextStyle(
-                                      fontSize: 11, color: Colors.grey),
-                                ),
-                              ],
-                            ),
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) =>
-                                      DetailPage(
-                                          docId: documentData['docId'])));
-                            },
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        Row(
-                          children: [
-                          ],
-                        ),
+    return ListTile(
+    title: Container(
+    margin: EdgeInsets.symmetric(vertical: 10),
+    child: Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+    SizedBox(width: 10,),
+    SizedBox(width: 25,
+    height: 25,
+    child: Container(
+    decoration: BoxDecoration(
+    color: isGrayBackground ? Colors.grey : Color(0xFFFF6347),
+    borderRadius: BorderRadius.circular(5),
+    ),
+    child: Center(
+    child: Text(
+    '$ranking',
+    style: TextStyle(
+    color: Colors.white,
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    ),
+    ),
+    ),
+    ),
+    ),
+    SizedBox(width: 5,),
+    Container(
+    width: 80,
+    height: 110, // 원하는 높이 설정
+    decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(5),
+    ),
+    child: Image.asset(
+    'assets/storePageIMG/${documentData['S_IMG']}',
+    fit: BoxFit.cover,
+    ),
+    ),
+    SizedBox(width: 13),
+    Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+    Container(
+    width: 200,
+    child: InkWell(
+    child: Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+    Text(
+    '${documentData['S_NAME']}',
+    style: TextStyle(fontSize: 20,
+    fontWeight: FontWeight.bold),
+    ),
+    Text('${documentData['S_SILPLEMONO']}',
+    maxLines: 3, // 표시할 최대 라인 수
+    overflow: TextOverflow.ellipsis,), // 넘치는 부분에 "..."을 표시
+    Row(
+    children: [
+    Icon(Icons.star, size: 25,
+    color: Colors.yellow[600]),
+    Text(
+    '${documentData['STARage']}', // 평균 별점 표시
+    style: TextStyle(
+    fontSize: 17,
+    fontWeight: FontWeight.bold,
+    ),
+    ),
+    SizedBox(width: 8),
+    Text(
+    '(${documentData['STARlength']})',
+    // 별점 개수 표시
+    style: TextStyle(
+    fontSize: 11, color: Colors.grey),
+    ),
+    ],
+    ),
+    Text(
+    '${documentData['S_ADDR1']} ${documentData['S_ADDR2']} ${documentData['S_ADDR3']}',
+    style: TextStyle(
+    fontSize: 11, color: Colors.grey),
+    ),
+    Text(
+    '${documentData['S_TIME']}',
+    style: TextStyle(
+    fontSize: 11, color: Colors.grey),
+    ),
+    ],
+    ),
+    onTap: () {
+    Navigator.push(context, MaterialPageRoute(
+    builder: (context) =>
+    DetailPage(
+    docId: documentData['docId'])));
+    },
+    ),
+    ),
+    SizedBox(height: 20),
+    Row(
+    children: [
+    ],
+    ),
 
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            );
-          }
-      },
+    ],
+    )
+    ],
+    ),
+    ),
     );
-  }
+    }
+    },
+    );
+    }
+    }
+    );
+
+    }
 }
