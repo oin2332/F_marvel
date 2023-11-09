@@ -16,7 +16,6 @@ void addBookmark(String userId, String docId) async {
 
     print('북마크에 추가 할 사용자 아이디 >> $userId');
 
-    // 10초 후에 Booktime 값을 "N"으로 업데이트
     Future.delayed(Duration(seconds: 10), () async {
       await updateBooktimeToN(docId, userId);
     });
