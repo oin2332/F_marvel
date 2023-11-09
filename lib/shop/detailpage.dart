@@ -13,6 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../main/mainPage.dart';
 //import '../reservation/function/bookmark.dart';
+import '../reservation/function/bookmark.dart';
 import '../user/userModel.dart';
 import 'loading.dart';
 
@@ -28,6 +29,7 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> {
 
   String? uId;
+  String? sId;
 
   @override
   void initState() {
@@ -147,6 +149,7 @@ class _DetailPageState extends State<DetailPage> {
     UserModel userModel = Provider.of<UserModel>(context);
     String? userId = userModel.userId;
     uId = userId;
+    sId = widget.docId;
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -165,7 +168,7 @@ class _DetailPageState extends State<DetailPage> {
           IconButton(
             icon: Icon(Icons.bookmark_border),
             onPressed: () {
-              //addBookmark(uId!);
+              addBookmark(uId!, sId!);
             },
           ),
         ],
