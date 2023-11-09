@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../user/userModel.dart';
-
+import '../user/userUnlogin.dart';
 
 class ReservationAdd extends StatefulWidget {
   final String addr;
@@ -20,18 +20,13 @@ class ReservationAdd extends StatefulWidget {
 
 class _ReservationAddState extends State<ReservationAdd> {
   Map<String, dynamic> timelist = {};
+
   @override
   void initState() {
-    // TODO: implement initState
     _fetchAllUserData(widget.doc);
     super.initState();
     timelist = widget.time;
-    print('dfasdfasdf$timelist');
-
-
-
   }
-
 
   DateTime? _selectedDay;
   DateTime _focusedDay = DateTime.now();
@@ -54,32 +49,37 @@ class _ReservationAddState extends State<ReservationAdd> {
   }
 
   List<Map<String, dynamic>> userDataList = [];
+  List<Map<String, dynamic>> reservationDataList = [];
 
   Future<List<Object>> _fetchAllUserData(String docId) async {
     try {
-      // T3_STORE_TBL 컬렉션에서 문서를 가져옴
       DocumentSnapshot storeSnapshot = await FirebaseFirestore.instance
           .collection('T3_STORE_TBL')
           .doc(docId)
           .get();
 
-      // 가져온 문서의 데이터를 확인
+      QuerySnapshot reservation = await FirebaseFirestore.instance
+          .collection('T3_STORE_RESERVATION')
+          .get();
+      reservation.docs.forEach((QueryDocumentSnapshot doc) {
+        Map<String, dynamic> data = {
+          'R_DATE': doc['R_DATE'],
+          'R_TIME': doc['R_TIME'],
+        };
+        reservationDataList.add(data);
+      });
+
       if (storeSnapshot.exists) {
-        // T3_TIME_TBL 컬렉션 참조를 얻음
         CollectionReference timeCollection = FirebaseFirestore.instance
             .collection('T3_STORE_TBL')
             .doc(docId)
             .collection('T3_TIME_TBL');
 
-        // T3_TIME_TBL 컬렉션의 문서들을 가져옴
         QuerySnapshot timeSnapshots = await timeCollection.get();
 
-        // T3_TIME_TBL 컬렉션 내의 문서들을 userDataList에 추가
         userDataList = timeSnapshots.docs.map((timeSnapshot) {
           return timeSnapshot.data() as Map<String, dynamic>;
         }).toList();
-
-
       } else {
         print('문서가 존재하지 않습니다.');
       }
@@ -91,30 +91,43 @@ class _ReservationAddState extends State<ReservationAdd> {
     }
   }
 
-
-
-
   Future<void> _saveReservation(UserModel userModel) async {
     String? userId = userModel.userId;
-    String? usernick = userModel.nickname;
+    String? usernick = userModel.name;
 
-    // Firebase에 예약 정보 저장
     await FirebaseFirestore.instance.collection('T3_STORE_RESERVATION').add({
-      'storeName': widget.sName, // 가게이름
-      'storeAddress': widget.addr, // 주소
-      'reservation:' : DateFormat('yyyy-MM-dd (E)', 'ko_KR').format(_selectedDay!), // 예약일
-      'reservationHour': timeSet, // 시간
-      'numberOfPeople': selectedNumber, // 예약인원
-      'Peopleid': userId, // 유저 아이디
-      'Peoplenickname': usernick, // 유저 이름(수정)
+      'R_S_ID': widget.sName,
+      'R_S_ADDR': widget.addr,
+      'R_DATE' : DateFormat('yyyy-MM-dd (E)', 'ko_KR').format(_selectedDay!),
+      'R_TIME': timeSet,
+      'R_number': selectedNumber,
+      'R_id': userId,
+      'R_name': usernick,
     });
 
     Navigator.of(context).pop();
     _secondModalSheet2(context);
-
-
-
   }
+  void time() {
+    List<Map<String, dynamic>> datatime = [];
+
+    // 선택된 날짜를 형식에 맞게 포맷
+
+
+    // reservationDataList에서 R_DATE와 동일한 값을 가진 데이터를 datatime에 추가
+    for (Map<String, dynamic> reservationData in reservationDataList) {
+      print('asdasd111$datatime');
+      if (reservationData['R_DATE'] == DateFormat('yyyy-MM-dd (E)', 'ko_KR').format(_selectedDay!)) {
+        datatime.add(reservationData);
+        print('asdasd112$datatime');
+      }
+    }
+    print('asdasd113$datatime');
+
+    // 이제 datatime 리스트에는 선택된 날짜와 동일한 R_DATE 값을 가진 데이터가 들어 있습니다.
+  }
+
+
 
   void _showModalBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -148,7 +161,6 @@ class _ReservationAddState extends State<ReservationAdd> {
                           selectedNumber = null;
                         });
                       },
-
                       selectedDayPredicate: (DateTime date) {
                         if (_selectedDay == null) {
                           return false;
@@ -160,12 +172,8 @@ class _ReservationAddState extends State<ReservationAdd> {
                       onPageChanged: (focusedDay) {
                         _focusedDay = focusedDay;
                       },
-
-
                       calendarFormat: CalendarFormat.month,
-                      // 초기 달력 형식을 월로 설정
                       enabledDayPredicate: (DateTime date) {
-                        // 이전 날짜는 비활성화
                         return date.isAfter(DateTime.now());
                       },
                       locale: 'ko_KR',
@@ -173,10 +181,7 @@ class _ReservationAddState extends State<ReservationAdd> {
                         weekendTextStyle: TextStyle(color: Colors.blue),
                       ),
                     ),
-
-
-                    SizedBox(height: 15
-                      ,),
+                    SizedBox(height: 15),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
@@ -192,17 +197,14 @@ class _ReservationAddState extends State<ReservationAdd> {
                           _numberpeople('8'), SizedBox(width: 6,),
                           _numberpeople('9'), SizedBox(width: 6,),
                           _numberpeople('10'),
-
                         ],
                       ),
                     ),
-
                     ElevatedButton(
                       onPressed: () {
-                        Navigator.of(context).pop(); // 모달 닫기
-                        if (_selectedDay != null && selectedNumber != null) {
+                        time();
+                        Navigator.of(context).pop();
 
-                        }
                       },
                       child: Text('확인'),
                     ),
@@ -210,14 +212,13 @@ class _ReservationAddState extends State<ReservationAdd> {
                 ),
               ),
             );
-          }
+          },
         );
       },
     );
   }
-
   Widget _numberpeople(String num) {
-    bool isSelected = selectedNumber == int.parse(num); // 현재 숫자가 선택된 숫자와 같은지 확인
+    bool isSelected = selectedNumber == int.parse(num);
     return Container(
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -266,6 +267,7 @@ class _ReservationAddState extends State<ReservationAdd> {
 
   Widget _clockbutton(String time) {
     bool isSelected = time == timeSet;
+    bool isDisabled = false;
     return Container(
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -273,20 +275,22 @@ class _ReservationAddState extends State<ReservationAdd> {
           children: [
             TextButton(
               onPressed: () {
-                setState(() {
-                  if (isSelected) {
-                    timeSet = null; // 이미 선택된 경우 선택 해제
-                  } else {
-                    timeSet = time; // 선택되지 않은 경우 선택
-                  }
-                });
+                if (!isDisabled) {
+                  setState(() {
+                    if (isSelected) {
+                      timeSet = null;
+                    } else {
+                      timeSet = time;
+                    }
+                  });
+                }
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
                 child: Text(
                   time,
                   style: TextStyle(
-                    color: isSelected ? Colors.white : Colors.black,
+                    color: isSelected ? Colors.white : (isDisabled ? Colors.grey : Colors.black),
                   ),
                 ),
               ),
@@ -300,11 +304,9 @@ class _ReservationAddState extends State<ReservationAdd> {
                   ),
                 ),
                 side: MaterialStateProperty.all(
-                  isSelected
-                      ? BorderSide.none // 선택된 경우 테두리 없음
-                      : BorderSide(
-                    color: Colors.black, // 선택되지 않은 경우 검은색 테두리
-                    width: 1, // 테두리 두께
+                  isSelected ? BorderSide.none : BorderSide(
+                    color: isDisabled ? Colors.grey : Colors.black,
+                    width: 1,
                   ),
                 ),
               ),
@@ -325,7 +327,7 @@ class _ReservationAddState extends State<ReservationAdd> {
           actions: [
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop(); // 다이얼로그 닫기
+                Navigator.of(context).pop();
               },
               child: Text('확인'),
             ),
@@ -335,18 +337,15 @@ class _ReservationAddState extends State<ReservationAdd> {
     );
   }
 
-  void _secondModalSheet() {
+  void _secondModalSheet(userModel) {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
       ),
       builder: (BuildContext context) {
-        UserModel userModel = Provider.of<UserModel>(context);
-        String? UserId = userModel.userId;
-        String? usernick = userModel.nickname;
         return SizedBox(
-          height: 900, // 원하는 높이로 설정
+          height: 900,
           child: Container(
             child: Column(
               children: [
@@ -384,8 +383,8 @@ class _ReservationAddState extends State<ReservationAdd> {
                             width: 350,
                             padding: EdgeInsets.all(30),
                             decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey, width: 1.0), // 테두리선 색 및 너비 조절
-                              borderRadius: BorderRadius.circular(10), // 레디우스 조절
+                              border: Border.all(color: Colors.grey, width: 1.0),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             child: Column(
                               children: [
@@ -398,8 +397,8 @@ class _ReservationAddState extends State<ReservationAdd> {
                                     Column(
                                       children: [
                                         Container(
-                                          width: 50, // 원하는 가로폭 설정
-                                          height: 50, // 원하는 세로 높이 설정 (옵션)
+                                          width: 50,
+                                          height: 50,
                                           child: Image.asset('assets/amenities/1.png'),
                                         ),
                                         Text(
@@ -415,8 +414,8 @@ class _ReservationAddState extends State<ReservationAdd> {
                                     Column(
                                       children: [
                                         Container(
-                                          width: 50, // 원하는 가로폭 설정
-                                          height: 50, // 원하는 세로 높이 설정 (옵션)
+                                          width: 50,
+                                          height: 50,
                                           child: Image.asset('assets/amenities/2.png'),
                                         ),
                                         Text(timeSet != null ? timeSet! : '선택 안 됨')
@@ -427,8 +426,8 @@ class _ReservationAddState extends State<ReservationAdd> {
                                     Column(
                                       children: [
                                         Container(
-                                          width: 50, // 원하는 가로폭 설정
-                                          height: 50, // 원하는 세로 높이 설정 (옵션)
+                                          width: 50,
+                                          height: 50,
                                           child: Image.asset('assets/amenities/3.png'),
                                         ),
                                         Text(
@@ -437,27 +436,21 @@ class _ReservationAddState extends State<ReservationAdd> {
                                             color: selectedNumber != null && selectedNumber == 0 ? Colors.red : Colors.black,
                                           ),
                                         )
-
                                       ],
                                     ),
-
                                   ],
                                 ),
-
-
                               ],
                             ),
                           ),
                           SizedBox(height: 10,),
                           Text('당일취소및 노쇼는 가게뿐만 아니라 다른 고객님들께도'),
                           Text('피해가 될수 있으므로 신중히 예약 부탁드립니다. :)'),
-
                         ],
                       ),
                     ],
                   ),
                 ),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -467,8 +460,8 @@ class _ReservationAddState extends State<ReservationAdd> {
                       },
                       child: Text('취소'),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.white,  // 배경색 (흰색)
-                        onPrimary: Colors.black, // 텍스트 색 (검정색)
+                        primary: Colors.white,
+                        onPrimary: Colors.black,
                       ),
                     ),
                     ElevatedButton(
@@ -476,23 +469,20 @@ class _ReservationAddState extends State<ReservationAdd> {
                           ? () {
                         _saveReservation(userModel);
                       }
-                          : null, // 버튼을 비활성화
+                          : null,
                       child: Text(
                         selectedNumber != null && _selectedDay != null && selectedNumber != null
                             ? '예약하기'
-                            : '예약 정보를 선택해 주세요', // 버튼 텍스트를 동적으로 설정
+                            : '예약 정보를 선택해 주세요',
                       ),
                       style: ElevatedButton.styleFrom(
                         primary: selectedNumber != null && _selectedDay != null && selectedNumber != null
-                            ? const Color(0xFFFF6347) // 활성화된 상태일 때의 색상
-                            : Colors.grey, // 비활성화된 상태일 때의 색상 (회색)
+                            ? const Color(0xFFFF6347)
+                            : Colors.grey,
                       ),
                     )
-
-
                   ],
                 ),
-
               ],
             ),
           ),
@@ -501,24 +491,12 @@ class _ReservationAddState extends State<ReservationAdd> {
     );
   }
 
-  Widget underlineBox(x) {
-    return SizedBox(
-      width: double.infinity,
-      height: x,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: Colors.grey[400],
-        ),
-      ),
-    );
-  }
-
-
 
 
   @override
   Widget build(BuildContext context) {
-
+    UserModel userModel = Provider.of<UserModel>(context);
+    String? userId = userModel.userId;
     return Container(
       child: Container(
         padding: const EdgeInsets.all(30.0),
@@ -565,82 +543,11 @@ class _ReservationAddState extends State<ReservationAdd> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    if(timelist['S_RE_TIME1'] != null)
-                    _clockbutton(timelist['S_RE_TIME1']),
-                    if(timelist['S_RE_TIME1'] != null)
-                      SizedBox(width: 6,),
-
-                    if(timelist['S_RE_TIME2'] != null)
-                      _clockbutton(timelist['S_RE_TIME2']),
-                    if(timelist['S_RE_TIME2'] != null)
-                      SizedBox(width: 6,),
-
-                    if(timelist['S_RE_TIME3'] != null)
-                      _clockbutton(timelist['S_RE_TIME3']),
-                    if(timelist['S_RE_TIME3'] != null)
-                      SizedBox(width: 6,),
-
-                    if(timelist['S_RE_TIME4'] != null)
-                      _clockbutton(timelist['S_RE_TIME4']),
-                    if(timelist['S_RE_TIME4'] != null)
-                      SizedBox(width: 6,),
-
-                    if(timelist['S_RE_TIME5'] != null)
-                      _clockbutton(timelist['S_RE_TIME5']),
-                    if(timelist['S_RE_TIME5'] != null)
-                      SizedBox(width: 6,),
-
-                    if(timelist['S_RE_TIME6'] != null)
-                      _clockbutton(timelist['S_RE_TIME6']),
-                    if(timelist['S_RE_TIME6'] != null)
-                      SizedBox(width: 6,),
-
-                    if(timelist['S_RE_TIME7'] != null)
-                      _clockbutton(timelist['S_RE_TIME7']),
-                    if(timelist['S_RE_TIME7'] != null)
-                      SizedBox(width: 6,),
-
-                    if(timelist['S_RE_TIME8'] != null)
-                      _clockbutton(timelist['S_RE_TIME8']),
-                    if(timelist['S_RE_TIME8'] != null)
-                      SizedBox(width: 6,),
-
-                    if(timelist['S_RE_TIME9'] != null)
-                      _clockbutton(timelist['S_RE_TIME9']),
-                    if(timelist['S_RE_TIME9'] != null)
-                      SizedBox(width: 6,),
-
-                    if(timelist['S_RE_TIME10'] != null)
-                      _clockbutton(timelist['S_RE_TIME10']),
-                    if(timelist['S_RE_TIME10'] != null)
-                      SizedBox(width: 6,),
-
-                    if(timelist['S_RE_TIME11'] != null)
-                      _clockbutton(timelist['S_RE_TIME11']),
-                    if(timelist['S_RE_TIME11'] != null)
-                      SizedBox(width: 6,),
-
-                    if(timelist['S_RE_TIME12'] != null)
-                      _clockbutton(timelist['S_RE_TIME12']),
-                    if(timelist['S_RE_TIME12'] != null)
-                      SizedBox(width: 6,),
-
-                    if(timelist['S_RE_TIME13'] != null)
-                      _clockbutton(timelist['S_RE_TIME13']),
-                    if(timelist['S_RE_TIME13'] != null)
-                      SizedBox(width: 6,),
-
-                    if(timelist['S_RE_TIME14'] != null)
-                      _clockbutton(timelist['S_RE_TIME14']),
-                    if(timelist['S_RE_TIME14'] != null)
-                      SizedBox(width: 6,),
-
-
-
-
-
-
-                    SizedBox(width: 8,),
+                    for (int i = 1; i <= 14; i++)
+                      if (timelist['S_RE_TIME$i'] != null) ...[
+                        _clockbutton(timelist['S_RE_TIME$i']),
+                        if (i < 14) SizedBox(width: 6),
+                      ],
                   ],
                 ),
               ),
@@ -648,36 +555,43 @@ class _ReservationAddState extends State<ReservationAdd> {
             SizedBox(height: 15,),
 
             Center(
-                child: TextButton(
-                  onPressed: () {
-                    _secondModalSheet();
-                  },
-                  style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(Size(180, 40)),
-                    // 버튼의 최소 크기 설정
-                    shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0), // 꼭지점을 둥글게 설정
-                      side: BorderSide(
-                          color: Color(0xFFFF6347), width: 1), // 1픽셀 두꺼운 테두리 설정
-                    )),
-                    backgroundColor: MaterialStateProperty.all(
-                        Colors.white), // 배경색 설정
+              child: TextButton(
+                onPressed: userId != null
+                    ? () {
+                  _secondModalSheet(userModel);
+                }
+                    : () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => UserUnlogin()));
+                },
+                style: ButtonStyle(
+                  fixedSize: MaterialStateProperty.all(Size(180, 40)),
+                  shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    side: BorderSide(color: Color(0xFFFF6347), width: 1),
+                  )),
+                  backgroundColor: MaterialStateProperty.all(Colors.white),
+                ),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      SizedBox(width: 3),
+                      Text(
+                        userId != null ? '예약하러가기' : '로그인 하러가기',
+                        style: TextStyle(
+                          color: Color(0xFFFF6347),
+                        ),
+                      ),
+                      Icon(
+                        Icons.keyboard_arrow_right,
+                        color: Color(0xFFFF6347),
+                      ),
+                    ],
                   ),
-                  child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          SizedBox(width: 3,),
-                          Text('예약하러가기', style: TextStyle(color: Color(
-                              0xFFFF6347)),),
-                          Icon(Icons.keyboard_arrow_right,
-                            color: Color(0xFFFF6347),)
-                        ],
-                      )
+                ),
+              ),
+            )
 
-                  ),
-                )
-            ),
           ],
         ),
       ),

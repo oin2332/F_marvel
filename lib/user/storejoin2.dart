@@ -78,34 +78,34 @@ class _JoinState extends State<StoreJoin2> {
       });
 
       await TIME.add({
-
-        'S_RE_TIME1' : Time1,
-
-        'S_RE_TIME2' : Time2,
-
-        'S_RE_TIME3' : Time3,
-
-        'S_RE_TIME4' : Time4,
-
-        'S_RE_TIME5' : Time5,
-
-        'S_RE_TIME6' : Time6,
-
-        'S_RE_TIME7' : Time7,
-
-        'S_RE_TIME8' : Time8,
-
-        'S_RE_TIME9' : Time9,
-
-        'S_RE_TIME10' : Time10,
-
-        'S_RE_TIME11' : Time11,
-
-        'S_RE_TIME12' : Time12,
-
-        'S_RE_TIME13' : Time13,
-
-        'S_RE_TIME14' : Time14,
+        if(Time1)
+        'S_RE_TIME1' : _Time1,
+        if(Time2)
+        'S_RE_TIME2' : _Time2,
+        if(Time3)
+        'S_RE_TIME3' : _Time3,
+        if(Time4)
+        'S_RE_TIME4' : _Time4,
+        if(Time5)
+        'S_RE_TIME5' : _Time5,
+        if(Time6)
+        'S_RE_TIME6' : _Time6,
+        if(Time7)
+        'S_RE_TIME7' : _Time7,
+        if(Time8)
+        'S_RE_TIME8' : _Time8,
+        if(Time9)
+        'S_RE_TIME9' : _Time9,
+        if(Time10)
+        'S_RE_TIME10' : _Time10,
+        if(Time11)
+        'S_RE_TIME11' : _Time11,
+        if(Time12)
+        'S_RE_TIME12' : _Time12,
+        if(Time13)
+        'S_RE_TIME13' : _Time13,
+        if(Time14)
+        'S_RE_TIME14' : _Time14,
 
       });
 
