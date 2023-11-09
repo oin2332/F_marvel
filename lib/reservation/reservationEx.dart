@@ -1,3 +1,4 @@
+/*
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -231,3 +232,4 @@ class StoreInfo {
 
   StoreInfo({required this.name, required this.address});
 }
+*/

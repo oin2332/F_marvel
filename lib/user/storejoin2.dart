@@ -312,82 +312,82 @@ class _JoinState extends State<StoreJoin2> {
                     _Time1 = value ? iconText : null;
                   });
                 }),
-                _butlist(Time2, _Time1, '12:00', '12시', (value, iconText) {
+                _butlist(Time2, _Time2, '12:00', '12시', (value, iconText) {
                   setState(() {
                     Time2 = value;
-                    _Time1 = value ? iconText : null;
+                    _Time2 = value ? iconText : null;
                   });
                 }),
-                _butlist(Time3, _Time1, '13:00', '13시', (value, iconText) {
+                _butlist(Time3, _Time3, '13:00', '13시', (value, iconText) {
                   setState(() {
                     Time3 = value;
-                    _Time1 = value ? iconText : null;
+                    _Time3 = value ? iconText : null;
                   });
                 }),
-                _butlist(Time4, _Time1, '14:00', '14시', (value, iconText) {
+                _butlist(Time4, _Time4, '14:00', '14시', (value, iconText) {
                   setState(() {
                     Time4 = value;
-                    _Time1 = value ? iconText : null;
+                    _Time4 = value ? iconText : null;
                   });
                 }),
-                _butlist(Time5, _Time1, '15:00', '15시', (value, iconText) {
+                _butlist(Time5, _Time5, '15:00', '15시', (value, iconText) {
                   setState(() {
                     Time5 = value;
-                    _Time1 = value ? iconText : null;
+                    _Time5 = value ? iconText : null;
                   });
                 }),
-                _butlist(Time6, _Time1, '16:00', '16시', (value, iconText) {
+                _butlist(Time6, _Time6, '16:00', '16시', (value, iconText) {
                   setState(() {
                     Time6 = value;
-                    _Time1 = value ? iconText : null;
+                    _Time6 = value ? iconText : null;
                   });
                 }),
-                _butlist(Time7, _Time1, '17:00', '17시', (value, iconText) {
+                _butlist(Time7, _Time7, '17:00', '17시', (value, iconText) {
                   setState(() {
                     Time7 = value;
-                    _Time1 = value ? iconText : null;
+                    _Time7 = value ? iconText : null;
                   });
                 }),
-                _butlist(Time8, _Time1, '18:00', '18시', (value, iconText) {
+                _butlist(Time8, _Time8, '18:00', '18시', (value, iconText) {
                   setState(() {
                     Time8 = value;
-                    _Time1 = value ? iconText : null;
+                    _Time8 = value ? iconText : null;
                   });
                 }),
-                _butlist(Time9, _Time1, '19:00', '19시', (value, iconText) {
+                _butlist(Time9, _Time9, '19:00', '19시', (value, iconText) {
                   setState(() {
                     Time9 = value;
-                    _Time1 = value ? iconText : null;
+                    _Time9 = value ? iconText : null;
                   });
                 }),
-                _butlist(Time10, _Time1, '20:00', '20시', (value, iconText) {
+                _butlist(Time10, _Time10, '20:00', '20시', (value, iconText) {
                   setState(() {
                     Time10 = value;
-                    _Time1 = value ? iconText : null;
+                    _Time10 = value ? iconText : null;
                   });
                 }),
-                _butlist(Time11, _Time1, '21:00', '21시', (value, iconText) {
+                _butlist(Time11, _Time11, '21:00', '21시', (value, iconText) {
                   setState(() {
                     Time11 = value;
-                    _Time1 = value ? iconText : null;
+                    _Time11 = value ? iconText : null;
                   });
                 }),
-                _butlist(Time12, _Time1, '22:00', '22시', (value, iconText) {
+                _butlist(Time12, _Time12, '22:00', '22시', (value, iconText) {
                   setState(() {
                     Time12 = value;
-                    _Time1 = value ? iconText : null;
+                    _Time12 = value ? iconText : null;
                   });
                 }),
-                _butlist(Time13, _Time1, '23:00', '23시', (value, iconText) {
+                _butlist(Time13, _Time13, '23:00', '23시', (value, iconText) {
                   setState(() {
                     Time13 = value;
-                    _Time1 = value ? iconText : null;
+                    _Time13 = value ? iconText : null;
                   });
                 }),
-                _butlist(Time14, _Time1, '24:00', '24시', (value, iconText) {
+                _butlist(Time14, _Time14, '24:00', '24시', (value, iconText) {
                   setState(() {
                     Time14 = value;
-                    _Time1 = value ? iconText : null;
+                    _Time14 = value ? iconText : null;
                   });
                 }),
 

@@ -65,6 +65,7 @@ class _ReservationAddState extends State<ReservationAdd> {
         Map<String, dynamic> data = {
           'R_DATE': doc['R_DATE'],
           'R_TIME': doc['R_TIME'],
+          'R_S_ID': doc['R_S_ID'],
         };
         reservationDataList.add(data);
       });
@@ -108,33 +109,17 @@ class _ReservationAddState extends State<ReservationAdd> {
     Navigator.of(context).pop();
     _secondModalSheet2(context);
   }
-  void time() {
-    List<Map<String, dynamic>> datatime = [];
 
-    // 선택된 날짜를 형식에 맞게 포맷
-
-
-    // reservationDataList에서 R_DATE와 동일한 값을 가진 데이터를 datatime에 추가
-    for (Map<String, dynamic> reservationData in reservationDataList) {
-      print('asdasd111$datatime');
-      if (reservationData['R_DATE'] == DateFormat('yyyy-MM-dd (E)', 'ko_KR').format(_selectedDay!)) {
-        datatime.add(reservationData);
-        print('asdasd112$datatime');
-      }
-    }
-    print('asdasd113$datatime');
-
-    // 이제 datatime 리스트에는 선택된 날짜와 동일한 R_DATE 값을 가진 데이터가 들어 있습니다.
-  }
-
-
+  bool _showClockButtons = false; // 초기에는 _clockbutton를 숨기도록 설정
 
   void _showModalBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30), topRight: Radius.circular(30)),
+          topLeft: Radius.circular(30),
+          topRight: Radius.circular(30),
+        ),
       ),
       builder: (BuildContext context) {
         return StatefulBuilder(
@@ -201,11 +186,15 @@ class _ReservationAddState extends State<ReservationAdd> {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: () {
-                        time();
-                        Navigator.of(context).pop();
-
-                      },
+                      onPressed: _selectedDay != null && selectedNumber != null
+                          ? () {
+                        setState(() {
+                          _showClockButtons = true; // 확인 버튼을 누르면 _clockbutton를 표시
+                          
+                        });
+                        Navigator.of(context).pop(); // 모달 시트 닫기
+                      }
+                          : null, // 버튼을 비활성화하려면 onPressed에 null을 설정
                       child: Text('확인'),
                     ),
                   ],
@@ -217,6 +206,7 @@ class _ReservationAddState extends State<ReservationAdd> {
       },
     );
   }
+
   Widget _numberpeople(String num) {
     bool isSelected = selectedNumber == int.parse(num);
     return Container(
@@ -264,10 +254,26 @@ class _ReservationAddState extends State<ReservationAdd> {
       ),
     );
   }
+  List<Map<String, dynamic>> datatime = [];
 
   Widget _clockbutton(String time) {
+    if (!_showClockButtons) {
+      return SizedBox(); // _showClockButtons가 false이면 아무것도 표시하지 않음
+    }
     bool isSelected = time == timeSet;
     bool isDisabled = false;
+    // 필요한 시간 목록을 가져와서 중복 여부를 확인
+    List<Map<String, dynamic>> datatime = [];
+    for (Map<String, dynamic> reservationData in reservationDataList) {
+      if (reservationData['R_S_ID'] == widget.sName && reservationData['R_DATE'] == DateFormat('yyyy-MM-dd (E)', 'ko_KR').format(_selectedDay!)) {
+        datatime.add(reservationData);
+      }
+    }
+
+    // 중복되는 경우 버튼 비활성화
+    if (datatime.any((data) => data['R_TIME'] == time)) {
+      isDisabled = true;
+    }
     return Container(
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -278,9 +284,9 @@ class _ReservationAddState extends State<ReservationAdd> {
                 if (!isDisabled) {
                   setState(() {
                     if (isSelected) {
-                      timeSet = null;
+                      timeSet = null; // 이미 선택된 경우 선택 해제 (null 값 설정)
                     } else {
-                      timeSet = time;
+                      timeSet = time; // 선택되지 않은 경우 선택
                     }
                   });
                 }
@@ -290,13 +296,13 @@ class _ReservationAddState extends State<ReservationAdd> {
                 child: Text(
                   time,
                   style: TextStyle(
-                    color: isSelected ? Colors.white : (isDisabled ? Colors.grey : Colors.black),
+                    color: isSelected ? Colors.white : (isDisabled ? Colors.grey[700] : Colors.black),
                   ),
                 ),
               ),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
-                  isSelected ? Color(0xFFFF6347) : Colors.white,
+                  isSelected ? Color(0xFFFF6347) : (isDisabled ? Colors.grey[400] : Colors.white), // 비활성화된 경우 회색 배경
                 ),
                 shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
@@ -304,8 +310,10 @@ class _ReservationAddState extends State<ReservationAdd> {
                   ),
                 ),
                 side: MaterialStateProperty.all(
-                  isSelected ? BorderSide.none : BorderSide(
-                    color: isDisabled ? Colors.grey : Colors.black,
+                  isSelected
+                      ? BorderSide.none // 선택된 경우 테두리 없음
+                      : BorderSide(
+                    color: isDisabled ? Colors.grey[800]! : Colors.black,
                     width: 1,
                   ),
                 ),
@@ -316,6 +324,8 @@ class _ReservationAddState extends State<ReservationAdd> {
       ),
     );
   }
+
+
 
   void _secondModalSheet2(BuildContext context) {
     showDialog(
@@ -465,18 +475,18 @@ class _ReservationAddState extends State<ReservationAdd> {
                       ),
                     ),
                     ElevatedButton(
-                      onPressed: selectedNumber != null && _selectedDay != null && selectedNumber != null
+                      onPressed: selectedNumber != null && _selectedDay != null && timeSet != null
                           ? () {
                         _saveReservation(userModel);
                       }
                           : null,
                       child: Text(
-                        selectedNumber != null && _selectedDay != null && selectedNumber != null
+                        selectedNumber != null && _selectedDay != null && timeSet != null
                             ? '예약하기'
                             : '예약 정보를 선택해 주세요',
                       ),
                       style: ElevatedButton.styleFrom(
-                        primary: selectedNumber != null && _selectedDay != null && selectedNumber != null
+                        primary: selectedNumber != null && _selectedDay != null && timeSet != null
                             ? const Color(0xFFFF6347)
                             : Colors.grey,
                       ),
@@ -538,19 +548,21 @@ class _ReservationAddState extends State<ReservationAdd> {
             ),
 
             SizedBox(height: 8,),
-            Container(
+          Container(
               child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
                   children: [
-                    for (int i = 1; i <= 14; i++)
-                      if (timelist['S_RE_TIME$i'] != null) ...[
-                        _clockbutton(timelist['S_RE_TIME$i']),
-                        if (i < 14) SizedBox(width: 6),
-                      ],
+                  for (int i = 1; i <= 14; i++)
+                  if (timelist['S_RE_TIME$i'] != null) ...[
+                      if (!datatime.any((data) => data['R_TIME'] == timelist['S_RE_TIME$i']))
+                      _clockbutton(timelist['S_RE_TIME$i']),
+
+                       if (i < 14) SizedBox(width: 6),
+                    ],
                   ],
-                ),
-              ),
+                 ),
+               ),
             ),
             SizedBox(height: 15,),
 
