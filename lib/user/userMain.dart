@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_marvel/board/boardAdd.dart';
+import 'package:food_marvel/board/boardView.dart';
+import 'package:food_marvel/board/list.dart';
 import 'package:food_marvel/user/allCollection.dart';
 import 'package:food_marvel/user/follower.dart';
 import 'package:food_marvel/user/following.dart';
@@ -379,7 +381,8 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
                   Column(
                     children: [
                       Text('등록된 리뷰가 없습니다', style: TextStyle(color: Colors.grey[400]!),textAlign: TextAlign.center,),
-                      TextButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (_) => BoardAdd()));}, child: Text('리뷰작성'))
+                      TextButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (_) => BoardAdd()));}, child: Text('리뷰작성')),
+                      TextButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (_) => Temp()));}, child: Text('리뷰(임시)'))
                     ],
                   ),
                 ],

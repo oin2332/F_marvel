@@ -38,13 +38,22 @@ class _BoardAddState extends State<BoardAdd> {
       FirebaseFirestore fs = FirebaseFirestore.instance; // 싱글톤 구성
       CollectionReference review = fs.collection("T3_REVIEW_TBL"); // 리뷰 컬렉션 이름 -> T3_REVIEW_TBL
 
+      List<String> imageUrls = []; // 이미지 주소들
+
+      //
+      for (File imageFile in _selectedImages) {
+        XFile xFile = XFile(imageFile.path); // File을 XFile로 변환
+        String imageUrl = await uploadImageToStorage(xFile); // 이미지 업로드
+        imageUrls.add(imageUrl);
+      }
+
       //리뷰 컬렉션 데이터 입력
       await review.add({
         'index' : index,
         'u_id' : uId,
         'title': _title.text,
         'content': _content.text,
-        'r_img_url' : url,
+        'r_img_urls': imageUrls, // 여러 이미지의 URL을 리스트로 저장
         'like' : like,
         'comment' : comment,
         's_id' : sId,
@@ -57,25 +66,6 @@ class _BoardAddState extends State<BoardAdd> {
       print("제목 또는 내용을 입력해주세요.");
     }
   }
-
-  // 리뷰 사진 선택 로직
-  // void _pickImage() async {
-  //   ImagePicker _picker = ImagePicker(); // ImagePicker 객체 선언 및 초기화
-  //   final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-  //   if (pickedFile != null) {
-  //     // 이미지를 Firebase Storage에 업로드하고 URL을 받아옵니다.
-  //     String imageUrl = await uploadImageToStorage(pickedFile);
-  //
-  //     // Firestore에 이미지 URL을 저장합니다.
-  //     updateProfileImageInFirestore(imageUrl);
-  //
-  //     // 미리보기 이미지 업데이트
-  //     setState(() {
-  //       _selectedImage = Image.file(File(pickedFile.path));
-  //     });
-  //   }
-  //   Navigator.pop(context); // 모달 바텀 시트 닫기
-  // }
 
   // Firebase Storage에 이미지를 업로드하는 함수
   Future<String> uploadImageToStorage(XFile pickedFile) async {
@@ -97,7 +87,7 @@ class _BoardAddState extends State<BoardAdd> {
   }
 
   // FireStore에 이미지 URL을 업데이트하는 함수
-  void updateProfileImageInFirestore(String imageUrl) async {
+  void updateReviewImageInFirestore(String imageUrl) async {
     try {
       String userId = uId ?? '';
       QuerySnapshot userSnapshot = await FirebaseFirestore.instance
@@ -108,12 +98,12 @@ class _BoardAddState extends State<BoardAdd> {
       if (userSnapshot.docs.isNotEmpty) {
         QueryDocumentSnapshot doc = userSnapshot.docs.first;
         await doc.reference.update({'profile_image': imageUrl});
-        print('프로필 이미지가 업데이트되었습니다.');
+        print('리뷰 이미지가 업데이트되었습니다.');
       } else {
         print('해당 사용자를 찾을 수 없습니다.');
       }
     } catch (e) {
-      print('프로필 이미지 업데이트 중 오류 발생: $e');
+      print('리뷰 이미지 업데이트 중 오류 발생: $e');
     }
   }
 
@@ -133,40 +123,14 @@ class _BoardAddState extends State<BoardAdd> {
     }
   }
 
-  void _showAllImages() {
-    if (_selectedImages.isNotEmpty) {
-      showDialog(
-        context: context,
-        builder: (context) => Dialog(
-          child: Container(
-            width: 300,
-            height: 300,
-            child: PageView.builder(
-              itemCount: _selectedImages.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Image.file(_selectedImages[index]);
-              },
-            ),
-          ),
-        ),
-      );
-    }
-  }
-
-
-
   // 별점 기능
-
-  // 초기 별점 설정
-  double _rating = 0.0;
-
+  double _rating = 0.0; // 초기 별점 설정
+  //
   void _onRatingUpdate(double rating) {
     setState(() {
       _rating = rating;
     });
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -216,7 +180,6 @@ class _BoardAddState extends State<BoardAdd> {
                       },
                     ),
                   ),
-
                   SizedBox(height: 10),
                   TextField(
                     controller: _content,
@@ -275,15 +238,15 @@ class _BoardAddState extends State<BoardAdd> {
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
                         if (states.contains(MaterialState.disabled)) {
-                          return Colors.grey; // 비활성화 상태일 때 배경색
+                          return Colors.grey[300]!; // 비활성화 상태일 때 배경색
                         }
-                        return Theme.of(context).primaryColor; // 활성화 상태일 때 기본 테마의 primary color
+                        return Colors.green[400]!; // 활성화 상태일 때 기본 테마의 primary color
                       }),
                       foregroundColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
                         if (states.contains(MaterialState.disabled)) {
                           return Colors.white; // 비활성화 상태일 때 텍스트 색상
                         }
-                        return Colors.deepOrange[400]!; // 활성화 상태일 때 텍스트 색상 (기본은 흰색)
+                        return Colors.white; // 활성화 상태일 때 텍스트 색상 (기본은 흰색)
                       }),
                     ),
                   ),

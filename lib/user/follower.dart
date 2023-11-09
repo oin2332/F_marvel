@@ -1,10 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:food_marvel/user/userModel.dart';
+import 'package:provider/provider.dart';
 
-class Follower extends StatelessWidget {
+import 'function/Follow.dart';
+
+class Follower extends StatefulWidget {
   const Follower({super.key});
 
   @override
+  State<Follower> createState() => _FollowerState();
+}
+
+class _FollowerState extends State<Follower> {
+  //
+  String? uId;
+  List<String> followers = []; // 팔로워 리스트 추가
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFollowers(); // initState에서 호출하여 화면이 로드될 때 팔로워를 불러옴
+  }
+
+  // 팔로워 호출
+  Future<void> _loadFollowers() async {
+    print('initState 동작 확인');
+    UserModel userModel = Provider.of<UserModel>(context, listen: false);
+    String? userId = userModel.userId;
+
+    if (userId != null) {
+      List<String> fetchedFollowers = await getUserFollowers(userId);
+
+      setState(() {
+        print('setState 동작 확인');
+        followers = fetchedFollowers;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // UserModel에서 사용자 아이디 받아오기
+    UserModel userModel = Provider.of<UserModel>(context);
+    String? userId = userModel.userId;
+    uId = userId;
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.black),
@@ -12,27 +52,27 @@ class Follower extends StatelessWidget {
             Navigator.pop(context);
           },
         ),
-          title: Text('팔로워', style: TextStyle(color: Colors.black)), backgroundColor: Colors.white, elevation: 0, // 그림자를 제거
+        title: Text('팔로워', style: TextStyle(color: Colors.black)), backgroundColor: Colors.white, elevation: 0, // 그림자를 제거
       ),
-      body: Container(
-        color: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListView(
-            children: [
-              SizedBox(height: 180),
-              Center(
-                child: Column(
-                  children: [
-                    Text('아직 팔로워가 없습니다.'),
-                    Text('다른 사람이 팔로우 하면 여기에 표시됩니다.', style: TextStyle(fontSize: 10))
-                  ],
-                ),
-              )
-            ],
-          ),
+      body: followers.isEmpty ? Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('아직 팔로워가 없습니다.'),
+            Text('다른 사람이 팔로우 하면 여기에 표시됩니다.',
+                style: TextStyle(fontSize: 10)),
+          ],
         ),
-      ),
+      )
+          : ListView.builder(
+        itemCount: followers.length,
+        itemBuilder: (BuildContext context, int index) {
+          return ListTile(
+            title: Text('Follower 문서 ID: ${followers[index]}'),
+            subtitle: Text('나를 팔로우 하는 사람 -> ${followers[index]}'),
+          );
+        },
+      )
     );
   }
 }
