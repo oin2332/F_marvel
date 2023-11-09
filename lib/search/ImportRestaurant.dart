@@ -1,18 +1,100 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-class ImportRestaurant extends StatelessWidget {
-  final List<int> shuffledIndices = [0, 1, 2, 3, 4, 5, 6];
+void main() => runApp(MaterialApp(
+  home: Scaffold(
+    appBar: AppBar(title: Text('Restaurant')),
+    body: ImportRestaurant(),
+  ),
+));
 
-  ImportRestaurant() {
-    shuffledIndices.shuffle(Random());
-  }
+class ImportRestaurant extends StatelessWidget {
+  final List<RestaurantItem> restaurantItems = [
+    RestaurantItem(
+      image: 'assets/searchIMG/searchimg0.jpg',
+      title: "#주차가능매장",
+      content: "내용0",
+    ),
+    RestaurantItem(
+      image: 'assets/searchIMG/searchimg1.jpg',
+      title: "#데이트하기\n좋은",
+      content: "내용1",
+    ),
+    RestaurantItem(
+      image: 'assets/searchIMG/searchimg2.jpg',
+      title: "#엘리베이터\n있는",
+      content: "내용2",
+    ),
+    RestaurantItem(
+      image: 'assets/searchIMG/searchimg3.jpg',
+      title: "#재방문많은",
+      content: "내용3",
+    ),
+    RestaurantItem(
+      image: 'assets/searchIMG/searchimg4.jpg',
+      title: "#숨은맛집",
+      content: "내용4",
+    ),
+    RestaurantItem(
+      image: 'assets/searchIMG/searchimg5.jpg',
+      title: "#1층매장",
+      content: "내용5",
+    ),
+    RestaurantItem(
+      image: 'assets/searchIMG/searchimg6.jpg',
+      title: "#키즈존",
+      content: "내용6",
+    ),
+    RestaurantItem(
+      image: 'assets/searchIMG/searchimg7.jpg',
+      title: "#이국적인",
+      content: "내용7",
+    ),
+    RestaurantItem(
+      image: 'assets/searchIMG/searchimg8.jpg',
+      title: "#소박한",
+      content: "내용8",
+    ),
+    RestaurantItem(
+      image: 'assets/searchIMG/searchimg9.jpg',
+      title: "#아늑한",
+      content: "내용9",
+    ),
+    RestaurantItem(
+      image: 'assets/searchIMG/searchimg10.jpg',
+      title: "#착한가격",
+      content: "내용10",
+    ),
+    RestaurantItem(
+      image: 'assets/searchIMG/searchimg11.jpg',
+      title: "#특별한날",
+      content: "내용11",
+    ),
+    RestaurantItem(
+      image: 'assets/searchIMG/searchimg12.jpg',
+      title: "#신선한",
+      content: "내용12",
+    ),
+    RestaurantItem(
+      image: 'assets/searchIMG/searchimg13.jpg',
+      title: "#비오는날",
+      content: "내용13",
+    ),
+    RestaurantItem(
+      image: 'assets/searchIMG/searchimg14.jpg',
+      title: "#포장가능",
+      content: "내용14",
+    ),
+
+  ];
 
   @override
   Widget build(BuildContext context) {
+    restaurantItems.shuffle(Random());
+
     return Container(
       color: Colors.white,
-       child: Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
@@ -36,51 +118,12 @@ class ImportRestaurant extends StatelessWidget {
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
-              final shuffledIndex = shuffledIndices[index];
-              if (shuffledIndex == 0) {
-                return _buildItemWithImage(
-                  image: 'assets/searchIMG/searchimg0.jpg',
-                  title: "#주차가능매장",
-                );//주석
-              } else if (shuffledIndex == 1) {
-                return _buildItemWithImage(
-                  image: 'assets/searchIMG/searchimg1.jpg',
-                  title: "#포장가능",
-                  content: "#내용2",
-                );
-              } else if (shuffledIndex == 2) {
-                return _buildItemWithImage(
-                  image: 'assets/searchIMG/searchimg2.jpg',
-                  title: "#엘레베이터",
-                  content: "#엘레베이터 있어요",
-                );
-              } else if (shuffledIndex == 3) {
-                return _buildItemWithImage(
-                  image: 'assets/searchIMG/searchimg3.jpg',
-                  title: "#2차로 가기 \n 좋은",
-                  content: "#내용4",
-                );
-              } else if (shuffledIndex == 4) {
-                return _buildItemWithImage(
-                  image: 'assets/searchIMG/searchimg4.jpg',
-                  title: "#분위기 좋은",
-                  content: "#내용5",
-                );
-              } else if (shuffledIndex == 5) {
-                return _buildItemWithImage(
-                  image: 'assets/searchIMG/searchimg5.jpg',
-                  title: "#1층매장",
-                  content: "#내용6",
-                );
-              } else if (shuffledIndex == 6) {
-                return _buildItemWithImage(
-                  image: 'assets/searchIMG/searchimg6.jpg',
-                  title: "#키즈존",
-                  content: "#내용7",
-                );
-              } else {
-                return _buildItemWithoutImage(index);
-              }
+              final restaurantItem = restaurantItems[index];
+              return _buildItemWithImage(
+                image: restaurantItem.image,
+                title: restaurantItem.title,
+                content: restaurantItem.content,
+              );
             },
           ),
         ],
@@ -89,8 +132,8 @@ class ImportRestaurant extends StatelessWidget {
   }
 
   Widget _buildItemWithImage({
-    String? image,
-    String? title,
+    required String image,
+    required String title,
     String content = "",
   }) {
     return Stack(
@@ -101,7 +144,7 @@ class ImportRestaurant extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
             image: DecorationImage(
-              image: AssetImage(image!),
+              image: AssetImage(image),
               fit: BoxFit.cover,
             ),
           ),
@@ -111,7 +154,7 @@ class ImportRestaurant extends StatelessWidget {
           left: 10,
           right: 10,
           child: Text(
-            title!,
+            title,
             style: TextStyle(
               fontSize: 25,
               fontWeight: FontWeight.bold,
@@ -137,35 +180,16 @@ class ImportRestaurant extends StatelessWidget {
       ],
     );
   }
-
-  Widget _buildItemWithoutImage(int index) {
-    return Container(
-      margin: EdgeInsets.all(15.0),
-      padding: EdgeInsets.all(10.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10.0),
-        color: Colors.grey,
-      ),
-      child: Center(
-        child: Text(
-          "Item $index",
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.white,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
-  }
 }
 
-void main() => runApp(MaterialApp(
-  home: Scaffold(
-    appBar: AppBar(title: Text('Restaurant')),
-    body: Container(
-      color: Colors.white, // 배경색을 흰색으로 설정
-      child: ImportRestaurant(),
-    ),
-  ),
-));
+class RestaurantItem {
+  final String image;
+  final String title;
+  final String content;
+
+  RestaurantItem({
+    required this.image,
+    required this.title,
+    this.content = "",
+  });
+}
