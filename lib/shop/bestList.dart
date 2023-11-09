@@ -68,6 +68,8 @@ class _BestListShopState extends State<BestListShop> {
                     starList.add(value);
                     x += numericValue;
                     y++;
+                  }else if (value is int){
+
                   }
                 }
               });
