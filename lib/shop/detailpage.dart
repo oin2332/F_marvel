@@ -7,10 +7,13 @@ import 'package:food_marvel/shop/tabBar.dart';
 import 'package:food_marvel/shop/test.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../main/mainPage.dart';
+import '../reservation/function/bookmark.dart';
+import '../user/userModel.dart';
 import 'loading.dart';
 
 class DetailPage extends StatefulWidget {
@@ -23,6 +26,8 @@ class DetailPage extends StatefulWidget {
   State<DetailPage> createState() => _DetailPageState();
 }
 class _DetailPageState extends State<DetailPage> {
+
+  String? uId;
 
   @override
   void initState() {
@@ -139,6 +144,10 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel userModel = Provider.of<UserModel>(context);
+    String? userId = userModel.userId;
+    uId = userId;
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -156,7 +165,7 @@ class _DetailPageState extends State<DetailPage> {
           IconButton(
             icon: Icon(Icons.bookmark_border),
             onPressed: () {
-              // 뒤로 가거나 다른 작업 수행
+              addBookmark(uId!);
             },
           ),
         ],

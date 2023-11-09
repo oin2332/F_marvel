@@ -39,12 +39,11 @@ class _UserInfoEditState extends State<UserInfoEdit> {
           String? pwd = userData['pwd'];
           String? gender = userData['gender'];
           print('name: $name, phone: $phone, gender: $gender');
-          if (name != null || phone != null || gender != null) {
+          if (name != null || phone != null) {
             // 사용자 정보를 각 컨트롤러에 할당
             setState(() {
               uName = name!;
               uPhone = phone!;
-              uGender = gender!;
             });
           } else {
             print('사용자 정보가 누락되었습니다.');
