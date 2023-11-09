@@ -32,9 +32,10 @@ class UserModel with ChangeNotifier {
     _intro = intro;
     notifyListeners();
   }
-  void login(String id, String? nickname){
+  void login(String id, String? nickname ,String? name){
     _userId = id;
     _nickname = nickname;
+    _name= name;
     if (_userId != null) {
       print("사용자는 현재 로그인되어 있습니다.");
     } else {

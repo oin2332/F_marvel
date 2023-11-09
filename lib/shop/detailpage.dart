@@ -12,7 +12,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../main/mainPage.dart';
-import '../reservation/function/bookmark.dart';
+//import '../reservation/function/bookmark.dart';
 import '../user/userModel.dart';
 import 'loading.dart';
 
@@ -165,7 +165,7 @@ class _DetailPageState extends State<DetailPage> {
           IconButton(
             icon: Icon(Icons.bookmark_border),
             onPressed: () {
-              addBookmark(uId!);
+              //addBookmark(uId!);
             },
           ),
         ],

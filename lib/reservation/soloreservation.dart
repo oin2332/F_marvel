@@ -32,20 +32,18 @@ class _ReservationPageState extends State<ReservationPage> {
 
   Future<void> _saveReservation(UserModel userModel) async {
     String? userId = userModel.userId;
-    String? usernick = userModel.nickname;
-
+    String? userName = userModel.name;
+    print(userId);
+    print(userName);
     // Firebase에 예약 정보 저장
     await FirebaseFirestore.instance.collection('reser_test').add({
-      'storeName': widget.storeInfo.name, // 가게이름
-      'storeAddress': widget.storeInfo.address, //
-      'reservationYear': selectedDate.year, // 년도
-      'reservationMonth': selectedDate.month, // 달
-      'reservationDay': selectedDate.day, // 일
-      'reservationHour': selectedHour, // 시간
-      'reservationMinute': selectedMinute, // 분
-      'numberOfPeople': numberOfPeople, // 예약인원
-      'Peopleid': userId, // 유저 아이디
-      'Peoplenickname': usernick, // 유저 닉네임
+      ' R_S_ID': widget.storeInfo.name, // 가게이름
+      'R_S_ADDR': widget.storeInfo.address, //
+      'R_DATE': selectedDate.year+selectedDate.month+selectedDate.day, // 예약일
+      'R_TIME': (selectedHour+selectedMinute), // 시간
+      'R_number': numberOfPeople, // 예약인원
+      'R_id': userId, // 유저 아이디
+      'R_name': userName, // 유저 닉네임
     });
 
     // 예약 완료 메시지 표시
@@ -57,8 +55,8 @@ class _ReservationPageState extends State<ReservationPage> {
   @override
   Widget build(BuildContext context) {
     UserModel userModel = Provider.of<UserModel>(context);
-    String? UserId = userModel.userId;
-    String? usernick = userModel.nickname;
+    // String? UserId = userModel.userId;
+    // String? UserName = userModel.name;
     return Scaffold(
       appBar: AppBar(
         title: Text('예약하기'),

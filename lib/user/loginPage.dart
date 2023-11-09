@@ -87,7 +87,8 @@ class _LoginPageState extends State<LoginPage> {
       DocumentSnapshot userDoc = userDocs.docs.first;
 
       String nickname = userDoc['nickname']; // 파이어스토어에서 닉네임 가져오기
-      Provider.of<UserModel>(context, listen: false).login(id, nickname); // UserModel에 저장
+      String name = userDoc['name'];
+      Provider.of<UserModel>(context, listen: false).login(id, nickname, name); // UserModel에 저장
       //Provider.of<UserModel>(context,listen: false).login(id);
 
       ScaffoldMessenger.of(context).showSnackBar(
