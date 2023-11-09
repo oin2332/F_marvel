@@ -80,11 +80,6 @@ class ImportRestaurant extends StatelessWidget {
       title: "#비오는날",
       content: "내용13",
     ),
-    RestaurantItem(
-      image: 'assets/searchIMG/searchimg14.jpg',
-      title: "#포장가능",
-      content: "내용14",
-    ),
 
   ];
 

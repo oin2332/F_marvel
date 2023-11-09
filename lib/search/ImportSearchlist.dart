@@ -192,7 +192,6 @@ class _SearchListShop extends State<SearchListShop> {
                         SizedBox(width: 6),
                         ElevatedButton(
                           onPressed: () {
-
                           },
                           style: ElevatedButton.styleFrom(
                             primary: const Color(0xFFFF6347),
