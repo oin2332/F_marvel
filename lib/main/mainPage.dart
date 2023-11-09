@@ -4,6 +4,7 @@ import 'package:food_marvel/main/ImportEvent.dart';
 import 'package:food_marvel/main/ImportIcons.dart';
 import 'package:food_marvel/reservation/function/deleteReservation.dart';
 import 'package:food_marvel/search/navSearch.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:food_marvel/reservation/RtabBar.dart';
 import '../board/timeLine.dart';
@@ -23,6 +24,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await initializeDateFormatting('ko_KR', null);
   runApp(
     MultiProvider(
       providers: [

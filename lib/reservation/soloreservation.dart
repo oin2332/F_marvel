@@ -33,14 +33,17 @@ class _ReservationPageState extends State<ReservationPage> {
   Future<void> _saveReservation(UserModel userModel) async {
     String? userId = userModel.userId;
     String? userName = userModel.name;
-    print(userId);
-    print(userName);
+    String formattedDate = DateFormat('yyyy-MM-dd (E)', 'ko_KR').format(selectedDate.toLocal());
+    String formattedTime = DateFormat('HH:mm').format(DateTime(2000, 1, 1, selectedHour, selectedMinute));
+
+    // print(formattedDate);
+    // print(formattedTime);
     // Firebase에 예약 정보 저장
-    await FirebaseFirestore.instance.collection('reser_test').add({
-      ' R_S_ID': widget.storeInfo.name, // 가게이름
+    await FirebaseFirestore.instance.collection('T3_STORE_RESERVATION').add({
+      'R_S_ID': widget.storeInfo.name, // 가게이름
       'R_S_ADDR': widget.storeInfo.address, //
-      'R_DATE': selectedDate.year+selectedDate.month+selectedDate.day, // 예약일
-      'R_TIME': (selectedHour+selectedMinute), // 시간
+      'R_DATE': formattedDate, // 예약일
+      'R_TIME': formattedTime, // 시간
       'R_number': numberOfPeople, // 예약인원
       'R_id': userId, // 유저 아이디
       'R_name': userName, // 유저 닉네임
@@ -57,6 +60,7 @@ class _ReservationPageState extends State<ReservationPage> {
     UserModel userModel = Provider.of<UserModel>(context);
     // String? UserId = userModel.userId;
     // String? UserName = userModel.name;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('예약하기'),
@@ -67,7 +71,7 @@ class _ReservationPageState extends State<ReservationPage> {
           children: <Widget>[
             // Text("예약자 $UserId "),
             // Text("유저 닉네임 $usernick" ),
-            Text('예약 날짜: ${DateFormat('yyyy년 MM월 dd일').format(selectedDate.toLocal())}'),
+            Text('예약 날짜: ${DateFormat('yyyy-MM-dd (E)' ,'ko_KR').format(selectedDate.toLocal())}'),
             TextButton(
               onPressed: () {
                 showDatePicker(

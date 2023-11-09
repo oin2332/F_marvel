@@ -11,11 +11,8 @@ class ReservationData {
   final String storeAddress;
   final String Peopleid;
   final int numberOfPeople;
-  final int reservationYear;
-  final int reservationMonth;
-  final int reservationDay;
-  final int reservationMinute;
-  final int reservationHour;
+  final String reservationDate;
+  final String reservationTime;
 
   // 다른 예약 정보 필드들도 추가할 수 있습니다.
 
@@ -25,11 +22,8 @@ class ReservationData {
     required this.storeAddress,
     required this.Peopleid,
     required this.numberOfPeople,
-    required this.reservationYear,
-    required this.reservationMonth,
-    required this.reservationDay,
-    required this.reservationMinute,
-    required this.reservationHour,
+    required this.reservationDate,
+    required this.reservationTime,
   });
 }
 
@@ -54,8 +48,8 @@ class ReservationListWidget extends StatelessWidget {
 
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-                .collection('reser_test')
-                .where('Peopleid', isEqualTo: userId) // 사용자 ID와 일치하는 예약만 가져오기
+                .collection('T3_STORE_RESERVATION')
+                .where('R_id', isEqualTo: userId) // 사용자 ID와 일치하는 예약만 가져오기
                 .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -68,15 +62,12 @@ class ReservationListWidget extends StatelessWidget {
           List<ReservationData> reservations = snapshot.data!.docs.map((doc) {
             Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
             return ReservationData(
-              storeName: data['storeName'] ?? '',
-              storeAddress: data['storeAddress'] ?? '',
-              Peopleid: data['Peopleid'] ?? '',
-              numberOfPeople: data['numberOfPeople'] ?? '',
-              reservationYear: data['reservationYear'] ?? '',
-              reservationMonth: data['reservationMonth'] ?? '',
-              reservationDay: data['reservationDay'] ?? '',
-              reservationMinute: data['reservationMinute'] ?? '',
-              reservationHour: data['reservationHour'] ?? '',
+              storeName: data['R_S_ID'] ?? '',
+              storeAddress: data['R_S_ADDR'] ?? '',
+              Peopleid: data['R_id'] ?? '',
+              numberOfPeople: data['R_number'] ?? '',
+              reservationDate: data['R_DATE'] ?? '',
+              reservationTime: data['R_TIME'] ?? '',
               id: doc.id, // Firestore 문서 ID를 할당합니다.
             );
           }).toList();
@@ -91,11 +82,8 @@ class ReservationListWidget extends StatelessWidget {
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('예약 날짜: ${reservation.reservationYear.toString()}년 '
-                        '${reservation.reservationMonth.toString()}월 '
-                        '${reservation.reservationDay.toString()}일'),
-                    Text('예약 시간 : ${reservation.reservationHour.toString()}시'
-                        '${reservation.reservationMinute.toString()}분'),
+                    Text('예약 날짜: ${reservation.reservationDate}'),
+                    Text('예약 시간 : ${reservation.reservationTime}'),
                     Text('예약자: ${reservation.Peopleid}'),
 
                     Text('예약 인원: ${reservation.numberOfPeople}명'),
