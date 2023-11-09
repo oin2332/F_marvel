@@ -16,7 +16,7 @@ class BestListShop extends StatefulWidget {
 
   BestListShop(this.category, {Key? key}) : super(key: key);
 
- 
+
   @override
   State<BestListShop> createState() => _BestListShopState();
 }
@@ -68,8 +68,6 @@ class _BestListShopState extends State<BestListShop> {
                     starList.add(value);
                     x += numericValue;
                     y++;
-                  }else if (value is int){
-
                   }
                 }
               });
@@ -91,7 +89,12 @@ class _BestListShopState extends State<BestListShop> {
           userDataList.sort((a, b) {
             double starA = double.tryParse(a['STARage']) ?? 0;
             double starB = double.tryParse(b['STARage']) ?? 0;
-            return starB.compareTo(starA); // 별점 내림차순으로 정렬
+
+            // 두 별점의 합을 계산하여 내림차순으로 정렬
+            double sumA = starA + a['someOtherValue'];
+            double sumB = starB + b['someOtherValue'];
+
+            return sumB.compareTo(sumA);
           });
 
         }
