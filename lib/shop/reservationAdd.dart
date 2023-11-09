@@ -171,16 +171,16 @@ class _ReservationAddState extends State<ReservationAdd> {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: [
-                          SizedBox(width: 12,),
-                          _numberpeople('1'), SizedBox(width: 6,),
-                          _numberpeople('2'), SizedBox(width: 6,),
-                          _numberpeople('3'), SizedBox(width: 6,),
-                          _numberpeople('4'), SizedBox(width: 6,),
-                          _numberpeople('5'), SizedBox(width: 6,),
-                          _numberpeople('6'), SizedBox(width: 6,),
-                          _numberpeople('7'), SizedBox(width: 6,),
-                          _numberpeople('8'), SizedBox(width: 6,),
-                          _numberpeople('9'), SizedBox(width: 6,),
+                          SizedBox(width: 12),
+                          _numberpeople('1'), SizedBox(width: 6),
+                          _numberpeople('2'), SizedBox(width: 6),
+                          _numberpeople('3'), SizedBox(width: 6),
+                          _numberpeople('4'), SizedBox(width: 6),
+                          _numberpeople('5'), SizedBox(width: 6),
+                          _numberpeople('6'), SizedBox(width: 6),
+                          _numberpeople('7'), SizedBox(width: 6),
+                          _numberpeople('8'), SizedBox(width: 6),
+                          _numberpeople('9'), SizedBox(width: 6),
                           _numberpeople('10'),
                         ],
                       ),
@@ -189,12 +189,11 @@ class _ReservationAddState extends State<ReservationAdd> {
                       onPressed: _selectedDay != null && selectedNumber != null
                           ? () {
                         setState(() {
-                          _showClockButtons = true; // 확인 버튼을 누르면 _clockbutton를 표시
-                          
+                          _showClockButtons = true;
                         });
-                        Navigator.of(context).pop(); // 모달 시트 닫기
+                        Navigator.of(context).pop();
                       }
-                          : null, // 버튼을 비활성화하려면 onPressed에 null을 설정
+                          : null,
                       child: Text('확인'),
                     ),
                   ],
@@ -256,7 +255,7 @@ class _ReservationAddState extends State<ReservationAdd> {
   }
   List<Map<String, dynamic>> datatime = [];
 
-  Widget _clockbutton(String time) {
+  Widget _clockbutton(String time) { // 시간 버튼 11:00 12:00
     if (!_showClockButtons) {
       return SizedBox(); // _showClockButtons가 false이면 아무것도 표시하지 않음
     }
@@ -325,9 +324,7 @@ class _ReservationAddState extends State<ReservationAdd> {
     );
   }
 
-
-
-  void _secondModalSheet2(BuildContext context) {
+  void _secondModalSheet2(BuildContext context) { // 예약완료되면 나오는 창
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -347,7 +344,7 @@ class _ReservationAddState extends State<ReservationAdd> {
     );
   }
 
-  void _secondModalSheet(userModel) {
+  void _secondModalSheet(userModel) { // 예약 완료하는창
     showModalBottomSheet(
       context: context,
       shape: RoundedRectangleBorder(
@@ -524,18 +521,32 @@ class _ReservationAddState extends State<ReservationAdd> {
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
                 child: Row(
                   children: [
-                    Icon(Icons.calendar_today_outlined, size: 18,
-                        color: Colors.black),
-                    SizedBox(width: 8),
-                    Text('${_selectedDay != null
-                        ? DateFormat('yyyy-MM-dd (E)', 'ko_KR').format(
-                        _selectedDay!)
-                        : '날짜 선택 안 함'}', style: TextStyle(color: Colors.black),
+                    Icon(
+                      Icons.calendar_today_outlined,
+                      size: 18,
+                      color: Colors.black,
                     ),
-                    Text(' / ', style: TextStyle(color: Colors.black),),
-                    Text('${selectedNumber != null
-                        ? '$selectedNumber 명'
-                        : '인원 선택 안 함'}', style: TextStyle(color: Colors.black),
+                    SizedBox(width: 8),
+                    Text(
+                      '${_selectedDay != null
+                          ? DateFormat('yyyy-MM-dd (E)', 'ko_KR').format(
+                          _selectedDay!)
+                          : '날짜 선택 필수'}',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                    Text(
+                      ' / ',
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    Text(
+                      '${selectedNumber != null
+                          ? '$selectedNumber 명'
+                          : '인원 선택 필수'}',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
                     ),
                   ],
                 ),
@@ -543,7 +554,11 @@ class _ReservationAddState extends State<ReservationAdd> {
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(Colors.white),
                 side: MaterialStateProperty.all(
-                    BorderSide(color: Colors.black, width: 1)),
+                  BorderSide(
+                    color: Colors.black,
+                    width: 1,
+                  ),
+                ),
               ),
             ),
 
@@ -557,7 +572,6 @@ class _ReservationAddState extends State<ReservationAdd> {
                   if (timelist['S_RE_TIME$i'] != null) ...[
                       if (!datatime.any((data) => data['R_TIME'] == timelist['S_RE_TIME$i']))
                       _clockbutton(timelist['S_RE_TIME$i']),
-
                        if (i < 14) SizedBox(width: 6),
                     ],
                   ],

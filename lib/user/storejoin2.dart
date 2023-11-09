@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:food_marvel/user/storeProfileEdit.dart';
 
 import 'loginPage.dart';
 
@@ -122,7 +123,7 @@ class _JoinState extends State<StoreJoin2> {
 
       Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => LoginPage())
+          MaterialPageRoute(builder: (context) => StoreProfileEdit(docid: widget.storeDocumentId))
       );
 
 

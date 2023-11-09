@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../board/storeboardAdd.dart';
 import '../map/maptotal.dart';
+import '../user/storeProfileEdit.dart';
 import '13_tapBar.dart';
 
 class ImportWhere extends StatefulWidget {
@@ -69,10 +71,10 @@ class _ImportWhereState extends State<ImportWhere> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => GooGleMap()));
                 }),
                 buildIconWithText('assets/main/incheon.jpg', '인천/부평', () {
-                  //Navigator.push(context, MaterialPageRoute(builder: (context) => BoardMain()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => StoreProfileEdit(docid: '004hw8u3x1igW11Du1i5')));
                 }),
                 buildIconWithText('assets/main/incheon2.jpg', '인천/연수', () {
-                  navigatePlacePage(1);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => StoreboardAdd()));
                 }),
                 buildIconWithText('assets/main/seoul.jpg', '서울/동암', () {
                   navigatePlacePage(2);
