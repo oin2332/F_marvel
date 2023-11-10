@@ -1,11 +1,7 @@
-import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:food_marvel/reservation/soloreservation.dart';
-import 'package:provider/provider.dart';
 
-import '../../user/userModel.dart';
 import 'detailpage.dart';
 import 'loading.dart';
 
@@ -90,11 +86,7 @@ class _BestListShopState extends State<BestListShop> {
             double starA = double.tryParse(a['STARage']) ?? 0;
             double starB = double.tryParse(b['STARage']) ?? 0;
 
-            // 두 별점의 합을 계산하여 내림차순으로 정렬
-            double sumA = starA + a['someOtherValue'];
-            double sumB = starB + b['someOtherValue'];
-
-            return sumB.compareTo(sumA);
+            return starB.compareTo(starA);
           });
 
         }
@@ -122,6 +114,7 @@ class _BestListShopState extends State<BestListShop> {
           return  ListView.builder(
             itemCount: userDataList.length,
             itemBuilder: (context, index) {
+              if (index >= 50) return null;
               final documentData = userDataList[index];
 
               // documentData['S_INFO1'] == '양식'

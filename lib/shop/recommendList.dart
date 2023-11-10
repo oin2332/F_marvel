@@ -28,7 +28,6 @@ class _RecommendListShopShopState extends State<RecommendListShop> {
   void initState() {
     super.initState();
 
-
   }
 
   List<Map<String, dynamic>> userDataList = [];
@@ -120,6 +119,7 @@ class _RecommendListShopShopState extends State<RecommendListShop> {
     return ListView.builder(
     itemCount: userDataList.length,
     itemBuilder: (context, index) {
+      if (index >= 50) return null;
     final documentData = userDataList[index];
 
     if (true) {

@@ -62,7 +62,7 @@ class _ReservationPageState extends State<ReservationPage> {
       },
       body: jsonEncode({
         'notification': {
-          'title': '시발련아 ',
+          'title': '푸드마블 ',
           'body': '예약이 성공적으로 완료되었습니다.',
         },
         'to': fcmToken,
@@ -83,15 +83,46 @@ class _ReservationPageState extends State<ReservationPage> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor:  Color(0xFFFF6347),
         title: Text('예약하기'),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Column(
           children: <Widget>[
+            SizedBox(height: 5,),
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFFCECD8),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    padding: EdgeInsets.all(5),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(width: 15),
+                            Text('푸드마블 정식 오픈!', style: TextStyle(color: Colors.black, fontSize: 20),),
+                            Image.asset('assets/main/쿼카-removebg-preview1.png', width: 65, height: 65,),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('전국', style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold,),),
+                            SizedBox(width: 10),
+                            Text('웨이팅을 실시간으로 !', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red, fontSize: 20,),),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+                      ],
+                    ),
+                  ),
+            ),
+            SizedBox(height: 20),
             // Text("예약자 $UserId "),
-            // Text("유저 닉네임 $usernick" ),
-            Text('예약 날짜: ${DateFormat('yyyy-MM-dd (E)' ,'ko_KR').format(selectedDate.toLocal())}'),
             TextButton(
               onPressed: () {
                 showDatePicker(
@@ -107,14 +138,21 @@ class _ReservationPageState extends State<ReservationPage> {
                   }
                 });
               },
-              child: Text('날짜 선택'),
-            ),
+              child: Text('날짜 선택',style: TextStyle(color: Colors.white),),
+              style: TextButton.styleFrom(
+                backgroundColor: Color(0xFFFF6347),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                ),),
+            // Text("유저 닉네임 $usernick" ),
+            SizedBox(height: 5,),
+            Text('예약 날짜: ${DateFormat('yyyy-MM-dd (E)' ,'ko_KR').format(selectedDate.toLocal())}'),
+            SizedBox(height: 5,),
             Text('예약 시간: ${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')}'),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 CupertinoButton(
-                  child: Icon(Icons.remove),
+                  child: Icon(Icons.remove, color: Color(0xFFFF6347)),
                   onPressed: () {
                     setState(() {
                       if (selectedHour > 10) {
@@ -143,7 +181,7 @@ class _ReservationPageState extends State<ReservationPage> {
                   },
                 ),
                 CupertinoButton(
-                  child: Icon(Icons.add),
+                  child: Icon(Icons.add, color: Color(0xFFFF6347)),
                   onPressed: () {
                     setState(() {
                       if (selectedHour < 23) {
@@ -164,7 +202,7 @@ class _ReservationPageState extends State<ReservationPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 CupertinoButton(
-                  child: Icon(Icons.remove),
+                  child: Icon(Icons.remove, color: Color(0xFFFF6347)),
                   onPressed: () {
                     setState(() {
                       if (numberOfPeople > 1) {
@@ -185,7 +223,7 @@ class _ReservationPageState extends State<ReservationPage> {
                   },
                 ),
                 CupertinoButton(
-                  child: Icon(Icons.add),
+                  child: Icon(Icons.add, color: Color(0xFFFF6347)),
                   onPressed: () {
                     setState(() {
                       if (numberOfPeople < 10) {
@@ -198,11 +236,14 @@ class _ReservationPageState extends State<ReservationPage> {
             ),
             ElevatedButton(
               onPressed: () => _saveReservation(userModel),
-              child: Text('예약 완료'),
+              child: Text('예약 완료',style: TextStyle(color: Colors.white)),
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFFFF6347),
+              ),
             ),
           ],
         ),
-      ),
+
     );
   }
 }
