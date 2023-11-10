@@ -104,6 +104,7 @@ class _ReservationAddState extends State<ReservationAdd> {
       'R_number': selectedNumber,
       'R_id': userId,
       'R_name': usernick,
+      'R_state': null,
     });
 
     Navigator.of(context).pop();

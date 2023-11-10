@@ -53,6 +53,7 @@ class _ReservationPageState extends State<ReservationPage> {
       'R_number': numberOfPeople, // 예약인원
       'R_id': userId, // 유저 아이디
       'R_name': userName, // 유저 닉네임
+      'R_state': null,
     });
 
     FirebaseMessaging messaging = FirebaseMessaging.instance;

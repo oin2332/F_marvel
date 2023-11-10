@@ -39,7 +39,7 @@ class ReservationDataProvider with ChangeNotifier {
 
 }
 
-class ReservationListWidget extends StatelessWidget {
+class AlarmList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var userModel = Provider.of<UserModel>(context); // UserModel 인스턴스 가져오기
@@ -52,10 +52,10 @@ class ReservationListWidget extends StatelessWidget {
 
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-                .collection('T3_STORE_RESERVATION')
-                .where('R_id', isEqualTo: userId) // 사용자 ID와 일치하는 예약만 가져오기
-                .where('R_state', isNull: true)  // R_state가 null인 데이터만 필터링
-                .snapshots(),
+          .collection('T3_STORE_RESERVATION')
+          .where('R_id', isEqualTo: userId) // 사용자 ID와 일치하는 예약만 가져오기
+          .where('R_state', isNull: true)  // R_state가 null인 데이터만 필터링
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
