@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:food_marvel/FCM/message.dart';
 import 'package:food_marvel/main/ImportEvent.dart';
 import 'package:food_marvel/main/ImportIcons.dart';
 import 'package:food_marvel/reservation/function/deleteReservation.dart';
@@ -7,10 +12,12 @@ import 'package:food_marvel/search/navSearch.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:food_marvel/reservation/RtabBar.dart';
+import '../FCM/fcmex.dart';
 import '../board/timeLine.dart';
 import '../firebase/firebase_options.dart';
 import '../search/headSearch.dart';
 import '../shop/storePage.dart';
+import 'package:http/http.dart' as http;
 
 import '../user/userMain.dart';
 import '../user/userModel.dart';
@@ -25,6 +32,13 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await initializeDateFormatting('ko_KR', null);
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  if (!kIsWeb) {
+    await setupFlutterNotifications();
+  }
+
+
   runApp(
     MultiProvider(
       providers: [
@@ -38,6 +52,7 @@ void main() async {
     ),
   );
 }
+
 
 
 class MyApp extends StatelessWidget {
@@ -55,11 +70,68 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
+
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await setupFlutterNotifications();
+  showFlutterNotification(message);
+  // Handle the background message
+  print('Handling a background message ${message.messageId}');
+}
+
 class _MainPageState extends State<MainPage> {
+  String? initialMessage;
+  bool _resolved = false;
+  @override
+  void initState() {
+    super.initState();
+
+    FirebaseMessaging.instance.getInitialMessage().then(
+          (value) => setState(
+            () {
+          _resolved = true;
+          initialMessage = value?.data.toString();
+        },
+      ),
+    );
+
+    FirebaseMessaging.onMessage.listen(showFlutterNotification);
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('A new onMessageOpenedApp event was published!');
+      Navigator.pushNamed(
+        context,
+        '/message',
+        arguments: MessageArguments(message, true),
+      );
+    });
+  }
+
+
   @override
   Widget build(BuildContext context) {
     UserModel userModel = Provider.of<UserModel>(context);
     String? uId = userModel.userId;
+
+    void sendReservationNotification() async {
+      FirebaseMessaging messaging = FirebaseMessaging.instance;
+      String? fcmToken = await messaging.getToken();
+      await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'key=AAAAH6_c1yw:APA91bEJTMrIJhVjJa4MBP76N_XncTlXQvXnOQB4aBv_9nrqEJP6dbJbiLZi-DQMGfg3PAXkXJwZHcxlJjW6PLLjaLGz34LBpXxYONkF9Xqlltb4FBqpW8P99ua-8opTVXUKeaQGZjPK',
+        },
+        body: jsonEncode({
+          'notification': {
+            'title': '예약 알림',
+            'body': '예약이 성공적으로 완료되었습니다.',
+          },
+          'to': fcmToken,
+        }),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor:  Colors.white,

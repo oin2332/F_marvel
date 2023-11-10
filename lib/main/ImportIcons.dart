@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../FCM/fcmex.dart';
 import '../shop/bestPage.dart';
 import '../shop/recommendPage.dart';
 import '../shop/storePage.dart';
@@ -61,7 +62,8 @@ class _ImportIconsState extends State<ImportIcons> {
       StorePage('피자'),
       StorePage('햄버거'),
       StorePage('분식'),
-      StorePage('포장마차'),
+      MessagingExampleApp(),
+      //StorePage('포장마차'),
     ];
 
     if (index >= 0 && index < pages.length) { //카테고리 버튼
