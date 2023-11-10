@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:food_marvel/reservation/function/deleteReservation.dart';
+import 'package:food_marvel/reservation/Visit_Cancel.dart';
+import 'package:food_marvel/reservation/function/Alarm.dart';
+import 'package:food_marvel/reservation/function/cancelReservation.dart';
 import 'package:food_marvel/reservation/function/getReservation.dart';
 import 'package:food_marvel/reservation/visit_completed_page.dart';
 import 'package:food_marvel/reservation/visit_schedule_page.dart';
@@ -17,7 +19,7 @@ import '../shop/storePage.dart';
 import '../user/userMain.dart';
 import '../user/userModel.dart';
 import '../user/userUnlogin.dart';
-import 'cancel_noshow_page.dart';
+import 'function/cancel_noshow_page.dart';
 
 
 class ResTabBar extends StatefulWidget {
@@ -64,6 +66,8 @@ class _ResTabBarState extends State<ResTabBar> {
         ),
         body: TabBarView(
           children: [
+            // 나의 알림
+            Center(child: AlarmList()),
             Container(
               child: Column(
                 children: [
@@ -83,12 +87,10 @@ class _ResTabBarState extends State<ResTabBar> {
                   // 여기에 방문 완료 페이지 내용 추가
                   if (selectedIndex == 1) Visit_schedule_page(),
                   // 여기에 취소/노쇼 페이지 내용 추가
-                  if (selectedIndex == 2) Noshow(),
+                  if (selectedIndex == 2) Visit_Cancel(),
                 ],
               ),
             ),
-            // 나의 알림
-            Center(child: ReservationListWidget()),
           ],
         ),
         bottomNavigationBar: BottomAppBar(

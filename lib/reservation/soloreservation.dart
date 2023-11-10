@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:food_marvel/shop/widthScroll.dart';
 import 'package:food_marvel/user/userModel.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +38,7 @@ class _ReservationPageState extends State<ReservationPage> {
   Future<void> _saveReservation(UserModel userModel) async {
     String? userId = userModel.userId;
     String? userName = userModel.name;
+
     String formattedDate = DateFormat('yyyy-MM-dd (E)', 'ko_KR').format(selectedDate.toLocal());
     String formattedTime = DateFormat('HH:mm').format(DateTime(2000, 1, 1, selectedHour, selectedMinute));
 
@@ -44,12 +47,13 @@ class _ReservationPageState extends State<ReservationPage> {
     // Firebase에 예약 정보 저장
     await FirebaseFirestore.instance.collection('T3_STORE_RESERVATION').add({
       'R_S_ID': widget.storeInfo.name, // 가게이름
-      'R_S_ADDR': widget.storeInfo.address, //
+      'R_S_ADDR': widget.storeInfo.address, // 가게주소
       'R_DATE': formattedDate, // 예약일
       'R_TIME': formattedTime, // 시간
       'R_number': numberOfPeople, // 예약인원
       'R_id': userId, // 유저 아이디
       'R_name': userName, // 유저 닉네임
+      'R_state': null,
     });
 
     FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -121,6 +125,33 @@ class _ReservationPageState extends State<ReservationPage> {
                     ),
                   ),
             ),
+            SizedBox(height: 15,),
+            Row(
+              children: [
+                SizedBox(height: 15,),
+                Container(
+                  width: 150,
+                  height: 150, // 원하는 높이 설정
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: CachedNetworkImage(
+                    placeholder: (context, url) => const CircularProgressIndicator(),
+                    imageUrl: widget.storeInfo.image, // widget.storeInfo.reimage에 이미지 URL이 들어있는 것으로 가정
+                  ),
+                ),
+                Column(
+                  children: [
+                    Text('${widget.storeInfo.name}',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,),),
+                    Text('${widget.storeInfo.submemo}',),
+                    Text('${widget.storeInfo.address}',style: TextStyle(fontSize: 12,color: Colors.grey),),
+                    // Text('${widget.storeInfo.time}',style: TextStyle(fontSize: 11, color: Colors.grey,),),
+                  ],
+                ),
+              ],
+            ),
+
+
             SizedBox(height: 20),
             // Text("예약자 $UserId "),
             TextButton(
@@ -241,16 +272,36 @@ class _ReservationPageState extends State<ReservationPage> {
                 primary: Color(0xFFFF6347),
               ),
             ),
+            SizedBox(height: 30,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                SizedBox(width: 15,),
+                Text("여기는 어떠신가요?",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
+              ],
+            ),
+            SizedBox(height: 10,),
+            // Expanded(child: WidthScroll("전국~")),
           ],
         ),
-
     );
   }
 }
 
 class StoreInfo {
+  final String image;
   final String name;
   final String address;
+  final String? submemo;
+  final String? time;
 
-  StoreInfo({required this.name, required this.address});
+
+  StoreInfo({
+    required this.image,
+    required this.name,
+    required this.address,
+    required this.submemo,
+    required this.time,
+  });
 }

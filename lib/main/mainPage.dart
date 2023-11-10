@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:food_marvel/FCM/message.dart';
 import 'package:food_marvel/main/ImportEvent.dart';
 import 'package:food_marvel/main/ImportIcons.dart';
-import 'package:food_marvel/reservation/function/deleteReservation.dart';
+import 'package:food_marvel/reservation/function/cancelReservation.dart';
 import 'package:food_marvel/search/navSearch.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';

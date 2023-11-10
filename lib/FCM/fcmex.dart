@@ -80,7 +80,7 @@ void showFlutterNotification(RemoteMessage message) {
           channelDescription: channel.description,
           // TODO add a proper drawable resource to android, for now using
           //      one that already exists in example app.
-          icon: 'launch_background',
+          icon: 'mipmap/ic_launcher',
         ),
       ),
     );
@@ -318,8 +318,11 @@ class _Application extends State<Application> {
                 GestureDetector(
                   onTap: () {
                     StoreInfo storeInfo = StoreInfo(
+                      image: "img",
                       name: "name",
                       address: "test",
+                      submemo: 'memo',
+                      time: 'time',
                     );
                     Navigator.push(
                       context,

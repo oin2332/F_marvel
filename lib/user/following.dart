@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_marvel/user/followList.dart';
 import 'package:food_marvel/user/userModel.dart';
 import 'package:provider/provider.dart';
 
@@ -60,22 +61,27 @@ class _FollowingState extends State<Following> {
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.black26),
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Icon(Icons.person_add_alt_1_sharp, size: 50),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text('연락처를 연결해서 친구를 팔로우 하고, \n함께 갈 레스토랑을 찾아보세요'),
-                          SizedBox(height: 5),
-                          Text('연락처 연결하기 >', style: TextStyle(color: Colors.deepOrange))
-                        ],
-                      )
-                    ],
-                  ),
+                  child: InkWell(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => FollowList()));
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(Icons.person_add_alt_1_sharp, size: 50),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('팔로잉할 친구를 찾아서 팔로우 하고, \n함께 갈 레스토랑을 찾아보세요'),
+                            SizedBox(height: 5),
+                            Text('친구 연결하기 >', style: TextStyle(color: Colors.deepOrange))
+                          ],
+                        )
+                      ],
+                    ),
+                  )
                 ),
               ),
               SizedBox(height: 140),

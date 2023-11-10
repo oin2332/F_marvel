@@ -1,4 +1,5 @@
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -154,9 +155,9 @@ class _BestListShopState extends State<BestListShop> {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          child: Image.asset(
-                            'assets/storePageIMG/${documentData['S_IMG']}',
-                            fit: BoxFit.cover,
+                          child: CachedNetworkImage(
+                            placeholder: (context, url) => const CircularProgressIndicator(),
+                            imageUrl: documentData['S_IMG'],
                           ),
                         ),
                         SizedBox(width: 13),

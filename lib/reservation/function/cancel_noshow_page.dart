@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:food_marvel/reservation/function/cancelReservation.dart';
+import 'package:food_marvel/reservation/function/deleteReservation.dart';
 import 'package:food_marvel/user/userModel.dart';
 import 'package:provider/provider.dart';
+
 
 class ReservationData {
   final String id;
@@ -33,13 +35,11 @@ class ReservationData {
 
 class ReservationDataProvider with ChangeNotifier {
   List<ReservationData> _reservations = [];
-
   List<ReservationData> get reservations => _reservations;
-
-
 }
 
-class ReservationListWidget extends StatelessWidget {
+
+class ReservationCListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var userModel = Provider.of<UserModel>(context); // UserModel 인스턴스 가져오기
@@ -52,10 +52,10 @@ class ReservationListWidget extends StatelessWidget {
 
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
-                .collection('T3_STORE_RESERVATION')
-                .where('R_id', isEqualTo: userId) // 사용자 ID와 일치하는 예약만 가져오기
-                .where('R_state', isNull: true)  // R_state가 null인 데이터만 필터링
-                .snapshots(),
+          .collection('T3_STORE_RESERVATION')
+          .where('R_id', isEqualTo: userId) // 사용자 ID와 일치하는 예약만 가져오기
+          .where('R_state', isEqualTo: 'C')  // R_state가 null인 데이터만 필터링
+          .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -105,23 +105,23 @@ class ReservationListWidget extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text('예약 취소'),
-                          content: Text('예약을 취소하시겠습니까?'),
+                          title: Text('취소 목록 삭제'),
+                          content: Text('취소 목록을 삭제하시겠습니까?'),
                           actions: <Widget>[
                             TextButton(
                               child: Text('확인'),
                               onPressed: () async {
                                 Navigator.of(context).pop(); // 다이얼로그 닫기
                                 // 예약 취소 로직을 여기에 추가
-                                await cancelReservation(reservation.id);
+                                await deleteReservation(reservation.id);
 
                                 // 예약이 성공적으로 취소되었음을 알리는 다이얼로그 표시
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      title: Text('예약 취소 완료'),
-                                      content: Text('예약이 성공적으로 취소되었습니다.'),
+                                      title: Text('취소 목록 삭제 완료'),
+                                      content: Text('취소 목록이 성공적으로 삭제되었습니다.'),
                                       actions: <Widget>[
                                         TextButton(
                                           child: Text('확인'),
@@ -147,7 +147,7 @@ class ReservationListWidget extends StatelessWidget {
                       },
                     );
                   },
-                  child: Text('예약 취소'),
+                  child: Text('취소 목록 삭제'),
                 ),
               );
             },

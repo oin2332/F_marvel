@@ -5,15 +5,9 @@ import 'package:food_marvel/search/headSearch.dart';
 import 'package:food_marvel/shop/bestPage.dart';
 import 'package:food_marvel/search/ImportRestaurant.dart';
 import 'package:food_marvel/search/ImportSuddenpopular.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
-
-import '../board/timeLine.dart';
-import '../main/mainPage.dart';
-import '../reservation/RtabBar.dart';
-import '../user/userMain.dart';
 import '../user/userModel.dart';
-import '../user/userUnlogin.dart';
+import 'ImportFilter.dart';
 
 void main() => runApp(MaterialApp(
   title: 'NavSearch',
@@ -40,16 +34,7 @@ class _NavSearchState extends State<NavSearch> {
     super.dispose();
   }
 
-  void openModal() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Container(
-          // 모달 내용을 구현하십시오.
-        );
-      },
-    );
-  }
+
 
   Widget _menubutton(String text) {
     return Container(
@@ -99,6 +84,15 @@ class _NavSearchState extends State<NavSearch> {
           );
         }).toList(),
       ),
+    );
+  }
+
+  void _showFilterModal() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return FilterModal();
+      },
     );
   }
 
@@ -213,12 +207,17 @@ class _NavSearchState extends State<NavSearch> {
                       alignment: Alignment.centerLeft,
                       child: Row(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10.0, bottom: 10.0),
-                            child: Icon(
-                              Icons.tune_outlined,
-                              color: Colors.black,
-                              size: 30,
+                          GestureDetector(
+                            onTap: () {
+                              _showFilterModal();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10.0, bottom: 10.0),
+                              child: Icon(
+                                Icons.tune_outlined,
+                                color: Colors.black,
+                                size: 30,
+                              ),
                             ),
                           ),
                           SizedBox(width: 10),

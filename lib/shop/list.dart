@@ -201,8 +201,11 @@ class _TestState extends State<ListsShop> {
                                 GestureDetector(
                                   onTap: () {
                                     StoreInfo storeInfo = StoreInfo(
+                                      image: documentData['S_IMG'],
                                       name: documentData['S_NAME'],
                                       address: '${documentData['S_ADDR1']} ${documentData['S_ADDR2']} ${documentData['S_ADDR3']}',
+                                      submemo: documentData['S_MEMO'],
+                                      time: documentData['S_TIME'],
                                     );
                                     Navigator.push(
                                       context,
