@@ -1,10 +1,13 @@
+import 'dart:convert';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:food_marvel/user/userModel.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
+import 'package:http/http.dart' as http;
 
 
 class ReservationPage extends StatefulWidget {
@@ -48,6 +51,23 @@ class _ReservationPageState extends State<ReservationPage> {
       'R_id': userId, // 유저 아이디
       'R_name': userName, // 유저 닉네임
     });
+
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    String? fcmToken = await messaging.getToken();
+    await http.post(
+      Uri.parse('https://fcm.googleapis.com/fcm/send'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'key=AAAAH6_c1yw:APA91bEJTMrIJhVjJa4MBP76N_XncTlXQvXnOQB4aBv_9nrqEJP6dbJbiLZi-DQMGfg3PAXkXJwZHcxlJjW6PLLjaLGz34LBpXxYONkF9Xqlltb4FBqpW8P99ua-8opTVXUKeaQGZjPK', // FCM 서버 키를 넣어주세요
+      },
+      body: jsonEncode({
+        'notification': {
+          'title': '시발련아 ',
+          'body': '예약이 성공적으로 완료되었습니다.',
+        },
+        'to': fcmToken,
+      }),
+    );
 
     // 예약 완료 메시지 표시
     ScaffoldMessenger.of(context).showSnackBar(
