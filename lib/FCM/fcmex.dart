@@ -318,8 +318,11 @@ class _Application extends State<Application> {
                 GestureDetector(
                   onTap: () {
                     StoreInfo storeInfo = StoreInfo(
+                      image: "img",
                       name: "name",
                       address: "test",
+                      submemo: 'memo',
+                      time: 'time',
                     );
                     Navigator.push(
                       context,
