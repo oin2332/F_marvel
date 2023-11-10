@@ -1,14 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:food_marvel/user/storeProfileEdit.dart';
+import 'package:food_marvel/shop/Addshop/storeProfileEdit.dart';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
+import 'package:food_marvel/shop/Addshop/storemenuimgAdd2.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import '../user/userModel.dart';
-import 'loginPage.dart';
+import '../../user/userModel.dart';
+import '../../user/loginPage.dart';
 
 
 class StoreJoin2 extends StatefulWidget {
@@ -121,15 +122,6 @@ class _JoinState extends State<StoreJoin2> {
           .doc(widget.storeDocumentId)
           .collection('T3_STAR_TBL');
 
-      List<String> imageUrls = []; // 이미지 주소들
-      //
-      for (File imageFile in _selectedImages) {
-        XFile xFile = XFile(imageFile.path); // File을 XFile로 변환
-        String imageUrl = await uploadImageToStorage(xFile); // 이미지 업로드
-        imageUrls.add(imageUrl);
-      }
-
-
       await star.add({
         'STAR' : 'a',
       });
@@ -189,14 +181,13 @@ class _JoinState extends State<StoreJoin2> {
         'S_MENU3-1' : S_MENU3_1.text,
         'S_MENU4' : S_MENU4.text,
         'S_MENU4-1' : S_MENU4_1.text,
-        'S_MENUimgList' : imageUrls,
       });
 
 
 
       Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => StoreProfileEdit(docid: widget.storeDocumentId))
+          MaterialPageRoute(builder: (context) => StoremenuimgAdd2(storeDocumentId: widget.storeDocumentId))
       );
 
 
@@ -464,39 +455,6 @@ class _JoinState extends State<StoreJoin2> {
 
               ],
             ),
-            InkWell(
-              onTap: _selectPics,
-              child: Container(
-                color: Colors.white,
-                child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          height: 400,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black),
-                          ),
-                          child:PageView.builder(
-                            itemCount: _selectedImages.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Container(
-                                alignment: Alignment.center,
-                                child: Image.file(
-                                  _selectedImages[index],
-                                  fit: BoxFit.cover, // 이미지를 컨테이너에 맞게 크기 조절
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    )
-                ),
-              ),
-            ),
             Column(
               children: [
                 SizedBox(height: 5),
@@ -634,7 +592,7 @@ class _JoinState extends State<StoreJoin2> {
 
                 });
                 },
-              child: Text('다음'),
+              child: Text('메뉴판 이미지 등록하러가기'),
             )
           ],
         ),

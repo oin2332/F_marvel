@@ -2,20 +2,24 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
+import 'package:food_marvel/shop/Addshop/storeboardAdd.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-import '../user/userModel.dart';
+import '../../user/userModel.dart';
 
-class StoreboardAdd extends StatefulWidget {
+class StoremenuimgAdd2 extends StatefulWidget {
+  final String storeDocumentId; // docId를 받을 변수 추가
+
+  StoremenuimgAdd2({required this.storeDocumentId});
 
 
   @override
-  State<StoreboardAdd> createState() => _BoardAddState();
+  State<StoremenuimgAdd2> createState() => _BoardAddState();
 }
 
-class _BoardAddState extends State<StoreboardAdd> {
+class _BoardAddState extends State<StoremenuimgAdd2> {
 
 
   String? _selectUser;
@@ -29,7 +33,7 @@ class _BoardAddState extends State<StoreboardAdd> {
       CollectionReference STOREIMG = FirebaseFirestore.instance
           .collection('T3_STORE_TBL')
           .doc(docid)
-          .collection('T3_STOREIMG_TBL');
+          .collection('T3_menuimg_TBL');
 
       List<String> imageUrls = []; // 이미지 주소들
 
@@ -44,7 +48,10 @@ class _BoardAddState extends State<StoreboardAdd> {
       await STOREIMG.add({
         'r_img_urls': imageUrls, // 여러 이미지의 URL을 리스트로 저장
       });
-
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => StoreboardAdd(storeDocumentId: widget.storeDocumentId))
+      );
 
     } else {
       print("제목 또는 내용을 입력해주세요.");
@@ -92,7 +99,7 @@ class _BoardAddState extends State<StoreboardAdd> {
     return Scaffold(
       appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.black),
-          title: Text('리뷰 작성', style: TextStyle(color: Colors.black)),
+          title: Text('가게 메뉴판 이미지 등록', style: TextStyle(color: Colors.black)),
           backgroundColor: Colors.white,
           elevation: 0,
           leading: IconButton(

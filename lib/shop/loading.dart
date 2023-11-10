@@ -26,3 +26,15 @@ class LoadingSpinner2 extends StatelessWidget {
     );
   }
 }
+class LoadingSpinner3 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: SpinKitPouringHourGlassRefined(
+        color: Color(0xFFFF6347), // 스피너의 색상 설정
+        size: 50.0, // 스피너의 크기 설정
+        duration: Duration(seconds: 1), // 스피너의 애니메이션 지속 시간 설정
+      ),
+    );
+  }
+}

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:food_marvel/shop/underlindeBox.dart';
 import 'package:vertical_barchart/vertical-barchart.dart';
 import 'package:vertical_barchart/vertical-barchartmodel.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
+import 'loading.dart';
 
 class TabBarEx extends StatefulWidget {
   final int initialTabIndex;
@@ -25,11 +27,6 @@ class _TabBarExState extends State<TabBarEx> {
   void initState() {
     super.initState();
     tabIndex = widget.initialTabIndex;
-    for (var value in img[0].values) {
-      if (value is String && value.endsWith('.jpeg')) {
-        Path.add(value);
-      }
-    }
 
 
 
@@ -51,7 +48,7 @@ class _TabBarExState extends State<TabBarEx> {
     List<String> num3 = Star.where((element) => element == '3').toList();
     List<String> num2 = Star.where((element) => element == '2').toList();
     List<String> num1 = Star.where((element) => element == '1').toList();
-      
+
     double cnt5 = num5.length.toDouble();
     double cnt4 = num4.length.toDouble();
     double cnt3 = num3.length.toDouble();
@@ -101,7 +98,6 @@ class _TabBarExState extends State<TabBarEx> {
 
   List<Map<String, dynamic>> userDataList = [];
   Map<String, dynamic> memuMap = {};
-
   Future<List<Widget>?> _fetchAllUserData(String docId) async {
     try {
       DocumentSnapshot storeSnapshot = await FirebaseFirestore.instance
@@ -118,6 +114,47 @@ class _TabBarExState extends State<TabBarEx> {
             .doc(docId)
             .collection('T3_STAR_TBL')
             .get();
+
+        //이미지 가져오기
+          QuerySnapshot storeImgList = await FirebaseFirestore.instance
+              .collection('T3_STORE_TBL')
+              .doc(docId)
+              .collection('T3_STOREIMG_TBL')
+              .get();
+
+
+            List<dynamic> imgstore = storeImgList.docs[0].get('r_img_urls'); // 첫 번째 문서의 r_img_urls 필드에서 데이터 가져오기
+
+            // r_img_urls의 각 항목을 imagePaths에 추가
+               imgstore.forEach((imageUrl) {
+              if (imageUrl is String) {
+                Path.add(imageUrl);
+              }
+            });
+
+
+
+        //메뉴 이미지 가져오기
+
+          QuerySnapshot monuImgList = await FirebaseFirestore.instance
+              .collection('T3_STORE_TBL')
+              .doc(docId)
+              .collection('T3_menuimg_TBL')
+              .get();
+
+          if (monuImgList.docs.isNotEmpty) {
+            List<dynamic> menuimglist = monuImgList.docs[0].get('r_img_urls'); // 첫 번째 문서의 r_img_urls 필드에서 데이터 가져오기
+
+            // r_img_urls의 각 항목을 imagePaths에 추가
+            menuimglist.forEach((imageUrl) {
+              if (imageUrl is String) {
+                menuImg.add(imageUrl);
+              }
+            });
+          } else {
+            print('이미지 목록이 비어 있습니다.');
+          }
+
 
         //메뉴 가져오기
         QuerySnapshot menuSnapshot = await FirebaseFirestore.instance
@@ -173,41 +210,7 @@ class _TabBarExState extends State<TabBarEx> {
     }
   }
 
-  List<Map<String, dynamic>> menuImg = [
-    {
-      'img1': 'BEKMIWOO_MENU1.jpg',
-      'img2': 'BEKMIWOO_MENU2.jpg',
-      'img3': 'BEKMIWOO_MENU3.jpg',
-      'img4': 'BEKMIWOO_MENU4.jpg',
-      'S_MENU1' : 'HANWOO',
-      'S_MENU1-1' : '59,000~360,000원',
-      'S_MENU2' : 'APPETIZER',
-      'S_MENU2-1' : '15,000~49,000원',
-      'S_MENU3' : 'DISH',
-      'S_MENU3-1' : '9,000~25,000원',
-      'S_MENU4' : 'BANJOO',
-      'S_MENU4-1' : '15,000~40,000원',
-      'S_MENU5' : 'DRINK',
-      'S_MENU5-1' : '55,000~28,000,000원',
-
-    },
-  ];
-  List<Map<String, dynamic>> img = [
-    {
-      'S_IMG1' : 'BEKMIWOO1.jpeg',
-      'S_IMG2' : 'BEKMIWOO2.jpeg',
-      'S_IMG3' : 'BEKMIWOO3.jpeg',
-      'S_IMG4' : 'BEKMIWOO4.jpeg',
-      'S_IMG5' : 'BEKMIWOO5.jpeg',
-      'S_IMG6' : 'BEKMIWOO6.jpeg',
-      'S_IMG7' : 'BEKMIWOO7.jpeg',
-      'S_IMG8' : 'BEKMIWOO8.jpeg',
-      'S_IMG9' : 'BEKMIWOO9.jpeg',
-      'S_IMG10' : 'BEKMIWOO10.jpeg',
-      'S_IMG11' : 'BEKMIWOO11.jpeg',
-      'S_IMG12' : 'BEKMIWOO12.jpeg',
-    }
-  ];
+  List<String> menuImg = [];
 
   List<Map<String, dynamic>> starlist = [
     {
@@ -262,7 +265,10 @@ class _TabBarExState extends State<TabBarEx> {
       context: context,
       builder: (context) {
         return Dialog(
-          child: Image.asset(imagePath), // 이미지 표시
+          child: CachedNetworkImage(
+            placeholder: (context, url) => const LoadingSpinner3(),
+            imageUrl: imagePath,
+          ), // 이미지 표시
         );
       },
     );
@@ -305,140 +311,144 @@ class _TabBarExState extends State<TabBarEx> {
                 Tab(text: '메뉴'),
                 Tab(text: '사진 ${Path.length}'),
                 Tab(text: '리뷰 ${Star.length}'),
-             ],
+              ],
             ),
           ),
           body: TabBarView(
             children: [
               Text("홍"),
               // 메뉴 ---------------------------------------------------------//
-                  FutureBuilder<List<Widget>?>(
+              FutureBuilder<List<Widget>?>(
                   future: _fetchAllUserData(widget.docId),
                   builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    print('별별별 : $Star');
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      print('별별별 : $Star');
 
-                  return Column(
-                  children: [
-                  CircularProgressIndicator(),
-                  ],
-                  ); // Display a loading indicator if the future is not resolved yet.
-                  } else {
+                      return Column(
+                        children: [
+                          CircularProgressIndicator(),
+                        ],
+                      ); // Display a loading indicator if the future is not resolved yet.
+                    } else {
                       return ListView(
-                          children: <Widget>[
-                            ListTile(
-                                title: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Row(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                // 이미지 클릭 시 다이얼로그 표시
-                                                _showImageDialog(context, 'assets/storePageIMG/BEKMIWOO/${menuImg[0]['img1']}');
-                                              },
-                                              child: Image.asset(
-                                                'assets/storePageIMG/${menuImg[0]['img1']}',
-                                                width: 250,
-                                                height: 330,
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                // 이미지 클릭 시 다이얼로그 표시
-                                                _showImageDialog(context, 'assets/storePageIMG/${menuImg[0]['img2']}');
-                                              },
-                                              child: Image.asset(
-                                                'assets/storePageIMG/${menuImg[0]['img2']}',
-                                                width: 250,
-                                                height: 330,
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                // 이미지 클릭 시 다이얼로그 표시
-                                                _showImageDialog(context, 'assets/storePageIMG/${menuImg[0]['img3']}');
-                                              },
-                                              child: Image.asset(
-                                                'assets/storePageIMG/${menuImg[0]['img3']}',
-                                                width: 250,
-                                                height: 330,
-                                              ),
-                                            ),
-                                            GestureDetector(
-                                              onTap: () {
-                                                // 이미지 클릭 시 다이얼로그 표시
-                                                _showImageDialog(context, 'assets/storePageIMG/${menuImg[0]['img4']}');
-                                              },
-                                              child: Image.asset(
-                                                'assets/storePageIMG/${menuImg[0]['img4']}',
-                                                width: 250,
-                                                height: 330,
-                                              ),
-                                            ),
-                                            // 다른 이미지들도 동일한 방식으로 처리
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 10,),
-                                    UnderLindeBox().underlineBox(1.0),
-                                    Container(
-                                      padding: EdgeInsets.all(30),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          ListTile(
+                              title: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Row(
                                         children: [
-                                          Text('${memuMap['S_MENU1']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-                                          SizedBox(height: 12,),
-                                          Text('${memuMap['S_MENU1-1']}',style: TextStyle(fontSize: 20)),
+                                          GestureDetector(
+                                            onTap: () {
+                                              // 이미지 클릭 시 다이얼로그 표시
+                                              _showImageDialog(context, menuImg[0]);
+                                            },
+                                            child: CachedNetworkImage(
+                                              width: 250,
+                                              height: 330,
+                                              placeholder: (context, url) => const LoadingSpinner3(),
+                                              imageUrl: menuImg[0],
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              // 이미지 클릭 시 다이얼로그 표시
+                                              _showImageDialog(context, menuImg[1]);
+                                            },
+                                            child: CachedNetworkImage(
+                                              width: 250,
+                                              height: 330,
+                                              placeholder: (context, url) => LoadingSpinner3(),
+                                              imageUrl: menuImg[1],
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              // 이미지 클릭 시 다이얼로그 표시
+                                              _showImageDialog(context, '${menuImg[2]}');
+                                            },
+                                            child: CachedNetworkImage(
+                                              width: 250,
+                                              height: 330,
+                                              placeholder: (context, url) => LoadingSpinner3(),
+                                              imageUrl: menuImg[2],
+                                            ),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              // 이미지 클릭 시 다이얼로그 표시
+                                              _showImageDialog(context, '${menuImg[3]}');
+                                            },
+                                            child: CachedNetworkImage(
+                                              width: 250,
+                                              height: 330,
+                                              placeholder: (context, url) => LoadingSpinner3(),
+                                              imageUrl: menuImg[3],
+                                            ),
+                                          ),
+                                          // 다른 이미지들도 동일한 방식으로 처리
                                         ],
                                       ),
                                     ),
-                                    UnderLindeBox().underlineBox(1.0),
-                                    Container(
-                                      padding: EdgeInsets.all(30),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text('${memuMap['S_MENU2']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-                                          SizedBox(height: 12,),
-                                          Text('${memuMap['S_MENU2-1']}',style: TextStyle(fontSize: 20)),
-                                        ],
-                                      ),
+                                  ),
+                                  SizedBox(height: 10,),
+                                  UnderLindeBox().underlineBox(1.0),
+                                  Container(
+                                    padding: EdgeInsets.all(30),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text('${memuMap['S_MENU1']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+                                        SizedBox(height: 12,),
+                                        Text('${memuMap['S_MENU1-1']}',style: TextStyle(fontSize: 20)),
+                                      ],
                                     ),
-                                    UnderLindeBox().underlineBox(1.0),
-                                    Container(
-                                      padding: EdgeInsets.all(30),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text('${memuMap['S_MENU3']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-                                          SizedBox(height: 12,),
-                                          Text('${memuMap['S_MENU3-1']}',style: TextStyle(fontSize: 20)),
-                                        ],
-                                      ),
+                                  ),
+                                  UnderLindeBox().underlineBox(1.0),
+                                  Container(
+                                    padding: EdgeInsets.all(30),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text('${memuMap['S_MENU2']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+                                        SizedBox(height: 12,),
+                                        Text('${memuMap['S_MENU2-1']}',style: TextStyle(fontSize: 20)),
+                                      ],
                                     ),
-                                    UnderLindeBox().underlineBox(1.0),
-                                    Container(
-                                      padding: EdgeInsets.all(30),
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text('${memuMap['S_MENU4']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-                                          SizedBox(height: 12,),
-                                          Text('${memuMap['S_MENU4-1']}',style: TextStyle(fontSize: 20)),
-                                        ],
-                                      ),
+                                  ),
+                                  UnderLindeBox().underlineBox(1.0),
+                                  Container(
+                                    padding: EdgeInsets.all(30),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text('${memuMap['S_MENU3']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+                                        SizedBox(height: 12,),
+                                        Text('${memuMap['S_MENU3-1']}',style: TextStyle(fontSize: 20)),
+                                      ],
                                     ),
-                                  ],
-                                )
-                            ),
-                          ],
-                        );
-                  }}),
+                                  ),
+                                  UnderLindeBox().underlineBox(1.0),
+                                  Container(
+                                    padding: EdgeInsets.all(30),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text('${memuMap['S_MENU4']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+                                        SizedBox(height: 12,),
+                                        Text('${memuMap['S_MENU4-1']}',style: TextStyle(fontSize: 20)),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              )
+                          ),
+                        ],
+                      );
+                    }}),
 
 
               // 사진----------------------------------------------------------------
@@ -461,9 +471,12 @@ class _TabBarExState extends State<TabBarEx> {
                             return AlertDialog(
                               content: Container(
                                 width: double.maxFinite, // 화면 너비에 맞게 설정
-                                child: Image.asset(
-                                  'assets/storePageIMG/${Path[index]}',
-                                  fit: BoxFit.contain, // 이미지를 화면에 꽉 채워 표시
+                                child: CachedNetworkImage(
+                                  width: 250,
+                                  height: 330,
+                                  fit: BoxFit.cover,
+                                  placeholder: (context, url) => const LoadingSpinner3(),
+                                  imageUrl: Path[index],
                                 ),
                               ),
 
@@ -473,9 +486,12 @@ class _TabBarExState extends State<TabBarEx> {
                       },
                       child: Container(
                         padding: EdgeInsets.all(5),
-                        child: Image.asset(
-                          'assets/storePageIMG/${Path[index]}',
+                        child: CachedNetworkImage(
+                          width: 250,
+                          height: 330,
                           fit: BoxFit.cover,
+                          placeholder: (context, url) => const LoadingSpinner3(),
+                          imageUrl: Path[index],
                         ),
                       ),
                     );
@@ -497,14 +513,14 @@ class _TabBarExState extends State<TabBarEx> {
                         children: [
                           Container(
                             child:Column(
-                                children: [
-                                  Text(' ${Star.length}개의 리뷰 별점 평균'),
-                                  SizedBox(height: 12,),
-                                  Icon(Icons.star,color: Colors.yellow[600],size: 50,),
-                                  Text('${average.toStringAsFixed(1)}',style: TextStyle(fontSize: 35,fontWeight: FontWeight.bold),)
+                              children: [
+                                Text(' ${Star.length}개의 리뷰 별점 평균'),
+                                SizedBox(height: 12,),
+                                Icon(Icons.star,color: Colors.yellow[600],size: 50,),
+                                Text('${average.toStringAsFixed(1)}',style: TextStyle(fontSize: 35,fontWeight: FontWeight.bold),)
 
-                                ],
-                              ),
+                              ],
+                            ),
                           ),
                           Column(
                             children: [
@@ -564,9 +580,5 @@ class _TabBarExState extends State<TabBarEx> {
     );
   }
 
-  //--------------------------------------------------------------//
+//--------------------------------------------------------------//
 }
-
-
-
-

@@ -1,10 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:food_marvel/user/storejoin2.dart';
-import '../board/boardAdd.dart';
-import '../firebase/firebase_options.dart';
-import 'loginPage.dart';
+import 'package:food_marvel/shop/Addshop/storejoin2.dart';
+import 'package:image_picker/image_picker.dart';
+import '../../board/boardAdd.dart';
+import '../../firebase/firebase_options.dart';
+import '../../user/loginPage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:flutter/material.dart';
+import 'package:food_marvel/user/bdayRegister.dart';
+import 'package:food_marvel/user/flavorChoice.dart';
+import 'package:food_marvel/user/snsConnect.dart';
+import 'package:food_marvel/user/userModel.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class StoreJoin extends StatefulWidget {
   StoreJoin({super.key});
@@ -38,6 +53,7 @@ class _JoinState extends State<StoreJoin> {
 
 
   String? gender;
+  String? imgPro;
 
   void _addSTORE() async {
     if (_id.text.isNotEmpty && _pwd.text.isNotEmpty) {
@@ -67,6 +83,7 @@ class _JoinState extends State<StoreJoin> {
         'S_RE_MEMO': _noshow.text,
         'S_TIME': _time.text,
         'S_SILPLEMONO': _silplemono.text,
+        'S_PROFILE' : imgPro,
 
         'timestamp': FieldValue.serverTimestamp(),
       });
@@ -146,17 +163,43 @@ class _JoinState extends State<StoreJoin> {
     }
   }
 
-  // 가입 버튼 비활성화
-/*
-  bool _canRegister() { //null 이 되면 안되는것들
-    return  _id.text.isNotEmpty && _pwd.text.isNotEmpty &&
-        _pwd2.text.isNotEmpty && _name.text.isNotEmpty && _addr1.text.isNotEmpty
-        && _addr2.text.isNotEmpty && _addr3.text.isNotEmpty  && _pay.text.isNotEmpty
-        && _time.text.isNotEmpty && _silplemono.text.isNotEmpty && _keyword1.text.isNotEmpty
-        && _info.text.isNotEmpty && _img.text.isNotEmpty
-    ;
+  File? _imageFile;
+  final picker = ImagePicker();
+
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await picker.pickImage(source: source);
+
+    if (pickedFile != null) {
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+    }
   }
-*/
+
+  Future<void> _uploadImage() async {
+    if (_imageFile == null) {
+      return; // 이미지가 없으면 업로드 중단
+    }
+
+    try {
+      // Firebase Storage에 이미지 업로드
+      Reference storageReference =
+      FirebaseStorage.instance.ref().child('storeImg/${DateTime.now().toString()}');
+      UploadTask uploadTask = storageReference.putFile(_imageFile!);
+
+      await uploadTask.whenComplete(() => null);
+
+      // 업로드 완료 후 이미지 URL 획득
+      imgPro = await storageReference.getDownloadURL();
+
+      // 여기에서 imageUrl을 사용하여 필요한 작업을 수행하세요 (예: 이미지 URL을 Firestore에 저장)
+
+      print('이미지가 업로드되었습니다. URL: $imgPro');
+    } catch (e) {
+      print('이미지 업로드 중 오류 발생: $e');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -170,6 +213,30 @@ class _JoinState extends State<StoreJoin> {
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: <Widget>[
+        Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _imageFile == null
+                ? Text('No image selected.')
+                : Image.file(_imageFile!),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(width: 20),
+                ElevatedButton(
+                  onPressed: () => _pickImage(ImageSource.gallery),
+                  child: Text('겔러리 사진 등록'),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _uploadImage,
+              child: Text('이미지 업데이트하기'),
+            ),
+          ],
+        ),
             Text('아이디', style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 5),
             TextField(

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -13,10 +14,14 @@ class Testimg extends StatefulWidget {
 }
 
 class _TestimgState extends State<Testimg> {
-  //String doc = 'upx55IlYcUeYoFvC0L8T';
+  @override
+  void initState() {
+    super.initState();
+    _fetchAllUserData1(widget.docId); // 데이터 미리 불러오기
+  }
+
   int currentPage = 0;
   final PageController _pageController = PageController();
-
 
   @override
   void dispose() {
@@ -33,7 +38,7 @@ class _TestimgState extends State<Testimg> {
 
   List<String> imagePaths = []; // 이미지 경로를 저장할 리스트
 
-  Future<List<String>?> _fetchAllUserData1(String docId) async {
+  Future<void> _fetchAllUserData1(String docId) async {
     try {
       DocumentSnapshot storeSnapshot = await FirebaseFirestore.instance
           .collection('T3_STORE_TBL')
@@ -51,10 +56,15 @@ class _TestimgState extends State<Testimg> {
           List<dynamic> rImgUrlsList = storeImgList.docs[0].get('r_img_urls'); // 첫 번째 문서의 r_img_urls 필드에서 데이터 가져오기
 
           // r_img_urls의 각 항목을 imagePaths에 추가
+          List<String> paths = [];
           rImgUrlsList.forEach((imageUrl) {
             if (imageUrl is String) {
-              imagePaths.add(imageUrl);
+              paths.add(imageUrl);
             }
+          });
+
+          setState(() {
+            imagePaths = paths;
           });
         } else {
           print('이미지 목록이 비어 있습니다.');
@@ -65,78 +75,71 @@ class _TestimgState extends State<Testimg> {
     } catch (e) {
       print('데이터를 불러오는 중 오류가 발생했습니다: $e');
     }
-
-    return imagePaths; // 이미지 경로 리스트 반환
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: FutureBuilder<void>(
-        future: _fetchAllUserData1(widget.docId),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                LoadingSpinner2(),
-              ],
-            ); // Display a loading indicator if the future is not resolved yet.
-          } else {
-            return Scaffold(
-              body: Stack(
-                children: [
-                  Center(
-                    child: Container(
-                      height: 400,
-                      child: PageView.builder(
-                        controller: _pageController,
-                        itemCount: imagePaths.length,
-                        itemBuilder: (context, index) {
-                          return Image.network(
-                            '${imagePaths[index]}',
-                            width: 400,
-                            height: 200,
-                            fit: BoxFit.cover,
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 10,
-                    right: 10,
-                    child: Center(
-                      child: Container(
-                        height: 30,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          border: Border.all(color: Colors.white, width: 1),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: Text(
-                              '${currentPage + 1}/${imagePaths.length}',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+      child: imagePaths == null
+          ? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          LoadingSpinner2(),
+        ],
+      )
+          : Scaffold(
+        body: Stack(
+          children: [
+            Center(
+              child: Container(
+                height: 400,
+                child: PageView.builder(
+                  itemCount: imagePaths.length,
+                  onPageChanged: (index) {
+                    setState(() {
+                      currentPage = index;
+                    });
+                  },
+                  itemBuilder: (context, index) {
+                    return CachedNetworkImage(
+                      width: 400,
+                      height: 200,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const LoadingSpinner3(),
+                      imageUrl: imagePaths[index],
+                    );
+                  },
+                ),
               ),
-            );
-          }
-        },
+            ),
+            Positioned(
+              bottom: 10,
+              right: 10,
+              child: Center(
+                child: Container(
+                  height: 30,
+                  width: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    border: Border.all(color: Colors.white, width: 1),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: Text(
+                        '${currentPage + 1}/${imagePaths.length}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -178,6 +178,7 @@ class _DetailPageState extends State<DetailPage> {
     UserModel userModel = Provider.of<UserModel>(context);
     String? userId = userModel.userId;
     uId = userId;
+
     sId = widget.docId;
 
     return Scaffold(
@@ -310,7 +311,6 @@ class _DetailPageState extends State<DetailPage> {
                                             size: 1,
                                           ),
                                       onRatingUpdate: (rating) {
-
                                       },
                                     ),
                                   ),

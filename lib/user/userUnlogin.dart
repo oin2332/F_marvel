@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:food_marvel/user/join.dart';
 import 'package:food_marvel/user/loginPage.dart';
-import 'package:food_marvel/user/storejoin.dart';
+import 'package:food_marvel/shop/Addshop/storejoin.dart';
 import 'package:food_marvel/user/userMain.dart';
 import 'package:food_marvel/main/importbottomBar.dart';
 
