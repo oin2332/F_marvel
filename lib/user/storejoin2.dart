@@ -1,7 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_marvel/user/storeProfileEdit.dart';
-
+import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import '../user/userModel.dart';
 import 'loginPage.dart';
 
 
@@ -37,6 +43,60 @@ class _JoinState extends State<StoreJoin2> {
 
 
   String? gender;
+  String? url;
+
+  Future<String> uploadImageToStorage(XFile pickedFile) async {
+    try {
+      String fileName = 'R' + DateTime.now().millisecondsSinceEpoch.toString() + '.jpg'; // 현재시간기준으로 파일 이름 자동생성
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child(widget.storeDocumentId) // 선택된 이미지 파일을 저장할 Firebase Storage 폴더 이름
+          .child(fileName);
+
+      await ref.putFile(File(pickedFile.path));
+
+      String downloadURL = await ref.getDownloadURL();
+      return downloadURL;
+    } catch (e) {
+      print('이미지 업로드 중 오류 발생: $e');
+      throw e;
+    }
+  }
+
+  // 이미지 선택 + 업로드 + 미리보기
+  List<File> _selectedImages = []; // 선택된 이미지들을 저장하는 리스트
+
+  void _selectPics() async {
+    final imagePicker = ImagePicker();
+
+    final pickedFiles = await imagePicker.pickMultiImage(); // 다중 이미지 선택
+
+    if (pickedFiles != null) {
+      setState(() {
+        _selectedImages.addAll(pickedFiles.map((pickedFile) => File(pickedFile.path)).toList());
+      });
+    }
+  }
+
+  void _showAllImages() {
+    if (_selectedImages.isNotEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) => Dialog(
+          child: Container(
+            width: 300,
+            height: 300,
+            child: PageView.builder(
+              itemCount: _selectedImages.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Image.file(_selectedImages[index]);
+              },
+            ),
+          ),
+        ),
+      );
+    }
+  }
 
   void _addcollection() async {
     if (widget.storeDocumentId != null && widget.storeDocumentId.isNotEmpty) {
@@ -55,15 +115,25 @@ class _JoinState extends State<StoreJoin2> {
           .collection('T3_STORE_TBL')
           .doc(widget.storeDocumentId)
           .collection('T3_MENU_TBL');
+
       CollectionReference star = FirebaseFirestore.instance
           .collection('T3_STORE_TBL')
           .doc(widget.storeDocumentId)
           .collection('T3_STAR_TBL');
 
+      List<String> imageUrls = []; // 이미지 주소들
+      //
+      for (File imageFile in _selectedImages) {
+        XFile xFile = XFile(imageFile.path); // File을 XFile로 변환
+        String imageUrl = await uploadImageToStorage(xFile); // 이미지 업로드
+        imageUrls.add(imageUrl);
+      }
+
+
       await star.add({
         'STAR' : 'a',
-
       });
+
 
       await CONVENIENCE.add({
         'S_ELEVA': S_ELEVA,
@@ -119,7 +189,10 @@ class _JoinState extends State<StoreJoin2> {
         'S_MENU3-1' : S_MENU3_1.text,
         'S_MENU4' : S_MENU4.text,
         'S_MENU4-1' : S_MENU4_1.text,
+        'S_MENUimgList' : imageUrls,
       });
+
+
 
       Navigator.push(
           context,
@@ -222,10 +295,6 @@ class _JoinState extends State<StoreJoin2> {
       ],
     );
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -395,6 +464,39 @@ class _JoinState extends State<StoreJoin2> {
 
               ],
             ),
+            InkWell(
+              onTap: _selectPics,
+              child: Container(
+                color: Colors.white,
+                child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          height: 400,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                          ),
+                          child:PageView.builder(
+                            itemCount: _selectedImages.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Container(
+                                alignment: Alignment.center,
+                                child: Image.file(
+                                  _selectedImages[index],
+                                  fit: BoxFit.cover, // 이미지를 컨테이너에 맞게 크기 조절
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    )
+                ),
+              ),
+            ),
             Column(
               children: [
                 SizedBox(height: 5),
@@ -512,15 +614,8 @@ class _JoinState extends State<StoreJoin2> {
                   ),
                   style: TextStyle(fontSize: 13),
                 ),
-
-
               ],
             ),
-
-
-
-
-
 
             ElevatedButton(
               style: ButtonStyle(

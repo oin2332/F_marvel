@@ -148,7 +148,6 @@ class _DetailPageState extends State<DetailPage> {
 
 
         userDataList.add(storeData);
-
       } else {
         print('해당 문서를 찾을 수 없습니다.');
       }
@@ -161,7 +160,8 @@ class _DetailPageState extends State<DetailPage> {
     try {
       FirebaseFirestore fs = FirebaseFirestore.instance;
       CollectionReference stores = fs.collection("T3_STORE_TBL");
-      DocumentReference bookmarkRef = stores.doc(docId).collection("T3_BOOKMARK_TBL").doc(userId);
+      DocumentReference bookmarkRef = stores.doc(docId).collection(
+          "T3_BOOKMARK_TBL").doc(userId);
 
       DocumentSnapshot bookmarkDoc = await bookmarkRef.get();
 
@@ -195,7 +195,8 @@ class _DetailPageState extends State<DetailPage> {
           ),
           actions: [
             IconButton(
-              icon: isBookmarked ? Image.asset('assets/bookmark-removebg-preview.png',)
+              icon: isBookmarked ? Image.asset(
+                'assets/bookmark-removebg-preview.png',)
                   : Image.asset('assets/bookmark2-removebg-preview.png',),
               onPressed: () {
                 if (uId == null) {
@@ -212,7 +213,8 @@ class _DetailPageState extends State<DetailPage> {
                               Navigator.of(context).pop(); // 다이얼로그 닫기
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => UserUnlogin()),
+                                MaterialPageRoute(
+                                    builder: (context) => UserUnlogin()),
                               );
                             },
                             child: Text("로그인하러 가기"),
@@ -256,12 +258,11 @@ class _DetailPageState extends State<DetailPage> {
                   ],
                 ); // Display a loading indicator if the future is not resolved yet.
               } else {
-
                 return ListView.builder(
                   itemCount: userDataList.length,
                   itemBuilder: (BuildContext context, int index) {
                     String addrsum = '${userDataList[index]['S_ADDR1']} ${userDataList[index]['S_ADDR2']}${userDataList[index]['S_ADDR3']}';
-                    print('asdasd${userDataList[index]}');
+
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -282,59 +283,75 @@ class _DetailPageState extends State<DetailPage> {
                                         .grey),),
                                   SizedBox(width: 8,),
                                   Text('${userDataList[index]['S_ADDR2']}',
-                                      style: TextStyle(fontSize: 10, color: Colors
+                                      style: TextStyle(
+                                          fontSize: 10, color: Colors
                                           .grey)),
                                 ],
                               ),
-                              Text('${userDataList[index]['S_NAME']}',style: TextStyle(fontSize: 22,fontWeight: FontWeight.bold),),
+                              Text('${userDataList[index]['S_NAME']}',
+                                style: TextStyle(fontSize: 22,
+                                    fontWeight: FontWeight.bold),),
                               Row(
                                 children: [
                                   Container(
                                     child: RatingBar.builder(
-                                      initialRating: double.parse(userDataList[index]['STARage']),
+                                      initialRating: double.parse(
+                                          userDataList[index]['STARage']),
                                       minRating: 1,
                                       direction: Axis.horizontal,
                                       allowHalfRating: true,
                                       itemCount: 5,
-                                      itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                                      itemBuilder: (context, _) => Icon(
-                                        Icons.star,
-                                        color: Colors.amber,
-                                        size: 1,
-                                      ),
+                                      itemPadding: EdgeInsets.symmetric(
+                                          horizontal: 4.0),
+                                      itemBuilder: (context, _) =>
+                                          Icon(
+                                            Icons.star,
+                                            color: Colors.amber,
+                                            size: 1,
+                                          ),
                                       onRatingUpdate: (rating) {
-                                        print(rating);
+
                                       },
                                     ),
                                   ),
                                   SizedBox(width: 7,),
                                   Text('${userDataList[index]['STARage']}',
-                                    style: TextStyle(fontWeight: FontWeight.bold),),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold),),
                                   SizedBox(width: 3,),
                                   Text('(${userDataList[index]['STARlength']})',
-                                      style: TextStyle(fontSize: 10, color: Colors
+                                      style: TextStyle(
+                                          fontSize: 10, color: Colors
                                           .grey)),
                                 ],
                               ),
                               SizedBox(height: 15,),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceEvenly,
                                 children: [
                                   TextButton(
-                                    onPressed: () async{
-                                      await launch("tel: ${userDataList[index]['S_NUMBER']}");
+                                    onPressed: () async {
+                                      await launch(
+                                          "tel: ${userDataList[index]['S_NUMBER']}");
                                     },
                                     style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(Colors.white),
-                                      side: MaterialStateProperty.all(BorderSide(color: Colors.black, width: 1)),
+                                      backgroundColor: MaterialStateProperty
+                                          .all(Colors.white),
+                                      side: MaterialStateProperty.all(
+                                          BorderSide(
+                                              color: Colors.black, width: 1)),
                                     ),
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 30.0),
                                       child: Row(
                                         children: [
-                                          Icon(Icons.call, size: 18, color: Colors.black),
+                                          Icon(Icons.call, size: 18,
+                                              color: Colors.black),
                                           SizedBox(width: 3),
-                                          Text('전화하기', style: TextStyle(color: Colors.black)),
+                                          Text('전화하기', style: TextStyle(
+                                              color: Colors.black)),
                                         ],
                                       ),
                                     ),
@@ -351,15 +368,19 @@ class _DetailPageState extends State<DetailPage> {
                                             color: Colors.black,),
                                           SizedBox(width: 3,),
                                           Text('위치보기',
-                                            style: TextStyle(color: Colors.black),),
+                                            style: TextStyle(
+                                                color: Colors.black),),
                                         ],
                                       ),
                                     ),
                                     style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all(
+                                      backgroundColor: MaterialStateProperty
+                                          .all(
                                           Colors.white), // 배경색을 흰색으로 설정
-                                      side: MaterialStateProperty.all(BorderSide(
-                                          color: Colors.black, width: 1)), // 테두리 설정
+                                      side: MaterialStateProperty.all(
+                                          BorderSide(
+                                              color: Colors.black,
+                                              width: 1)), // 테두리 설정
                                     ),
                                   ),
                                 ],
@@ -369,7 +390,10 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                         underlineBox(5.0),
                         //예약 일시 부분
-                        ReservationAdd(addr : addrsum, sName : userDataList[index]['S_NAME'],doc : widget.docId,time : time),
+                        ReservationAdd(addr: addrsum,
+                            sName: userDataList[index]['S_NAME'],
+                            doc: widget.docId,
+                            time: time),
                         underlineBox(5.0),
                         //홈 메뉴 사진 리뷰
                         Container(
@@ -377,7 +401,8 @@ class _DetailPageState extends State<DetailPage> {
                             children: [
                               SizedBox(height: 15,),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceEvenly,
                                 children: [
                                   TextButton(onPressed: () {
 
@@ -385,20 +410,25 @@ class _DetailPageState extends State<DetailPage> {
                                       color: Colors.black),),),
                                   TextButton(onPressed: () {
                                     Navigator.push(context, MaterialPageRoute(
-                                      builder: (_) => TabBarEx(initialTabIndex: 1, docId: widget.docId),
+                                      builder: (_) =>
+                                          TabBarEx(initialTabIndex: 1,
+                                              docId: widget.docId),
                                     ));
                                   }, child: Text('메뉴', style: TextStyle(
                                       color: Colors.black),),),
                                   TextButton(onPressed: () {
                                     Navigator.push(context, MaterialPageRoute(
-                                      builder: (_) => TabBarEx(initialTabIndex: 2, docId: widget.docId),
+                                      builder: (_) =>
+                                          TabBarEx(initialTabIndex: 2,
+                                              docId: widget.docId),
                                     ));
-
                                   }, child: Text('사진', style: TextStyle(
                                       color: Colors.black),),),
                                   TextButton(onPressed: () {
                                     Navigator.push(context, MaterialPageRoute(
-                                      builder: (_) => TabBarEx(initialTabIndex: 3, docId: widget.docId),
+                                      builder: (_) =>
+                                          TabBarEx(initialTabIndex: 3,
+                                              docId: widget.docId),
                                     ));
                                     ;
                                   }, child: Text('리뷰', style: TextStyle(
@@ -466,7 +496,8 @@ class _DetailPageState extends State<DetailPage> {
                                 child: Row(
                                   children: [
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .start,
                                       children: [
                                         Text('예약 오픈 일정', style: TextStyle(
                                             fontSize: 20,
@@ -482,10 +513,12 @@ class _DetailPageState extends State<DetailPage> {
                                                 Icon(Icons.access_time,
                                                   color: Color(0xFFFF6347),),
                                                 SizedBox(width: 6,),
-                                                Text(getThisMonth() + '1일 14:00',
+                                                Text(
+                                                  getThisMonth() + '1일 14:00',
                                                   style: TextStyle(
                                                       color: Color(0xFFFF6347),
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight: FontWeight
+                                                          .bold,
                                                       fontSize: 16),)
                                               ],
                                             ),
@@ -505,10 +538,12 @@ class _DetailPageState extends State<DetailPage> {
                                                 Icon(Icons.access_time,
                                                   color: Color(0xFFFF6347),),
                                                 SizedBox(width: 6,),
-                                                Text(getThisMonth() + '15일 14:00',
+                                                Text(
+                                                  getThisMonth() + '15일 14:00',
                                                   style: TextStyle(
                                                       color: Color(0xFFFF6347),
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight: FontWeight
+                                                          .bold,
                                                       fontSize: 16),)
                                               ],
                                             ),
@@ -537,7 +572,8 @@ class _DetailPageState extends State<DetailPage> {
                                 child: Row(
                                   children: [
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .start,
                                       children: [
                                         Text('공지',
                                           style: TextStyle(fontSize: 20,
@@ -546,17 +582,21 @@ class _DetailPageState extends State<DetailPage> {
                                         Container(
                                             width: 300,
                                             child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              mainAxisAlignment: MainAxisAlignment
+                                                  .start,
                                               children: [
                                                 Flexible(
                                                     child: RichText(
-                                                      overflow: TextOverflow.ellipsis,
+                                                      overflow: TextOverflow
+                                                          .ellipsis,
                                                       maxLines: 5,
-                                                      strutStyle: StrutStyle(fontSize: 16.0),
+                                                      strutStyle: StrutStyle(
+                                                          fontSize: 16.0),
                                                       text: TextSpan(
                                                           text: '${userDataList[index]['S_MEMO']}',
                                                           style: TextStyle(
-                                                              color: Colors.black,
+                                                              color: Colors
+                                                                  .black,
                                                               height: 1.4,
                                                               fontSize: 12.0,
                                                               fontFamily: 'NanumSquareRegular')),
@@ -592,10 +632,14 @@ class _DetailPageState extends State<DetailPage> {
                                       children: [
                                         if (icon['S_STAIRS'] == true)
                                           Container(
-                                            margin: EdgeInsets.all(4), // 각 아이콘과 텍스트의 마진
+                                            margin: EdgeInsets.all(4),
+                                            // 각 아이콘과 텍스트의 마진
                                             child: Column(
                                               children: [
-                                                Image.asset('assets/amenities/stairs.png', width: 50, fit: BoxFit.contain),
+                                                Image.asset(
+                                                    'assets/amenities/stairs.png',
+                                                    width: 50,
+                                                    fit: BoxFit.contain),
                                                 Text('계단 있어요'),
                                               ],
                                             ),
@@ -605,7 +649,10 @@ class _DetailPageState extends State<DetailPage> {
                                             margin: EdgeInsets.all(4),
                                             child: Column(
                                               children: [
-                                                Image.asset('assets/amenities/stairs.png', width: 50, fit: BoxFit.contain),
+                                                Image.asset(
+                                                    'assets/amenities/stairs.png',
+                                                    width: 50,
+                                                    fit: BoxFit.contain),
                                                 Text('계단 없어요'),
                                               ],
                                             ),
@@ -615,7 +662,10 @@ class _DetailPageState extends State<DetailPage> {
                                             margin: EdgeInsets.all(4),
                                             child: Column(
                                               children: [
-                                                Image.asset('assets/amenities/floor.png', width: 50, fit: BoxFit.contain),
+                                                Image.asset(
+                                                    'assets/amenities/floor.png',
+                                                    width: 50,
+                                                    fit: BoxFit.contain),
                                                 Text('${icon['S_FLOORtext']}'),
                                               ],
                                             ),
@@ -625,7 +675,10 @@ class _DetailPageState extends State<DetailPage> {
                                             margin: EdgeInsets.all(4),
                                             child: Column(
                                               children: [
-                                                Image.asset('assets/amenities/kid.png', width: 50, fit: BoxFit.contain),
+                                                Image.asset(
+                                                    'assets/amenities/kid.png',
+                                                    width: 50,
+                                                    fit: BoxFit.contain),
                                                 Text('키즈존'),
                                               ],
                                             ),
@@ -635,7 +688,10 @@ class _DetailPageState extends State<DetailPage> {
                                             margin: EdgeInsets.all(4),
                                             child: Column(
                                               children: [
-                                                Image.asset('assets/amenities/nokid.png', width: 50, fit: BoxFit.contain),
+                                                Image.asset(
+                                                    'assets/amenities/nokid.png',
+                                                    width: 50,
+                                                    fit: BoxFit.contain),
                                                 Text('NO키즈존'),
                                               ],
                                             ),
@@ -645,7 +701,10 @@ class _DetailPageState extends State<DetailPage> {
                                             margin: EdgeInsets.all(4),
                                             child: Column(
                                               children: [
-                                                Image.asset('assets/amenities/parking.png', width: 50, fit: BoxFit.contain),
+                                                Image.asset(
+                                                    'assets/amenities/parking.png',
+                                                    width: 50,
+                                                    fit: BoxFit.contain),
                                                 Text('주차'),
                                               ],
                                             ),
@@ -655,7 +714,10 @@ class _DetailPageState extends State<DetailPage> {
                                             margin: EdgeInsets.all(4),
                                             child: Column(
                                               children: [
-                                                Image.asset('assets/amenities/toilet.png', width: 50, fit: BoxFit.contain),
+                                                Image.asset(
+                                                    'assets/amenities/toilet.png',
+                                                    width: 50,
+                                                    fit: BoxFit.contain),
                                                 Text('화장실'),
                                               ],
                                             ),
@@ -665,7 +727,10 @@ class _DetailPageState extends State<DetailPage> {
                                             margin: EdgeInsets.all(4),
                                             child: Column(
                                               children: [
-                                                Image.asset('assets/amenities/elevator.png', width: 50, fit: BoxFit.contain),
+                                                Image.asset(
+                                                    'assets/amenities/elevator.png',
+                                                    width: 50,
+                                                    fit: BoxFit.contain),
                                                 Text('엘리베이터'),
                                               ],
                                             ),
@@ -675,7 +740,10 @@ class _DetailPageState extends State<DetailPage> {
                                             margin: EdgeInsets.all(4),
                                             child: Column(
                                               children: [
-                                                Image.asset('assets/amenities/group.png', width: 50, fit: BoxFit.contain),
+                                                Image.asset(
+                                                    'assets/amenities/group.png',
+                                                    width: 50,
+                                                    fit: BoxFit.contain),
                                                 Text('단체가능'),
                                               ],
                                             ),
@@ -685,7 +753,10 @@ class _DetailPageState extends State<DetailPage> {
                                             margin: EdgeInsets.all(4),
                                             child: Column(
                                               children: [
-                                                Image.asset('assets/amenities/takeout.png', width: 50, fit: BoxFit.contain),
+                                                Image.asset(
+                                                    'assets/amenities/takeout.png',
+                                                    width: 50,
+                                                    fit: BoxFit.contain),
                                                 Text('포장가능'),
                                               ],
                                             ),
@@ -707,51 +778,83 @@ class _DetailPageState extends State<DetailPage> {
                                     Container(
                                       padding: EdgeInsets.all(30),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .spaceBetween,
                                         children: [
-                                          Text('메뉴', style: TextStyle(fontSize: 20,
+                                          Text(
+                                            '메뉴', style: TextStyle(fontSize: 20,
                                               fontWeight: FontWeight.bold),),
-                                          TextButton(onPressed: (){
-                                            Navigator.push(context, MaterialPageRoute(
-                                              builder: (_) => TabBarEx(initialTabIndex: 1, docId: widget.docId),
+                                          TextButton(onPressed: () {
+                                            Navigator.push(
+                                                context, MaterialPageRoute(
+                                              builder: (_) =>
+                                                  TabBarEx(initialTabIndex: 1,
+                                                      docId: widget.docId),
                                             ));
-                                          }, child: Text('전체보기 >',style: TextStyle(fontSize: 12,color: Colors.grey),))
+                                          },
+                                              child: Text('전체보기 >',
+                                                style: TextStyle(fontSize: 12,
+                                                    color: Colors.grey),))
                                         ],
                                       ),
                                     ),
                                     underlineBox(2.0),
                                     Container(
-                                      padding: EdgeInsets.only(left: 30,top: 10,right: 30,bottom: 10),
+                                      padding: EdgeInsets.only(left: 30,
+                                          top: 10,
+                                          right: 30,
+                                          bottom: 10),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .spaceBetween,
                                         children: [
-                                          Text(memuMap['S_MENU1'], style: TextStyle(fontSize: 15,
-                                              fontWeight: FontWeight.bold),),
-                                          TextButton(onPressed: (){}, child: Text(memuMap['S_MENU1-1'],style: TextStyle(fontSize: 15,color: Colors.grey),))
+                                          Text(memuMap['S_MENU1'],
+                                            style: TextStyle(fontSize: 15,
+                                                fontWeight: FontWeight.bold),),
+                                          TextButton(onPressed: () {},
+                                              child: Text(memuMap['S_MENU1-1'],
+                                                style: TextStyle(fontSize: 15,
+                                                    color: Colors.grey),))
                                         ],
                                       ),
                                     ),
                                     underlineBox(1.0),
                                     Container(
-                                      padding: EdgeInsets.only(left: 30,top: 10,right: 30,bottom: 10),
+                                      padding: EdgeInsets.only(left: 30,
+                                          top: 10,
+                                          right: 30,
+                                          bottom: 10),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .spaceBetween,
                                         children: [
-                                          Text(memuMap['S_MENU2'], style: TextStyle(fontSize: 15,
-                                              fontWeight: FontWeight.bold),),
-                                          TextButton(onPressed: (){}, child: Text(memuMap['S_MENU2-1'],style: TextStyle(fontSize: 15,color: Colors.grey),))
+                                          Text(memuMap['S_MENU2'],
+                                            style: TextStyle(fontSize: 15,
+                                                fontWeight: FontWeight.bold),),
+                                          TextButton(onPressed: () {},
+                                              child: Text(memuMap['S_MENU2-1'],
+                                                style: TextStyle(fontSize: 15,
+                                                    color: Colors.grey),))
                                         ],
                                       ),
                                     ),
                                     underlineBox(1.0),
                                     Container(
-                                      padding: EdgeInsets.only(left: 30,top: 10,right: 30,bottom: 10),
+                                      padding: EdgeInsets.only(left: 30,
+                                          top: 10,
+                                          right: 30,
+                                          bottom: 10),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .spaceBetween,
                                         children: [
-                                          Text(memuMap['S_MENU3'], style: TextStyle(fontSize: 15,
-                                              fontWeight: FontWeight.bold),),
-                                          TextButton(onPressed: (){}, child: Text(memuMap['S_MENU3-1'],style: TextStyle(fontSize: 15,color: Colors.grey),))
+                                          Text(memuMap['S_MENU3'],
+                                            style: TextStyle(fontSize: 15,
+                                                fontWeight: FontWeight.bold),),
+                                          TextButton(onPressed: () {},
+                                              child: Text(memuMap['S_MENU3-1'],
+                                                style: TextStyle(fontSize: 15,
+                                                    color: Colors.grey),))
                                         ],
                                       ),
                                     ),
@@ -826,16 +929,23 @@ class _DetailPageState extends State<DetailPage> {
                                     Container(
                                       padding: EdgeInsets.all(30),
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .spaceBetween,
                                         children: [
-                                          Text('사진', style: TextStyle(fontSize: 20,
+                                          Text(
+                                            '사진', style: TextStyle(fontSize: 20,
                                               fontWeight: FontWeight.bold),),
-                                          TextButton(onPressed: (){
-                                            Navigator.push(context, MaterialPageRoute(
-                                              builder: (_) => TabBarEx(initialTabIndex: 2, docId: widget.docId),
+                                          TextButton(onPressed: () {
+                                            Navigator.push(
+                                                context, MaterialPageRoute(
+                                              builder: (_) =>
+                                                  TabBarEx(initialTabIndex: 2,
+                                                      docId: widget.docId),
                                             ));
-
-                                          }, child: Text('전체보기 >',style: TextStyle(fontSize: 12,color: Colors.grey),))
+                                          },
+                                              child: Text('전체보기 >',
+                                                style: TextStyle(fontSize: 12,
+                                                    color: Colors.grey),))
                                         ],
                                       ),
                                     ),
@@ -844,7 +954,8 @@ class _DetailPageState extends State<DetailPage> {
                                       child: Column(
                                         children: [
                                           Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            mainAxisAlignment: MainAxisAlignment
+                                                .spaceEvenly,
                                             children: [
                                               Image.asset(
                                                 'assets/storePageIMG/BEKMIWOO1.jpeg',
@@ -864,7 +975,8 @@ class _DetailPageState extends State<DetailPage> {
                                           ),
                                           SizedBox(height: 7,),
                                           Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            mainAxisAlignment: MainAxisAlignment
+                                                .spaceEvenly,
                                             children: [
                                               Image.asset(
                                                 'assets/storePageIMG/BEKMIWOO4.jpeg',
@@ -888,10 +1000,6 @@ class _DetailPageState extends State<DetailPage> {
                                     )
 
 
-
-
-
-
                                   ],
                                 ),
                               ),
@@ -905,12 +1013,14 @@ class _DetailPageState extends State<DetailPage> {
                                   children: [
                                     Column(
                                       children: [
-                                        Text('지도', style: TextStyle(fontSize: 20,
+                                        Text(
+                                          '지도', style: TextStyle(fontSize: 20,
                                             fontWeight: FontWeight.bold),),
                                         SizedBox(
                                           width: 400,
                                           height: 400,
-                                          child: GoogleMapPage(initialAddress: '${userDataList[index]['S_ADDR1']} ${userDataList[index]['S_ADDR2']}${userDataList[index]['S_ADDR3']}'), // 여기에 함수를 호출하여 내용을 표시
+                                          child: GoogleMapPage(
+                                              initialAddress: '${userDataList[index]['S_ADDR1']} ${userDataList[index]['S_ADDR2']}${userDataList[index]['S_ADDR3']}'), // 여기에 함수를 호출하여 내용을 표시
                                         ),
                                       ],
                                     )
@@ -925,67 +1035,96 @@ class _DetailPageState extends State<DetailPage> {
                                 child: Row(
                                   children: [
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .start,
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .start,
                                       children: [
-                                        Text('상세정보', style: TextStyle(fontSize: 20,
+                                        Text(
+                                          '상세정보', style: TextStyle(fontSize: 20,
                                             fontWeight: FontWeight.bold),),
                                         SizedBox(height: 20,),
                                         Container(
                                           padding: EdgeInsets.all(20),
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment
+                                                .start,
                                             children: [
-                                              Text('전화번호',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),SizedBox(height: 5,),
-                                              Text('${userDataList[index]['S_NUMBER']}'),
+                                              Text('전화번호', style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15),),
+                                              SizedBox(height: 5,),
+                                              Text(
+                                                  '${userDataList[index]['S_NUMBER']}'),
                                               SizedBox(height: 25,),
 
-                                              Text('매장소개',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),SizedBox(height: 5,),
+                                              Text('매장소개', style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15),),
+                                              SizedBox(height: 5,),
                                               Container(
                                                   width: 300,
                                                   child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    mainAxisAlignment: MainAxisAlignment
+                                                        .start,
                                                     children: [
                                                       Flexible(
                                                           child: RichText(
-                                                            overflow: TextOverflow.ellipsis,
+                                                            overflow: TextOverflow
+                                                                .ellipsis,
                                                             maxLines: 5,
-                                                            strutStyle: StrutStyle(fontSize: 16.0),
+                                                            strutStyle: StrutStyle(
+                                                                fontSize: 16.0),
                                                             text: TextSpan(
                                                                 text: '${userDataList[index]['S_MEMO']}',
                                                                 style: TextStyle(
-                                                                    color: Colors.black,
+                                                                    color: Colors
+                                                                        .black,
                                                                     height: 1.4,
                                                                     fontSize: 12.0,
                                                                     fontFamily: 'NanumSquareRegular')),
                                                           )),
                                                     ],
-                                                  )),SizedBox(height: 25,),
+                                                  )),
+                                              SizedBox(height: 25,),
 
-                                              Text('안내 및 유의사항',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),SizedBox(height: 5,),
+                                              Text('안내 및 유의사항',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15),),
+                                              SizedBox(height: 5,),
                                               Container(
                                                   width: 300,
                                                   child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    mainAxisAlignment: MainAxisAlignment
+                                                        .start,
                                                     children: [
                                                       Flexible(
                                                           child: RichText(
-                                                            overflow: TextOverflow.ellipsis,
+                                                            overflow: TextOverflow
+                                                                .ellipsis,
                                                             maxLines: 5,
-                                                            strutStyle: StrutStyle(fontSize: 16.0),
+                                                            strutStyle: StrutStyle(
+                                                                fontSize: 16.0),
                                                             text: TextSpan(
                                                                 text: '${userDataList[index]['S_RE_MEMO']}',
                                                                 style: TextStyle(
-                                                                    color: Colors.black,
+                                                                    color: Colors
+                                                                        .black,
                                                                     height: 1.4,
                                                                     fontSize: 12.0,
                                                                     fontFamily: 'NanumSquareRegular')),
                                                           )),
                                                     ],
-                                                  )),SizedBox(height: 25,),
+                                                  )),
+                                              SizedBox(height: 25,),
 
-                                              Text('홈페이지',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15),),SizedBox(height: 5,),
-                                              Text('${userDataList[index]['S_HOMEPAGE']}'),
+                                              Text('홈페이지', style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15),),
+                                              SizedBox(height: 5,),
+                                              Text(
+                                                  '${userDataList[index]['S_HOMEPAGE']}'),
 
 
                                             ],
@@ -1012,10 +1151,7 @@ class _DetailPageState extends State<DetailPage> {
         )
 
     );
-
   }
-
-
 
 
   String peopleCount = '2';
@@ -1046,10 +1182,6 @@ class _DetailPageState extends State<DetailPage> {
         nextMonth); // 다음 달을 문자열로 변환합니다.
     return '$month';
   }
-
-
-
-
 
 
   Widget underlineBox(x) {
@@ -1096,24 +1228,4 @@ class _DetailPageState extends State<DetailPage> {
       ),
     );
   }
-
-
-  List<String> path = ['1.jpg', '2.jpg', '1.jpg', '2.jpg'];
-  List<String> imgtest = ['BEKMIWOO1.jpeg','BEKMIWOO2.jpeg','BEKMIWOO3.jpeg','BEKMIWOO4.jpeg','BEKMIWOO5.jpeg','BEKMIWOO6.jpeg','BEKMIWOO7.jpeg',];
-  final List<Map<String, dynamic>> storeList = [
-    {
-      '제목': '가게이름',
-      '별점': '4.8',
-      '설명': '가게가 착하고 사장님이 맛있어요\n 가게가 착하고 사장님이 맛있어요',
-      '주소': '인천광역시 부평구 부평1동 부흥로 264 동아웰빙타운관리단 9층',
-      '카테고리': '레스토랑'
-    }
-  ];
-
-
-
 }
-
-
-
-

@@ -16,7 +16,7 @@ class _TestimgState extends State<Testimg> {
   //String doc = 'upx55IlYcUeYoFvC0L8T';
   int currentPage = 0;
   final PageController _pageController = PageController();
-  List<String> imagePaths = []; // 이미지 경로를 저장할 리스트
+
 
   @override
   void dispose() {
@@ -31,8 +31,9 @@ class _TestimgState extends State<Testimg> {
     });
   }
 
+  List<String> imagePaths = []; // 이미지 경로를 저장할 리스트
 
-  Future<List<Widget>?> _fetchAllUserData1(String docId) async {
+  Future<List<String>?> _fetchAllUserData1(String docId) async {
     try {
       DocumentSnapshot storeSnapshot = await FirebaseFirestore.instance
           .collection('T3_STORE_TBL')
@@ -46,13 +47,17 @@ class _TestimgState extends State<Testimg> {
             .collection('T3_STOREIMG_TBL')
             .get();
 
-
         if (storeImgList.docs.isNotEmpty) {
-          for (var storeImgDoc in storeImgList.docs) {
-            Map<String, dynamic> storeImgData = storeImgDoc.data() as Map<String, dynamic>;
-            List<String> imgList = storeImgData.values.cast<String>().toList();
-            imagePaths.addAll(imgList);
-          }
+          List<dynamic> rImgUrlsList = storeImgList.docs[0].get('r_img_urls'); // 첫 번째 문서의 r_img_urls 필드에서 데이터 가져오기
+
+          // r_img_urls의 각 항목을 imagePaths에 추가
+          rImgUrlsList.forEach((imageUrl) {
+            if (imageUrl is String) {
+              imagePaths.add(imageUrl);
+            }
+          });
+        } else {
+          print('이미지 목록이 비어 있습니다.');
         }
       } else {
         print('해당 문서를 찾을 수 없습니다.');
@@ -60,7 +65,12 @@ class _TestimgState extends State<Testimg> {
     } catch (e) {
       print('데이터를 불러오는 중 오류가 발생했습니다: $e');
     }
+
+    return imagePaths; // 이미지 경로 리스트 반환
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -86,8 +96,8 @@ class _TestimgState extends State<Testimg> {
                         controller: _pageController,
                         itemCount: imagePaths.length,
                         itemBuilder: (context, index) {
-                          return Image.asset(
-                            'assets/storePageIMG/${imagePaths[index]}',
+                          return Image.network(
+                            '${imagePaths[index]}',
                             width: 400,
                             height: 200,
                             fit: BoxFit.cover,

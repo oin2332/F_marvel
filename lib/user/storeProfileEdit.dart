@@ -3,9 +3,6 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:food_marvel/user/bdayRegister.dart';
-import 'package:food_marvel/user/flavorChoice.dart';
-import 'package:food_marvel/user/snsConnect.dart';
 import 'package:food_marvel/user/userModel.dart';
 import 'package:provider/provider.dart';
 
@@ -144,7 +141,7 @@ class _ProfileEditState extends State<StoreProfileEdit> {
         await doc.reference.update({'profile_image': imageUrl});
         print('프로필 이미지가 업데이트되었습니다.');
       } else {
-        print('해당 사용자를 찾을 수 없습니다.');
+        print('해당 사용자를 찾을 수 없습니다 .');
       }
     } catch (e) {
       print('프로필 이미지 업데이트 중 오류 발생: $e');
