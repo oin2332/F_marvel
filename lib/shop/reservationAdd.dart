@@ -144,6 +144,7 @@ class _ReservationAddState extends State<ReservationAdd> {
                           _selectedDay = selectedDay;
                           _focusedDay = focusedDay;
                           selectedNumber = null;
+                          _showClockButtons = true;
                         });
                       },
                       selectedDayPredicate: (DateTime date) {
