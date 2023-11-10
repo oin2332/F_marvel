@@ -589,7 +589,7 @@ class _DetailPageState extends State<DetailPage> {
                                                     child: RichText(
                                                       overflow: TextOverflow
                                                           .ellipsis,
-                                                      maxLines: 5,
+                                                      maxLines: 6,
                                                       strutStyle: StrutStyle(
                                                           fontSize: 16.0),
                                                       text: TextSpan(
@@ -861,66 +861,7 @@ class _DetailPageState extends State<DetailPage> {
                                   ],
                                 ),
                               ),
-                              /*   if(usermenulist == null && usermenulist!['S_MENU1'] == null)
-                              Container(
-
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(30),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text('메뉴', style: TextStyle(fontSize: 20,
-                                              fontWeight: FontWeight.bold),),
-                                          TextButton(onPressed: (){
-                                            Navigator.push(context, MaterialPageRoute(
-                                                builder: (_) => TabBarEx(initialTabIndex: 1)));
-                                          }, child: Text('전체보기 >',style: TextStyle(fontSize: 12,color: Colors.grey),))
-                                        ],
-                                      ),
-                                    ),
-                                    underlineBox(2.0),
-                                    Container(
-                                      padding: EdgeInsets.only(left: 30,top: 10,right: 30,bottom: 10),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(userDataList[index]['menu']['S_MENU1'], style: TextStyle(fontSize: 15,
-                                              fontWeight: FontWeight.bold),),
-                                          TextButton(onPressed: (){}, child: Text('9,000~ 4,0000원',style: TextStyle(fontSize: 15,color: Colors.grey),))
-                                        ],
-                                      ),
-                                    ),
-                                    underlineBox(1.0),
-                                    Container(
-                                      padding: EdgeInsets.only(left: 30,top: 10,right: 30,bottom: 10),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text('멀봐 ', style: TextStyle(fontSize: 15,
-                                              fontWeight: FontWeight.bold),),
-                                          TextButton(onPressed: (){}, child: Text('6816351원',style: TextStyle(fontSize: 15,color: Colors.grey),))
-                                        ],
-                                      ),
-                                    ),
-                                    underlineBox(1.0),
-                                    Container(
-                                      padding: EdgeInsets.only(left: 30,top: 10,right: 30,bottom: 10),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text('멀봐 ', style: TextStyle(fontSize: 15,
-                                              fontWeight: FontWeight.bold),),
-                                          TextButton(onPressed: (){}, child: Text('6816351원',style: TextStyle(fontSize: 15,color: Colors.grey),))
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),*/
                               underlineBox(5.0),
-
                               //사진--------------------
 
                               Container(

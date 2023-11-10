@@ -74,7 +74,7 @@ class _ImportWhereState extends State<ImportWhere> {
 
                 }),
                 buildIconWithText('assets/main/incheon2.jpg', '인천/연수', () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => StoremenuimgAdd2(storeDocumentId: '004hw8u3x1igW11Du1i5')));
+
                 }),
                 buildIconWithText('assets/main/seoul.jpg', '서울/동암', () {
                   navigatePlacePage(2);

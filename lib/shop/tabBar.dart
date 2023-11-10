@@ -25,6 +25,7 @@ class _TabBarExState extends State<TabBarEx> {
   late List<VBarChartModel> bardata;
   @override
   void initState() {
+    _fetchAllUserData(widget.docId);
     super.initState();
     tabIndex = widget.initialTabIndex;
 
@@ -32,15 +33,6 @@ class _TabBarExState extends State<TabBarEx> {
 
     double total = 0.0; // 숫자를 더할 변수
 
-    for (var value in starlist[0].values) {
-      if (value is String) {
-        int starValue = int.parse(value);
-        if (starValue != null) {
-          total += starValue;
-          Star.add(value); // Star 리스트에 value를 추가
-        }
-      }
-    }
     average = total / Star.length;
 
     List<String> num5 = Star.where((element) => element == '5').toList();
@@ -185,9 +177,6 @@ class _TabBarExState extends State<TabBarEx> {
               }
             });
           }
-
-
-
         } else {
           starList.add('0');
         }
@@ -195,13 +184,13 @@ class _TabBarExState extends State<TabBarEx> {
         if (y > 0) {
           x = x / y;
         }
-        print('4 $storeData');
         storeData['STARlength'] = y;
         storeData['STARage'] = x.toStringAsFixed(1);
         storeData['STARlist'] = starList;
         storeData['docId'] = docId;
         userDataList.add(storeData);
         Star.addAll(starList);
+
       } else {
         print('해당 문서를 찾을 수 없습니다.');
       }
@@ -211,26 +200,6 @@ class _TabBarExState extends State<TabBarEx> {
   }
 
   List<String> menuImg = [];
-
-  List<Map<String, dynamic>> starlist = [
-    {
-      'star1' : '5',
-      'star2' : '5',
-      'star3' : '3',
-      'star4' : '3',
-      'star5' : '5',
-      'star6' : '1',
-      'star7' : '4',
-      'star8' : '5',
-      'star9' : '4',
-      'star10' : '4',
-      'star11' : '2',
-      'star12' : '2',
-      'star13' : '5',
-      'star14' : '4',
-    }
-  ];
-
 
   int tabIndex = 1;
   double countOfOnly5Stars  = 0;
@@ -318,19 +287,7 @@ class _TabBarExState extends State<TabBarEx> {
             children: [
               Text("홍"),
               // 메뉴 ---------------------------------------------------------//
-              FutureBuilder<List<Widget>?>(
-                  future: _fetchAllUserData(widget.docId),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      print('별별별 : $Star');
-
-                      return Column(
-                        children: [
-                          CircularProgressIndicator(),
-                        ],
-                      ); // Display a loading indicator if the future is not resolved yet.
-                    } else {
-                      return ListView(
+             ListView(
                         children: <Widget>[
                           ListTile(
                               title: Column(
@@ -447,8 +404,7 @@ class _TabBarExState extends State<TabBarEx> {
                               )
                           ),
                         ],
-                      );
-                    }}),
+                      ),
 
 
               // 사진----------------------------------------------------------------
@@ -545,13 +501,6 @@ class _TabBarExState extends State<TabBarEx> {
             ],
           ),
 
-
-
-
-
-
-
-
           //------------------------------------------//
           bottomNavigationBar: BottomAppBar(
             child: Container(
@@ -579,6 +528,4 @@ class _TabBarExState extends State<TabBarEx> {
       ),
     );
   }
-
-//--------------------------------------------------------------//
 }

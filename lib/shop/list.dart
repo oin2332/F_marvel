@@ -130,6 +130,7 @@ class _TestState extends State<ListsShop> {
                           child: CachedNetworkImage(
                             placeholder: (context, url) => LoadingSpinner3(),
                             imageUrl: documentData['S_IMG'],
+                            fit: BoxFit.cover,
                           ),
                         ),
                         SizedBox(width: 13),
@@ -147,7 +148,21 @@ class _TestState extends State<ListsShop> {
                                       '${documentData['S_NAME']}',
                                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                     ),
-                                    Text('${documentData['S_SILPLEMONO']}'),
+                                    RichText(
+                                      overflow: TextOverflow
+                                          .ellipsis,
+                                      maxLines: 2,
+                                      strutStyle: StrutStyle(
+                                          fontSize: 16.0),
+                                      text: TextSpan(
+                                          text: '${documentData['S_SILPLEMONO']}',
+                                          style: TextStyle(
+                                              color: Colors
+                                                  .black,
+                                              height: 1.4,
+                                              fontSize: 12.0,
+                                              fontFamily: 'NanumSquareRegular')),
+                                    ),
                                     Row(
                                       children: [
                                         Icon(Icons.star, size: 25, color: Colors.yellow[600]),
@@ -208,30 +223,6 @@ class _TestState extends State<ListsShop> {
                                       style: TextStyle(color: Colors.white),
                                     ),
                                   ),
-                                ),
-                                SizedBox(width: 6),
-                                ElevatedButton(
-                                  onPressed: () {
-
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    primary: const Color(0xFFFF6347),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 10),
-                                  ),
-                                  child: Text('18:00'),
-                                ),
-                                SizedBox(width: 6),
-                                ElevatedButton(
-                                  onPressed: () {
-
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    primary: const Color(0xFFFF6347),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 10),
-                                  ),
-                                  child: Text('21:00'),
                                 ),
                               ],
                             ),

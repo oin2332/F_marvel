@@ -22,14 +22,14 @@ class StoremenuimgAdd2 extends StatefulWidget {
 class _BoardAddState extends State<StoremenuimgAdd2> {
 
   bool isContentValid = false; // 리뷰 글 작성 감지
-  String? docid = "sLQ65gDMeBP95FgSHh40";
-  //CRUD - Create,Add
+  String? docid = "004hw8u3x1igW11Du1i5";
+  //CRUD   - Create,Add
   void _addBoard() async {
     if (true) {
 
       CollectionReference STOREIMG = FirebaseFirestore.instance
           .collection('T3_STORE_TBL')
-          .doc('ph0caYFiGUsWCcnUoi4H')
+          .doc(docid)
           .collection('T3_menuimg_TBL');
 
       List<String> imageUrls = []; // 이미지 주소들
@@ -96,7 +96,7 @@ class _BoardAddState extends State<StoremenuimgAdd2> {
     return Scaffold(
       appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.black),
-          title: Text('가게 메뉴판 이미지 등록', style: TextStyle(color: Colors.black)),
+          title: Text('${docid}가게 메뉴판 이미지 등록', style: TextStyle(color: Colors.black)),
           backgroundColor: Colors.white,
           elevation: 0,
           leading: IconButton(
