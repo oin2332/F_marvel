@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-void addBookmark(String userId, String docId) async {
+Future<void> addBookmark(String userId, String docId) async {
   try {
     FirebaseFirestore fs = FirebaseFirestore.instance;
     CollectionReference stores = fs.collection("T3_STORE_TBL");
