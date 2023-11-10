@@ -266,7 +266,7 @@ class _TabBarExState extends State<TabBarEx> {
       builder: (context) {
         return Dialog(
           child: CachedNetworkImage(
-            placeholder: (context, url) => const LoadingSpinner3(),
+            placeholder: (context, url) => LoadingSpinner3(),
             imageUrl: imagePath,
           ), // 이미지 표시
         );
@@ -349,7 +349,7 @@ class _TabBarExState extends State<TabBarEx> {
                                             child: CachedNetworkImage(
                                               width: 250,
                                               height: 330,
-                                              placeholder: (context, url) => const LoadingSpinner3(),
+                                              placeholder: (context, url) => LoadingSpinner3(),
                                               imageUrl: menuImg[0],
                                             ),
                                           ),
@@ -475,7 +475,7 @@ class _TabBarExState extends State<TabBarEx> {
                                   width: 250,
                                   height: 330,
                                   fit: BoxFit.cover,
-                                  placeholder: (context, url) => const LoadingSpinner3(),
+                                  placeholder: (context, url) => LoadingSpinner3(),
                                   imageUrl: Path[index],
                                 ),
                               ),
@@ -490,7 +490,7 @@ class _TabBarExState extends State<TabBarEx> {
                           width: 250,
                           height: 330,
                           fit: BoxFit.cover,
-                          placeholder: (context, url) => const LoadingSpinner3(),
+                          placeholder: (context, url) => LoadingSpinner3(),
                           imageUrl: Path[index],
                         ),
                       ),

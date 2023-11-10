@@ -21,18 +21,15 @@ class StoremenuimgAdd2 extends StatefulWidget {
 
 class _BoardAddState extends State<StoremenuimgAdd2> {
 
-
-  String? _selectUser;
-
   bool isContentValid = false; // 리뷰 글 작성 감지
-  String? docid = "upx55IlYcUeYoFvC0L8T";
+  String? docid = "sLQ65gDMeBP95FgSHh40";
   //CRUD - Create,Add
   void _addBoard() async {
     if (true) {
 
       CollectionReference STOREIMG = FirebaseFirestore.instance
           .collection('T3_STORE_TBL')
-          .doc(docid)
+          .doc('ph0caYFiGUsWCcnUoi4H')
           .collection('T3_menuimg_TBL');
 
       List<String> imageUrls = []; // 이미지 주소들
@@ -50,7 +47,7 @@ class _BoardAddState extends State<StoremenuimgAdd2> {
       });
       Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => StoreboardAdd(storeDocumentId: widget.storeDocumentId))
+          MaterialPageRoute(builder: (context) => StoreboardAdd(storeDocumentId: docid!))
       );
 
     } else {

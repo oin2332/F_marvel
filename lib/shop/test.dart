@@ -105,7 +105,7 @@ class _TestimgState extends State<Testimg> {
                       width: 400,
                       height: 200,
                       fit: BoxFit.cover,
-                      placeholder: (context, url) => const LoadingSpinner3(),
+                      placeholder: (context, url) => LoadingSpinner3(),
                       imageUrl: imagePaths[index],
                     );
                   },

@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
+import '../../main/mainPage.dart';
 import '../../user/userModel.dart';
 
 class StoreboardAdd extends StatefulWidget {
@@ -47,6 +48,7 @@ class _BoardAddState extends State<StoreboardAdd> {
         'r_img_urls': imageUrls, // 여러 이미지의 URL을 리스트로 저장
       });
 
+      Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
 
     } else {
       print("제목 또는 내용을 입력해주세요.");
@@ -56,7 +58,7 @@ class _BoardAddState extends State<StoreboardAdd> {
   // Firebase Storage에 이미지를 업로드하는 함수
   Future<String> uploadImageToStorage(XFile pickedFile) async {
     try {
-      String fileName = 'R' + DateTime.now().millisecondsSinceEpoch.toString() + '.jpg'; // 현재시간기준으로 파일 이름 자동생성
+      String fileName = 'S' + DateTime.now().millisecondsSinceEpoch.toString() + '.jpg'; // 현재시간기준으로 파일 이름 자동생성
       firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
           .ref()
           .child(widget.storeDocumentId!) // 선택된 이미지 파일을 저장할 Firebase Storage 폴더 이름

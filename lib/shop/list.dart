@@ -128,7 +128,7 @@ class _TestState extends State<ListsShop> {
                             borderRadius: BorderRadius.circular(5),
                           ),
                           child: CachedNetworkImage(
-                            placeholder: (context, url) => const LoadingSpinner3(),
+                            placeholder: (context, url) => LoadingSpinner3(),
                             imageUrl: documentData['S_IMG'],
                           ),
                         ),
