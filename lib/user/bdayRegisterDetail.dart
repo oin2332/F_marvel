@@ -44,7 +44,6 @@ class _BdayRegisterDetailState extends State<BdayRegisterDetail> {
         return Column(
           children: <Widget>[
             RadioListTile<String>(
-              title: Text('내 생일'),
               value: '내 생일',
               groupValue: selectedType,
               onChanged: (String? value) {
@@ -53,9 +52,19 @@ class _BdayRegisterDetailState extends State<BdayRegisterDetail> {
                   Navigator.pop(context);
                 });
               },
+              title: Row(
+                children: [
+                  Image.asset(
+                    'assets/main/celebration-removebg-preview.png',
+                    width: 30,
+                    height: 30,
+                  ),
+                  SizedBox(width: 10), // 이미지와 텍스트 사이의 간격
+                  Text('내 생일'),
+                ],
+              ),
             ),
             RadioListTile<String>(
-              title: Text('결혼 기념일'),
               value: '결혼 기념일',
               groupValue: selectedType,
               onChanged: (String? value) {
@@ -64,9 +73,19 @@ class _BdayRegisterDetailState extends State<BdayRegisterDetail> {
                   Navigator.pop(context);
                 });
               },
+              title: Row(
+                children: [
+                  Image.asset(
+                    'assets/main/heart-removebg-preview.png',
+                    width: 30,
+                    height: 30,
+                  ),
+                  SizedBox(width: 10), // 이미지와 텍스트 사이의 간격
+                  Text('결혼 기념일'),
+                ],
+              ),
             ),
             RadioListTile<String>(
-              title: Text('다른 사람 생일'),
               value: '다른 사람 생일',
               groupValue: selectedType,
               onChanged: (String? value) {
@@ -75,9 +94,19 @@ class _BdayRegisterDetailState extends State<BdayRegisterDetail> {
                   Navigator.pop(context);
                 });
               },
+              title: Row(
+                children: [
+                  Image.asset(
+                    'assets/main/celebration-removebg-preview.png',
+                    width: 30,
+                    height: 30,
+                  ),
+                  SizedBox(width: 10), // 이미지와 텍스트 사이의 간격
+                  Text('다른사람 생일'),
+                ],
+              ),
             ),
             RadioListTile<String>(
-              title: Text('기타'),
               value: '기타',
               groupValue: selectedType,
               onChanged: (String? value) {
@@ -86,6 +115,17 @@ class _BdayRegisterDetailState extends State<BdayRegisterDetail> {
                   Navigator.pop(context);
                 });
               },
+              title: Row(
+                children: [
+                  Image.asset(
+                    'assets/main/celebration-removebg-preview.png',
+                    width: 30,
+                    height: 30,
+                  ),
+                  SizedBox(width: 10), // 이미지와 텍스트 사이의 간격
+                  Text('기타'),
+                ],
+              ),
             ),
           ],
         );

@@ -24,11 +24,13 @@ class _FilterAddrState extends State<FilterAddr> {
             },
             child: Row(
               children: [
-                Icon(
-                  Icons.map,
-                  color: Colors.blue,
+                Image.asset(
+                  'assets/main/gps-removebg-preview1.png',
+                  width: 30,
+                  height: 30,
+                  color: Colors.black, // 색상을 원하는 색으로 변경할 수 있어요.
                 ),
-                SizedBox(width: 10.0,),
+                SizedBox(width: 3.0,),
                 Padding(
                   padding: EdgeInsets.only(right: 5.0),
                   child: Text(

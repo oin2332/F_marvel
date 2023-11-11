@@ -3,6 +3,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'Event1.dart';
+
 class ImportEvent extends StatefulWidget {
   @override
   State<ImportEvent> createState() => _ImportEventState();
@@ -20,12 +22,12 @@ class _ImportEventState extends State<ImportEvent> {
     'assets/main/whisky.png',
   ];
 
-  final List<String> pageUrls = [
-    'https://www.bluer.co.kr/magazine/303',
-    'https://www.bluer.co.kr/magazine/346',
-    'https://magazine.hankyung.com/money/article/202101214003c',
-    'https://www.story-w.co.kr/story-w/1426/2023-wine-referral',
-    'https://the-edit.co.kr/50593',
+  final pages = [
+    Event1(),
+    Event2(),
+    Event3(),
+    Event4(),
+    Event5(),
   ];
 
   Timer? _timer;
@@ -47,12 +49,11 @@ class _ImportEventState extends State<ImportEvent> {
   }
 
   void navigateEventPage(int index) {
-    _pageController.animateToPage(
-      index,
-      duration: Duration(milliseconds: 500),
-      curve: Curves.easeIn,
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => pages[index]),
     );
-    launchURL(pageUrls[index]);
+
   }
 
   void launchURL(String url) async {
