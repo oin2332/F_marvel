@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:food_marvel/user/userModel.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+import 'function/Day.dart';
 
 class BdayRegisterDetail extends StatefulWidget {
   const BdayRegisterDetail({super.key});
@@ -12,6 +17,8 @@ class _BdayRegisterDetailState extends State<BdayRegisterDetail> {
   String selectedType = '기념일 유형을 선택해 주세요'; // 기본값으로 '내 생일' 선택
   String selectedDate = ''; // 선택된 날짜 저장
 
+  final TextEditingController _memo = TextEditingController();
+
   Future<void> _showDatePickerDialog() async {
     DateTime? picked = await showDatePicker(
       context: context,
@@ -21,8 +28,11 @@ class _BdayRegisterDetailState extends State<BdayRegisterDetail> {
     );
 
     if (picked != null && picked != DateTime.now()) {
+      // 날짜 형식 변환
+      String formattedDate = DateFormat('yyyy-MM-dd').format(picked);
+
       setState(() {
-        selectedDate = "${picked.year}-${picked.month}-${picked.day}";
+        selectedDate = formattedDate;
       });
     }
   }
@@ -85,6 +95,8 @@ class _BdayRegisterDetailState extends State<BdayRegisterDetail> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel userModel = Provider.of<UserModel>(context);
+    String? userId = userModel.userId;
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.white,
@@ -119,22 +131,29 @@ class _BdayRegisterDetailState extends State<BdayRegisterDetail> {
             ),
             SizedBox(height: 20),
             Text('메모'),
-            TextField(decoration: InputDecoration(labelText: '기념일에 대한 내용을 적어주세요')),
+            TextField(
+                controller: _memo,
+                decoration: InputDecoration(labelText: '기념일에 대한 내용을 적어주세요')
+            ),
             SizedBox(height: 20),
             ElevatedButton(
               style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.deepOrange[400]!)),
-              onPressed: (){
+              onPressed: () async {
                 String type = selectedType;
-                String date = selectedDate;
+                DateTime date = selectedDate.isNotEmpty ? DateTime.parse(selectedDate) : DateTime.now(); // 선택된 날짜가 없을 경우 현재 날짜 사용
+                String memo = _memo.text; // 여기에서 메모 데이터를 얻어오는 코드를 추가
 
-                // 데이터를 전달하고자 하는 경우, Navigator로 화면을 닫음과 동시에 데이터를 전달합니다.
+                // 데이터를 Firestore에 저장
+                await setDay(userId!, type!, date!, memo!);
+
+                // 화면 닫기
                 Navigator.pop(context, {'type': type, 'date': date});
               },
               child: Container(
-                width: double.infinity, // 버튼의 너비를 화면 너비로 설정
-                padding: EdgeInsets.symmetric(horizontal: 20.0), // 좌우 패딩을 추가
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
                 child: Text('등록', textAlign: TextAlign.center,),
-                ),
+              ),
             )
           ],
         ),

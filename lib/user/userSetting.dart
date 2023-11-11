@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_marvel/etc/customerSuggest.dart';
 import 'package:food_marvel/etc/noticeList.dart';
+import 'package:food_marvel/user/blockList.dart';
 import 'package:food_marvel/user/connectNumber.dart';
 import 'package:food_marvel/user/notificationSetting.dart';
 import 'package:food_marvel/user/profileEdit.dart';
@@ -101,7 +102,9 @@ class UserSetting extends StatelessWidget {
                   Container(height: 1, width: 250, color: Colors.grey),
                   Text('서비스 이용', style: TextStyle(color: Colors.grey[600]!),),
                   TextButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => BlockList()));
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(

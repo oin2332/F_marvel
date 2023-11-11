@@ -34,6 +34,39 @@ class _JoinState extends State<Join> {
 
   String? gender;
 
+  // 아이디와 비밀번호의 정규식 패턴
+  final RegExp _idPattern = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{7,}$'); // 영문 + 숫자 7자 이상
+  final RegExp _pwdPattern = RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$'); // 영문 + 숫자 8자 이상
+
+  // 아이디와 비밀번호가 정규식에 맞는지 확인하는 함수
+  bool _isIdValid(String id) => _idPattern.hasMatch(id);
+  bool _isPwdValid(String pwd) => _pwdPattern.hasMatch(pwd);
+
+  void _formIdCheck() async {
+    // 아이디와 비밀번호가 정규식에 맞는지 확인
+    if (!_isIdValid(_id.text)) {
+      // 아이디가 조건에 맞지 않을 경우
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('아이디는 영문과 숫자의 조합이어야 합니다.'),
+        ),
+      );
+      return;
+    }
+  }
+
+  void _formPwdCheck() async {
+    if (!_isPwdValid(_pwd.text)) {
+      // 비밀번호가 조건에 맞지 않을 경우
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('비밀번호는 영문과 숫자의 조합이며 최소 8자 이상이어야 합니다.'),
+        ),
+      );
+      return;
+    }
+  }
+
   void _register() async {
     if(_idChecked) {
       return; // 중복 아이디 확인이 성공하지 않은 경우, 가입을 중단
@@ -164,7 +197,7 @@ class _JoinState extends State<Join> {
               TextField(
                 onChanged: (value) {
                     _checkDuplicateId();
-
+                    _formIdCheck();
                 },
                 controller: _id,
                 decoration: InputDecoration(
@@ -190,6 +223,9 @@ class _JoinState extends State<Join> {
               Text('비밀번호', style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 5),
               TextField(
+                onChanged: (value){
+                  _formPwdCheck();
+                },
                 controller: _pwd,
                 decoration: InputDecoration(
                   filled: true,
@@ -202,6 +238,7 @@ class _JoinState extends State<Join> {
                 obscureText: true, // 비밀번호 숨기기
               ),
               SizedBox(height: 30),
+
               Text('비밀번호 확인', style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 5),
               TextField(

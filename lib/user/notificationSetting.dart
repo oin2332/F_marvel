@@ -64,6 +64,7 @@ class _NotificationSettingState extends State<NotificationSetting> {
                       isReservationNotificationEnabled = value;
                     });
                   },
+                  activeColor: Colors.deepOrange[300]!, // 켜진 상태일 때의 색상
                 ),
               ],
             ),
@@ -86,6 +87,7 @@ class _NotificationSettingState extends State<NotificationSetting> {
                       isReservationNotificationOpen = value;
                     });
                   },
+                  activeColor: Colors.deepOrange[300]!, // 켜진 상태일 때의 색상
                 ),
               ],
             ),
@@ -108,6 +110,7 @@ class _NotificationSettingState extends State<NotificationSetting> {
                       isActiveNotificationOpen = value;
                     });
                   },
+                  activeColor: Colors.deepOrange[300]!, // 켜진 상태일 때의 색상
                 ),
               ],
             ),
@@ -140,6 +143,7 @@ class _NotificationSettingState extends State<NotificationSetting> {
                   onChanged: (value) {
                     updateAllNotifications(value);
                   },
+                  activeColor: Colors.deepOrange[300]!, // 켜진 상태일 때의 색상
                 ),
               ],
             ),
@@ -157,6 +161,7 @@ class _NotificationSettingState extends State<NotificationSetting> {
                       }
                     });
                   },
+                  activeColor: Colors.deepOrange[300]!, // 켜진 상태일 때의 색상
                 ),
               ],
             ),
@@ -174,6 +179,7 @@ class _NotificationSettingState extends State<NotificationSetting> {
                       }
                     });
                   },
+                  activeColor: Colors.deepOrange[300]!, // 켜진 상태일 때의 색상
                 ),
               ],
             ),
@@ -191,6 +197,7 @@ class _NotificationSettingState extends State<NotificationSetting> {
                       }
                     });
                   },
+                  activeColor: Colors.deepOrange[300]!, // 켜진 상태일 때의 색상
                 ),
               ],
             ),
@@ -209,6 +216,7 @@ class _NotificationSettingState extends State<NotificationSetting> {
                       }
                     });
                   },
+                  activeColor: Colors.deepOrange[300]!, // 켜진 상태일 때의 색상
                 ),
               ],
             ),
@@ -226,6 +234,7 @@ class _NotificationSettingState extends State<NotificationSetting> {
                       }
                     });
                   },
+                  activeColor: Colors.deepOrange[300]!, // 켜진 상태일 때의 색상
                 ),
               ],
             ),
