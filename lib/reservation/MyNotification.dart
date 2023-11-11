@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:food_marvel/reservation/function/updateReservationState.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../user/userModel.dart';
+import 'RtabBar.dart';
 
 class MyNotification extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    updateReservationStatus();
     UserModel userModel = Provider.of<UserModel>(context);
     String? userId = userModel.userId;
 

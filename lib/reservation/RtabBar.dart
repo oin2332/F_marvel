@@ -23,6 +23,7 @@ import '../user/userUnlogin.dart';
 import 'function/cancel_noshow_page.dart';
 
 
+
 class ResTabBar extends StatefulWidget {
   const ResTabBar({Key? key}) : super(key: key);
 
@@ -37,7 +38,7 @@ class _ResTabBarState extends State<ResTabBar> {
   void initState() {
     super.initState();
     // 앱이 시작될 때 예약 상태를 업데이트합니다.
-    updateReservationStatus();
+
   }
 
   @override
@@ -131,38 +132,11 @@ class _ResTabBarState extends State<ResTabBar> {
 
     );
   }
-  Future<void> updateReservationStatus() async {
-    // 현재 시간을 가져옵니다.
-    DateTime now = DateTime.now();
-
-    // Firestore에서 예약 목록을 가져옵니다.
-    QuerySnapshot<Map<String, dynamic>> reservationSnapshot = await FirebaseFirestore.instance
-        .collection('T3_STORE_RESERVATION')
-        .where('R_state', isNull: true) // 방문 완료되지 않은 예약만 가져오기
-        .get();
-
-    // 예약을 방문 완료로 표시할 조건을 설정합니다.
-    int bufferMinutes = 30; // 예약 시간에서 얼마나 이전까지 방문 완료로 표시할지 설정 (예: 30분)
-    for (QueryDocumentSnapshot<Map<String, dynamic>> reservationDoc in reservationSnapshot.docs) {
-      Map<String, dynamic> data = reservationDoc.data();
-      DateTime reservationDateTime =
-      DateTime.parse("${data['R_DATE']} ${data['R_TIME']}"); // 문자열로 된 날짜와 시간을 DateTime으로 변환합니다.
-
-      // 예약 시간이 현재 시간보다 이전이고, 현재 시간에서 bufferMinutes 이내인 경우 방문 완료로 표시합니다.
-      if (reservationDateTime.isBefore(now) && now.difference(reservationDateTime).inMinutes.abs() <= bufferMinutes) {
-        // Firestore에서 해당 예약을 업데이트합니다.
-        await FirebaseFirestore.instance.collection('T3_STORE_RESERVATION').doc(reservationDoc.id).update({
-          'R_state': 'G', // 'G'는 방문 완료를 나타내는 상태입니다. 적절한 값으로 변경하세요.
-        });
-      }
-    }
-  }
 
   @override
   void didUpdateWidget(covariant ResTabBar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // 페이지가 업데이트되었을 때 예약 상태를 다시 업데이트합니다.
-    updateReservationStatus();
+    // didUpdateWidget에서는 호출할 필요가 없습니다.
   }
 
   Widget buildTabButton(int index, String text) {
