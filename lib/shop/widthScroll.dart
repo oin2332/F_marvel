@@ -17,7 +17,7 @@ class _WidthScrollState extends State<WidthScroll> {
   @override
   void initState() {
     super.initState();
-
+    fetchUserData();
   }
 
   List<Map<String, dynamic>> userDataList = [];
