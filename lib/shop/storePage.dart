@@ -107,11 +107,12 @@ class _StorePageState extends State<StorePage> {
       appBar: AppBar(
         title: Text('${widget.category}'),
         backgroundColor: const Color(0xFFFF6347),
+        elevation: 0,
       ),
       body: Container(
         child: Column(
           children: [
-            SizedBox(height: 10),
+            /*SizedBox(height: 10),
             InkWell( // InkWell을 사용하여 터치 이벤트 처리
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => ReservationPage())).then((data) {
@@ -142,8 +143,7 @@ class _StorePageState extends State<StorePage> {
                   ],
                 ),
               ),
-            ),
-            underlineBox(0.8),
+            ),*/
 
             Row(
               children: [

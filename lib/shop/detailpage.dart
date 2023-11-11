@@ -5,7 +5,6 @@ import 'package:food_marvel/map/mini.dart';
 import 'package:food_marvel/shop/reservationAdd.dart';
 import 'package:food_marvel/shop/tabBar.dart';
 import 'package:food_marvel/shop/test.dart';
-import 'package:food_marvel/user/function/checkUserID.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
@@ -243,7 +242,34 @@ class _DetailPageState extends State<DetailPage> {
               onPressed: () {
                 if (uId == null) {
                   // 사용자가 로그인하지 않은 경우
-                  CheckUserID(context);
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text("로그인이 필요합니다"),
+                        content: Text("북마크를 사용하려면 먼저 로그인해야 합니다."),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(); // 다이얼로그 닫기
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => UserUnlogin()),
+                              );
+                            },
+                            child: Text("로그인하러 가기"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop(); // 다이얼로그 닫기
+                            },
+                            child: Text("닫기"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 } else {
                   // 사용자가 로그인한 경우 북마크 작업 수행
                   addBookmark(uId!, sId!).then((_) {
@@ -306,26 +332,19 @@ class _DetailPageState extends State<DetailPage> {
                               Text('${userDataList[index]['S_NAME']}',
                                 style: TextStyle(fontSize: 22,
                                     fontWeight: FontWeight.bold),),
+                              SizedBox(height: 8,),
                               Row(
                                 children: [
                                   Container(
-                                    child: RatingBar.builder(
-                                      initialRating: double.parse(
-                                          userDataList[index]['STARage']),
-                                      minRating: 1,
-                                      direction: Axis.horizontal,
-                                      allowHalfRating: true,
+                                    child: RatingBarIndicator(
+                                      rating: double.parse(userDataList[index]['STARage']),
+                                      itemBuilder: (context, index) => Icon(
+                                        Icons.star,
+                                        color: Colors.amber,
+                                      ),
                                       itemCount: 5,
-                                      itemPadding: EdgeInsets.symmetric(
-                                          horizontal: 4.0),
-                                      itemBuilder: (context, _) =>
-                                          Icon(
-                                            Icons.star,
-                                            color: Colors.amber,
-                                            size: 1,
-                                          ),
-                                      onRatingUpdate: (rating) {
-                                      },
+                                      itemSize: 25.0,
+                                      direction: Axis.horizontal,
                                     ),
                                   ),
                                   SizedBox(width: 7,),
@@ -405,9 +424,11 @@ class _DetailPageState extends State<DetailPage> {
                         underlineBox(5.0),
                         //예약 일시 부분
                         ReservationAdd(addr: addrsum,
-                            sName: userDataList[index]['S_NAME'],
-                            doc: widget.docId,
-                            time: time),
+                          sName: userDataList[index]['S_NAME'],
+                          doc: widget.docId,
+                          time: time,
+                          shopId: userDataList[index]['S_ID'],
+                        ),
                         underlineBox(5.0),
                         //홈 메뉴 사진 리뷰
                         Container(
@@ -637,11 +658,10 @@ class _DetailPageState extends State<DetailPage> {
 
                               underlineBox(5.0),
                               //편의시설--------------------
-
                               Container(
-                                padding: EdgeInsets.all(30),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                padding: EdgeInsets.only(top: 30,left: 30,bottom: 0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
                                     Text(
                                       '편의시설',
@@ -650,6 +670,15 @@ class _DetailPageState extends State<DetailPage> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(left: 30,right: 30,bottom: 30),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+
                                     SizedBox(height: 32),
                                     Wrap(
                                       spacing: 10, // 가로 방향의 마진

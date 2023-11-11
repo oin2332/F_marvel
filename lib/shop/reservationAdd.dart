@@ -10,9 +10,11 @@ class ReservationAdd extends StatefulWidget {
   final String addr;
   final String sName;
   final String doc;
+  final String shopId;
   final dynamic time;
 
-  ReservationAdd({required this.addr, required this.sName, required this.doc, required this.time});
+
+  ReservationAdd({required this.addr, required this.sName, required this.doc, required this.time, required this.shopId});
 
   @override
   State<ReservationAdd> createState() => _ReservationAddState();
@@ -97,8 +99,9 @@ class _ReservationAddState extends State<ReservationAdd> {
     String? usernick = userModel.name;
 
     await FirebaseFirestore.instance.collection('T3_STORE_RESERVATION').add({
-      'R_S_ID': widget.sName,
+      'R_S_ID': widget.shopId,
       'R_S_ADDR': widget.addr,
+      'R_S_name': widget.sName,
       'R_DATE' : DateFormat('yyyy-MM-dd (E)', 'ko_KR').format(_selectedDay!),
       'R_TIME': timeSet,
       'R_number': selectedNumber,
@@ -125,47 +128,49 @@ class _ReservationAddState extends State<ReservationAdd> {
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setState) {
-            return SizedBox(
-              height: 900,
+            return SingleChildScrollView(
               child: Container(
+                padding: EdgeInsets.all(20),
                 child: Column(
                   children: [
-                    TableCalendar(
-                      availableCalendarFormats: _availableCalendarFormats,
-                      focusedDay: _focusedDay,
-                      firstDay: DateTime(1800),
-                      lastDay: DateTime(3000),
-                      headerStyle: HeaderStyle(
-                        formatButtonVisible: false,
-                        titleCentered: true,
-                        titleTextStyle: TextStyle(fontWeight: FontWeight.w700),
-                      ),
-                      onDaySelected: (selectedDay, focusedDay) {
-                        setState(() {
-                          _selectedDay = selectedDay;
+                    Container(
+                      child: TableCalendar(
+                        availableCalendarFormats: _availableCalendarFormats,
+                        focusedDay: _focusedDay,
+                        firstDay: DateTime(1800),
+                        lastDay: DateTime(3000),
+                        headerStyle: HeaderStyle(
+                          formatButtonVisible: false,
+                          titleCentered: true,
+                          titleTextStyle: TextStyle(fontWeight: FontWeight.w700),
+                        ),
+                        onDaySelected: (selectedDay, focusedDay) {
+                          setState(() {
+                            _selectedDay = selectedDay;
+                            _focusedDay = focusedDay;
+                            selectedNumber = null;
+                            _showClockButtons = true;
+                          });
+                        },
+                        selectedDayPredicate: (DateTime date) {
+                          if (_selectedDay == null) {
+                            return false;
+                          }
+                          return date.year == _selectedDay!.year &&
+                              date.month == _selectedDay!.month &&
+                              date.day == _selectedDay!.day;
+                        },
+                        onPageChanged: (focusedDay) {
                           _focusedDay = focusedDay;
-                          selectedNumber = null;
-                          _showClockButtons = true;
-                        });
-                      },
-                      selectedDayPredicate: (DateTime date) {
-                        if (_selectedDay == null) {
-                          return false;
-                        }
-                        return date.year == _selectedDay!.year &&
-                            date.month == _selectedDay!.month &&
-                            date.day == _selectedDay!.day;
-                      },
-                      onPageChanged: (focusedDay) {
-                        _focusedDay = focusedDay;
-                      },
-                      calendarFormat: CalendarFormat.month,
-                      enabledDayPredicate: (DateTime date) {
-                        return date.isAfter(DateTime.now());
-                      },
-                      locale: 'ko_KR',
-                      calendarStyle: CalendarStyle(
-                        weekendTextStyle: TextStyle(color: Colors.blue),
+                        },
+                        calendarFormat: CalendarFormat.month,
+                        enabledDayPredicate: (DateTime date) {
+                          return date.isAfter(DateTime.now());
+                        },
+                        locale: 'ko_KR',
+                        calendarStyle: CalendarStyle(
+                          weekendTextStyle: TextStyle(color: Colors.blue),
+                        ),
                       ),
                     ),
                     SizedBox(height: 15),
@@ -187,6 +192,7 @@ class _ReservationAddState extends State<ReservationAdd> {
                         ],
                       ),
                     ),
+                    SizedBox(height: 13,),
                     ElevatedButton(
                       onPressed: _selectedDay != null && selectedNumber != null
                           ? () {
@@ -197,6 +203,10 @@ class _ReservationAddState extends State<ReservationAdd> {
                       }
                           : null,
                       child: Text('확인'),
+                      style: ElevatedButton.styleFrom(
+                        primary: Color(0xFFFF6347),
+                        fixedSize: Size(200, 30),// 원하는 색상으로 변경
+                      ),
                     ),
                   ],
                 ),
@@ -339,6 +349,10 @@ class _ReservationAddState extends State<ReservationAdd> {
                 Navigator.of(context).pop();
               },
               child: Text('확인'),
+              style: ElevatedButton.styleFrom(
+                primary: Color(0xFFFF6347)
+                ,
+              ),
             ),
           ],
         );
