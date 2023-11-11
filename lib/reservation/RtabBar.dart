@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:food_marvel/reservation/MyNotification.dart';
 import 'package:food_marvel/reservation/Visit_Cancel.dart';
 import 'package:food_marvel/reservation/function/Alarm.dart';
 import 'package:food_marvel/reservation/function/cancelReservation.dart';
@@ -70,7 +71,7 @@ class _ResTabBarState extends State<ResTabBar> {
         body: TabBarView(
           children: [
             // 나의 알림
-            Center(child: AlarmList()),
+            Center(child: MyNotification()),
             Container(
               child: Column(
                 children: [

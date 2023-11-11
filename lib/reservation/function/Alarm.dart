@@ -4,32 +4,9 @@ import 'package:flutter/widgets.dart';
 import 'package:food_marvel/reservation/function/cancelReservation.dart';
 import 'package:food_marvel/user/userModel.dart';
 import 'package:provider/provider.dart';
-
-class ReservationData {
-  final String id;
-  final String storeName;
-  final String storeAddress;
-  final String Peopleid;
-  final int numberOfPeople;
-  final String reservationDate;
-  final String reservationTime;
+import '../function/reservation_data.dart';
 
 
-
-  // 다른 예약 정보 필드들도 추가할 수 있습니다.
-
-  ReservationData({
-    required this.id,
-    required this.storeName,
-    required this.storeAddress,
-    required this.Peopleid,
-    required this.numberOfPeople,
-    required this.reservationDate,
-    required this.reservationTime,
-    required state,
-
-  });
-}
 
 class ReservationDataProvider with ChangeNotifier {
   List<ReservationData> _reservations = [];
@@ -113,7 +90,7 @@ class AlarmList extends StatelessWidget {
                               onPressed: () async {
                                 Navigator.of(context).pop(); // 다이얼로그 닫기
                                 // 예약 취소 로직을 여기에 추가
-                                await cancelReservation(reservation.id);
+                                await cancelReservation(reservation);
 
                                 // 예약이 성공적으로 취소되었음을 알리는 다이얼로그 표시
                                 showDialog(

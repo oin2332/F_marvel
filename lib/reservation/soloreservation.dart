@@ -43,7 +43,7 @@ class _ReservationPageState extends State<ReservationPage> {
     String? userId = userModel.userId;
     String? userName = userModel.name;
 
-    String formattedDate = DateFormat('yyyy-MM-dd (E)', 'ko_KR').format(selectedDate.toLocal());
+    String formattedDate = DateFormat('yyyy-MM-dd', 'ko_KR').format(selectedDate.toLocal());
     String formattedTime = DateFormat('HH:mm').format(DateTime(2000, 1, 1, selectedHour, selectedMinute));
 
     // print(formattedDate);
@@ -59,6 +59,16 @@ class _ReservationPageState extends State<ReservationPage> {
       'R_name': userName, // 유저 닉네임
       'R_state': null,
     });
+    // 알림을 Firestore "alarm_test" 컬렉션에 추가합니다.
+    await FirebaseFirestore.instance.collection('alarm_test').add({
+      'message': '예약이 완료되었습니다.',
+      'timestamp': FieldValue.serverTimestamp(),
+      'R_id': userId, // 유저 아이디
+      'R_S_ID': widget.storeInfo.name, // 가게이름
+      'R_DATE': formattedDate, // 예약일
+      // 다른 필요한 정보들을 추가하세요.
+    });
+
 
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     String? fcmToken = await messaging.getToken();

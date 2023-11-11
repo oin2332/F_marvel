@@ -6,15 +6,27 @@ import 'package:flutter/widgets.dart';
 import 'package:food_marvel/reservation/RtabBar.dart';
 import 'package:http/http.dart' as http;
 import 'getReservation.dart';
-
-Future<void> cancelReservation(String reservationId) async {
+import '../function/reservation_data.dart';
+Future<void> cancelReservation(ReservationData reservation) async {
   try {
     // 예약을 취소할 때 R_state 필드를 'C'로 업데이트합니다.
     await FirebaseFirestore.instance.collection('T3_STORE_RESERVATION')
-        .doc(reservationId).
+        .doc(reservation.id).
     update({
       'R_state': 'C',
     });
+
+    // 알림을 Firestore "alarm_test" 컬렉션에 추가합니다.
+    await FirebaseFirestore.instance.collection('alarm_test').add({
+      'message': '예약이 취소되었습니다.',
+      'timestamp': FieldValue.serverTimestamp(),
+      'R_id': reservation.Peopleid , // 유저 아이디
+      'R_S_ID': reservation.storeName, // 가게이름
+      'R_DATE': reservation.reservationDate, // 예약일
+      // 다른 필요한 정보들을 추가하세요.
+    });
+
+
   } catch (e) {
     print('예약 상태 업데이트 오류: $e');
     // 예외 처리는 여기에 추가하세요.

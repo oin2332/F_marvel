@@ -6,7 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:food_marvel/reservation/RtabBar.dart';
 import 'package:http/http.dart' as http;
 import 'getReservation.dart';
-
+import '../function/reservation_data.dart';
 Future<void> deleteReservation(String reservationId) async {
   try {
     // 예약을 삭제합니다.
