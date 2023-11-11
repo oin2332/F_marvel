@@ -11,6 +11,9 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 
+import '../user/function/checkUserID.dart';
+import '../user/userUnlogin.dart';
+
 
 class ReservationPage extends StatefulWidget {
   final StoreInfo storeInfo;
@@ -22,6 +25,7 @@ class ReservationPage extends StatefulWidget {
 }
 
 class _ReservationPageState extends State<ReservationPage> {
+
   late DateTime selectedDate;
   late int selectedHour;
   late int selectedMinute;
@@ -81,6 +85,7 @@ class _ReservationPageState extends State<ReservationPage> {
 
   @override
   Widget build(BuildContext context) {
+
     UserModel userModel = Provider.of<UserModel>(context);
     // String? UserId = userModel.userId;
     // String? UserName = userModel.name;
@@ -126,59 +131,95 @@ class _ReservationPageState extends State<ReservationPage> {
                   ),
             ),
             SizedBox(height: 15,),
-            Row(
-              children: [
-                SizedBox(height: 15,),
-                Container(
-                  width: 150,
-                  height: 150, // 원하는 높이 설정
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: CachedNetworkImage(
-                    placeholder: (context, url) => const CircularProgressIndicator(),
-                    imageUrl: widget.storeInfo.image, // widget.storeInfo.reimage에 이미지 URL이 들어있는 것으로 가정
-                  ),
-                ),
-                Column(
+            Card(
+              elevation: 1, // 카드 그림자 높이
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15), // 카드 테두리 모양
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
                   children: [
-                    Text('${widget.storeInfo.name}',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,),),
-                    Text('${widget.storeInfo.submemo}',),
-                    Text('${widget.storeInfo.address}',style: TextStyle(fontSize: 12,color: Colors.grey),),
-                    // Text('${widget.storeInfo.time}',style: TextStyle(fontSize: 11, color: Colors.grey,),),
+                    Container(
+                      width: 150,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(5),
+                        child: CachedNetworkImage(
+                          placeholder: (context, url) => const CircularProgressIndicator(),
+                          imageUrl: widget.storeInfo.image, // 이미지 URL
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${widget.storeInfo.name}',
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            '${widget.storeInfo.submemo}',maxLines: 5, // 표시할 최대 라인 수
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            '${widget.storeInfo.address}',
+                            style: TextStyle(fontSize: 12, color: Colors.grey),
+                          ),
+                          // Text('${widget.storeInfo.time}',
+                          //     style: TextStyle(fontSize: 11, color: Colors.grey,),
+                          // ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
-              ],
+              ),
             ),
 
 
             SizedBox(height: 20),
             // Text("예약자 $UserId "),
-            TextButton(
-              onPressed: () {
-                showDatePicker(
-                  context: context,
-                  initialDate: selectedDate,
-                  firstDate: DateTime.now(),
-                  lastDate: DateTime.now().add(Duration(days: 365 * 2)),
-                ).then((pickedDate) {
-                  if (pickedDate != null && pickedDate != selectedDate) {
-                    setState(() {
-                      selectedDate = pickedDate;
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    showDatePicker(
+                      context: context,
+                      initialDate: selectedDate,
+                      firstDate: DateTime.now(),
+                      lastDate: DateTime.now().add(Duration(days: 365 * 2)),
+                    ).then((pickedDate) {
+                      if (pickedDate != null && pickedDate != selectedDate) {
+                        setState(() {
+                          selectedDate = pickedDate;
+                        });
+                      }
                     });
-                  }
-                });
-              },
-              child: Text('날짜 선택',style: TextStyle(color: Colors.white),),
-              style: TextButton.styleFrom(
-                backgroundColor: Color(0xFFFF6347),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                ),),
-            // Text("유저 닉네임 $usernick" ),
-            SizedBox(height: 5,),
-            Text('예약 날짜: ${DateFormat('yyyy-MM-dd (E)' ,'ko_KR').format(selectedDate.toLocal())}'),
-            SizedBox(height: 5,),
-            Text('예약 시간: ${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')}'),
+                  },
+                  child: Text('날짜 선택',style: TextStyle(color: Colors.white),),
+                  style: TextButton.styleFrom(
+                    backgroundColor: Color(0xFFFF6347),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    ),),
+                // Text("유저 닉네임 $usernick" ),
+                SizedBox(width: 5,),
+                Column(
+                  children: [
+                    SizedBox(height: 5,),
+                    Text('예약 날짜: ${DateFormat('yyyy-MM-dd (E)' ,'ko_KR').format(selectedDate.toLocal())}'),
+                    SizedBox(height: 5,),
+                    Text('예약 시간: ${selectedHour.toString().padLeft(2, '0')}:${selectedMinute.toString().padLeft(2, '0')}'),
+                  ],
+                ),
+              ],
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -252,6 +293,7 @@ class _ReservationPageState extends State<ReservationPage> {
                       numberOfPeople = value.round();
                     });
                   },
+                  activeColor: Color(0xFFFF6347),
                 ),
                 CupertinoButton(
                   child: Icon(Icons.add, color: Color(0xFFFF6347)),
@@ -266,13 +308,19 @@ class _ReservationPageState extends State<ReservationPage> {
               ],
             ),
             ElevatedButton(
-              onPressed: () => _saveReservation(userModel),
-              child: Text('예약 완료',style: TextStyle(color: Colors.white)),
+              onPressed: () {
+                if (userModel.isLogin) {
+                  _saveReservation(userModel);
+                } else {
+                  CheckUserID(context);
+                }
+              },
+              child: Text('예약 완료', style: TextStyle(color: Colors.white)),
               style: ElevatedButton.styleFrom(
                 primary: Color(0xFFFF6347),
               ),
             ),
-            SizedBox(height: 30,),
+            SizedBox(height: 10,),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -281,8 +329,8 @@ class _ReservationPageState extends State<ReservationPage> {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),),
               ],
             ),
-            SizedBox(height: 10,),
-            // Expanded(child: WidthScroll("전국~")),
+            SizedBox(height: 1,),
+            Expanded(child: WidthScroll("전국~")),
           ],
         ),
     );
