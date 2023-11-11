@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'; // 필요한 패키지를 추가합니다.
 import 'package:food_marvel/user/userMain.dart';
 import 'package:food_marvel/user/userModel.dart';
+import 'package:food_marvel/user/userUnlogin.dart';
 import 'package:provider/provider.dart';
+import '../board/timeLine.dart';
+import '../main/mainPage.dart';
+import '../reservation/RtabBar.dart';
+import '../search/navSearch.dart';
 import 'join.dart';
 
 class LoginPage extends StatefulWidget {
@@ -18,6 +23,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel userModel = Provider.of<UserModel>(context);
+    String? uId = userModel.userId;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,elevation: 0,
@@ -66,12 +73,46 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 onPressed: _login,
-                child: Text('로그인'),
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0), // 원하는 패딩 적용
+                  child: Text('로그인'),
+                ),
               ),
             ],
           ),
         ),
       ),
+      bottomNavigationBar: BottomAppBar(
+        child: Container(
+          height: 50,
+          color: Color.fromRGBO(255, 255, 255, 1.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              InkWell(
+                onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
+                },child: Icon(Icons.home_outlined,size: 30),),
+              InkWell(
+                onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => NavSearch()));
+                },child: Icon(Icons.search_outlined, size: 30),),
+              InkWell(onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => TimeLine()));
+              },  child: Icon(Icons.message_outlined, size: 28),),
+              InkWell(onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ResTabBar()));
+              }, child: Icon(Icons.calendar_today_outlined, size: 28),),
+              InkWell(onTap: () {
+                if (userModel.isLogin) {
+                  Navigator.pop(context);
+                } else {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => UserUnlogin()));
+                }
+              }, child: Icon(Icons.person, size: 30),),
+            ],
+          ),
+        ),
+      ),
+
     );
   }
 

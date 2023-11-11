@@ -5,6 +5,13 @@ import 'package:food_marvel/user/loginPage.dart';
 import 'package:food_marvel/shop/Addshop/storejoin.dart';
 import 'package:food_marvel/user/userMain.dart';
 import 'package:food_marvel/main/importbottomBar.dart';
+import 'package:food_marvel/user/userModel.dart';
+import 'package:provider/provider.dart';
+
+import '../board/timeLine.dart';
+import '../main/mainPage.dart';
+import '../reservation/RtabBar.dart';
+import '../search/navSearch.dart';
 
 class UserUnlogin extends StatefulWidget {
   const UserUnlogin({super.key});
@@ -18,13 +25,15 @@ class _UserUnloginState extends State<UserUnlogin> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel userModel = Provider.of<UserModel>(context);
+    String? uId = userModel.userId;
     return MaterialApp(
       home: Scaffold(
         body: ListView(
           children: [
             SizedBox(height: 20),
             Align(
-              alignment: Alignment.centerLeft,
+              alignment: Alignment.center,
               child: SizedBox(
                 height: 140, // 원하는 높이
                 child: Image.asset('assets/main/loading.png'),
@@ -76,7 +85,7 @@ class _UserUnloginState extends State<UserUnlogin> {
                     },
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0), ),),
-                      backgroundColor: MaterialStateProperty.all<Color>(Colors.grey[200]!),
+                      backgroundColor: MaterialStateProperty.all<Color>(Colors.grey[100]!),
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(18.0),
@@ -101,6 +110,37 @@ class _UserUnloginState extends State<UserUnlogin> {
             ),
           ],
         ),
+        bottomNavigationBar: BottomAppBar(
+          child: Container(
+            height: 50,
+            color: Color.fromRGBO(255, 255, 255, 1.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                InkWell(
+                  onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
+                  },child: Icon(Icons.home_outlined,size: 30),),
+                InkWell(
+                  onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => NavSearch()));
+                  },child: Icon(Icons.search_outlined, size: 30),),
+                InkWell(onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => TimeLine()));
+                },  child: Icon(Icons.message_outlined, size: 28),),
+                InkWell(onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => ResTabBar()));
+                }, child: Icon(Icons.calendar_today_outlined, size: 28),),
+                InkWell(onTap: () {
+                  if (userModel.isLogin) {
+                    Navigator.pop(context);
+                  } else {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => UserUnlogin()));
+                  }
+                }, child: Icon(Icons.person, size: 30),),
+              ],
+            ),
+          ),
+        ),
+
       ),
     );
   }

@@ -183,223 +183,223 @@ class _TabBarExState extends State<TabBarEx> {
               ],
             ),
           ),
-          body: TabBarView(
-            children: [
-              Text("홍"),
-              // 메뉴 ---------------------------------------------------------//
-             ListView(
-                        children: <Widget>[
-                          ListTile(
-                              title: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    child: SingleChildScrollView(
-                                      scrollDirection: Axis.horizontal,
-                                      child: Row(
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              // 이미지 클릭 시 다이얼로그 표시
-                                              _showImageDialog(context, menuImg[0]);
-                                            },
-                                            child: CachedNetworkImage(
-                                              width: 250,
-                                              height: 330,
-                                              placeholder: (context, url) => LoadingSpinner3(),
-                                              imageUrl: menuImg[0],
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              // 이미지 클릭 시 다이얼로그 표시
-                                              _showImageDialog(context, menuImg[1]);
-                                            },
-                                            child: CachedNetworkImage(
-                                              width: 250,
-                                              height: 330,
-                                              placeholder: (context, url) => LoadingSpinner3(),
-                                              imageUrl: menuImg[1],
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              // 이미지 클릭 시 다이얼로그 표시
-                                              _showImageDialog(context, '${menuImg[2]}');
-                                            },
-                                            child: CachedNetworkImage(
-                                              width: 250,
-                                              height: 330,
-                                              placeholder: (context, url) => LoadingSpinner3(),
-                                              imageUrl: menuImg[2],
-                                            ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              // 이미지 클릭 시 다이얼로그 표시
-                                              _showImageDialog(context, '${menuImg[3]}');
-                                            },
-                                            child: CachedNetworkImage(
-                                              width: 250,
-                                              height: 330,
-                                              placeholder: (context, url) => LoadingSpinner3(),
-                                              imageUrl: menuImg[3],
-                                            ),
-                                          ),
-                                          // 다른 이미지들도 동일한 방식으로 처리
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 10,),
-                                  UnderLindeBox().underlineBox(1.0),
-                                  Container(
-                                    padding: EdgeInsets.all(30),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text('${memuMap['S_MENU1']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-                                        SizedBox(height: 12,),
-                                        Text('${memuMap['S_MENU1-1']}',style: TextStyle(fontSize: 20)),
-                                      ],
-                                    ),
-                                  ),
-                                  UnderLindeBox().underlineBox(1.0),
-                                  Container(
-                                    padding: EdgeInsets.all(30),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text('${memuMap['S_MENU2']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-                                        SizedBox(height: 12,),
-                                        Text('${memuMap['S_MENU2-1']}',style: TextStyle(fontSize: 20)),
-                                      ],
-                                    ),
-                                  ),
-                                  UnderLindeBox().underlineBox(1.0),
-                                  Container(
-                                    padding: EdgeInsets.all(30),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text('${memuMap['S_MENU3']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-                                        SizedBox(height: 12,),
-                                        Text('${memuMap['S_MENU3-1']}',style: TextStyle(fontSize: 20)),
-                                      ],
-                                    ),
-                                  ),
-                                  UnderLindeBox().underlineBox(1.0),
-                                  Container(
-                                    padding: EdgeInsets.all(30),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text('${memuMap['S_MENU4']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
-                                        SizedBox(height: 12,),
-                                        Text('${memuMap['S_MENU4-1']}',style: TextStyle(fontSize: 20)),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              )
-                          ),
-                        ],
-                      ),
-
-
-              // 사진----------------------------------------------------------------
-              Container(
-                padding: EdgeInsets.all(10),
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                  ),
-                  itemCount: Path.length,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        // 이미지를 누를 때 AlertDialog로 이미지 크게 보기
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              content: Container(
-                                width: double.maxFinite, // 화면 너비에 맞게 설정
-                                child: CachedNetworkImage(
-                                  width: 250,
-                                  height: 330,
-                                  fit: BoxFit.cover,
-                                  placeholder: (context, url) => LoadingSpinner3(),
-                                  imageUrl: Path[index],
-                                ),
-                              ),
-
-                            );
-                          },
-                        );
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(5),
-                        child: CachedNetworkImage(
-                          width: 250,
-                          height: 330,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => LoadingSpinner3(),
-                          imageUrl: Path[index],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-
-              ),
-
-              //리뷰-------------------------------------------------------------------//
-              Container(
-                color: Colors.white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Container(
-                            child:Column(
-                              children: [
-                                Text(' ${Star.length}개의 리뷰 별점 평균'),
-                                SizedBox(height: 12,),
-                                Icon(Icons.star,color: Colors.yellow[600],size: 50,),
-                                Text('${average.toStringAsFixed(1)}',style: TextStyle(fontSize: 35,fontWeight: FontWeight.bold),)
-
-                              ],
-                            ),
-                          ),
-                          Column(
-                            children: [
-                              _buildGrafik(bardata),
-                            ],
-                          ),
-
-                        ],
-                      ),
-                    ),
-                    UnderLindeBox().underlineBox(2.0),
-
-
-
-                  ],
-                ),
-              )
-
-
-
-
-            ],
-          ),
+          // body: TabBarView(
+          //   children: [
+          //     Text("홍"),
+          //     // 메뉴 ---------------------------------------------------------//
+          //    ListView(
+          //               children: <Widget>[
+          //                 ListTile(
+          //                     title: Column(
+          //                       crossAxisAlignment: CrossAxisAlignment.start,
+          //                       children: [
+          //                         Container(
+          //                           child: SingleChildScrollView(
+          //                             scrollDirection: Axis.horizontal,
+          //                             child: Row(
+          //                               children: [
+          //                                 GestureDetector(
+          //                                   onTap: () {
+          //                                     // 이미지 클릭 시 다이얼로그 표시
+          //                                     _showImageDialog(context, menuImg[0]);
+          //                                   },
+          //                                   child: CachedNetworkImage(
+          //                                     width: 250,
+          //                                     height: 330,
+          //                                     placeholder: (context, url) => LoadingSpinner3(),
+          //                                     imageUrl: menuImg[0],
+          //                                   ),
+          //                                 ),
+          //                                 GestureDetector(
+          //                                   onTap: () {
+          //                                     // 이미지 클릭 시 다이얼로그 표시
+          //                                     _showImageDialog(context, menuImg[1]);
+          //                                   },
+          //                                   child: CachedNetworkImage(
+          //                                     width: 250,
+          //                                     height: 330,
+          //                                     placeholder: (context, url) => LoadingSpinner3(),
+          //                                     imageUrl: menuImg[1],
+          //                                   ),
+          //                                 ),
+          //                                 GestureDetector(
+          //                                   onTap: () {
+          //                                     // 이미지 클릭 시 다이얼로그 표시
+          //                                     _showImageDialog(context, '${menuImg[2]}');
+          //                                   },
+          //                                   child: CachedNetworkImage(
+          //                                     width: 250,
+          //                                     height: 330,
+          //                                     placeholder: (context, url) => LoadingSpinner3(),
+          //                                     imageUrl: menuImg[2],
+          //                                   ),
+          //                                 ),
+          //                                 GestureDetector(
+          //                                   onTap: () {
+          //                                     // 이미지 클릭 시 다이얼로그 표시
+          //                                     _showImageDialog(context, '${menuImg[3]}');
+          //                                   },
+          //                                   child: CachedNetworkImage(
+          //                                     width: 250,
+          //                                     height: 330,
+          //                                     placeholder: (context, url) => LoadingSpinner3(),
+          //                                     imageUrl: menuImg[3],
+          //                                   ),
+          //                                 ),
+          //                                 // 다른 이미지들도 동일한 방식으로 처리
+          //                               ],
+          //                             ),
+          //                           ),
+          //                         ),
+          //                         SizedBox(height: 10,),
+          //                         UnderLindeBox().underlineBox(1.0),
+          //                         Container(
+          //                           padding: EdgeInsets.all(30),
+          //                           child: Column(
+          //                             crossAxisAlignment: CrossAxisAlignment.start,
+          //                             children: [
+          //                               Text('${memuMap['S_MENU1']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+          //                               SizedBox(height: 12,),
+          //                               Text('${memuMap['S_MENU1-1']}',style: TextStyle(fontSize: 20)),
+          //                             ],
+          //                           ),
+          //                         ),
+          //                         UnderLindeBox().underlineBox(1.0),
+          //                         Container(
+          //                           padding: EdgeInsets.all(30),
+          //                           child: Column(
+          //                             crossAxisAlignment: CrossAxisAlignment.start,
+          //                             children: [
+          //                               Text('${memuMap['S_MENU2']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+          //                               SizedBox(height: 12,),
+          //                               Text('${memuMap['S_MENU2-1']}',style: TextStyle(fontSize: 20)),
+          //                             ],
+          //                           ),
+          //                         ),
+          //                         UnderLindeBox().underlineBox(1.0),
+          //                         Container(
+          //                           padding: EdgeInsets.all(30),
+          //                           child: Column(
+          //                             crossAxisAlignment: CrossAxisAlignment.start,
+          //                             children: [
+          //                               Text('${memuMap['S_MENU3']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+          //                               SizedBox(height: 12,),
+          //                               Text('${memuMap['S_MENU3-1']}',style: TextStyle(fontSize: 20)),
+          //                             ],
+          //                           ),
+          //                         ),
+          //                         UnderLindeBox().underlineBox(1.0),
+          //                         Container(
+          //                           padding: EdgeInsets.all(30),
+          //                           child: Column(
+          //                             crossAxisAlignment: CrossAxisAlignment.start,
+          //                             children: [
+          //                               Text('${memuMap['S_MENU4']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+          //                               SizedBox(height: 12,),
+          //                               Text('${memuMap['S_MENU4-1']}',style: TextStyle(fontSize: 20)),
+          //                             ],
+          //                           ),
+          //                         ),
+          //                       ],
+          //                     )
+          //                 ),
+          //               ],
+          //             ),
+          //
+          //
+          //     // 사진----------------------------------------------------------------
+          //     Container(
+          //       padding: EdgeInsets.all(10),
+          //       child: GridView.builder(
+          //         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          //           crossAxisCount: 2,
+          //           crossAxisSpacing: 8,
+          //           mainAxisSpacing: 8,
+          //         ),
+          //         itemCount: Path.length,
+          //         itemBuilder: (context, index) {
+          //           return GestureDetector(
+          //             onTap: () {
+          //               // 이미지를 누를 때 AlertDialog로 이미지 크게 보기
+          //               showDialog(
+          //                 context: context,
+          //                 builder: (BuildContext context) {
+          //                   return AlertDialog(
+          //                     content: Container(
+          //                       width: double.maxFinite, // 화면 너비에 맞게 설정
+          //                       child: CachedNetworkImage(
+          //                         width: 250,
+          //                         height: 330,
+          //                         fit: BoxFit.cover,
+          //                         placeholder: (context, url) => LoadingSpinner3(),
+          //                         imageUrl: Path[index],
+          //                       ),
+          //                     ),
+          //
+          //                   );
+          //                 },
+          //               );
+          //             },
+          //             child: Container(
+          //               padding: EdgeInsets.all(5),
+          //               child: CachedNetworkImage(
+          //                 width: 250,
+          //                 height: 330,
+          //                 fit: BoxFit.cover,
+          //                 placeholder: (context, url) => LoadingSpinner3(),
+          //                 imageUrl: Path[index],
+          //               ),
+          //             ),
+          //           );
+          //         },
+          //       ),
+          //
+          //     ),
+          //
+          //     //리뷰-------------------------------------------------------------------//
+          //     Container(
+          //       color: Colors.white,
+          //       child: Column(
+          //         crossAxisAlignment: CrossAxisAlignment.start,
+          //         children: [
+          //           Container(
+          //             padding: EdgeInsets.all(0),
+          //             child: Row(
+          //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //               children: [
+          //                 Container(
+          //                   child:Column(
+          //                     children: [
+          //                       Text(' ${Star.length}개의 리뷰 별점 평균'),
+          //                       SizedBox(height: 12,),
+          //                       Icon(Icons.star,color: Colors.yellow[600],size: 50,),
+          //                       Text('${average.toStringAsFixed(1)}',style: TextStyle(fontSize: 35,fontWeight: FontWeight.bold),)
+          //
+          //                     ],
+          //                   ),
+          //                 ),
+          //                 Column(
+          //                   children: [
+          //                     _buildGrafik(bardata),
+          //                   ],
+          //                 ),
+          //
+          //               ],
+          //             ),
+          //           ),
+          //           UnderLindeBox().underlineBox(2.0),
+          //
+          //
+          //
+          //         ],
+          //       ),
+          //     )
+          //
+          //
+          //
+          //
+          //   ],
+          // ),
 
           //------------------------------------------//
           bottomNavigationBar: BottomAppBar(

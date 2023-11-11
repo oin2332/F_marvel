@@ -5,6 +5,7 @@ import 'package:food_marvel/map/mini.dart';
 import 'package:food_marvel/shop/reservationAdd.dart';
 import 'package:food_marvel/shop/tabBar.dart';
 import 'package:food_marvel/shop/test.dart';
+import 'package:food_marvel/user/function/checkUserID.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
@@ -242,34 +243,7 @@ class _DetailPageState extends State<DetailPage> {
               onPressed: () {
                 if (uId == null) {
                   // 사용자가 로그인하지 않은 경우
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text("로그인이 필요합니다"),
-                        content: Text("북마크를 사용하려면 먼저 로그인해야 합니다."),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop(); // 다이얼로그 닫기
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => UserUnlogin()),
-                              );
-                            },
-                            child: Text("로그인하러 가기"),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop(); // 다이얼로그 닫기
-                            },
-                            child: Text("닫기"),
-                          ),
-                        ],
-                      );
-                    },
-                  );
+                  CheckUserID(context);
                 } else {
                   // 사용자가 로그인한 경우 북마크 작업 수행
                   addBookmark(uId!, sId!).then((_) {
