@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
 // 사용자 리스트 조회
@@ -37,7 +38,14 @@ Future<String?> fetchProfileImageUrl(String userId) async {
     if (userSnapshot.docs.isNotEmpty) {
       for (QueryDocumentSnapshot doc in userSnapshot.docs) {
         Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
-        return userData['profile_image'] ?? '/assets/user/userProfile.png'; // 대체값을 지정
+        String? imageUrl = userData['profile_image'];
+
+        if (imageUrl == null) {
+          // 만약 profile_image 값이 null이라면 디폴트 이미지의 다운로드 링크를 반환
+          return await fetchDefaultProfileImageUrl();
+        } else {
+          return imageUrl;
+        }
       }
     } else {
       print('해당 사용자를 찾을 수 없습니다.');
@@ -48,6 +56,19 @@ Future<String?> fetchProfileImageUrl(String userId) async {
   }
 
   return null;
+}
+
+// Firebase Storage에서 디폴트 프로필 이미지 다운로드 링크 가져오기
+Future<String?> fetchDefaultProfileImageUrl() async {
+  try {
+    // 'userProfile.png'는 Storage에 있는 디폴트 이미지의 경로입니다.
+    String defaultImageUrl =
+        'https://firebasestorage.googleapis.com/v0/b/tjoeun3joproject.appspot.com/o/user%2FuserProfile.png?alt=media';
+    return defaultImageUrl;
+  } catch (e) {
+    print('디폴트 프로필 이미지 가져오기 오류: $e');
+    throw e;
+  }
 }
 
 // 출력 화면 로직
