@@ -4,7 +4,7 @@ import 'package:food_marvel/shop/underlindeBox.dart';
 import 'package:vertical_barchart/vertical-barchart.dart';
 import 'package:vertical_barchart/vertical-barchartmodel.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
+import '../reservation/soloreservation.dart';
 import 'loading.dart';
 
 class TabBarEx extends StatefulWidget {
@@ -28,26 +28,34 @@ class TabBarEx extends StatefulWidget {
 }
 
 class _TabBarExState extends State<TabBarEx> {
-  List<Map<String, dynamic>>? userDataList;
+  List<Map<String, dynamic>>? StoreDataList;
+  List<Map<String, dynamic>>? userBoard;
   Map<String, dynamic>? memuMap;
   List<String> Path = [];
   List<String> menuImg = [];
   List<String> Star = [];
-
   late List<VBarChartModel> bardata;
   late double average;
 
+  int tabIndex = 1;
+  double countOfOnly5Stars  = 0;
+  double countOfOnly4Stars  = 0;
+  double countOfOnly3Stars  = 0;
+  double countOfOnly2Stars  = 0;
+  double countOfOnly1Stars  = 0;
+  String? targetSId;
   @override
   void initState() {
     super.initState();
     tabIndex = widget.initialTabIndex;
-    userDataList = widget.shopInfo;  // 이미 widget으로부터 전달받은 값으로 초기화
+    StoreDataList = widget.shopInfo;  // 이미 widget으로부터 전달받은 값으로 초기화
     memuMap = widget.memuMap;  // 이미 widget으로부터 전달받은 값으로 초기화
     Path = widget.imgPathList;  // 이미 widget으로부터 전달받은 값으로 초기화
     menuImg = widget.menuImgList;  // 이미 widget으로부터 전달받은 값으로 초기화
     Star = widget.shopInfo[0]['STARlist'];  // 이미 widget으로부터 전달받은 값으로 초기화
-
-
+    print('ffddssdd   $StoreDataList');
+    targetSId = widget.shopInfo[0]['S_ID'];
+    print('asdasdasd$targetSId');
     List<String> starList = widget.shopInfo[0]['STARlist']; // 별점을 나타내는 문자열 리스트
 
 
@@ -78,7 +86,6 @@ class _TabBarExState extends State<TabBarEx> {
         colors: [Colors.orange, Colors.deepOrange],
         jumlah: cnt5,
         tooltip: "(${num5.length})",
-
       ),
       VBarChartModel(
         index: 1,
@@ -109,16 +116,35 @@ class _TabBarExState extends State<TabBarEx> {
         tooltip: "(${num1.length})",
       ),
     ];
+    boardList();
+  }
+  Future<void> boardList() async {
+    try {
+      // 'T3_REVIEW_TBL' 컬렉션의 데이터 가져오기
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
+          .collection('T3_REVIEW_TBL')
+          .get();
 
+
+      // 가져온 데이터를 사용
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document in querySnapshot.docs) {
+        // 각 문서의 데이터에 접근
+        Map<String, dynamic> data = document.data()!;
+
+        // 's_id' 필드가 targetSId와 일치하는 경우만 userBoard 리스트에 추가
+        if (data['s_id'] == targetSId) {
+          userBoard ??= [];
+          userBoard!.add(data);
+        }
+      }
+
+      // 확인용 출력
+      print('User Board: $userBoard');
+    } catch (e) {
+      print('데이터를 불러오는 중 오류 발생: $e');
+    }
   }
 
-
-  int tabIndex = 1;
-  double countOfOnly5Stars  = 0;
-  double countOfOnly4Stars  = 0;
-  double countOfOnly3Stars  = 0;
-  double countOfOnly2Stars  = 0;
-  double countOfOnly1Stars  = 0;
 
   Widget _buildGrafik(List<VBarChartModel> bardata) {
     return Container(
@@ -165,7 +191,7 @@ class _TabBarExState extends State<TabBarEx> {
                 IconButton(onPressed: (){
                   Navigator.of(context).pop();
                 }, icon: Icon(Icons.arrow_back_sharp),color: Colors.black,),
-                Text('가게이름',style: TextStyle(color: Colors.black),)
+                Text('${StoreDataList![0]['S_NAME']}',style: TextStyle(color: Colors.black),)
               ],
             ),
             backgroundColor: Color(0xFFFFffff),
@@ -303,9 +329,9 @@ class _TabBarExState extends State<TabBarEx> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                //    Text('${memuMap['S_MENU4']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
+                                  Text('${memuMap!['S_MENU4']}',style: TextStyle(fontSize: 25,fontWeight: FontWeight.bold),),
                                 SizedBox(height: 12,),
-                                //    Text('${memuMap['S_MENU4-1']}',style: TextStyle(fontSize: 20)),
+                                  Text('${memuMap!['S_MENU4-1']}',style: TextStyle(fontSize: 20)),
                               ],
                             ),
                           ),
@@ -314,8 +340,6 @@ class _TabBarExState extends State<TabBarEx> {
                   ),
                 ],
               ),
-
-
               // 사진----------------------------------------------------------------
               Container(
                 padding: EdgeInsets.all(10),
@@ -344,7 +368,6 @@ class _TabBarExState extends State<TabBarEx> {
                                   imageUrl: Path[index],
                                 ),
                               ),
-
                             );
                           },
                         );
@@ -362,54 +385,169 @@ class _TabBarExState extends State<TabBarEx> {
                     );
                   },
                 ),
-
               ),
-
               //리뷰-------------------------------------------------------------------//
               Container(
                 color: Colors.white,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.all(0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Container(
-                            child:Column(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Container(
+                              child: Column(
+                                children: [
+                                  Text(' ${Star.length-1}개의 리뷰 별점 평균'),
+                                  SizedBox(height: 12,),
+                                  Icon(Icons.star, color: Colors.yellow[600], size: 50,),
+                                  Text('${average.toStringAsFixed(1)}', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),)
+                                ],
+                              ),
+                            ),
+                            Column(
                               children: [
-                                Text(' ${Star.length}개의 리뷰 별점 평균'),
-                                SizedBox(height: 12,),
-                                Icon(Icons.star,color: Colors.yellow[600],size: 50,),
-                                Text('${average.toStringAsFixed(1)}',style: TextStyle(fontSize: 35,fontWeight: FontWeight.bold),)
-
+                                _buildGrafik(bardata),
                               ],
                             ),
+                          ],
+                        ),
+                      ),
+                      UnderLindeBox().underlineBox(2.0),
+                      SizedBox(height: 18,),
+                      // ListView.builder를 사용하여 각 항목 동적으로 표시
+                     /* ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: userBoard?.length,
+                        itemBuilder: (context, index) {
+                          return Text('ffdd');
+                        },
+                      ),*/
+                      Row(
+                        children: [
+                          ClipOval(
+                            child: Image.asset(
+                              'assets/user/basic.jpg',
+                              width: 45,
+                              height: 45,
+                              fit: BoxFit.cover,
+                            ),
                           ),
+                          SizedBox(width: 10),
                           Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _buildGrafik(bardata),
+                              Text('식도성역류염', style: TextStyle(fontWeight: FontWeight.bold)),
+                              Text('리뷰1개, 평균 별점 5') // 수정 필요한 부분
                             ],
                           ),
-
+                          SizedBox(width: 145),
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.deepOrange[400], // 배경 색상
+                              ),
+                              onPressed: (){},
+                              child: Text('팔로우')
+                          )
                         ],
                       ),
-                    ),
-                    UnderLindeBox().underlineBox(2.0),
+                      SizedBox(height: 10),
+                      Image.asset('assets/user/review.jpg'),
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Icon(Icons.star),
+                          Text('1일전')
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text('우대갈비 폼 미쳤다')
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            IconButton(onPressed: (){}, icon: Icon(Icons.favorite)),
+                            SizedBox(width: 30),
+                            IconButton(onPressed: (){}, icon: Icon(Icons.messenger))
+                          ],
+                        ),
+                      ),
+                      Container(height: 10, width: 410, color: Colors.grey[300]!),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          ClipOval(
+                            child: Image.asset(
+                              'assets/user/basic.jpg',
+                              width: 45,
+                              height: 45,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('식도성역류염', style: TextStyle(fontWeight: FontWeight.bold)),
+                              Text('리뷰1개, 평균 별점 5') // 수정 필요한 부분
+                            ],
+                          ),
+                          SizedBox(width: 145),
+                          ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.deepOrange[400], // 배경 색상
+                              ),
+                              onPressed: (){},
+                              child: Text('팔로우')
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Image.asset('assets/user/review.jpg'),
+                      SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Icon(Icons.star),
+                          Text('1일전')
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text('우대갈비 폼 미쳤다')
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            IconButton(onPressed: (){}, icon: Icon(Icons.favorite)),
+                            SizedBox(width: 30),
+                            IconButton(onPressed: (){}, icon: Icon(Icons.messenger))
+                          ],
+                        ),
+                      ),
+                      Container(height: 10, width: 410, color: Colors.grey[300]!),
+                      SizedBox(height: 10),
 
-
-
-                  ],
+                    ],
+                  ),
                 ),
-              )
-
-
+              ),
 
 
             ],
-          ),
 
+          ),
           //------------------------------------------//
           bottomNavigationBar: BottomAppBar(
             child: Container(
@@ -419,7 +557,23 @@ class _TabBarExState extends State<TabBarEx> {
                 children: [
                   IconButton(onPressed: () {}, icon: Icon(Icons.bookmark_border)),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+
+                        StoreInfo storeInfo = StoreInfo(
+                          image: widget.shopInfo[0]['S_IMG'],
+                          name: widget.shopInfo[0]['S_NAME'],
+                          address: '${widget.shopInfo[0]['S_ADDR1']} ${widget.shopInfo[0]['S_ADDR2']} ${widget.shopInfo[0]['S_ADDR3']}',
+                          submemo: widget.shopInfo[0]['S_MEMO'],
+                          time: widget.shopInfo[0]['S_TIME'],
+                        );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ReservationPage(
+                                  storeInfo: storeInfo)
+                          ),
+                        );
+                    },
                     child: Text(
                       '예약하기',
                       style: TextStyle(color: Colors.white, fontSize: 19),
