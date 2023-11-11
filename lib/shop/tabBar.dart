@@ -9,10 +9,16 @@ import 'loading.dart';
 
 class TabBarEx extends StatefulWidget {
   final int initialTabIndex;
-  final String docId;
+  final  List<Map<String, dynamic>> shopInfo;
+  final  List<String> imgPathList;
+  final List<String> menuImgList;
+  final Map<String, dynamic> memuMap;
   TabBarEx({
     required this.initialTabIndex,
-    required this.docId,
+    required this.shopInfo,
+    required this.imgPathList,
+    required this.menuImgList,
+    required this.memuMap,
   });
 
 
@@ -25,10 +31,13 @@ class _TabBarExState extends State<TabBarEx> {
   late List<VBarChartModel> bardata;
   @override
   void initState() {
-    _fetchAllUserData(widget.docId);
     super.initState();
     tabIndex = widget.initialTabIndex;
+    print(widget.shopInfo);
+    List<Map<String, dynamic>> userDataList = widget.shopInfo;
+    Map<String, dynamic> memuMap = {};
 
+    List<String> menuImg = [];
 
 
     double total = 0.0; // 숫자를 더할 변수
@@ -88,118 +97,9 @@ class _TabBarExState extends State<TabBarEx> {
 
   }
 
-  List<Map<String, dynamic>> userDataList = [];
-  Map<String, dynamic> memuMap = {};
-  Future<List<Widget>?> _fetchAllUserData(String docId) async {
-    try {
-      DocumentSnapshot storeSnapshot = await FirebaseFirestore.instance
-          .collection('T3_STORE_TBL')
-          .doc(docId)
-          .get();
-
-      if (storeSnapshot.exists) {
-        Map<String, dynamic> storeData = storeSnapshot.data() as Map<String, dynamic>;
-
-        // 해당 상점의 별점 정보 가져오기
-        QuerySnapshot starSnapshot = await FirebaseFirestore.instance
-            .collection('T3_STORE_TBL')
-            .doc(docId)
-            .collection('T3_STAR_TBL')
-            .get();
-
-        //이미지 가져오기
-          QuerySnapshot storeImgList = await FirebaseFirestore.instance
-              .collection('T3_STORE_TBL')
-              .doc(docId)
-              .collection('T3_STOREIMG_TBL')
-              .get();
-
-
-            List<dynamic> imgstore = storeImgList.docs[0].get('r_img_urls'); // 첫 번째 문서의 r_img_urls 필드에서 데이터 가져오기
-
-            // r_img_urls의 각 항목을 imagePaths에 추가
-               imgstore.forEach((imageUrl) {
-              if (imageUrl is String) {
-                Path.add(imageUrl);
-              }
-            });
-
-
-
-        //메뉴 이미지 가져오기
-
-          QuerySnapshot monuImgList = await FirebaseFirestore.instance
-              .collection('T3_STORE_TBL')
-              .doc(docId)
-              .collection('T3_menuimg_TBL')
-              .get();
-
-          if (monuImgList.docs.isNotEmpty) {
-            List<dynamic> menuimglist = monuImgList.docs[0].get('r_img_urls'); // 첫 번째 문서의 r_img_urls 필드에서 데이터 가져오기
-
-            // r_img_urls의 각 항목을 imagePaths에 추가
-            menuimglist.forEach((imageUrl) {
-              if (imageUrl is String) {
-                menuImg.add(imageUrl);
-              }
-            });
-          } else {
-            print('이미지 목록이 비어 있습니다.');
-          }
-
-
-        //메뉴 가져오기
-        QuerySnapshot menuSnapshot = await FirebaseFirestore.instance
-            .collection('T3_STORE_TBL')
-            .doc(docId)
-            .collection('T3_MENU_TBL')
-            .get();
-        if (menuSnapshot.docs.isNotEmpty) {
-          memuMap = menuSnapshot.docs.first.data() as Map<String, dynamic>;
-        }
-
-
-        List<String> starList = [];
-        double x = 0;
-        int y = 0;
-
-        if (starSnapshot.docs.isNotEmpty) {
-          for (var starDoc in starSnapshot.docs) {
-            Map<String, dynamic> starData = starDoc.data() as Map<String, dynamic>;
-            starData.forEach((key, value) {
-              if (value is String) {
-                double? numericValue = double.tryParse(value);
-                if (numericValue != null) {
-                  starList.add(value);
-                  x += numericValue;
-                  y++;
-                }
-              }
-            });
-          }
-        } else {
-          starList.add('0');
-        }
-
-        if (y > 0) {
-          x = x / y;
-        }
-        storeData['STARlength'] = y;
-        storeData['STARage'] = x.toStringAsFixed(1);
-        storeData['STARlist'] = starList;
-        storeData['docId'] = docId;
-        userDataList.add(storeData);
-        Star.addAll(starList);
-
-      } else {
-        print('해당 문서를 찾을 수 없습니다.');
-      }
-    } catch (e) {
-      print('데이터를 불러오는 중 오류가 발생했습니다: $e');
-    }
-  }
-
-  List<String> menuImg = [];
+  List<Map<String, dynamic>>? userDataList;
+  Map<String, dynamic>? memuMap;
+  List<String>? menuImg;
 
   int tabIndex = 1;
   double countOfOnly5Stars  = 0;

@@ -22,7 +22,7 @@ class StoremenuimgAdd2 extends StatefulWidget {
 class _BoardAddState extends State<StoremenuimgAdd2> {
 
   bool isContentValid = false; // 리뷰 글 작성 감지
-  String? docid = "004hw8u3x1igW11Du1i5";
+  String? docid = "38kVr4JBLu354TNH8Mwz";
   //CRUD   - Create,Add
   void _addBoard() async {
     if (true) {

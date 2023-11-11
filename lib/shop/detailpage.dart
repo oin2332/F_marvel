@@ -55,6 +55,8 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   List<Map<String, dynamic>> userDataList = [];
+  List<String> Path = [];
+  List<String> menuImg = [];
   Map<String, dynamic> memuMap = {};
   Map<String, dynamic> icon = {};
   Map<String, dynamic> time = {};
@@ -94,10 +96,48 @@ class _DetailPageState extends State<DetailPage> {
             .collection('T3_TIME_TBL')
             .get();
 
+        QuerySnapshot monuImgList = await FirebaseFirestore.instance
+            .collection('T3_STORE_TBL')
+            .doc(docId)
+            .collection('T3_menuimg_TBL')
+            .get();
+
+        if (monuImgList.docs.isNotEmpty) {
+          List<dynamic> menuimglist = monuImgList.docs[0].get('r_img_urls'); // 첫 번째 문서의 r_img_urls 필드에서 데이터 가져오기
+
+          // r_img_urls의 각 항목을 imagePaths에 추가
+          menuimglist.forEach((imageUrl) {
+            if (imageUrl is String) {
+              menuImg.add(imageUrl);
+            }
+          });
+        } else {
+          print('이미지 목록이 비어 있습니다.');
+        }
+
 
         if (timeSnapshot.docs.isNotEmpty) {
           time = timeSnapshot.docs.first.data() as Map<String, dynamic>;
         }
+
+        //이미지 가져오기
+        QuerySnapshot storeImgList = await FirebaseFirestore.instance
+            .collection('T3_STORE_TBL')
+            .doc(docId)
+            .collection('T3_STOREIMG_TBL')
+            .get();
+
+
+        List<dynamic> imgstore = storeImgList.docs[0].get('r_img_urls'); // 첫 번째 문서의 r_img_urls 필드에서 데이터 가져오기
+
+        // r_img_urls의 각 항목을 imagePaths에 추가
+        imgstore.forEach((imageUrl) {
+          if (imageUrl is String) {
+            Path.add(imageUrl);
+          }
+        });
+
+
 
 
 
@@ -412,15 +452,23 @@ class _DetailPageState extends State<DetailPage> {
                                     Navigator.push(context, MaterialPageRoute(
                                       builder: (_) =>
                                           TabBarEx(initialTabIndex: 1,
-                                              docId: widget.docId),
+                                            shopInfo : userDataList!,
+                                            imgPathList :Path!,
+                                            menuImgList : menuImg!,
+                                            memuMap : memuMap!,),
                                     ));
                                   }, child: Text('메뉴', style: TextStyle(
                                       color: Colors.black),),),
                                   TextButton(onPressed: () {
                                     Navigator.push(context, MaterialPageRoute(
                                       builder: (_) =>
-                                          TabBarEx(initialTabIndex: 2,
-                                              docId: widget.docId),
+                                          TabBarEx(
+                                            initialTabIndex: 2,
+                                            shopInfo : userDataList!,
+                                            imgPathList :Path!,
+                                            menuImgList : menuImg!,
+                                            memuMap : memuMap!,
+                                          ),
                                     ));
                                   }, child: Text('사진', style: TextStyle(
                                       color: Colors.black),),),
@@ -428,7 +476,10 @@ class _DetailPageState extends State<DetailPage> {
                                     Navigator.push(context, MaterialPageRoute(
                                       builder: (_) =>
                                           TabBarEx(initialTabIndex: 3,
-                                              docId: widget.docId),
+                                            shopInfo : userDataList!,
+                                            imgPathList :Path!,
+                                            menuImgList : menuImg!,
+                                            memuMap : memuMap!,),
                                     ));
                                     ;
                                   }, child: Text('리뷰', style: TextStyle(
@@ -770,9 +821,7 @@ class _DetailPageState extends State<DetailPage> {
 
                               underlineBox(5.0),
                               //메뉴--------------------
-                              //if(usermenulist != null && usermenulist['S_MENU1'] != null)
                               Container(
-
                                 child: Column(
                                   children: [
                                     Container(
@@ -789,7 +838,10 @@ class _DetailPageState extends State<DetailPage> {
                                                 context, MaterialPageRoute(
                                               builder: (_) =>
                                                   TabBarEx(initialTabIndex: 1,
-                                                      docId: widget.docId),
+                                                    shopInfo : userDataList!,
+                                                    imgPathList :Path!,
+                                                    menuImgList : menuImg!,
+                                                    memuMap : memuMap!,),
                                             ));
                                           },
                                               child: Text('전체보기 >',
@@ -881,7 +933,10 @@ class _DetailPageState extends State<DetailPage> {
                                                 context, MaterialPageRoute(
                                               builder: (_) =>
                                                   TabBarEx(initialTabIndex: 2,
-                                                      docId: widget.docId),
+                                                    shopInfo : userDataList!,
+                                                    imgPathList :Path!,
+                                                    menuImgList : menuImg!,
+                                                    memuMap : memuMap!,),
                                             ));
                                           },
                                               child: Text('전체보기 >',
@@ -898,19 +953,22 @@ class _DetailPageState extends State<DetailPage> {
                                             mainAxisAlignment: MainAxisAlignment
                                                 .spaceEvenly,
                                             children: [
-                                              Image.asset(
-                                                'assets/storePageIMG/BEKMIWOO1.jpeg',
+                                              Image.network(
+                                                Path[0],
                                                 width: 125,
+                                                height: 100,
                                               ),
                                               SizedBox(width: 3,),
-                                              Image.asset(
-                                                'assets/storePageIMG/BEKMIWOO2.jpeg',
+                                              Image.network(
+                                                Path[1],
                                                 width: 125,
+                                                height: 100,
                                               ),
                                               SizedBox(width: 3,),
-                                              Image.asset(
-                                                'assets/storePageIMG/BEKMIWOO3.jpeg',
+                                              Image.network(
+                                                Path[2],
                                                 width: 125,
+                                                height: 100,
                                               ),
                                             ],
                                           ),
@@ -919,19 +977,22 @@ class _DetailPageState extends State<DetailPage> {
                                             mainAxisAlignment: MainAxisAlignment
                                                 .spaceEvenly,
                                             children: [
-                                              Image.asset(
-                                                'assets/storePageIMG/BEKMIWOO4.jpeg',
+                                              Image.network(
+                                                Path[3],
                                                 width: 125,
+                                                height: 100,
                                               ),
                                               SizedBox(width: 3,),
-                                              Image.asset(
-                                                'assets/storePageIMG/BEKMIWOO5.jpeg',
+                                              Image.network(
+                                                Path[4],
                                                 width: 125,
+                                                height: 100,
                                               ),
                                               SizedBox(width: 3,),
-                                              Image.asset(
-                                                'assets/storePageIMG/BEKMIWOO6.jpeg',
+                                              Image.network(
+                                                Path[5],
                                                 width: 125,
+                                                height: 100,
                                               ),
                                             ],
                                           ),
