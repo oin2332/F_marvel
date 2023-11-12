@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
 class FilterAddr extends StatefulWidget {
+
   @override
-  _FilterAddrState createState() => _FilterAddrState();
+  _FilterAddr createState() => _FilterAddr();
 }
 
-class _FilterAddrState extends State<FilterAddr> {
+class _FilterAddr extends State<FilterAddr> {
   Set<String> selectedLocations = Set<String>();
-
-  // Define a list of locations
   List<String> locations = ['서울', '경기', '인천'];
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class _FilterAddrState extends State<FilterAddr> {
                   'assets/main/gps-removebg-preview1.png',
                   width: 30,
                   height: 30,
-                  color: Colors.black, // 색상을 원하는 색으로 변경할 수 있어요.
+                  color: Colors.black,
                 ),
                 SizedBox(width: 3.0,),
                 Padding(
@@ -55,6 +56,7 @@ class _FilterAddrState extends State<FilterAddr> {
       ),
     );
   }
+
 
   void _openLocationSelection(BuildContext context) {
     Set<String> tempSelectedLocations = Set<String>.from(selectedLocations);
@@ -96,10 +98,9 @@ class _FilterAddrState extends State<FilterAddr> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 10), // Add spacing between buttons
+                    SizedBox(width: 10),
                     ElevatedButton(
                       onPressed: () {
-                        // "선택" 버튼을 눌렀을 때의 동작
                         Navigator.pop(context, tempSelectedLocations);
                       },
                       style: ElevatedButton.styleFrom(
@@ -113,6 +114,7 @@ class _FilterAddrState extends State<FilterAddr> {
                           color: Colors.white,
                         ),
                       ),
+
                     ),
                   ],
                 ),
@@ -128,6 +130,7 @@ class _FilterAddrState extends State<FilterAddr> {
         });
       }
     });
+
   }
 
   Widget _buildLocationButton(BuildContext context, String location, Set<String> tempSelectedLocations, StateSetter setState) {

@@ -9,6 +9,7 @@ import 'package:food_marvel/search/ImportFilter6SelectBtn.dart';
 
 
 class FilterModal extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,6 +32,7 @@ class FilterModal extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
+
                   },
                   child: Row(
                     children: [
