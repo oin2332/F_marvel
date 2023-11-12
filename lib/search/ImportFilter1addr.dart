@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 class FilterAddr extends StatefulWidget {
 
   @override
-  _FilterAddr createState() => _FilterAddr();
+  FilterAddrState createState() => FilterAddrState();
 }
 
-class _FilterAddr extends State<FilterAddr> {
+class FilterAddrState extends State<FilterAddr> {
   Set<String> selectedLocations = Set<String>();
   List<String> locations = ['서울', '경기', '인천'];
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +54,6 @@ class _FilterAddr extends State<FilterAddr> {
       ),
     );
   }
-
 
   void _openLocationSelection(BuildContext context) {
     Set<String> tempSelectedLocations = Set<String>.from(selectedLocations);
@@ -114,7 +111,6 @@ class _FilterAddr extends State<FilterAddr> {
                           color: Colors.white,
                         ),
                       ),
-
                     ),
                   ],
                 ),
@@ -130,7 +126,6 @@ class _FilterAddr extends State<FilterAddr> {
         });
       }
     });
-
   }
 
   Widget _buildLocationButton(BuildContext context, String location, Set<String> tempSelectedLocations, StateSetter setState) {
