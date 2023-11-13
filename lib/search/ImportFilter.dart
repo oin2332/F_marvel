@@ -7,17 +7,13 @@ import 'package:food_marvel/search/ImportFilter5Facility.dart';
 import 'package:food_marvel/search/ImportFilter6SelectBtn.dart';
 
 class FilterModal extends StatefulWidget {
-
-
   @override
   State<FilterModal> createState() => _FilterModalState();
-
 }
 
 
 
 class _FilterModalState extends State<FilterModal> {
-
 
   @override
   Widget build(BuildContext context) {

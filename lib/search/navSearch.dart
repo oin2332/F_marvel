@@ -5,15 +5,12 @@ import 'package:food_marvel/search/headSearch.dart';
 import 'package:food_marvel/shop/bestPage.dart';
 import 'package:food_marvel/search/ImportRestaurant.dart';
 import 'package:food_marvel/search/ImportSuddenpopular.dart';
-import 'package:provider/provider.dart';
-import '../user/userModel.dart';
 import 'ImportFilter.dart';
 
 void main() => runApp(MaterialApp(
   title: 'NavSearch',
   home: NavSearch(),
   debugShowCheckedModeBanner: false,
-
 ));
 
 class NavSearch extends StatefulWidget {
@@ -26,7 +23,10 @@ class NavSearch extends StatefulWidget {
 class _NavSearchState extends State<NavSearch> {
   TextEditingController _searchController = TextEditingController();
   List<String> recentSearches = [];
-  bool isFilterVisible = false;
+  bool isImportSuddenPopularVisible = true;
+  bool isImportRestaurantVisible = true;
+
+
 
   @override
   void dispose() {
@@ -98,7 +98,6 @@ class _NavSearchState extends State<NavSearch> {
 
   @override
   Widget build(BuildContext context) {
-    UserModel userModel = Provider.of<UserModel>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepOrange[400],
@@ -192,12 +191,18 @@ class _NavSearchState extends State<NavSearch> {
                         ],
                       ),
                     ),
-                    ImportSuddenPopular(), // 관심 급상승 음식점 부분 임포트
+                    if (isImportSuddenPopularVisible) ImportSuddenPopular(),
                   ],
                 ),
               ),
             ),
-            ImportRestaurant(), // 어떤맛집 찾으세요 부분 임포트
+            if (isImportSuddenPopularVisible) ImportRestaurant(
+              onTapCallback: () {
+                setState(() {
+                  isImportSuddenPopularVisible = false;
+                });
+              },
+            ),
           ],
         ),
       ),
