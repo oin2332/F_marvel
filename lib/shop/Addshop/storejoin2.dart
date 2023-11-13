@@ -39,6 +39,7 @@ class _JoinState extends State<StoreJoin2> {
   final TextEditingController S_MENU3_1 = TextEditingController();
   final TextEditingController S_MENU4 = TextEditingController();
   final TextEditingController S_MENU4_1 = TextEditingController();
+  final TextEditingController S_MENUPRICE = TextEditingController();
 
 
 
@@ -122,7 +123,7 @@ class _JoinState extends State<StoreJoin2> {
           .collection('T3_STAR_TBL');
 
       await star.add({
-        'STAR' : '0',
+        'STAR' : 'a',
       });
 
 
@@ -141,36 +142,36 @@ class _JoinState extends State<StoreJoin2> {
 
       await TIME.add({
         if(Time1)
-        'S_RE_TIME1' : _Time1,
+          'S_RE_TIME1' : _Time1,
         if(Time2)
-        'S_RE_TIME2' : _Time2,
+          'S_RE_TIME2' : _Time2,
         if(Time3)
-        'S_RE_TIME3' : _Time3,
+          'S_RE_TIME3' : _Time3,
         if(Time4)
-        'S_RE_TIME4' : _Time4,
+          'S_RE_TIME4' : _Time4,
         if(Time5)
-        'S_RE_TIME5' : _Time5,
+          'S_RE_TIME5' : _Time5,
         if(Time6)
-        'S_RE_TIME6' : _Time6,
+          'S_RE_TIME6' : _Time6,
         if(Time7)
-        'S_RE_TIME7' : _Time7,
+          'S_RE_TIME7' : _Time7,
         if(Time8)
-        'S_RE_TIME8' : _Time8,
+          'S_RE_TIME8' : _Time8,
         if(Time9)
-        'S_RE_TIME9' : _Time9,
+          'S_RE_TIME9' : _Time9,
         if(Time10)
-        'S_RE_TIME10' : _Time10,
+          'S_RE_TIME10' : _Time10,
         if(Time11)
-        'S_RE_TIME11' : _Time11,
+          'S_RE_TIME11' : _Time11,
         if(Time12)
-        'S_RE_TIME12' : _Time12,
+          'S_RE_TIME12' : _Time12,
         if(Time13)
-        'S_RE_TIME13' : _Time13,
+          'S_RE_TIME13' : _Time13,
         if(Time14)
-        'S_RE_TIME14' : _Time14,
+          'S_RE_TIME14' : _Time14,
 
       });
-
+      int? menuPrice = int.tryParse(S_MENUPRICE.text);
       await MENU.add({
         'S_MENU1' : S_MENU1.text,
         'S_MENU1-1' : S_MENU1_1.text,
@@ -180,6 +181,7 @@ class _JoinState extends State<StoreJoin2> {
         'S_MENU3-1' : S_MENU3_1.text,
         'S_MENU4' : S_MENU4.text,
         'S_MENU4-1' : S_MENU4_1.text,
+        'S_MENUPRICE' : menuPrice,
       });
 
 
@@ -301,12 +303,12 @@ class _JoinState extends State<StoreJoin2> {
             Column(
               children: [
                 Text('편의기능체크'),
-                  _butlist(S_ELEVA, _S_ELEVA, 'elevator.png', '엘리베이터', (value, iconText) {
+                _butlist(S_ELEVA, _S_ELEVA, 'elevator.png', '엘리베이터', (value, iconText) {
                   setState(() {
-                  S_ELEVA = value;
-                  _S_ELEVA = value ? iconText : null;
+                    S_ELEVA = value;
+                    _S_ELEVA = value ? iconText : null;
                   });
-                  }),
+                }),
                 _butlist(S_GROUP, _S_GROUP, 'group.png', '단체가능/불가', (value, iconText) {
                   setState(() {
                     S_GROUP = value;
@@ -571,6 +573,18 @@ class _JoinState extends State<StoreJoin2> {
                   ),
                   style: TextStyle(fontSize: 13),
                 ),
+
+                TextField(
+                  controller: S_MENUPRICE,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.grey[200]!, // 배경색 설정
+                    hintText: '1인당 가격 숫자로만 입력',
+                    hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
+                    border: InputBorder.none, // 밑줄 없애기
+                  ),
+                  style: TextStyle(fontSize: 13),
+                ),
               ],
             ),
 
@@ -590,7 +604,7 @@ class _JoinState extends State<StoreJoin2> {
                   _addcollection();
 
                 });
-                },
+              },
               child: Text('메뉴판 이미지 등록하러가기'),
             )
           ],

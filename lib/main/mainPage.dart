@@ -194,24 +194,24 @@ class _MainPageState extends State<MainPage> {
               ImportEvent(),
 
               SizedBox(height: 10,),
-             ImportIcons(),
+              ImportIcons(),
 
               SizedBox(height: 20,),
               Container(height: 5, width: 400, color: Colors.grey[300]!),
               SizedBox(height: 20,),
 
               ImportWhere(),
-              Container(height: 5, width: 400, color: Colors.grey[300]!),
-              SizedBox(height: 20,),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(width: 15,),
-                  Text("타임라인 게시판",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black)),
-                ],
-              ),
+              // Container(height: 5, width: 400, color: Colors.grey[300]!),
+              // SizedBox(height: 20,),
+              //
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.start,
+              //   children: [
+              //     SizedBox(width: 15,),
+              //     Text("타임라인 게시판",
+              //         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black)),
+              //   ],
+              // ),
             ],
           ),
 
@@ -226,7 +226,7 @@ class _MainPageState extends State<MainPage> {
             children: [
               InkWell(
                 onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));},
-                  child: Icon(Icons.home,size: 30),),
+                child: Icon(Icons.home,size: 30),),
               InkWell(
                 onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => NavSearch()));
                 }, child: Icon(Icons.search_outlined, size: 30),),
