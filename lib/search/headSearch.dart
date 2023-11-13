@@ -339,7 +339,7 @@ class _SearchState extends State<Search> {
         ),
       ),
       resizeToAvoidBottomInset: false,
-      bottomNavigationBar: BottomNavBar(), // 바텀바 부분 임포트
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }

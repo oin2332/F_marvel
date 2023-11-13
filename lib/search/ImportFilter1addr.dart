@@ -123,6 +123,7 @@ class FilterAddrState extends State<FilterAddr> {
       if (value != null && value is Set<String>) {
         setState(() {
           selectedLocations = value;
+
         });
       }
     });

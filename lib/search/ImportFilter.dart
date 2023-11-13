@@ -8,11 +8,17 @@ import 'package:food_marvel/search/ImportFilter6SelectBtn.dart';
 
 class FilterModal extends StatefulWidget {
 
+
   @override
   State<FilterModal> createState() => _FilterModalState();
+
 }
 
+
+
 class _FilterModalState extends State<FilterModal> {
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,28 +39,31 @@ class _FilterModalState extends State<FilterModal> {
                     color: Colors.black,
                   ),
                 ),
-                  Row(
-                    children: [
-                      TextButton(
-                        child: Text('초기화', style: TextStyle(
+                Row(
+                  children: [
+                    TextButton(
+                      child: Text(
+                        '초기화',
+                        style: TextStyle(
                           fontSize: 16.0,
-                          color: Colors.deepOrange[400],
-                        ),),
-                        onPressed: (){
-                          _resetFilters();
-                        },
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          _resetFilters();
-                        },
-                        child: Icon(
-                          Icons.refresh,
                           color: Colors.deepOrange[400],
                         ),
                       ),
-                    ],
-                  ),
+                      onPressed: () {
+                        _resetFilters();
+                      },
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        _resetFilters();
+                      },
+                      child: Icon(
+                        Icons.refresh,
+                        color: Colors.deepOrange[400],
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -70,8 +79,11 @@ class _FilterModalState extends State<FilterModal> {
           SizedBox(height: 30.0),
           FilterSelectBtn(
             onSearchPressed: () {
+
+              Navigator.pop(context);
             },
             onClosePressed: () {
+
               Navigator.pop(context);
             },
           ),
@@ -82,12 +94,5 @@ class _FilterModalState extends State<FilterModal> {
 
   void _resetFilters() {
     Navigator.pop(context);
-
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return FilterModal();
-      },
-    );
   }
 }

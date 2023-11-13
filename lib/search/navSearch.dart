@@ -129,7 +129,7 @@ class _NavSearchState extends State<NavSearch> {
                       child: Row(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: 10.0),
+                            padding: const EdgeInsets.only(left: 10.0,top: 10,),
                             child: Icon(
                               Icons.search,
                               color: Colors.black,
@@ -143,7 +143,7 @@ class _NavSearchState extends State<NavSearch> {
                               );
                             },
                             child: Padding(
-                              padding: const EdgeInsets.only(bottom: 5.0, left: 15.0),
+                              padding: const EdgeInsets.only(bottom: 5.0, left: 15.0,top: 10,),
                               child: Text(
                                 "지역/음식/매장명 검색",
                                 style: TextStyle(
@@ -155,49 +155,6 @@ class _NavSearchState extends State<NavSearch> {
                           ),
                         ],
                       ),
-                    ),
-                    SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Icon(
-                            Icons.calendar_today_rounded,
-                            color: Colors.black,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 5.0, left: 15.0),
-                          child: Text(
-                            "날짜/시간/인원 선택",
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                        Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 15.0),
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            // 검색 버튼을 눌렀을 때 수행할 동작 추가
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            primary: Colors.blue,
-                          ),
-                          child: Text(
-                            "선택하러가기",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
                     Divider(
                       thickness: 2,
