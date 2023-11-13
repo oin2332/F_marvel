@@ -1,10 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../user/userModel.dart';
 
 // 추천탭
 class RecomendTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    UserModel userModel = Provider.of<UserModel>(context);
+    String? userId = userModel.userId;
     return Container(
       color: Colors.white,
       child: Padding(
@@ -124,6 +129,7 @@ Widget _buildReviewList() {
                     alignment: Alignment.centerLeft,
                     child: Text(content) // 리뷰 작성 내용
                 ),
+
                 // 음식점 정보 리스트타일, 댓글, 좋아요 등 추가
                 SizedBox(height: 10),
                 Container(height: 10, width: 410, color: Colors.grey[300]!),
@@ -136,6 +142,7 @@ Widget _buildReviewList() {
   );
 }
 
+// 리뷰게시판 이미지 슬라이드
 Widget _buildImageSlider(List<String> imageUrls) {
   return Container(
     height: 400,

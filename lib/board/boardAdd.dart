@@ -65,6 +65,9 @@ class _BoardAddState extends State<BoardAdd> {
         imageUrls.add(imageUrl);
       }
 
+      // 별점 값 추가
+      double ratingValue = _rating;
+
       //리뷰 컬렉션 데이터 입력
       await review.add({
         'index' : index,
@@ -76,6 +79,7 @@ class _BoardAddState extends State<BoardAdd> {
         'comment' : comment,
         's_id' : sId,
         'timestamp' : FieldValue.serverTimestamp(),
+        'rating' : ratingValue, // 별점 값 추가
       });
 
       _title.clear();
@@ -279,11 +283,7 @@ class _BoardAddState extends State<BoardAdd> {
                     itemSize: 40,
                     glowColor: Colors.amber,
                     allowHalfRating: true,
-                    onRatingUpdate: (value) {
-                      setState(() {
-                        _rating = value;
-                      });
-                    },
+                    onRatingUpdate: _onRatingUpdate,
                     ratingWidget: RatingWidget(
                       full: Icon(Icons.star, color: Colors.amber),
                       half: Icon(Icons.star_half, color: Colors.amber),
