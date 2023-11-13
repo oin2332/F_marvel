@@ -123,7 +123,7 @@ class _JoinState extends State<StoreJoin2> {
           .collection('T3_STAR_TBL');
 
       await star.add({
-        'STAR' : 'a',
+        'STAR' : '0',
       });
 
 
