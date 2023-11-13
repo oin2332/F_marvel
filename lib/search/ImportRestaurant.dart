@@ -1,14 +1,23 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-void main() => runApp(MaterialApp(
-  home: Scaffold(
-    appBar: AppBar(title: Text('Restaurant')),
-    body: ImportRestaurant(),
-  ),
-));
 
-class ImportRestaurant extends StatelessWidget {
+class ImportRestaurant extends StatefulWidget {
+  final VoidCallback onTapCallback;
+
+  ImportRestaurant({required this.onTapCallback});
+
+  @override
+  State<ImportRestaurant> createState() => _ImportRestaurantState();
+}
+
+class _ImportRestaurantState extends State<ImportRestaurant> {
+  bool isImportSuddenPopularVisible = true;
+  bool isImportRestaurantVisible = true;
+  List<Map<String, dynamic>> parkingDataList = [];
+
+
   final List<RestaurantItem> restaurantItems = [
     RestaurantItem(
       image: 'assets/searchIMG/searchimg0.jpg',
@@ -83,6 +92,7 @@ class ImportRestaurant extends StatelessWidget {
 
   ];
 
+
   @override
   Widget build(BuildContext context) {
     restaurantItems.shuffle(Random());
@@ -118,20 +128,28 @@ class ImportRestaurant extends StatelessWidget {
                 image: restaurantItem.image,
                 title: restaurantItem.title,
                 content: restaurantItem.content,
+                onTapCallback: () => _handleItemTap(restaurantItem.title),
               );
             },
           ),
+
         ],
       ),
     );
   }
 
+
+
+
   Widget _buildItemWithImage({
     required String image,
     required String title,
     String content = "",
+    required VoidCallback onTapCallback,
   }) {
-    return Stack(
+    return GestureDetector(
+      onTap: onTapCallback,
+      child :Stack(
       children: [
         Container(
           margin: EdgeInsets.all(15.0),
@@ -172,8 +190,37 @@ class ImportRestaurant extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
         ),
+
+
       ],
+      ),
     );
+  }
+  void _handleItemTap(String title) {
+    if (title == "#주차가능매장") {
+      _fetchDataFromFirestore();
+    }
+    print('아이템이 눌렸습니다: $title');
+    widget.onTapCallback();
+  }
+}
+
+
+void _fetchDataFromFirestore() async {
+  try {
+    QuerySnapshot convenienceSnapshot = await FirebaseFirestore.instance
+        .collection('T3_STORE_TBL')
+        .doc('docId')
+        .collection('T3_CONVENIENCE_TBL')
+        .where('S_PARKING', isEqualTo: true)
+        .get();
+
+    List<Map<String, dynamic>> parkingDataList = [];
+    convenienceSnapshot.docs.forEach((doc) {
+      print('서브컬렉션 데이터: ${doc.data()}');
+    });
+  } catch (e) {
+    print('데이터 가져오기 오류: $e');
   }
 }
 
@@ -187,4 +234,5 @@ class RestaurantItem {
     required this.title,
     this.content = "",
   });
+
 }

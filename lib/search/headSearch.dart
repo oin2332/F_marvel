@@ -34,6 +34,8 @@ class _SearchState extends State<Search> {
   List<String> recentSearches = [];
   String searchQuery = "";
   List<Map<String, dynamic>> searchResults = [];
+  bool isImportSuddenPopularVisible = true;
+  bool isImportRestaurantVisible = true;
 
 
   @override
@@ -331,8 +333,14 @@ class _SearchState extends State<Search> {
             if (searchQuery.isEmpty)
               Column(
                 children: [
-                  ImportSuddenPopular(),
-                  ImportRestaurant(),
+                  if (isImportSuddenPopularVisible) ImportSuddenPopular(),
+                  if (isImportSuddenPopularVisible) ImportRestaurant(
+                    onTapCallback: () {
+                      setState(() {
+                        isImportSuddenPopularVisible = false;
+                      });
+                    },
+                  ),
                 ],
               ),
           ],
