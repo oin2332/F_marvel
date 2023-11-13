@@ -77,6 +77,12 @@ class _TabBarExState extends State<TabBarEx> {
     double cnt2 = num2.length.toDouble();
     double cnt1 = num1.length.toDouble();
 
+    cnt5 ??= 0;
+    cnt4 ??= 0;
+    cnt3 ??= 0;
+    cnt2 ??= 0;
+    cnt1 ??= 0;
+
     bardata = [
       VBarChartModel(
         index: 0,
@@ -384,7 +390,7 @@ class _TabBarExState extends State<TabBarEx> {
                             Container(
                               child: Column(
                                 children: [
-                                  Text(' ${Star.length}개의 리뷰 별점 평균'),
+                                  Text(' ${Star.length-1}개의 리뷰 별점 평균'),
                                   SizedBox(height: 12,),
                                   Icon(Icons.star, color: Colors.yellow[600], size: 50,),
                                   Text('${average.toStringAsFixed(1)}', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),)
