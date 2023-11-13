@@ -20,6 +20,7 @@ class _BoardAddState extends State<BoardAdd> {
   // 입력 데이터 변수
   final TextEditingController _title = TextEditingController();
   final TextEditingController _content = TextEditingController();
+  final PageController _pageController = PageController(initialPage: 0); // 페이지 컨트롤러
 
   String? index;
   String? uId;
@@ -31,6 +32,23 @@ class _BoardAddState extends State<BoardAdd> {
   String? _selectUser;
 
   bool isContentValid = false; // 리뷰 글 작성 감지
+
+  void _previousPage() {
+    if (_pageController.page != 0) {
+      _pageController.previousPage(
+        duration: Duration(milliseconds: 300),
+        curve: Curves.ease,
+      );
+    }
+  }
+  void _nextPage() {
+    if (_pageController.page != _selectedImages.length - 1) {
+      _pageController.nextPage(
+        duration: Duration(milliseconds: 300),
+        curve: Curves.ease,
+      );
+    }
+  }
 
   //CRUD - Create,Add
   void _addBoard() async {
@@ -162,22 +180,62 @@ class _BoardAddState extends State<BoardAdd> {
                 shrinkWrap: true,
                 children: [
                   Container(
-                    width: double.infinity,
-                    height: 400,
+                    // width: double.infinity,
+                    height: 250,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black),
+                      border: Border.all(color: Colors.grey),
                     ),
-                    child:PageView.builder(
-                      itemCount: _selectedImages.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                          alignment: Alignment.center,
-                          child: Image.file(
-                            _selectedImages[index],
-                            fit: BoxFit.cover, // 이미지를 컨테이너에 맞게 크기 조절
-                          ),
-                        );
-                      },
+                    child:Stack(
+                      children: [
+                        PageView.builder(
+                          controller: _pageController,
+                          itemCount: _selectedImages.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return Container(
+                              alignment: Alignment.center,
+                              child: Image.file(
+                                _selectedImages[index],
+                                // fit: BoxFit.cover, // 이미지를 컨테이너에 맞게 크기 조절
+                              ),
+                            );
+                          },
+                        ),
+                            Positioned(
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            top: 0,
+                            child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                            Container(
+                              width: 40.0, height: 40.0,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                              ),
+                              child: IconButton(
+                              onPressed:
+                                _previousPage,
+                              icon: Icon(Icons.keyboard_arrow_left),
+                              ),
+                            ),
+                            Container(
+                              width: 40.0, height: 40.0,
+                              decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                            ),
+                              child: IconButton(
+                              onPressed:
+                                _nextPage,
+                              icon: Icon(Icons.keyboard_arrow_right),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      ],
                     ),
                   ),
                   SizedBox(height: 10),

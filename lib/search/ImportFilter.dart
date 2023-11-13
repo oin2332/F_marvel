@@ -6,9 +6,13 @@ import 'package:food_marvel/search/ImportFilter4Feel.dart';
 import 'package:food_marvel/search/ImportFilter5Facility.dart';
 import 'package:food_marvel/search/ImportFilter6SelectBtn.dart';
 
+class FilterModal extends StatefulWidget {
 
+  @override
+  State<FilterModal> createState() => _FilterModalState();
+}
 
-class FilterModal extends StatelessWidget {
+class _FilterModalState extends State<FilterModal> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -29,25 +33,28 @@ class FilterModal extends StatelessWidget {
                     color: Colors.black,
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                  },
-                  child: Row(
+                  Row(
                     children: [
-                      Text(
-                        '초기화',
-                        style: TextStyle(
+                      TextButton(
+                        child: Text('초기화', style: TextStyle(
                           fontSize: 16.0,
+                          color: Colors.deepOrange[400],
+                        ),),
+                        onPressed: (){
+                          _resetFilters();
+                        },
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          _resetFilters();
+                        },
+                        child: Icon(
+                          Icons.refresh,
                           color: Colors.deepOrange[400],
                         ),
                       ),
-                      Icon(
-                        Icons.refresh,
-                        color: Colors.deepOrange[400],
-                      ),
                     ],
                   ),
-                ),
               ],
             ),
           ),
@@ -60,7 +67,7 @@ class FilterModal extends StatelessWidget {
           FilterSoloPrice(),
           FilterFeel(),
           FilterFacility(),
-          SizedBox(height: 50.0),
+          SizedBox(height: 30.0),
           FilterSelectBtn(
             onSearchPressed: () {
             },
@@ -70,6 +77,17 @@ class FilterModal extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void _resetFilters() {
+    Navigator.pop(context);
+
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return FilterModal();
+      },
     );
   }
 }

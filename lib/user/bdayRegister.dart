@@ -21,6 +21,7 @@ class BdayRegister extends StatelessWidget {
         color: Colors.white,
         child: ListView(
           children: [
+            buildBdayList(userId!),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: InkWell(
@@ -44,7 +45,7 @@ class BdayRegister extends StatelessWidget {
               ),
             ),
             // 이부분에 기념일 리스트 출력
-            buildBdayList(userId!),
+
           ],
         ),
       ),

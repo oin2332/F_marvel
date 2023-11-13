@@ -25,11 +25,12 @@ class _FilterFoodtype extends State<FilterFoodtype> {
             },
             child: Row(
               children: [
-                Icon(
-                  Icons.food_bank_outlined,
-                  color: Colors.blue,
+                Image.asset(
+                  'assets/main/fork-removebg-preview.png',
+                  width: 30, // 이미지의 너비와 높이를 조정할 수 있습니다.
+                  height: 30,
                 ),
-                SizedBox(width: 10.0,),
+                SizedBox(width: 3.0,),
                 Padding(
                   padding: EdgeInsets.only(right: 5.0),
                   child: Text(

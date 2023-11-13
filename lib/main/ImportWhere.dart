@@ -67,7 +67,7 @@ class _ImportWhereState extends State<ImportWhere> {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                buildIconWithText('assets/main/gps-removebg-preview.png', '내주변', () {
+                buildIconWithText('assets/main/gpsgps.png', '내주변', () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => GooGleMap()));
                 }),
                 buildIconWithText('assets/main/incheon.jpg', '인천/부평', () {

@@ -105,8 +105,27 @@ Widget buildBdayList(String userId) {
 
 
                 return ListTile(
-                  title: Text('$type - $formattedDate'),
-                  subtitle: Text(memo),
+                  leading: type == '결혼 기념일'
+                      ? Image.asset(
+                    'assets/main/heart-removebg-preview.png',
+                    width: 35,
+                    height: 35,
+                  )
+                      : Image.asset(
+                    'assets/main/celebration-removebg-preview.png',
+                    width: 35,
+                    height: 35,
+                  ),
+                  title: Text(
+                    '$type - $formattedDate',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  subtitle: Text(memo, style: TextStyle(
+                    color: Colors.grey,
+                  )),
                 );
               },
             );

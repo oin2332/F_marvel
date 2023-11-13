@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
 class FilterAddr extends StatefulWidget {
+
   @override
-  _FilterAddrState createState() => _FilterAddrState();
+  FilterAddrState createState() => FilterAddrState();
 }
 
-class _FilterAddrState extends State<FilterAddr> {
+class FilterAddrState extends State<FilterAddr> {
   Set<String> selectedLocations = Set<String>();
-
-  // Define a list of locations
   List<String> locations = ['서울', '경기', '인천'];
 
   @override
@@ -24,11 +23,13 @@ class _FilterAddrState extends State<FilterAddr> {
             },
             child: Row(
               children: [
-                Icon(
-                  Icons.map,
-                  color: Colors.blue,
+                Image.asset(
+                  'assets/main/gps-removebg-preview1.png',
+                  width: 30,
+                  height: 30,
+                  color: Colors.black,
                 ),
-                SizedBox(width: 10.0,),
+                SizedBox(width: 3.0,),
                 Padding(
                   padding: EdgeInsets.only(right: 5.0),
                   child: Text(
@@ -94,10 +95,9 @@ class _FilterAddrState extends State<FilterAddr> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 10), // Add spacing between buttons
+                    SizedBox(width: 10),
                     ElevatedButton(
                       onPressed: () {
-                        // "선택" 버튼을 눌렀을 때의 동작
                         Navigator.pop(context, tempSelectedLocations);
                       },
                       style: ElevatedButton.styleFrom(
