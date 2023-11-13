@@ -71,8 +71,6 @@ class UserSetting extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Container(height: 1, width: 250, color: Colors.grey),
-                  Text('예약 정보', style: TextStyle(color: Colors.grey[600]!),),
                   TextButton(
                     onPressed: (){},
                     child: Padding(
@@ -81,19 +79,6 @@ class UserSetting extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('예약 연동하기', style: TextStyle(color: Colors.black)),
-                          Icon(Icons.keyboard_arrow_right, color: Colors.black)
-                        ],
-                      ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: (){},
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('결제 카드 관리', style: TextStyle(color: Colors.black)),
                           Icon(Icons.keyboard_arrow_right, color: Colors.black)
                         ],
                       ),

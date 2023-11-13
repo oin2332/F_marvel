@@ -3,6 +3,7 @@ import 'package:food_marvel/user/followList.dart';
 import 'package:food_marvel/user/userModel.dart';
 import 'package:provider/provider.dart';
 
+import '../board/function/Board.dart';
 import 'function/Follow.dart';
 
 class Following extends StatefulWidget {
@@ -40,6 +41,10 @@ class _FollowingState extends State<Following> {
 
   @override
   Widget build(BuildContext context) {
+    // UserModel에서 사용자 아이디 받아오기
+    UserModel userModel = Provider.of<UserModel>(context);
+    String? userId = userModel.userId;
+    uId = userId;
     return Scaffold(
       appBar: AppBar(leading: IconButton(icon: Icon(Icons.arrow_back, color: Colors.black),
         onPressed: () {
@@ -53,7 +58,6 @@ class _FollowingState extends State<Following> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListView(
-            shrinkWrap: true,
             children: [
               InkWell(
                 child: Container(
@@ -84,7 +88,6 @@ class _FollowingState extends State<Following> {
                   )
                 ),
               ),
-              SizedBox(height: 140),
               followings.isEmpty ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -100,8 +103,39 @@ class _FollowingState extends State<Following> {
                 itemCount: followings.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
-                    title: Text('Following 문서 ID: ${followings[index]}'),
-                    subtitle: Text('내가 팔로잉 하는 사람 -> ${followings[index]}'),
+                    title: Row(
+                      children: [
+                        Container(
+                          width: 50,
+                          height: 50,
+                          child: ClipOval(
+                            child: FutureBuilder<String?>(
+                              future: fetchProfileImageUrl(uId!),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return CircularProgressIndicator(); // 데이터를 기다리는 동안 로딩 표시
+                                } else if (snapshot.hasError) {
+                                  return Text('오류 발생: ${snapshot.error}');
+                                } else {
+                                  String? imageUrl = snapshot.data;
+                                  if (imageUrl != null) {
+                                    return Image.network(
+                                      imageUrl,
+                                      fit: BoxFit.cover, // 이미지가 원 안에 꽉 차게 표시됩니다.
+                                      width: 50,
+                                      height: 50,
+                                    );
+                                  } else {
+                                    return Image.asset('assets/user/userProfile.png');
+                                  }
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                        Text('Following 문서 ID: ${followings[index]}')
+                      ],
+                    )
                   );
                 },
               )

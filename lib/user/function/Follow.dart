@@ -95,4 +95,26 @@ Future<void> followUser(String myUserId, String followedUserId) async {
   }
 }
 
+// 내가 팔로우 하는 사용자들의 프로필 이미지 출력
+Future<String?> followingProfileImageUrl(String userId) async {
+  try {
+    QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+        .collection('T3_USER_TBL')
+        .where('id', isEqualTo: userId)
+        .get();
 
+    if (userSnapshot.docs.isNotEmpty) {
+      for (QueryDocumentSnapshot doc in userSnapshot.docs) {
+        Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
+        return userData['profile_image'];
+      }
+    } else {
+      print('해당 사용자를 찾을 수 없습니다.');
+    }
+  } catch (e) {
+    print('데이터를 불러오는 중 오류가 발생했습니다: $e');
+    throw e;
+  }
+
+  return null;
+}

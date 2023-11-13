@@ -58,54 +58,60 @@ Widget _buildReviewList() {
             return Column(
               children: [
                 SizedBox(height: 10),
-                Row(
-                  children: [
-                    // 프로필 사진
-                    Container(
-                      width: 50,
-                      height: 50,
-                      child: ClipOval(
-                        child: FutureBuilder<String?>(
-                          future: fetchProfileImageUrl(uId!),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return CircularProgressIndicator(); // 데이터를 기다리는 동안 로딩 표시
-                            } else if (snapshot.hasError) {
-                              return Text('오류 발생: ${snapshot.error}');
-                            } else {
-                              String? imageUrl = snapshot.data;
-                              if (imageUrl != null) {
-                                return Image.network(
-                                  imageUrl,
-                                  fit: BoxFit.cover, // 이미지가 원 안에 꽉 차게 표시됩니다.
-                                  width: 50,
-                                  height: 50,
-                                );
-                              } else {
-                                return Image.asset('assets/user/userProfile.png');
-                              }
-                            }
-                          },
-                        ),
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          // 프로필 사진
+                          Container(
+                            width: 50,
+                            height: 50,
+                            child: ClipOval(
+                              child: FutureBuilder<String?>(
+                                future: fetchProfileImageUrl(uId!),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState == ConnectionState.waiting) {
+                                    return CircularProgressIndicator(); // 데이터를 기다리는 동안 로딩 표시
+                                  } else if (snapshot.hasError) {
+                                    return Text('오류 발생: ${snapshot.error}');
+                                  } else {
+                                    String? imageUrl = snapshot.data;
+                                    if (imageUrl != null) {
+                                      return Image.network(
+                                        imageUrl,
+                                        fit: BoxFit.cover, // 이미지가 원 안에 꽉 차게 표시됩니다.
+                                        width: 50,
+                                        height: 50,
+                                      );
+                                    } else {
+                                      return Image.asset('assets/user/userProfile.png');
+                                    }
+                                  }
+                                },
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(uId, style: TextStyle(fontWeight: FontWeight.bold)), // 리뷰 작성자 아이디
+                              Text('리뷰 23개, 평균별점 4.1'), // 리뷰 갯수, 평균 별점
+                            ],
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(width: 10),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(uId, style: TextStyle(fontWeight: FontWeight.bold)), // 리뷰 작성자 아이디
-                        Text('리뷰 23개, 평균별점 4.1'), // 리뷰 갯수, 평균 별점
-                      ],
-                    ),
-                    SizedBox(width: 108),
-                    ElevatedButton( // 팔로우 버튼
-                        onPressed: (){},
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.deepOrange[400]!, // 원하는 색상으로 변경
+                      ElevatedButton( // 팔로우 버튼
+                            onPressed: (){},
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.deepOrange[400]!, // 원하는 색상으로 변경
+                            ),
+                            child: Text('팔로우', style: TextStyle(fontWeight: FontWeight.bold))
                         ),
-                        child: Text('팔로우', style: TextStyle(fontWeight: FontWeight.bold))
-                    )
-                  ],
+                    ],
+                  ),
                 ),
                 SizedBox(height: 10),
                 _buildImageSlider(imageUrls),
