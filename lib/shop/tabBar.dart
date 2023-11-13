@@ -116,7 +116,52 @@ class _TabBarExState extends State<TabBarEx> {
     ];
   }
 
+  Future<void> boardList() async {
+    try {
+      // 'T3_REVIEW_TBL' 컬렉션의 데이터 가져오기
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore.instance
+          .collection('T3_REVIEW_TBL')
+          .where('s_id', isEqualTo: StoreDataList[0]['S_ID']) // 's_id' 필드가 'shopid'와 일치하는 문서들만 가져옴
+          .get();
 
+      // 가져온 데이터를 사용
+      userBoard = querySnapshot.docs.map((QueryDocumentSnapshot<Map<String, dynamic>> document) {
+        // 각 문서의 데이터에 접근
+        return document.data()!;
+      }).toList();
+
+      // 확인용 출력
+      print('User Board: $userBoard');
+    } catch (e) {
+      print('데이터를 불러오는 중 오류 발생: $e');
+    }
+  }
+
+//사진 이미지
+  Widget _buildImageSlider(List<String> imageUrls) {
+    return Container(
+      height: 400,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: imageUrls.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Container(
+              width: 380,
+              child: ClipRRect( // ClipRRect를 사용하여 이미지의 경계를 둥글게 함
+                borderRadius: BorderRadius.circular(10), // 원하는 값을 설정
+                child: Image.network(
+                  imageUrls[index],
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
 
 
 
@@ -207,57 +252,21 @@ class _TabBarExState extends State<TabBarEx> {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
-                                children: [
-                                  GestureDetector(
+                                children: List.generate(
+                                  menuImg.length,
+                                      (index) => GestureDetector(
                                     onTap: () {
                                       // 이미지 클릭 시 다이얼로그 표시
-                                      _showImageDialog(context, menuImg[0]);
+                                      _showImageDialog(context, menuImg[index]);
                                     },
                                     child: CachedNetworkImage(
                                       width: 250,
                                       height: 330,
                                       placeholder: (context, url) => LoadingSpinner3(),
-                                      imageUrl: menuImg[0],
+                                      imageUrl: menuImg[index],
                                     ),
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      // 이미지 클릭 시 다이얼로그 표시
-                                      _showImageDialog(context, menuImg[1]);
-                                    },
-                                    child: CachedNetworkImage(
-                                      width: 250,
-                                      height: 330,
-                                      placeholder: (context, url) => LoadingSpinner3(),
-                                      imageUrl: menuImg[1],
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      // 이미지 클릭 시 다이얼로그 표시
-                                      _showImageDialog(context, '${menuImg[2]}');
-                                    },
-                                    child: CachedNetworkImage(
-                                      width: 250,
-                                      height: 330,
-                                      placeholder: (context, url) => LoadingSpinner3(),
-                                      imageUrl: menuImg[2],
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      // 이미지 클릭 시 다이얼로그 표시
-                                      _showImageDialog(context, '${menuImg[3]}');
-                                    },
-                                    child: CachedNetworkImage(
-                                      width: 250,
-                                      height: 330,
-                                      placeholder: (context, url) => LoadingSpinner3(),
-                                      imageUrl: menuImg[3],
-                                    ),
-                                  ),
-                                  // 다른 이미지들도 동일한 방식으로 처리
-                                ],
+                                ),
                               ),
                             ),
                           ),
@@ -392,15 +401,129 @@ class _TabBarExState extends State<TabBarEx> {
                       ),
                       UnderLindeBox().underlineBox(2.0),
                       SizedBox(height: 18,),
+                      FutureBuilder<void>(
+                        future: boardList(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                LoadingSpinner(),
+                              ],
+                            );
+                          } else {
+                            // userBoard가 null이거나 비어 있으면 빈 상태를 표시
+                            if (userBoard == null || userBoard.isEmpty) {
+                              return ListTile(
+                                title: Center(child: Text('리뷰가 없습니다.',style: TextStyle(fontSize: 32,color: Colors.grey),),),
+                              );
+                            }
+                            final length = userBoard.length;
+                            // 최대 10개의 리뷰만 표시
+                            int itemCount = length > 10 ? 10 : length;
+                            return ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: itemCount,
+                          itemBuilder: (BuildContext context, int index) {
+                          // userBoard[index]가 null이 아닌 경우에만 해당 부분을 표시
+                          if (userBoard[index] != null) {
+                            return Container(
+                              padding: EdgeInsets.all(30),
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 10),
+                                  Row(
+                                    children: [
+                                      // 프로필 사진
+                                      Container(
+                                        width: 50,
+                                        height: 50,
+                                        child: ClipOval(
+                                          child: FutureBuilder<String?>(
+                                            future: fetchProfileImageUrl(
+                                                userBoard[index]['uId'] ?? ''),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState ==
+                                                  ConnectionState.waiting) {
+                                                return CircularProgressIndicator(); // 데이터를 기다리는 동안 로딩 표시
+                                              } else if (snapshot.hasError) {
+                                                return Text('오류 발생: ${snapshot
+                                                    .error}');
+                                              } else {
+                                                String? imageUrl = snapshot.data;
+                                                if (imageUrl != null) {
+                                                  return Image.network(
+                                                    imageUrl,
+                                                    fit: BoxFit.cover,
+                                                    width: 50,
+                                                    height: 50,
+                                                  );
+                                                } else {
+                                                  return Image.asset(
+                                                      'assets/user/userProfile.png');
+                                                }
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 10),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment
+                                            .start,
+                                        children: [
+                                          Text(userBoard![index]['uId'] ?? '',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold)),
+                                          Text('리뷰 23개, 별점4'),
+                                        ],
+                                      ),
+                                      SizedBox(width: 80),
+                                      ElevatedButton(
+                                        onPressed: () {},
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Colors.deepOrange[400]!,
+                                        ),
+                                        child: Text('팔로우', style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 10),
+                                  _buildImageSlider((userBoard[index]['r_img_urls'] as List<dynamic>).cast<String>()),
+                                  SizedBox(height: 5),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Icon(Icons.star, color: Colors.amber),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(userBoard[index]['content'] ?? ''),
+                                  ),
+                                  SizedBox(height: 10),
+
+                                ],
+                              ),
+                            );
+                              } else {
+                                return Container(); // userBoard[index]가 null인 경우 빈 컨테이너 반환
+                                }
+                              }
+                            );
+
+                          }
+
+                        },
+                      )
+
 
                     ],
                   ),
                 ),
-              )
-
-
+              ),
             ],
-
           ),
           //------------------------------------------//
           bottomNavigationBar: BottomAppBar(
