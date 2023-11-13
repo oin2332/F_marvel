@@ -57,6 +57,43 @@ Future<List<String>> getUserFollowings(String userId) async {
     return [];
   }
 }
+// 언팔로우기능
+Future<void> unfollowUser(String myUserId, String followedUserId) async {
+  try {
+    CollectionReference userCollection = FirebaseFirestore.instance.collection('T3_USER_TBL');
+    var userDocSnapshot = await userCollection.where('id', isEqualTo: myUserId).limit(1).get();
+    var followedUserDocSnapshot = await userCollection.where('id', isEqualTo: followedUserId).limit(1).get();
+
+    if (userDocSnapshot.docs.isNotEmpty) {
+      await followedUserDocSnapshot.docs.first.reference.collection('T3_FOLLOWER_TBL').doc(myUserId).delete();
+    }
+
+    if (followedUserDocSnapshot.docs.isNotEmpty) {
+      await userDocSnapshot.docs.first.reference.collection('T3_FOLLOWING_TBL').doc(followedUserId).delete();
+    }
+  } catch (e) {
+    print('언팔로우 에러: $e');
+  }
+}
+
+//팔로워 삭제기능
+  Future<void> unfollowFollower(String myUserId, String followerUserId) async {
+    try {
+      CollectionReference userCollection = FirebaseFirestore.instance.collection('T3_USER_TBL');
+      var userDocSnapshot = await userCollection.where('id', isEqualTo: myUserId).limit(1).get();
+      var followerUserDocSnapshot = await userCollection.where('id', isEqualTo: followerUserId).limit(1).get();
+
+      if (userDocSnapshot.docs.isNotEmpty) {
+        await followerUserDocSnapshot.docs.first.reference.collection('T3_FOLLOWER_TBL').doc(myUserId).delete();
+      }
+
+      if (followerUserDocSnapshot.docs.isNotEmpty) {
+        await userDocSnapshot.docs.first.reference.collection('T3_FOLLOWING_TBL').doc(followerUserId).delete();
+      }
+    } catch (e) {
+      print('팔로워 삭제기능: $e');
+    }
+  }
 
 //팔로우 기능
 Future<void> followUser(String myUserId, String followedUserId) async {
@@ -381,10 +418,9 @@ class FollowerUserIdListWidget extends StatelessWidget {
 
   // 현재 사용자가 팔로우하는 사용자 ID 목록을 가져오는 함수
   Future<List<String>> fetchFollowerUserIds(String currentUserId) async {
-    List<String> followingUserIds = [];
+    List<String> followerUserIds = []; // 변수명을 'followerUserIds'로 변경
 
     try {
-      // t3_user_tbl에서 현재 사용자의 문서를 가져옴
       QuerySnapshot userDocuments = await FirebaseFirestore.instance
           .collection('T3_USER_TBL')
           .where('id', isEqualTo: currentUserId)
@@ -393,21 +429,35 @@ class FollowerUserIdListWidget extends StatelessWidget {
       if (userDocuments.docs.isNotEmpty) {
         DocumentSnapshot userDocument = userDocuments.docs.first;
 
-        // t3_following_tbl 컬렉션 조회
-        CollectionReference followingCollection = userDocument.reference.collection('t3_follower_tbl');
-        QuerySnapshot followingDocs = await followingCollection.get();
+        CollectionReference followerCollection = userDocument.reference.collection('T3_FOLLOWER_TBL'); // 여기서 컬렉션 이름 변경
+        QuerySnapshot followerDocs = await followerCollection.get();
 
-        // t3_following_tbl 안에 있는 문서 아이디 목록
-        List<String> followingIds = followingDocs.docs.map((doc) => doc.id).toList();
-
-        // 이제 followingIds 리스트에는 현재 사용자가 팔로우하는 사용자들의 ID가 들어 있습니다.
+        followerUserIds = followerDocs.docs.map((doc) => doc.id).toList(); // 리스트 변수명 변경
       }
-
-
     } catch (e) {
-      print('Error fetching following user IDs: $e');
+      print('팔로워 사용자 ID를 불러오는 중 오류: $e');
     }
 
-    return followingUserIds;
+    return followerUserIds;
+  }
+  Future<int> fetchFollowerCount(String currentUserId) async {
+    try {
+      QuerySnapshot userDocuments = await FirebaseFirestore.instance
+          .collection('T3_USER_TBL')
+          .where('id', isEqualTo: currentUserId)
+          .get();
+
+      if (userDocuments.docs.isNotEmpty) {
+        DocumentSnapshot userDocument = userDocuments.docs.first;
+
+        CollectionReference followerCollection = userDocument.reference.collection('T3_FOLLOWER_TBL');
+        QuerySnapshot followerDocs = await followerCollection.get();
+
+        return followerDocs.docs.length;
+      }
+    } catch (e) {
+      print('팔로워 수를 불러오는 중 오류: $e');
+    }
+    return 0; // 에러가 발생하면 0을 반환하도록 설정
   }
 }

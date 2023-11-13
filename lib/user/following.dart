@@ -17,6 +17,37 @@ class _FollowingState extends State<Following> {
   String? uId;
   List<String> followings = []; // 팔로워 리스트 추가
 
+  Future<void> _unfollowUser(String userId) async {
+    await unfollowUser(uId!, userId); // 팔로우를 해제하는 함수 호출
+    _loadFollowings(); // 언팔로우 이후 팔로잉 목록 다시 불러오기
+  }
+
+  void _confirmUnfollowDialog(String userName) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('팔로우를 취소하시겠습니까?'),
+          content: Text('정말 $userName 님의 팔로우를 취소하시겠습니까?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('예'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _unfollowUser(userName);
+              },
+            ),
+            TextButton(
+              child: Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
   @override
   void initState() {
     super.initState();
@@ -105,40 +136,51 @@ class _FollowingState extends State<Following> {
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
                     title: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          width: 50,
-                          height: 50,
-                          child: ClipOval(
-                            child: FutureBuilder<String?>(
-                              future: fetchProfileImageUrl(followings[index]),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState == ConnectionState.waiting) {
-                                  return CircularProgressIndicator();
-                                } else if (snapshot.hasError) {
-                                  return Text('오류 발생: ${snapshot.error}');
-                                } else {
-                                  String? imageUrl = snapshot.data;
-                                  if (imageUrl != null) {
-                                    return Image.network(
-                                      imageUrl,
-                                      fit: BoxFit.cover,
-                                      width: 50,
-                                      height: 50,
-                                    );
-                                  } else {
-                                    return Image.asset('assets/user/userProfile.png');
-                                  }
-                                }
-                              },
+                        Row(
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              child: ClipOval(
+                                child: FutureBuilder<String?>(
+                                  future: fetchProfileImageUrl(followings[index]),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                      return CircularProgressIndicator();
+                                    } else if (snapshot.hasError) {
+                                      return Text('오류 발생: ${snapshot.error}');
+                                    } else {
+                                      String? imageUrl = snapshot.data;
+                                      if (imageUrl != null) {
+                                        return Image.network(
+                                          imageUrl,
+                                          fit: BoxFit.cover,
+                                          width: 50,
+                                          height: 50,
+                                        );
+                                      } else {
+                                        return Image.asset('assets/user/userProfile.png');
+                                      }
+                                    }
+                                  },
+                                ),
+                              ),
                             ),
-                          ),
+                            SizedBox(width: 20),
+                            Text(followings[index]),
+                          ],
                         ),
-                        SizedBox(width: 20),
-                        Text(followings[index])
+                        ElevatedButton(
+                          onPressed: () {
+                            _confirmUnfollowDialog(followings[index]);
+                          },
+                          style: ElevatedButton.styleFrom(primary: Color(0xFFFF6347)),
+                          child: Text('팔로우 해제'),
+                        ),
                       ],
-                    )
+                    ),
                   );
                 },
               )
