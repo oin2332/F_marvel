@@ -119,6 +119,8 @@ class _TabBarExState extends State<TabBarEx> {
 
 
 
+
+
   Widget _buildGrafik(List<VBarChartModel> bardata) {
     return Container(
       width: 200, // 원하는 가로 크기

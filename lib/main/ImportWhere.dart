@@ -71,7 +71,7 @@ class _ImportWhereState extends State<ImportWhere> {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => GooGleMap()));
                 }),
                 buildIconWithText('assets/main/incheon.jpg', '인천/부평', () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => StoremenuimgAdd2(storeDocumentId: 'ㄹㅇ',)));
+
                 }),
                 buildIconWithText('assets/main/incheon2.jpg', '인천/연수', () {
 
