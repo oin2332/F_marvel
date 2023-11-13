@@ -70,21 +70,21 @@ class _ImportWhereState extends State<ImportWhere> {
                 buildIconWithText('assets/main/gpsgps.png', '내주변', () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => GooGleMap()));
                 }),
-                buildIconWithText('assets/main/incheon.jpg', '인천/부평', () {
+                buildIconWithText('assets/main/incheon.jpg', '인천', () {
 
                 }),
-                buildIconWithText('assets/main/incheon2.jpg', '인천/연수', () {
+                buildIconWithText('assets/main/seoul2.jpg', '서울', () {
 
                 }),
-                buildIconWithText('assets/main/seoul.jpg', '서울/동암', () {
+                buildIconWithText('assets/main/rudrleh.jpg', '경기', () {
                   navigatePlacePage(2);
                 }),
-                buildIconWithText('assets/main/seoul2.jpg', '서울/중구', () {
+                buildIconWithText('assets/main/wpwneh.jpg', '제주', () {
                   navigatePlacePage(3);
                 }),
-                buildIconWithText('assets/main/seoul3.jpg', '서울/남동구', () {
-                  navigatePlacePage(4);
-                }),
+                // buildIconWithText('assets/main/seoul3.jpg', '서울/남동구', () {
+                //   navigatePlacePage(4);
+                // }),
               ],
             ),
           ),
