@@ -44,9 +44,14 @@ class _FilterModalState extends State<FilterModal> {
                           _resetFilters();
                         },
                       ),
-                      Icon(
-                        Icons.refresh,
-                        color: Colors.deepOrange[400],
+                      GestureDetector(
+                        onTap: () {
+                          _resetFilters();
+                        },
+                        child: Icon(
+                          Icons.refresh,
+                          color: Colors.deepOrange[400],
+                        ),
                       ),
                     ],
                   ),
@@ -76,10 +81,8 @@ class _FilterModalState extends State<FilterModal> {
   }
 
   void _resetFilters() {
-    // 현재 모달을 닫기
     Navigator.pop(context);
 
-    // 새로운 모달 열기
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
