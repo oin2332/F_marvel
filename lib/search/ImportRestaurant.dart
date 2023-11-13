@@ -89,7 +89,6 @@ class _ImportRestaurantState extends State<ImportRestaurant> {
       title: "#비오는날",
       content: "내용13",
     ),
-
   ];
 
 
@@ -132,14 +131,10 @@ class _ImportRestaurantState extends State<ImportRestaurant> {
               );
             },
           ),
-
         ],
       ),
     );
   }
-
-
-
 
   Widget _buildItemWithImage({
     required String image,
@@ -234,5 +229,4 @@ class RestaurantItem {
     required this.title,
     this.content = "",
   });
-
 }

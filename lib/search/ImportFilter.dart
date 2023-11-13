@@ -90,5 +90,16 @@ class _FilterModalState extends State<FilterModal> {
 
   void _resetFilters() {
     Navigator.pop(context);
+    _openFilterModal();
+  }
+
+  void _openFilterModal() {
+    // Use the context to show the modal again
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return FilterModal();
+      },
+    );
   }
 }
