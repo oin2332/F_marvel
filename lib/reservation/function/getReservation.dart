@@ -5,6 +5,7 @@ import 'package:food_marvel/reservation/function/cancelReservation.dart';
 import 'package:food_marvel/user/userModel.dart';
 import 'package:provider/provider.dart';
 import '../function/reservation_data.dart';
+import 'updateReservationState.dart';
 
 
 class ReservationDataProvider with ChangeNotifier {
@@ -40,6 +41,7 @@ class ReservationListWidget extends StatelessWidget {
         } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
           return Center(child: Text('No reservations available.'));
         } else {
+          updateReservationStatus(snapshot.data!.docs);
           List<ReservationData> reservations = snapshot.data!.docs.map((doc) {
             Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
             return ReservationData(

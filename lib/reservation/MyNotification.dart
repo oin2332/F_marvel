@@ -9,7 +9,6 @@ import 'RtabBar.dart';
 class MyNotification extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    updateReservationStatus();
     UserModel userModel = Provider.of<UserModel>(context);
     String? userId = userModel.userId;
 

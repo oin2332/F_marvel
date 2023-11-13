@@ -81,7 +81,7 @@ class ReservationFListWidget extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text('예약 취소'),
+                          title: Text('후기 작성'),
                           content: Text('예약을 취소하시겠습니까?'),
                           actions: <Widget>[
                             TextButton(
@@ -123,7 +123,7 @@ class ReservationFListWidget extends StatelessWidget {
                       },
                     );
                   },
-                  child: Text('예약 취소'),
+                  child: Text('후기 작성'),
                 ),
               );
             },
