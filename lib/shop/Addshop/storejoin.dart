@@ -33,7 +33,6 @@ class _JoinState extends State<StoreJoin> {
   final TextEditingController _id = TextEditingController();
   final TextEditingController _pwd = TextEditingController();
   final TextEditingController _pwd2 = TextEditingController();
-  final TextEditingController _img = TextEditingController();
   final TextEditingController _keyword1 = TextEditingController();
   final TextEditingController _keyword2 = TextEditingController();
   final TextEditingController _keyword3 = TextEditingController();
@@ -74,7 +73,7 @@ class _JoinState extends State<StoreJoin> {
         'S_HOMEPAGE': _homepage.text,
         'S_ID': storeid+_id.text,
         'S_PWD': _pwd.text,
-        'S_IMG': _img.text,
+        'S_IMG': imgPro,
         'S_INFO1': _info.text,
         'S_MEMO': _memo.text,
         'S_NUMBER': _number.text,
@@ -83,7 +82,6 @@ class _JoinState extends State<StoreJoin> {
         'S_RE_MEMO': _noshow.text,
         'S_TIME': _time.text,
         'S_SILPLEMONO': _silplemono.text,
-        'S_PROFILE' : imgPro,
 
         'timestamp': FieldValue.serverTimestamp(),
       });
@@ -94,7 +92,6 @@ class _JoinState extends State<StoreJoin> {
 
       _id.clear();
       _pwd.clear();
-      _img.clear();
       _keyword1.clear();
       _keyword2.clear();
       _keyword3.clear();
@@ -421,18 +418,7 @@ class _JoinState extends State<StoreJoin> {
             ),
             SizedBox(height: 5),
             Text('이미지 확장자명까지', style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(height: 5),
-            TextField(
-              controller: _img,
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: Colors.grey[200]!, // 배경색 설정
-                hintText: '이미지 확장자명까지',
-                hintStyle: TextStyle(color: Colors.black38), // 라벨 텍스트의 색상 변경
-                border: InputBorder.none, // 밑줄 없애기
-              ),
-              style: TextStyle(fontSize: 13),
-            ),
+
             SizedBox(height: 5),
             Text('브레이크타임', style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 5),

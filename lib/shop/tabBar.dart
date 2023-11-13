@@ -4,6 +4,7 @@ import 'package:food_marvel/shop/underlindeBox.dart';
 import 'package:vertical_barchart/vertical-barchart.dart';
 import 'package:vertical_barchart/vertical-barchartmodel.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import '../board/function/Board.dart';
 import 'loading.dart';
 
 class TabBarEx extends StatefulWidget {
@@ -27,14 +28,15 @@ class TabBarEx extends StatefulWidget {
 }
 
 class _TabBarExState extends State<TabBarEx> {
-  List<Map<String, dynamic>>? StoreDataList;
-  List<Map<String, dynamic>>? userBoard;
-  Map<String, dynamic>? memuMap;
+  late List<Map<String, dynamic>> StoreDataList;
+  late List<Map<String, dynamic>> userBoard;
+  late Map<String, dynamic> memuMap;
   List<String> Path = [];
   List<String> menuImg = [];
   List<String> Star = [];
   late List<VBarChartModel> bardata;
   late double average;
+  late String shopid;
 
   int tabIndex = 1;
   double countOfOnly5Stars  = 0;
@@ -113,6 +115,8 @@ class _TabBarExState extends State<TabBarEx> {
       ),
     ];
   }
+
+
 
 
   Widget _buildGrafik(List<VBarChartModel> bardata) {
@@ -369,7 +373,7 @@ class _TabBarExState extends State<TabBarEx> {
                             Container(
                               child: Column(
                                 children: [
-                                  Text(' ${Star.length-1}개의 리뷰 별점 평균'),
+                                  Text(' ${Star.length}개의 리뷰 별점 평균'),
                                   SizedBox(height: 12,),
                                   Icon(Icons.star, color: Colors.yellow[600], size: 50,),
                                   Text('${average.toStringAsFixed(1)}', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),)

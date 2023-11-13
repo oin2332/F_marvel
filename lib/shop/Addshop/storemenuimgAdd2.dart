@@ -22,14 +22,13 @@ class StoremenuimgAdd2 extends StatefulWidget {
 class _BoardAddState extends State<StoremenuimgAdd2> {
 
   bool isContentValid = false; // 리뷰 글 작성 감지
-  String? docid = "38kVr4JBLu354TNH8Mwz";
   //CRUD   - Create,Add
   void _addBoard() async {
     if (true) {
 
       CollectionReference STOREIMG = FirebaseFirestore.instance
           .collection('T3_STORE_TBL')
-          .doc(docid)
+          .doc(widget.storeDocumentId)
           .collection('T3_menuimg_TBL');
 
       List<String> imageUrls = []; // 이미지 주소들
@@ -47,7 +46,7 @@ class _BoardAddState extends State<StoremenuimgAdd2> {
       });
       Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => StoreboardAdd(storeDocumentId: docid!))
+          MaterialPageRoute(builder: (context) => StoreboardAdd(storeDocumentId: widget.storeDocumentId!))
       );
 
     } else {
@@ -61,7 +60,7 @@ class _BoardAddState extends State<StoremenuimgAdd2> {
       String fileName = 'R' + DateTime.now().millisecondsSinceEpoch.toString() + '.jpg'; // 현재시간기준으로 파일 이름 자동생성
       firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
           .ref()
-          .child(docid!) // 선택된 이미지 파일을 저장할 Firebase Storage 폴더 이름
+          .child(widget.storeDocumentId!) // 선택된 이미지 파일을 저장할 Firebase Storage 폴더 이름
           .child(fileName);
 
       await ref.putFile(File(pickedFile.path));
@@ -96,7 +95,7 @@ class _BoardAddState extends State<StoremenuimgAdd2> {
     return Scaffold(
       appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.black),
-          title: Text('${docid}가게 메뉴판 이미지 등록', style: TextStyle(color: Colors.black)),
+          title: Text('가게 메뉴판 이미지 등록', style: TextStyle(color: Colors.black)),
           backgroundColor: Colors.white,
           elevation: 0,
           leading: IconButton(
