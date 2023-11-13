@@ -31,7 +31,7 @@ class _DetailPageState extends State<DetailPage> {
   bool isBookmarked = false;
   String? uId;
   String? sId;
-
+  final GlobalKey mapkey = GlobalKey();
   @override
   void initState() {
     super.initState();
@@ -155,7 +155,7 @@ class _DetailPageState extends State<DetailPage> {
 
         List<String> starList = [];
         double x = 0;
-        int y = 0;
+        int y = -1;
 
         if (starSnapshot.docs.isNotEmpty) {
           for (var starDoc in starSnapshot.docs) {
@@ -210,6 +210,15 @@ class _DetailPageState extends State<DetailPage> {
       print('북마크 상태 확인 중 오류 발생: $e');
       return false; // 에러 시 기본값으로 false 반환
     }
+  }
+
+  void _scrollToMap() { // 지도보이게끔 이동시켜주는 버튼기능
+    Scrollable.ensureVisible(
+      mapkey.currentContext!,
+      duration: Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+      alignment: 0.4, // 조절 가능한 값 (0에서 1 사이)
+    );
   }
 
 
@@ -391,29 +400,24 @@ class _DetailPageState extends State<DetailPage> {
                                   ),
                                   SizedBox(width: 5,),
                                   TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      _scrollToMap(); // 버튼이 눌릴 때 _scrollToMap 메소드 호출
+                                    },
                                     child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 30.0), // 넓이 조절
+                                      padding: const EdgeInsets.symmetric(horizontal: 30.0),
                                       child: Row(
                                         children: [
-                                          Icon(Icons.location_on, size: 18,
-                                            color: Colors.black,),
+                                          Icon(Icons.location_on, size: 18, color: Colors.black,),
                                           SizedBox(width: 3,),
-                                          Text('위치보기',
-                                            style: TextStyle(
-                                                color: Colors.black),),
+                                          Text('위치보기', style: TextStyle(color: Colors.black),),
                                         ],
                                       ),
                                     ),
                                     style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty
-                                          .all(
-                                          Colors.white), // 배경색을 흰색으로 설정
+                                      backgroundColor: MaterialStateProperty.all(Colors.white),
                                       side: MaterialStateProperty.all(
-                                          BorderSide(
-                                              color: Colors.black,
-                                              width: 1)), // 테두리 설정
+                                        BorderSide(color: Colors.black, width: 1),
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -1013,25 +1017,30 @@ class _DetailPageState extends State<DetailPage> {
                               //지도
 
                               Container(
+                                key: mapkey,
                                 padding: EdgeInsets.all(5),
                                 child: Row(
                                   children: [
                                     Column(
                                       children: [
                                         Text(
-                                          '지도', style: TextStyle(fontSize: 20,
-                                            fontWeight: FontWeight.bold),),
+                                          '지도',
+                                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                        ),
                                         SizedBox(
                                           width: 400,
                                           height: 400,
                                           child: GoogleMapPage(
-                                              initialAddress: '${userDataList[index]['S_ADDR1']} ${userDataList[index]['S_ADDR2']}${userDataList[index]['S_ADDR3']}'), // 여기에 함수를 호출하여 내용을 표시
+                                            initialAddress:
+                                            '${userDataList[index]['S_ADDR1']} ${userDataList[index]['S_ADDR2']}${userDataList[index]['S_ADDR3']}',
+                                          ),
                                         ),
                                       ],
-                                    )
+                                    ),
                                   ],
                                 ),
                               ),
+
 
                               underlineBox(5.0),
                               //상세정보
@@ -1068,7 +1077,7 @@ class _DetailPageState extends State<DetailPage> {
                                                   fontSize: 15),),
                                               SizedBox(height: 5,),
                                               Container(
-                                                  width: 300,
+                                                  width: 250,
                                                   child: Row(
                                                     mainAxisAlignment: MainAxisAlignment
                                                         .start,
@@ -1128,9 +1137,31 @@ class _DetailPageState extends State<DetailPage> {
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 15),),
                                               SizedBox(height: 5,),
-                                              Text(
-                                                  '${userDataList[index]['S_HOMEPAGE']}'),
-
+                                              Container(
+                                                  width: 300,
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment
+                                                        .start,
+                                                    children: [
+                                                      Flexible(
+                                                          child: RichText(
+                                                            overflow: TextOverflow
+                                                                .ellipsis,
+                                                            maxLines: 5,
+                                                            strutStyle: StrutStyle(
+                                                                fontSize: 16.0),
+                                                            text: TextSpan(
+                                                                text: '${userDataList[index]['S_HOMEPAGE']}',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    height: 1.4,
+                                                                    fontSize: 12.0,
+                                                                    fontFamily: 'NanumSquareRegular')),
+                                                          )),
+                                                    ],
+                                                  )),
+                                              SizedBox(height: 40,)
 
                                             ],
                                           ),

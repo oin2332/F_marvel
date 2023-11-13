@@ -86,7 +86,9 @@ class _StorePageState extends State<StorePage> {
 
   Widget _menubutton(String text) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => Search()));
+      },
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20), // 타원형 모양을 위한 값
@@ -144,7 +146,6 @@ class _StorePageState extends State<StorePage> {
                 ),
               ),
             ),*/
-
             Row(
               children: [
                 Padding(
@@ -160,7 +161,7 @@ class _StorePageState extends State<StorePage> {
                               },
                               icon:  Icon(Icons.map_outlined),),
                             SizedBox(width: 5,),
-                            IconButton(onPressed: (){}, icon: Icon(Icons.tune_rounded)),
+                            IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => Search()));}, icon: Icon(Icons.tune_rounded)),
                           ]
                       ),
                     )
@@ -178,13 +179,13 @@ class _StorePageState extends State<StorePage> {
                           SizedBox(width: 20),
                           _menubutton('지역'),
                           SizedBox(width: 20),
-                          _menubutton('몰라'),
+                          _menubutton('맛집'),
                           SizedBox(width: 20),
-                          _menubutton('test'),
+                          _menubutton('데이트'),
                           SizedBox(width: 20),
-                          _menubutton('test'),
+                          _menubutton('분위기좋은'),
                           SizedBox(width: 20),
-                          _menubutton('test'),
+                          _menubutton('키즈존'),
                         ],
                       ),
                     ),

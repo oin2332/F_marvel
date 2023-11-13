@@ -23,8 +23,6 @@ class ListsShop extends StatefulWidget {
 }
 
 class _TestState extends State<ListsShop> {
-
-
   @override
   void initState() {
     super.initState();
@@ -55,7 +53,7 @@ class _TestState extends State<ListsShop> {
 
           List<String> starList = [];
           double x = 0;
-          int y = 0;
+          int y = -1;
 
           if (starSnapshot.docs.isNotEmpty) {
             for (var starDoc in starSnapshot.docs) {
@@ -84,7 +82,7 @@ class _TestState extends State<ListsShop> {
           // userDataList에 상점 데이터 추가
           if (storeData['S_INFO1'] == widget.category) {
             storeData['STARlength'] = y;
-            storeData['STARage'] = x.toStringAsFixed(1);
+            storeData['STARage'] = (x?.toStringAsFixed(1) ?? '0').toString();
             storeData['STARlist'] = starList;
             storeData['docId'] = docId;
             userDataList.add(storeData);
@@ -167,7 +165,7 @@ class _TestState extends State<ListsShop> {
                                       children: [
                                         Icon(Icons.star, size: 25, color: Colors.yellow[600]),
                                         Text(
-                                          '${documentData['STARage']}', // 평균 별점 표시
+                                          '${documentData['STARage'] ?? 0}', // 평균 별점 표시
                                           style: TextStyle(
                                             fontSize: 17,
                                             fontWeight: FontWeight.bold,

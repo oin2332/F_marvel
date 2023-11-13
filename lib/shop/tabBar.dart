@@ -5,6 +5,7 @@ import 'package:vertical_barchart/vertical-barchart.dart';
 import 'package:vertical_barchart/vertical-barchartmodel.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../board/function/Board.dart';
+import '../reservation/soloreservation.dart';
 import 'loading.dart';
 
 class TabBarEx extends StatefulWidget {
@@ -63,7 +64,7 @@ class _TabBarExState extends State<TabBarEx> {
     double sum = numericStarList.fold(0, (prev, star) => prev + star);
 
 
-    average = sum / numericStarList.length;
+    average = (sum / numericStarList.length);
 
     List<String> num5 = Star.where((element) => element == '5').toList();
     List<String> num4 = Star.where((element) => element == '4').toList();
@@ -240,7 +241,7 @@ class _TabBarExState extends State<TabBarEx> {
                 ),
                 Tab(text: '메뉴'),
                 Tab(text: '사진 ${Path.length}'),
-                Tab(text: '리뷰 ${Star.length}'),
+                Tab(text: '리뷰 ${Star.length-1}'),
               ],
             ),
           ),
@@ -393,7 +394,7 @@ class _TabBarExState extends State<TabBarEx> {
                                   Text(' ${Star.length-1}개의 리뷰 별점 평균'),
                                   SizedBox(height: 12,),
                                   Icon(Icons.star, color: Colors.yellow[600], size: 50,),
-                                  Text('${average.toStringAsFixed(1)}', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),)
+                                  Text('${average.isNaN ? 0 : average.toStringAsFixed(1)}', style: TextStyle(fontSize: 35, fontWeight: FontWeight.bold),)
                                 ],
                               ),
                             ),
@@ -540,7 +541,22 @@ class _TabBarExState extends State<TabBarEx> {
                 children: [
                   IconButton(onPressed: () {}, icon: Icon(Icons.bookmark_border)),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      StoreInfo storeInfo = StoreInfo(
+                        image: widget.shopInfo[0]['S_IMG'],
+                        name: widget.shopInfo[0]['S_NAME'],
+                        address: '${widget.shopInfo[0]['S_ADDR1']} ${widget.shopInfo[0]['S_ADDR2']} ${widget.shopInfo[0]['S_ADDR3']}',
+                        submemo: widget.shopInfo[0]['S_MEMO'],
+                        time: widget.shopInfo[0]['S_TIME'],
+                      );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ReservationPage(
+                                storeInfo: storeInfo)
+                        ),
+                      );
+                    },
                     child: Text(
                       '예약하기',
                       style: TextStyle(color: Colors.white, fontSize: 19),
