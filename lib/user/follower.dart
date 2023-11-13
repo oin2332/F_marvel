@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_marvel/user/function/User.dart';
 import 'package:food_marvel/user/userModel.dart';
 import 'package:provider/provider.dart';
 
@@ -65,11 +66,50 @@ class _FollowerState extends State<Follower> {
         ),
       )
           : ListView.builder(
+        shrinkWrap: true,
         itemCount: followers.length,
         itemBuilder: (BuildContext context, int index) {
-          return ListTile(
-            title: Text('Follower 문서 ID: ${followers[index]}'),
-            subtitle: Text('나를 팔로우 하는 사람 -> ${followers[index]}'),
+          return Column(
+            children: [
+              ListTile(
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 50,
+                        child: ClipOval(
+                          child: FutureBuilder<String?>(
+                            future: fetchProfileImageUrl(followers[index]),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return CircularProgressIndicator();
+                              } else if (snapshot.hasError) {
+                                return Text('오류 발생: ${snapshot.error}');
+                              } else {
+                                String? imageUrl = snapshot.data;
+                                if (imageUrl != null) {
+                                  return Image.network(
+                                    imageUrl,
+                                    fit: BoxFit.cover,
+                                    width: 50,
+                                    height: 50,
+                                  );
+                                } else {
+                                  return Image.asset('assets/user/userProfile.png');
+                                }
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 20),
+                      Text(followers[index])
+                    ],
+                  )
+              ),
+              SizedBox(height: 10)
+            ],
           );
         },
       )

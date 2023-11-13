@@ -88,6 +88,7 @@ class _FollowingState extends State<Following> {
                   )
                 ),
               ),
+              SizedBox(height: 20),
               followings.isEmpty ? Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -104,16 +105,17 @@ class _FollowingState extends State<Following> {
                 itemBuilder: (BuildContext context, int index) {
                   return ListTile(
                     title: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
                           width: 50,
                           height: 50,
                           child: ClipOval(
                             child: FutureBuilder<String?>(
-                              future: fetchProfileImageUrl(uId!),
+                              future: fetchProfileImageUrl(followings[index]),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState == ConnectionState.waiting) {
-                                  return CircularProgressIndicator(); // 데이터를 기다리는 동안 로딩 표시
+                                  return CircularProgressIndicator();
                                 } else if (snapshot.hasError) {
                                   return Text('오류 발생: ${snapshot.error}');
                                 } else {
@@ -121,7 +123,7 @@ class _FollowingState extends State<Following> {
                                   if (imageUrl != null) {
                                     return Image.network(
                                       imageUrl,
-                                      fit: BoxFit.cover, // 이미지가 원 안에 꽉 차게 표시됩니다.
+                                      fit: BoxFit.cover,
                                       width: 50,
                                       height: 50,
                                     );
@@ -133,7 +135,8 @@ class _FollowingState extends State<Following> {
                             ),
                           ),
                         ),
-                        Text('Following 문서 ID: ${followings[index]}')
+                        SizedBox(width: 20),
+                        Text(followings[index])
                       ],
                     )
                   );

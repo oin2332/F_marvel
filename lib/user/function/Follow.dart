@@ -1,4 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+
+import '../../board/function/Board.dart';
 
 // 팔로우 (팔로워) 조회
 Future<List<String>> getUserFollowers(String userId) async {
@@ -117,4 +120,294 @@ Future<String?> followingProfileImageUrl(String userId) async {
   }
 
   return null;
+}
+
+// 내가 팔로우하는 사람들 프로필 사진 리스트
+class UserIdListWidget extends StatelessWidget {
+  final String currentUserId; // 현재 사용자의 ID
+
+  UserIdListWidget({required this.currentUserId});
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<String>>(
+      future: fetchFollowingUserIds(currentUserId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text('Error: ${snapshot.error}'),
+          );
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(
+            child: Text('No user IDs found.'),
+          );
+        } else {
+          List<String> followingUserIds = snapshot.data!;
+          return ListView.builder(
+            shrinkWrap: true,
+            itemCount: followingUserIds.length,
+            itemBuilder: (context, index) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        // 프로필사진
+                        Container(
+                          width: 50,
+                          height: 50,
+                          child: ClipOval(
+                            child: FutureBuilder<String?>(
+                              future: fetchProfileImageUrl(followingUserIds[index]),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return CircularProgressIndicator();
+                                } else if (snapshot.hasError) {
+                                  return Text('Error: ${snapshot.error}');
+                                } else {
+                                  String? imageUrl = snapshot.data;
+                                  if (imageUrl != null) {
+                                    return Image.network(
+                                      imageUrl,
+                                      fit: BoxFit.cover,
+                                      width: 50,
+                                      height: 50,
+                                    );
+                                  } else {
+                                    return Image.asset('/assets/user/userProfile.png');
+                                  }
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                        // 아이디
+                        Text('${followingUserIds[index]}', style: TextStyle(fontWeight: FontWeight.bold)),
+                        SizedBox(width: 10),
+                        Row(
+                          children: [
+                            SizedBox(width: 20),
+                            // 팔로우버튼
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  // 팔로우 버튼이 눌렸을 때의 동작 정의
+                                  // 현재는 간단히 콘솔에 사용자 ID를 출력하는 예시를 보여줍니다.
+                                  print('Following ${followingUserIds[index]}');
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.deepOrange[400]!,
+                                ),
+                                child: Text('팔로우', style: TextStyle(fontWeight: FontWeight.bold)),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      },
+    );
+  }
+
+  // 현재 사용자가 팔로우하는 사용자 ID 목록을 가져오는 함수
+  Future<List<String>> fetchFollowingUserIds(String currentUserId) async {
+    List<String> followingUserIds = [];
+
+    try {
+      // t3_user_tbl에서 현재 사용자의 문서를 가져옴
+      QuerySnapshot userDocuments = await FirebaseFirestore.instance
+          .collection('T3_USER_TBL')
+          .where('id', isEqualTo: currentUserId)
+          .get();
+
+      if (userDocuments.docs.isNotEmpty) {
+        DocumentSnapshot userDocument = userDocuments.docs.first;
+
+        // t3_following_tbl 컬렉션 조회
+        CollectionReference followingCollection = userDocument.reference.collection('t3_following_tbl');
+        QuerySnapshot followingDocs = await followingCollection.get();
+
+        // t3_following_tbl 안에 있는 문서 아이디 목록
+        List<String> followingIds = followingDocs.docs.map((doc) => doc.id).toList();
+
+        // 이제 followingIds 리스트에는 현재 사용자가 팔로우하는 사용자들의 ID가 들어 있습니다.
+      }
+
+
+    } catch (e) {
+      print('Error fetching following user IDs: $e');
+    }
+
+    return followingUserIds;
+  }
+}
+
+// 나를 팔로우 하는 사용자들의 프로필 이미지 출력
+Future<String?> followerProfileImageUrl(String userId) async {
+  try {
+    QuerySnapshot userSnapshot = await FirebaseFirestore.instance
+        .collection('T3_USER_TBL')
+        .where('id', isEqualTo: userId)
+        .get();
+
+    if (userSnapshot.docs.isNotEmpty) {
+      for (QueryDocumentSnapshot doc in userSnapshot.docs) {
+        Map<String, dynamic> userData = doc.data() as Map<String, dynamic>;
+        return userData['profile_image'];
+      }
+    } else {
+      print('해당 사용자를 찾을 수 없습니다.');
+    }
+  } catch (e) {
+    print('데이터를 불러오는 중 오류가 발생했습니다: $e');
+    throw e;
+  }
+
+  return null;
+}
+
+// 나를 팔로우하는 사람들 프로필 사진 리스트
+class FollowerUserIdListWidget extends StatelessWidget {
+  final String UserId; // 현재 사용자의 ID
+
+  FollowerUserIdListWidget({required this.UserId});
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<String>>(
+      future: fetchFollowerUserIds(UserId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (snapshot.hasError) {
+          return Center(
+            child: Text('Error: ${snapshot.error}'),
+          );
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(
+            child: Text('No user IDs found.'),
+          );
+        } else {
+          List<String> followingUserIds = snapshot.data!;
+          return ListView.builder(
+            shrinkWrap: true,
+            itemCount: followingUserIds.length,
+            itemBuilder: (context, index) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        // 프로필사진
+                        Container(
+                          width: 50,
+                          height: 50,
+                          child: ClipOval(
+                            child: FutureBuilder<String?>(
+                              future: fetchProfileImageUrl(followingUserIds[index]),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return CircularProgressIndicator();
+                                } else if (snapshot.hasError) {
+                                  return Text('Error: ${snapshot.error}');
+                                } else {
+                                  String? imageUrl = snapshot.data;
+                                  if (imageUrl != null) {
+                                    return Image.network(
+                                      imageUrl,
+                                      fit: BoxFit.cover,
+                                      width: 50,
+                                      height: 50,
+                                    );
+                                  } else {
+                                    return Image.asset('/assets/user/userProfile.png');
+                                  }
+                                }
+                              },
+                            ),
+                          ),
+                        ),
+                        // 아이디
+                        Text('${followingUserIds[index]}', style: TextStyle(fontWeight: FontWeight.bold)),
+                        SizedBox(width: 10),
+                        Row(
+                          children: [
+                            SizedBox(width: 20),
+                            // 팔로우버튼
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  // 팔로우 버튼이 눌렸을 때의 동작 정의
+                                  // 현재는 간단히 콘솔에 사용자 ID를 출력하는 예시를 보여줍니다.
+                                  print('Following ${followingUserIds[index]}');
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.deepOrange[400]!,
+                                ),
+                                child: Text('팔로우', style: TextStyle(fontWeight: FontWeight.bold)),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      },
+    );
+  }
+
+  // 현재 사용자가 팔로우하는 사용자 ID 목록을 가져오는 함수
+  Future<List<String>> fetchFollowerUserIds(String currentUserId) async {
+    List<String> followingUserIds = [];
+
+    try {
+      // t3_user_tbl에서 현재 사용자의 문서를 가져옴
+      QuerySnapshot userDocuments = await FirebaseFirestore.instance
+          .collection('T3_USER_TBL')
+          .where('id', isEqualTo: currentUserId)
+          .get();
+
+      if (userDocuments.docs.isNotEmpty) {
+        DocumentSnapshot userDocument = userDocuments.docs.first;
+
+        // t3_following_tbl 컬렉션 조회
+        CollectionReference followingCollection = userDocument.reference.collection('t3_follower_tbl');
+        QuerySnapshot followingDocs = await followingCollection.get();
+
+        // t3_following_tbl 안에 있는 문서 아이디 목록
+        List<String> followingIds = followingDocs.docs.map((doc) => doc.id).toList();
+
+        // 이제 followingIds 리스트에는 현재 사용자가 팔로우하는 사용자들의 ID가 들어 있습니다.
+      }
+
+
+    } catch (e) {
+      print('Error fetching following user IDs: $e');
+    }
+
+    return followingUserIds;
+  }
 }

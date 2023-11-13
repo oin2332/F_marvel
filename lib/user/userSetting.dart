@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_marvel/FCM/fcmex.dart';
 import 'package:food_marvel/etc/customerSuggest.dart';
 import 'package:food_marvel/etc/noticeList.dart';
 import 'package:food_marvel/user/blockList.dart';
@@ -72,7 +73,9 @@ class UserSetting extends StatelessWidget {
                     ),
                   ),
                   TextButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => Application()));
+                    },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Row(

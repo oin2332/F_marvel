@@ -70,6 +70,8 @@ class _ImportIconsState extends State<ImportIcons> {
       Navigator.push(context, MaterialPageRoute(builder: (context) => pages[index]));
     }
   }
+
+
   @override
   Widget build(BuildContext context) {
     return  Column(
@@ -77,6 +79,7 @@ class _ImportIconsState extends State<ImportIcons> {
         SizedBox(height: 20,),
         GridView.builder(
             shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 5,
               crossAxisSpacing: 8.0,
