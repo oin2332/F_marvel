@@ -1,12 +1,8 @@
-import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:food_marvel/reservation/soloreservation.dart';
-import 'package:provider/provider.dart';
 
-import '../../user/userModel.dart';
 import 'detailpage.dart';
 import 'loading.dart';
 
@@ -19,10 +15,10 @@ class RecommendListShop extends StatefulWidget {
 
 
   @override
-  State<RecommendListShop> createState() => _RecommendListShopShopState();
+  State<RecommendListShop> createState() => _RecommendListShopState();
 }
 
-class _RecommendListShopShopState extends State<RecommendListShop> {
+class _RecommendListShopState extends State<RecommendListShop> {
 
 
   @override
@@ -40,6 +36,8 @@ class _RecommendListShopShopState extends State<RecommendListShop> {
           .get();
 
       if (storeSnapshot.docs.isNotEmpty) {
+        userDataList.clear(); // 중복 데이터를 피하기 위해 목록 지우기
+
         for (var storeDoc in storeSnapshot.docs) {
           Map<String, dynamic> storeData = storeDoc.data() as Map<String, dynamic>;
           String docId = storeDoc.id;
@@ -53,7 +51,7 @@ class _RecommendListShopShopState extends State<RecommendListShop> {
 
           List<String> starList = [];
           double x = 0;
-          int y = 0;
+          int y = -1;
 
           if (starSnapshot.docs.isNotEmpty) {
             for (var starDoc in starSnapshot.docs) {
@@ -62,7 +60,7 @@ class _RecommendListShopShopState extends State<RecommendListShop> {
               starData.forEach((key, value) {
                 if (value is String) {
                   // 문자열을 숫자로 변환하여 평균을 계산합니다
-                  double numericValue = double.parse(value);
+                  double? numericValue = double.tryParse(value);
                   if (numericValue != null) {
                     starList.add(value);
                     x += numericValue;
@@ -79,24 +77,19 @@ class _RecommendListShopShopState extends State<RecommendListShop> {
             x = x / y;
           }
 
-          // S_INFO1 필드가 '양식'인 경우에만 userDataList에 추가
           storeData['STARlength'] = y;
           storeData['STARage'] = x.toStringAsFixed(1);
           storeData['STARlist'] = starList;
           storeData['docId'] = docId;
           userDataList.add(storeData);
 
+          userDataList.sort((a, b) {
+            double starA = double.tryParse(a['STARlength'].toString()) ?? 0;
+            double starB = double.tryParse(b['STARlength'].toString()) ?? 0;
+            return starB.compareTo(starA);
+          });
 
         }
-        userDataList.sort((a, b) {
-          int starLengthA = int.tryParse(a['STARlength']) ?? 0;
-          int starLengthB = int.tryParse(b['STARlength']) ?? 0;
-          return starLengthB.compareTo(starLengthA); // 리뷰 수 내림차순으로 정렬
-        });
-
-        setState(() {
-          // 상태 업데이트 등 다른 작업 수행
-        });
       } else {
         print('상점 데이터를 찾을 수 없습니다.');
       }
@@ -110,135 +103,138 @@ class _RecommendListShopShopState extends State<RecommendListShop> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<void>(
-        future: fetchUserData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return LoadingSpinner(); // 로딩 스피너 표시
-          } else if (snapshot.hasError) {
-            return Text('에러 발생: ${snapshot.error}');
-          } else {
-            return ListView.builder(
-              itemCount: userDataList.length,
-              itemBuilder: (context, index) {
-                if (index >= 50) return null;
-                final documentData = userDataList[index];
+      future: fetchUserData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return LoadingSpinner(); // 로딩 스피너 표시
+        } else if (snapshot.hasError) {
+          return Text('에러 발생: ${snapshot.error}');
+        } else {
+          // 데이터를 사용하는 코드
+          return  ListView.builder(
+            itemCount: userDataList.length,
+            itemBuilder: (context, index) {
+              if (index >= 50) return null;
+              final documentData = userDataList[index];
 
-                if (true) {
-                  final ranking = index + 1;
-                  final isGrayBackground = ranking >= 4;
-
-
-                  return ListTile(
-                    title: Container(
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(width: 10,),
-                          SizedBox(width: 25,
-                            height: 25,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: isGrayBackground ? Colors.grey : Color(0xFFFF6347),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  '$ranking',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 5,),
-                          Container(
-                            width: 80,
-                            height: 110, // 원하는 높이 설정
+              // documentData['S_INFO1'] == '양식'
+              if (true) {
+                final ranking = index + 1;
+                final isGrayBackground = ranking >= 4;
+                return ListTile(
+                  title: Container(
+                    margin: EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(width: 10,),
+                        SizedBox(width: 25,
+                          height: 25,
+                          child: Container(
                             decoration: BoxDecoration(
+                              color: isGrayBackground ? Colors.grey : Color(0xFFFF6347),
                               borderRadius: BorderRadius.circular(5),
                             ),
-                            child: CachedNetworkImage(
-                              placeholder: (context, url) => const CircularProgressIndicator(),
-                              imageUrl: documentData['S_IMG'],
-                            ),
-                          ),
-                          SizedBox(width: 13),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 200,
-                                child: InkWell(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '${documentData['S_NAME']}',
-                                        style: TextStyle(fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text('${documentData['S_SILPLEMONO']}',
-                                        maxLines: 3, // 표시할 최대 라인 수
-                                        overflow: TextOverflow.ellipsis,), // 넘치는 부분에 "..."을 표시
-                                      Row(
-                                        children: [
-                                          Icon(Icons.star, size: 25,
-                                              color: Colors.yellow[600]),
-                                          Text(
-                                            '${documentData['STARage']}', // 평균 별점 표시
-                                            style: TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          SizedBox(width: 8),
-                                          Text(
-                                            '(${documentData['STARlength']})',
-                                            // 별점 개수 표시
-                                            style: TextStyle(
-                                                fontSize: 11, color: Colors.grey),
-                                          ),
-                                        ],
-                                      ),
-                                      Text(
-                                        '${documentData['S_ADDR1']} ${documentData['S_ADDR2']} ${documentData['S_ADDR3']}',
-                                        style: TextStyle(
-                                            fontSize: 11, color: Colors.grey),
-                                      ),
-                                      Text(
-                                        '${documentData['S_TIME']}',
-                                        style: TextStyle(
-                                            fontSize: 11, color: Colors.grey),
-                                      ),
-                                    ],
-                                  ),
-                                  onTap: () {
-                                    Navigator.push(context, MaterialPageRoute(
-                                        builder: (context) =>
-                                            DetailPage(
-                                                docId: documentData['docId'])));
-                                  },
+                            child: Center(
+                              child: Text(
+                                '$ranking',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(height: 20),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 5,),
+                        Container(
+                          width: 80,
+                          height: 110, // 원하는 높이 설정
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: CachedNetworkImage(
+                            placeholder: (context, url) => const CircularProgressIndicator(),
+                            imageUrl: documentData['S_IMG'],
+                          ),
+                        ),
+                        SizedBox(width: 13),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 200,
+                              child: InkWell(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      '${documentData['S_NAME']}',
+                                      style: TextStyle(fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text('${documentData['S_SILPLEMONO']}',
+                                      maxLines: 3, // 표시할 최대 라인 수
+                                      overflow: TextOverflow.ellipsis,), // 넘치는 부분에 "..."을 표시
+                                    Row(
+                                      children: [
+                                        Icon(Icons.star, size: 25,
+                                            color: Colors.yellow[600]),
+                                        Text(
+                                          '${documentData['STARage']}', // 평균 별점 표시
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(width: 8),
+                                        Text(
+                                          '(${documentData['STARlength']})',
+                                          // 별점 개수 표시
+                                          style: TextStyle(
+                                              fontSize: 11, color: Colors.grey),
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                      '${documentData['S_ADDR1']} ${documentData['S_ADDR2']} ${documentData['S_ADDR3']}',
+                                      style: TextStyle(
+                                          fontSize: 11, color: Colors.grey),
+                                    ),
+                                    Text(
+                                      '${documentData['S_TIME']}',
+                                      style: TextStyle(
+                                          fontSize: 11, color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                                onTap: () {
+                                  Navigator.push(context, MaterialPageRoute(
+                                      builder: (context) =>
+                                          DetailPage(
+                                              docId: documentData['docId'])));
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 20),
+                            Row(
+                              children: [
+                              ],
+                            ),
 
-                            ],
-                          )
-                        ],
-                      ),
+                          ],
+                        )
+                      ],
                     ),
-                  );
-                }
-              },
-            );
-          }
+                  ),
+                );
+              }
+            },
+          );
         }
+      },
     );
-
   }
 }

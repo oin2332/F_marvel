@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:food_marvel/main/mainPage.dart';
 import 'package:food_marvel/shop/recommendList.dart';
 
+import 'bestList.dart';
+
 
 
 void main() => runApp(MaterialApp(

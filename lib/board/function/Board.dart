@@ -139,16 +139,15 @@ Widget _buildReviewList() {
 Widget _buildImageSlider(List<String> imageUrls) {
   return Container(
     height: 400,
-    child: ListView.builder(
-      scrollDirection: Axis.horizontal,
+    child: PageView.builder(
       itemCount: imageUrls.length,
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.all(5.0),
           child: Container(
             width: 380,
-            child: ClipRRect( // ClipRRect를 사용하여 이미지의 경계를 둥글게 함
-              borderRadius: BorderRadius.circular(10), // 원하는 값을 설정
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
               child: Image.network(
                 imageUrls[index],
                 fit: BoxFit.cover,

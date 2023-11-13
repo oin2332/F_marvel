@@ -150,7 +150,7 @@ class _ImportEventState extends State<ImportEvent> {
                 margin: EdgeInsets.symmetric(horizontal: 4.0),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: _currentPage == entry.key ? Colors.red : Colors.grey,
+                  color: _currentPage == entry.key ? Color(0xFFFF6347) : Colors.black12,
                 ),
               );
             }).toList(),

@@ -51,7 +51,7 @@ class _BestListShopState extends State<BestListShop> {
 
           List<String> starList = [];
           double x = 0;
-          int y = 0;
+          int y = -1;
 
           if (starSnapshot.docs.isNotEmpty) {
             for (var starDoc in starSnapshot.docs) {
