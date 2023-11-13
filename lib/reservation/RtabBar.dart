@@ -51,7 +51,7 @@ class _ResTabBarState extends State<ResTabBar> {
         appBar: AppBar(
             iconTheme: IconThemeData(color: Colors.black),
             title: Text('예약 관리', style: TextStyle(color: Colors.black)),
-            backgroundColor: Color(0xECFF6347),
+            backgroundColor: Colors.deepOrange[400],
             elevation: 0,
             leading: IconButton(
                 onPressed: (){
@@ -68,7 +68,7 @@ class _ResTabBarState extends State<ResTabBar> {
             labelStyle: TextStyle(fontWeight: FontWeight.bold), // 선택된 탭의 텍스트 bold
             unselectedLabelColor: Colors.white, // 선택되지 않은 탭의 텍스트 색상
             indicator: BoxDecoration(
-              color:  Color(0xFFFF2828) , // 선택된 탭 바 색상
+              color:  Colors.deepOrange[100] , // 선택된 탭 바 색상
             ),
           ),
         ),

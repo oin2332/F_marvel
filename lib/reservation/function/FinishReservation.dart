@@ -123,6 +123,9 @@ class ReservationFListWidget extends StatelessWidget {
                       },
                     );
                   },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.deepOrange[400], // 버튼의 배경색
+                  ),
                   child: Text('후기 작성'),
                 ),
               );
