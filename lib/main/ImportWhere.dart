@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-
-import '../shop/Addshop/storeboardAdd.dart';
 import '../map/maptotal.dart';
-import '../shop/Addshop/storemenuimgAdd2.dart';
-import '13_tapBar.dart';
+
 
 class ImportWhere extends StatefulWidget {
 
@@ -31,20 +28,6 @@ class _ImportWhereState extends State<ImportWhere> {
         ),
       ],
     );
-  }
-  void navigatePlacePage(int index) {
-    final pages = [
-      Sample13(),
-      Sample13(),
-      Sample13(),
-      Sample13(),
-      Sample13(),
-      Sample13(),
-    ];
-
-    if (index >= 0 && index < pages.length) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => pages[index]));
-    }
   }
 
   @override
@@ -77,13 +60,13 @@ class _ImportWhereState extends State<ImportWhere> {
 
                 }),
                 buildIconWithText('assets/main/rudrleh.jpg', '경기', () {
-                  navigatePlacePage(2);
+
                 }),
                 buildIconWithText('assets/main/wpwneh.jpg', '제주', () {
-                  navigatePlacePage(3);
+
                 }),
                 // buildIconWithText('assets/main/seoul3.jpg', '서울/남동구', () {
-                //   navigatePlacePage(4);
+
                 // }),
               ],
             ),

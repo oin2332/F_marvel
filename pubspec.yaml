@@ -47,7 +47,7 @@ dependencies:
   geocoding:
   permission_handler:
   vertical_barchart: ^2.0.0+2
-  url_launcher:
+  url_launcher: ^6.2.1
   carousel_slider:
   modal_bottom_sheet:
   cached_network_image: ^3.3.0
@@ -69,7 +69,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: ^0.13.1
-  url_launcher:
   font_awesome_flutter:
 
 

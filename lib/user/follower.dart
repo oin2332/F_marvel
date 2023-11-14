@@ -16,6 +16,11 @@ class _FollowerState extends State<Follower> {
   String? uId;
   List<String> followers = [];
 
+  Future<void> _unfollowFollower(String userId) async {
+    await unfollowFollower(uId!, userId);
+    _loadFollowers();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -34,10 +39,7 @@ class _FollowerState extends State<Follower> {
     }
   }
 
-  Future<void> unfollowFollower(String userId) async {
-    await unfollowUser(uId!, userId);
-    _loadFollowers();
-  }
+
 
   void _confirmUnfollowerDialog(String userName) {
     showDialog(
@@ -51,7 +53,7 @@ class _FollowerState extends State<Follower> {
               child: Text('예'),
               onPressed: () {
                 Navigator.of(context).pop();
-                unfollowFollower(userName);
+                _unfollowFollower(userName);
               },
             ),
             TextButton(

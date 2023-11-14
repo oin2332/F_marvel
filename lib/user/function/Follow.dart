@@ -77,23 +77,21 @@ Future<void> unfollowUser(String myUserId, String followedUserId) async {
 }
 
 //팔로워 삭제기능
-  Future<void> unfollowFollower(String myUserId, String followerUserId) async {
-    try {
-      CollectionReference userCollection = FirebaseFirestore.instance.collection('T3_USER_TBL');
-      var userDocSnapshot = await userCollection.where('id', isEqualTo: myUserId).limit(1).get();
-      var followerUserDocSnapshot = await userCollection.where('id', isEqualTo: followerUserId).limit(1).get();
-
-      if (userDocSnapshot.docs.isNotEmpty) {
-        await followerUserDocSnapshot.docs.first.reference.collection('T3_FOLLOWER_TBL').doc(myUserId).delete();
-      }
-
-      if (followerUserDocSnapshot.docs.isNotEmpty) {
-        await userDocSnapshot.docs.first.reference.collection('T3_FOLLOWING_TBL').doc(followerUserId).delete();
-      }
-    } catch (e) {
-      print('팔로워 삭제기능: $e');
+Future<void> unfollowFollower(String myUserId, String followedUserId) async {
+  try {
+    CollectionReference userCollection = FirebaseFirestore.instance.collection('T3_USER_TBL');
+    var userDocSnapshot = await userCollection.where('id', isEqualTo: myUserId).limit(1).get();
+    if (userDocSnapshot.docs.isNotEmpty) {
+      await userDocSnapshot.docs.first.reference.collection('T3_FOLLOWER_TBL').doc(followedUserId).delete();
     }
+    var followedUserDocSnapshot = await userCollection.where('id', isEqualTo: followedUserId).limit(1).get();
+    if (followedUserDocSnapshot.docs.isNotEmpty) {
+      await followedUserDocSnapshot.docs.first.reference.collection('T3_FOLLOWING_TBL').doc(myUserId).delete();
+    }
+  } catch (e) {
+    print('팔로우삭제 에러: $e');
   }
+}
 
 //팔로우 기능
 Future<void> followUser(String myUserId, String followedUserId) async {

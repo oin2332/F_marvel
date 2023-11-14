@@ -77,7 +77,30 @@ class _ImportEventState extends State<ImportEvent> {
                 padding: EdgeInsets.symmetric(horizontal: 3.0),
                 child: InkWell(
                   onTap: () {
-                    navigateEventPage(entry.key);
+                    String url;
+                    switch (entry.key) {
+                      case 0:
+                        url = 'https://www.bluer.co.kr/magazine/303'; // 파인
+                        break;
+                      case 1:
+                        url = 'https://www.bluer.co.kr/magazine/346'; // 한정식
+                        break;
+                      case 2:
+                        url =
+                        'https://magazine.hankyung.com/money/article/202101214003c'; // 스테이크
+                        break;
+                      case 3:
+                        url =
+                        'https://www.story-w.co.kr/story-w/1426/2023-wine-referral'; // 와인
+                        break;
+                      case 4:
+                        url = 'https://the-edit.co.kr/50593'; // 위스키
+                        break;
+                      default:
+                        url = 'https://www.defaulturl.com'; // 필요한 경우 기본 URL
+                        break;
+                    }
+                    launchURL(url);
                   },
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5.0),
