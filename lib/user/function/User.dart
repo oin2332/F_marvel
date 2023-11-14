@@ -3,8 +3,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../member.dart';
 import '../userModel.dart';
 import 'Follow.dart';
+
+
+
+
 
 // 사용자 리스트 조회
 Future<List<String>> fetchUserIds() async {
@@ -117,24 +122,34 @@ class UserIdListWidget extends StatelessWidget {
                                 future: fetchProfileImageUrl(userIds[index]),
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState == ConnectionState.waiting) {
-                                    return CircularProgressIndicator(); // 데이터를 기다리는 동안 로딩 표시
+                                    return CircularProgressIndicator();
                                   } else if (snapshot.hasError) {
                                     return Text('오류 발생: ${snapshot.error}');
                                   } else {
                                     String? imageUrl = snapshot.data;
                                     if (imageUrl != null) {
-                                      return Image.network(
-                                        imageUrl,
-                                        fit: BoxFit.cover, // 이미지가 원 안에 꽉 차게 표시됩니다.
-                                        width: 50,
-                                        height: 50,
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => Member(userId: userIds[index]),
+                                            ),
+                                          );
+                                        },
+                                        child: Image.network(
+                                          imageUrl,
+                                          fit: BoxFit.cover,
+                                          width: 50,
+                                          height: 50,
+                                        ),
                                       );
                                     } else {
                                       return Image.asset('/assets/user/userProfile.png');
                                     }
                                   }
                                 },
-                              ),
+                              )
                             ),
                           ),
                           // 아이디

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'function/User.dart';
+import 'member.dart';
 
 class FollowList extends StatefulWidget {
   const FollowList({super.key});
@@ -25,7 +26,7 @@ class _FollowListState extends State<FollowList> {
           children: [
             Column(
               children: [
-                UserIdListWidget()
+               UserIdListWidget()
               ],
             )
           ],
@@ -34,4 +35,5 @@ class _FollowListState extends State<FollowList> {
     );
   }
 }
+
 
