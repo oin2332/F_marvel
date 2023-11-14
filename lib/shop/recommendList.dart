@@ -157,6 +157,7 @@ class _RecommendListShopState extends State<RecommendListShop> {
                           child: CachedNetworkImage(
                             placeholder: (context, url) => const CircularProgressIndicator(),
                             imageUrl: documentData['S_IMG'],
+                            fit: BoxFit.cover,
                           ),
                         ),
                         SizedBox(width: 13),

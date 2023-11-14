@@ -158,6 +158,7 @@ class _BestListShopState extends State<BestListShop> {
                           child: CachedNetworkImage(
                             placeholder: (context, url) => const CircularProgressIndicator(),
                             imageUrl: documentData['S_IMG'],
+                            fit: BoxFit.cover,
                           ),
                         ),
                         SizedBox(width: 13),

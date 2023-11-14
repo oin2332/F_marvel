@@ -216,12 +216,12 @@ class _TestState extends State<ListsShop> {
                                   child: Container(
                                     decoration: BoxDecoration(
                                       color: const Color(0xFFFF6347),
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(5),
                                     ),
-                                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                                     child: Text(
                                       '예약하기',
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(color: Colors.white,fontSize: 14),
                                     ),
                                   ),
                                 ),
