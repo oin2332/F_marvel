@@ -178,7 +178,7 @@ class _FollowingState extends State<Following> {
                             _confirmUnfollowDialog(followings[index]);
                           },
                           style: ElevatedButton.styleFrom(primary: Color(0xFFFF6347)),
-                          child: Text('팔로우 해제'),
+                          child: Text('팔로잉 해제'),
                         ),
                       ],
                     ),

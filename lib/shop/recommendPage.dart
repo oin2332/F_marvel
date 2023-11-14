@@ -52,7 +52,7 @@ class _RecommenedPageState extends State<RecommenedPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text("유저 추천 스토어", style: TextStyle(
+        title: Text("유저 추천 TOP30", style: TextStyle(
             fontSize: 21, fontWeight: FontWeight.bold, color: Colors.black)),
         leading: IconButton(
           icon: Icon(Icons.chevron_left, color: Colors.black),

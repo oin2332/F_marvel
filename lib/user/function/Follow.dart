@@ -438,24 +438,25 @@ class FollowerUserIdListWidget extends StatelessWidget {
 
     return followerUserIds;
   }
-  Future<int> fetchFollowerCount(String currentUserId) async {
+  Future<int> fetchFollowerCount(String userId) async {
     try {
-      QuerySnapshot userDocuments = await FirebaseFirestore.instance
+      DocumentSnapshot userDocument = await FirebaseFirestore.instance
           .collection('T3_USER_TBL')
-          .where('id', isEqualTo: currentUserId)
+          .doc(userId)
           .get();
 
-      if (userDocuments.docs.isNotEmpty) {
-        DocumentSnapshot userDocument = userDocuments.docs.first;
+      if (userDocument.exists) {
+        // 참조한 사용자의 팔로워 컬렉션에서 모든 문서를 가져오기
+        QuerySnapshot followerDocs = await userDocument.reference
+            .collection('T3_FOLLOWER_TBL')
+            .get();
 
-        CollectionReference followerCollection = userDocument.reference.collection('T3_FOLLOWER_TBL');
-        QuerySnapshot followerDocs = await followerCollection.get();
-
+        // 팔로워 문서의 개수 반환
         return followerDocs.docs.length;
       }
     } catch (e) {
       print('팔로워 수를 불러오는 중 오류: $e');
     }
-    return 0; // 에러가 발생하면 0을 반환하도록 설정
+    return 0; // 에러 발생 시 0 반환
   }
 }

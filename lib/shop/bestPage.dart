@@ -50,7 +50,7 @@ class _BestPageState extends State<BestPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text("전국 BEST 맛집", style: TextStyle(
+        title: Text("전국 BEST TOP30", style: TextStyle(
             fontSize: 21, fontWeight: FontWeight.bold, color: Colors.black)),
         leading: IconButton(
           icon: Icon(Icons.chevron_left, color: Colors.black),
