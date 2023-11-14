@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../userModel.dart';
+import 'Follow.dart';
 
 // 사용자 리스트 조회
 Future<List<String>> fetchUserIds() async {
@@ -75,6 +79,7 @@ Future<String?> fetchDefaultProfileImageUrl() async {
 class UserIdListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    String? userId = Provider.of<UserModel>(context).userId; // UserModel에서 사용자 아이디 받아오기
     return FutureBuilder<List<String>>(
       future: fetchUserIds(),
       builder: (context, snapshot) {
@@ -143,7 +148,9 @@ class UserIdListWidget extends StatelessWidget {
                               Align(
                                 alignment: Alignment.centerRight,
                                 child: ElevatedButton( // 팔로우 버튼
-                                    onPressed: (){},
+                                    onPressed: (){
+                                      followUser(userId!, userIds[index]);
+                                    },
                                     style: ElevatedButton.styleFrom(
                                       primary: Colors.deepOrange[400]!, // 원하는 색상으로 변경
                                     ),

@@ -13,6 +13,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:food_marvel/reservation/RtabBar.dart';
 import '../FCM/fcmex.dart';
+import '../board/list.dart';
 import '../board/timeLine.dart';
 import '../firebase/firebase_options.dart';
 import '../search/headSearch.dart';
@@ -231,7 +232,7 @@ class _MainPageState extends State<MainPage> {
                 onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => NavSearch()));
                 }, child: Icon(Icons.search_outlined, size: 30),),
               InkWell(onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => TimeLine()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Temp()));
               },  child: Icon(Icons.message_outlined, size: 28),),
               InkWell(onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => ResTabBar()));

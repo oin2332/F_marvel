@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:food_marvel/board/timeLine.dart';
 import 'package:food_marvel/main/mainPage.dart';
 import 'package:food_marvel/search/navSearch.dart';
 import 'package:food_marvel/user/userUnlogin.dart';
 import 'package:provider/provider.dart';
 
+import '../board/list.dart';
 import '../reservation/RtabBar.dart';
 import '../user/userMain.dart';
 import '../user/userModel.dart';
@@ -35,7 +35,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
               onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => NavSearch()));
               }, child: Icon(Icons.saved_search, size: 30),),
             InkWell(onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => TimeLine()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => Temp()));
             },  child: Icon(Icons.message_outlined, size: 28),),
             InkWell(onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => ResTabBar()));

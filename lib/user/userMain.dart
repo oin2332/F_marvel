@@ -382,7 +382,6 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
                     children: [
                       Text('등록된 리뷰가 없습니다', style: TextStyle(color: Colors.grey[400]!),textAlign: TextAlign.center,),
                       TextButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (_) => BoardAdd()));}, child: Text('리뷰작성')),
-                      TextButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (_) => Temp()));}, child: Text('리뷰(임시)'))
                     ],
                   ),
                 ],
