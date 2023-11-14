@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../board/boardView.dart';
+import '../board/list.dart';
 import '../board/timeLine.dart';
 import '../main/importbottomBar.dart';
 import '../main/mainPage.dart';
@@ -115,7 +116,7 @@ class _ResTabBarState extends State<ResTabBar> {
                   onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => NavSearch()));
                   }, child: Icon(Icons.search_outlined, size: 30),),
                 InkWell(onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => TimeLine()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Temp()));
                 },  child: Icon(Icons.message_outlined, size: 28),),
                 InkWell(onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => ResTabBar()));

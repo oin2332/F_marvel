@@ -58,6 +58,7 @@ Widget _buildReviewList() {
             var content = review['content'];
             var imageUrls = (review['r_img_urls'] as List<dynamic>).cast<String>(); // 수정된 부분
             var rating = review['rating'];
+            print(rating);
             var uId = review['u_id'];
 
             return Column(
@@ -121,9 +122,12 @@ Widget _buildReviewList() {
                 SizedBox(height: 10),
                 _buildImageSlider(imageUrls),
                 SizedBox(height: 5),
-                Align(
-                  alignment: Alignment.centerLeft,
-                    child: Icon(Icons.star, color: Colors.amber) // 내가 준 별점
+                // 별점 출력 부분 (숫자로 값을 입력받고 -> 별 갯수로 출력)
+                Row(
+                  children: [
+                    Icon(Icons.star, color: Colors.amber), // 내가 준 별점
+                    Text('$rating', style: TextStyle(fontWeight: FontWeight.bold)), // 별점 출력 추가
+                  ],
                 ),
                 Align(
                     alignment: Alignment.centerLeft,

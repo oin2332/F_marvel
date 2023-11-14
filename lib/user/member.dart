@@ -137,17 +137,17 @@ class _MemberState extends State<Member> {
                   ),
                   padding: MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.all(10.0)),
                   minimumSize: MaterialStateProperty.all<Size>(Size(double.infinity, 0)),
-                  backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.deepOrange[400]!),
                   elevation: MaterialStateProperty.all<double>(0),
                   overlayColor: MaterialStateProperty.all<Color>(Colors.deepOrange[400]!), // 터치 효과 색상
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.grey), // border 색상 black
+                      side: BorderSide(color: Colors.white), // border 색상 black
                       borderRadius: BorderRadius.circular(30), // 버튼 테두리 모양 조정
                     ),
                   ),
                 ),
-                child: Text('팔로우', style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),),
+                child: Text('팔로우', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
               ),
             ),
             SizedBox(height: 20),
@@ -155,9 +155,6 @@ class _MemberState extends State<Member> {
             Column(
               children: [
                 Text('등록된 리뷰가 없습니다', style: TextStyle(color: Colors.grey[400]!),textAlign: TextAlign.center,),
-                TextButton(onPressed: (){
-                  //Navigator.push(context, MaterialPageRoute(builder: (_) => BoardAdd()));
-                  }, child: Text('리뷰작성')),
               ],
             ),
           ],

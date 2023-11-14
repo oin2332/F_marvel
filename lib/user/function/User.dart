@@ -177,6 +177,7 @@ class UserIdListWidget extends StatelessWidget {
                         ],
                       ),
                     ),
+                    SizedBox(height: 10)
                   ],
                 );
             },

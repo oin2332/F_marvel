@@ -404,7 +404,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
                 onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => NavSearch()));
                   },child: Icon(Icons.search_outlined, size: 30),),
               InkWell(onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => TimeLine()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Temp()));
               },  child: Icon(Icons.message_outlined, size: 28),),
               InkWell(onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => ResTabBar()));
