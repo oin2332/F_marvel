@@ -256,6 +256,7 @@ class _TabBarExState extends State<TabBarEx> {
             ),
           ),
           body: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
             children: [
               Text("홍"),
               // 메뉴 ---------------------------------------------------------//

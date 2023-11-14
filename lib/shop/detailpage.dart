@@ -497,7 +497,7 @@ class _DetailPageState extends State<DetailPage> {
                                     height: 2,
                                     child: DecoratedBox(
                                       decoration: BoxDecoration(
-                                        color: Colors.black,
+                                      color: Color(0xFFFF6347),
                                       ),
                                     ),
                                   ),
