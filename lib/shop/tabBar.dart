@@ -215,16 +215,25 @@ class _TabBarExState extends State<TabBarEx> {
           appBar: AppBar(
             title: Row(
               children: [
-                IconButton(onPressed: (){
-                  Navigator.of(context).pop();
-                }, icon: Icon(Icons.arrow_back_sharp),color: Colors.black,),
-                Text('가게이름',style: TextStyle(color: Colors.black),)
+                IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: Icon(Icons.arrow_back_sharp),
+                  color: Colors.black,
+                ),
+                Text(
+                  '가게이름',
+                  style: TextStyle(color: Colors.black),
+                )
               ],
             ),
             backgroundColor: Color(0xFFFFffff),
             bottom: TabBar(
+              physics: NeverScrollableScrollPhysics(),
+              isScrollable: false,
               labelColor: Colors.black,
-              indicatorColor: Colors.black,
+              indicatorColor: Color(0xFFFF6347), // 바닥줄 색상 변경
               unselectedLabelColor: Colors.grey,
               labelStyle: TextStyle(
                 fontSize: 17, // 글씨 크기 조절
@@ -232,6 +241,7 @@ class _TabBarExState extends State<TabBarEx> {
               ),
               tabs: [
                 Tab(
+
                   child: TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();

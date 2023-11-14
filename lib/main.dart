@@ -32,8 +32,6 @@ void main() async{
         ChangeNotifierProvider(create: (context) => UserModel()),
         ChangeNotifierProvider(create: (context) => ModalData()),
         ChangeNotifierProvider(create: (context) => ReservationDataProvider()),
-
-
       ],
       child: MyApp(),
     ),

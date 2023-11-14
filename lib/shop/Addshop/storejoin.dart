@@ -54,7 +54,10 @@ class _JoinState extends State<StoreJoin> {
   String? gender;
   String? imgPro;
 
+  bool checkStore = false;
+
   void _addSTORE() async {
+    //_uploadImage();
     if (_id.text.isNotEmpty && _pwd.text.isNotEmpty) {
       FirebaseFirestore fs = FirebaseFirestore.instance;
       CollectionReference STORE = fs.collection("T3_STORE_TBL");
@@ -521,16 +524,38 @@ class _JoinState extends State<StoreJoin> {
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.disabled)) {
-                      return Colors.grey[300]!; // 비활성화 상태일 때 배경색을 회색으로 지정
-                    }
-                    return Colors.deepOrange[400]!; // 활성화 상태일 때 배경색을 주황색으로 지정
-                  },
+                    // 값이 없는 경우 버튼 비활성화
+                        if ( imgPro == null ||
+                            _pwd.text.isEmpty ||
+                            _id.text.isEmpty ||
+                            _keyword1.text.isEmpty ||
+                            _keyword2.text.isEmpty ||
+                            _addr1.text.isEmpty ||
+                            _addr2.text.isEmpty ||
+                            _addr3.text.isEmpty ||
+                            _name.text.isEmpty ||
+                            _info.text.isEmpty) {
+                          return Colors.grey[300] ?? Colors.grey; // Null이면 기본값으로 Colors.grey 사용
+                        }
+                        return Colors.deepOrange[400] ?? Colors.deepOrange; // Null이면 기본값으로 Colors.deepOrange 사용
+                      },
                 ),
               ),
-              onPressed: (){
-                _addSTORE();
-                },
+              onPressed: () {
+                // 값이 있는 경우에만 _addSTORE 함수 호출
+                if ( imgPro != null ||
+                    _pwd.text.isNotEmpty &&
+                    _id.text.isNotEmpty &&
+                    _keyword1.text.isNotEmpty &&
+                    _keyword2.text.isNotEmpty &&
+                    _addr1.text.isNotEmpty &&
+                    _addr2.text.isNotEmpty &&
+                    _addr3.text.isNotEmpty &&
+                    _name.text.isNotEmpty &&
+                    _info.text.isNotEmpty) {
+                  return _addSTORE();
+                }
+              },
               child: Text('가게'),
             ),
           ],
