@@ -126,7 +126,7 @@ Widget _buildReviewList() {
                 Row(
                   children: [
                     Icon(Icons.star, color: Colors.amber), // 내가 준 별점
-                    Text('$rating', style: TextStyle(fontWeight: FontWeight.bold)), // 별점 출력 추가
+                    Text('${rating.toStringAsFixed(1)}', style: TextStyle(fontWeight: FontWeight.bold)), // 별점 출력 (소수점 1자리까지 표시)
                   ],
                 ),
                 Align(
