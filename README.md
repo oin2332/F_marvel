@@ -25,7 +25,6 @@
 * 프로세서 : Intel(R) Core(TM) i5-9400F CPU @ 2.90GHz
 * 기타 도구 및 라이브러리: <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=bogyuuggi)](https://github.com/bogyuuggi/food_marvel)
 
 
 ## 📜 서비스 내용
