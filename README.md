@@ -1,10 +1,32 @@
 ![header](https://capsule-render.vercel.app/api?type=Waving&color=auto&height=300&section=header&text=Food_marvelr&animation=fadeIn&fontSize=90)
 
-# food_marvel
+# 프로젝트 소개
 
-A new Flutter project.
+맛집 / 음식점 추천을 과 예약 시스템이 가능한 애플리케이션 입니다
 
-## Getting Started
+# 🕰개발작 기간 
+📆 2023-10-25 ~ 2023.11.15
+<br>
+<br>
+
+# 맴버 구성
+* 서보규(팀장) -
+* 이상엽 -
+* 강도현 -
+* 신동환 -
+* 손명욱 -
+
+# ⚙ 개발환경
+<br><br><br>
+
+* 개발툴 : <img src="https://img.shields.io/badge/androidstudio-3DDC84?style=for-the-badge&logo=androidstudio&logoColor=white">   <img src="https://img.shields.io/badge/flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white">
+* 개발 언어 : <img src="https://img.shields.io/badge/dart-0175C2?style=for-the-badge&logo=dart&logoColor=white"> 
+* OS : Windows 10 Pro (64bit), x64 기반 프로세서
+* 데이터베이스 :
+* 프로세서 : Intel(R) Core(TM) i5-9400F CPU @ 2.90GHz
+* 기타 도구 및 라이브러리: <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
+
+* ![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=anuraghazra&layout=compact)
 
 This project is a starting point for a Flutter application.
 
