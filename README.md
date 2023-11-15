@@ -17,16 +17,15 @@
 * 손명욱 -
 
 # ⚙ 개발환경
-<br><br><br>
 
 * 개발툴 : <img src="https://img.shields.io/badge/androidstudio-3DDC84?style=for-the-badge&logo=androidstudio&logoColor=white">   <img src="https://img.shields.io/badge/flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white">
 * 개발 언어 : <img src="https://img.shields.io/badge/dart-0175C2?style=for-the-badge&logo=dart&logoColor=white"> 
 * OS : Windows 10 Pro (64bit), x64 기반 프로세서
-* 데이터베이스 :
+* 데이터베이스 : <img src="https://img.shields.io/badge/firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white">
 * 프로세서 : Intel(R) Core(TM) i5-9400F CPU @ 2.90GHz
 * 기타 도구 및 라이브러리: <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 
-* ![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=anuraghazra&layout=compact)
+![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=anuraghazra&layout=compact)
 
 This project is a starting point for a Flutter application.
 
