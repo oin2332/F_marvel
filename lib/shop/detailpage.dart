@@ -31,12 +31,14 @@ class _DetailPageState extends State<DetailPage> {
   bool isBookmarked = false;
   String? uId;
   String? sId;
+  late Future<void> _fetchUserData;
   final GlobalKey mapkey = GlobalKey();
   @override
   void initState() {
     super.initState();
+    _fetchUserData = _fetchAllUserData(widget.docId);
     initializeDateFormatting("ko_KR", null);
-    UserModel userModel = Provider.of<UserModel>(context, listen: false);
+ /*   UserModel userModel = Provider.of<UserModel>(context, listen: false);
     uId = userModel.userId;
 
     if (uId != null) {
@@ -51,7 +53,7 @@ class _DetailPageState extends State<DetailPage> {
       setState(() {
         isBookmarked = false;
       });
-    }
+    }*/
   }
 
   List<Map<String, dynamic>> userDataList = [];
@@ -228,6 +230,7 @@ class _DetailPageState extends State<DetailPage> {
     String? userId = userModel.userId;
     uId = userId;
 
+
     sId = widget.docId;
 
     return Scaffold(
@@ -297,7 +300,7 @@ class _DetailPageState extends State<DetailPage> {
         body:
         Container(
           child: FutureBuilder<void>(
-            future: _fetchAllUserData(widget.docId),
+            future: _fetchUserData,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Column(

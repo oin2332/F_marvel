@@ -64,7 +64,7 @@ class _TabBarExState extends State<TabBarEx> {
     double sum = numericStarList.fold(0, (prev, star) => prev + star);
 
 
-    average = (sum / numericStarList.length);
+    average = (sum / (numericStarList.length-1));
 
     List<String> num5 = Star.where((element) => element == '5').toList();
     List<String> num4 = Star.where((element) => element == '4').toList();
@@ -495,7 +495,7 @@ class _TabBarExState extends State<TabBarEx> {
                                           Text(userBoard![index]['uId'] ?? '',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold)),
-                                          Text('리뷰 23개, 별점4'),
+                                          Text('리뷰 23개, 별점3'),
                                         ],
                                       ),
                                       SizedBox(width: 80),
