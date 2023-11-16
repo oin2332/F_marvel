@@ -16,7 +16,7 @@ Future<void> addBookmark(String userId, String docId) async {
 
     print('북마크에 추가 할 사용자 아이디 >> $userId');
 
-    Future.delayed(Duration(seconds: 10), () async {
+    Future.delayed(Duration(seconds: 30), () async {
       await updateBooktimeToN(docId, userId);
     });
   } catch (e) {
