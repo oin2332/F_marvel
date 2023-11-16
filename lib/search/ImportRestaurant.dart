@@ -11,6 +11,17 @@ class ImportRestaurant extends StatefulWidget {
   @override
   State<ImportRestaurant> createState() => _ImportRestaurantState();
 }
+class RestaurantItem {
+  final String image;
+  final String title;
+  final String content;
+
+  RestaurantItem({
+    required this.image,
+    required this.title,
+    this.content = "",
+  });
+}
 
 class _ImportRestaurantState extends State<ImportRestaurant> {
   bool isImportSuddenPopularVisible = true;
@@ -144,89 +155,109 @@ class _ImportRestaurantState extends State<ImportRestaurant> {
   }) {
     return GestureDetector(
       onTap: onTapCallback,
-      child :Stack(
-      children: [
-        Container(
-          margin: EdgeInsets.all(15.0),
-          padding: EdgeInsets.all(10.0),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
-            image: DecorationImage(
-              image: AssetImage(image),
-              fit: BoxFit.cover,
+      child: Stack(
+        children: [
+          Container(
+            margin: EdgeInsets.all(15.0),
+            padding: EdgeInsets.all(10.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              image: DecorationImage(
+                image: AssetImage(image),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
-        Positioned(
-          top: 30,
-          left: 10,
-          right: 10,
-          child: Text(
-            title,
-            style: TextStyle(
-              fontSize: 25,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+          Positioned(
+            top: 30,
+            left: 10,
+            right: 10,
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
           ),
-        ),
-        Positioned(
-          top: 130,
-          left: 10,
-          right: 10,
-          child: Text(
-            content,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-              color: Colors.lightBlueAccent,
+          Positioned(
+            top: 130,
+            left: 10,
+            right: 10,
+            child: Text(
+              content,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                color: Colors.lightBlueAccent,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
           ),
-        ),
 
 
-      ],
+        ],
       ),
     );
   }
-  void _handleItemTap(String title) {
-    if (title == "#주차가능매장") {
-      _fetchDataFromFirestore();
+
+
+
+  void _handleItemTap(String title) async {
+    try {
+      QuerySnapshot storeSnapshot = await FirebaseFirestore.instance
+          .collection('T3_STORE_TBL')
+          .get();
+
+      storeSnapshot.docs.forEach((storeDoc) async {
+        String storeDocId = storeDoc.id;
+
+        if (title == "#주차가능매장") {
+          // 여기에서 storeDoc.data()로부터 원하는 필드 값을 가져와서 처리
+          var fieldValue = (storeDoc.data() as Map<String, dynamic>)['S_PARKING'];
+          if (fieldValue != null && fieldValue == true) {
+            _fetchDataFromFirestore(storeDoc);
+          }
+        }
+
+        QuerySnapshot convenienceSnapshot = await FirebaseFirestore.instance
+            .collection('T3_STORE_TBL')
+            .doc(storeDocId)
+            .collection('T3_CONVENIENCE_TBL')
+            .where('S_PARKING', isEqualTo: true)
+            .get();
+
+        convenienceSnapshot.docs.forEach((convenienceDoc) {
+          // 여기에서 필요한 작업 수행
+          print('서브컬렉션 데이터: ${convenienceDoc.data()}');
+        });
+      });
+    } catch (e) {
+      print('데이터 가져오기 오류: $e');
     }
-    print('아이템이 눌렸습니다: $title');
-    widget.onTapCallback();
   }
-}
 
+  void _fetchDataFromFirestore(DocumentSnapshot storeDoc) async {
+    String docId = storeDoc.id;
+    try {
+      QuerySnapshot convenienceSnapshot = await FirebaseFirestore.instance
+          .collection('T3_STORE_TBL')
+          .doc(docId)
+          .collection('T3_CONVENIENCE_TBL')
+          .where('S_PARKING', isEqualTo: true)
+          .get();
 
-void _fetchDataFromFirestore() async {
-  try {
-    QuerySnapshot convenienceSnapshot = await FirebaseFirestore.instance
-        .collection('T3_STORE_TBL')
-        .doc('docId')
-        .collection('T3_CONVENIENCE_TBL')
-        .where('S_PARKING', isEqualTo: true)
-        .get();
-
-    List<Map<String, dynamic>> parkingDataList = [];
-    convenienceSnapshot.docs.forEach((doc) {
-      print('서브컬렉션 데이터: ${doc.data()}');
-    });
-  } catch (e) {
-    print('데이터 가져오기 오류: $e');
+      List<Map<String, dynamic>> parkingDataList = [];
+      convenienceSnapshot.docs.forEach((doc) {
+        print('서브컬렉션 데이터: ${doc.data()}');
+      });
+    } catch (e) {
+      print('데이터 가져오기 오류: $e');
+    }
   }
-}
 
-class RestaurantItem {
-  final String image;
-  final String title;
-  final String content;
 
-  RestaurantItem({
-    required this.image,
-    required this.title,
-    this.content = "",
-  });
+
 }
