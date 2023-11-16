@@ -105,8 +105,8 @@ class _SearchListShop extends State<SearchListShop> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: Image.asset(
-                    'assets/storePageIMG/${documentData['S_IMG']}',
+                  child: Image.network(
+                    '${documentData['S_IMG']}',
                     fit: BoxFit.cover,
                   ),
                 ),

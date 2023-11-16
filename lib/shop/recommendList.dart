@@ -84,9 +84,17 @@ class _RecommendListShopState extends State<RecommendListShop> {
           userDataList.add(storeData);
 
           userDataList.sort((a, b) {
-            double starA = double.tryParse(a['STARlength'].toString()) ?? 0;
-            double starB = double.tryParse(b['STARlength'].toString()) ?? 0;
-            return starB.compareTo(starA);
+            double starLengthA = double.tryParse(a['STARlength'].toString()) ?? 0;
+            double starLengthB = double.tryParse(b['STARlength'].toString()) ?? 0;
+            double starAgeA = double.tryParse(a['STARage'].toString()) ?? 0;
+            double starAgeB = double.tryParse(b['STARage'].toString()) ?? 0;
+
+            // 먼저 STARlength로 정렬 후, STARlength가 같은 경우 STARage로 정렬
+            if (starLengthA == starLengthB) {
+              return starAgeB.compareTo(starAgeA); // STARage 내림차순 정렬
+            } else {
+              return starLengthB.compareTo(starLengthA); // STARlength 내림차순 정렬
+            }
           });
 
         }
