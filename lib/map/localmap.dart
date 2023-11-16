@@ -10,12 +10,12 @@ import 'package:firebase_core/firebase_core.dart';
 
 import '../firebase/firebase_options.dart';
 
-class Place {
+class OtherPackagePlace  {
   final String name;
   final String address;
   final Future<LatLng?> location;
 
-  Place({required this.name, required this.address, required String category})
+  OtherPackagePlace ({required this.name, required this.address, required String category})
       : location = getLocationFromAddress(address);
 }
 
@@ -52,9 +52,11 @@ class _MyAppState extends State<SMap> {
   }
 
   Future<void> _addMarkers() async {
+    _markers.clear();
+    _circles.clear();
     List<Place> places = (await getData()).cast<Place>();
 
-    _circles.add(getCircleBoundary(_center, 600));
+    _circles.add(getCircleBoundary(_center, 5000));
 
     if (_circles.isEmpty) {
       print('Circle is not available.');
