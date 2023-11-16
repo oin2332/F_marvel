@@ -206,6 +206,7 @@ class _ImportRestaurantState extends State<ImportRestaurant> {
 
 
   Future<void> _handleItemTap(String title) async {
+    print('handleItemTap 호출: $title');
     try {
       QuerySnapshot storeSnapshot = await FirebaseFirestore.instance
           .collection('T3_STORE_TBL')
@@ -215,31 +216,32 @@ class _ImportRestaurantState extends State<ImportRestaurant> {
         String storeDocId = storeDoc.id;
 
         if (title == "#주차가능매장") {
-          var fieldValue = (storeDoc.data() as Map<String, dynamic>)['S_PARKING'];
-          if (fieldValue == true) {
+          // 직접 서브컬렉션에 쿼리를 수행
+          QuerySnapshot convenienceSnapshot = await FirebaseFirestore.instance
+              .collection('T3_STORE_TBL')
+              .doc(storeDocId)
+              .collection('T3_CONVENIENCE_TBL')
+              .where('S_PARKING', isEqualTo: true)
+              .get();
+
+          convenienceSnapshot.docs.forEach((convenienceDoc) {
+            print('서브컬렉션 데이터: ${convenienceDoc.data()}');
+          });
+
+          if (convenienceSnapshot.docs.isNotEmpty) {
             print('주차가능매장이 선택됨!');
+            setState(() {
+              isImportSuddenPopularVisible = false;
+            });
           }
         }
-
-        QuerySnapshot convenienceSnapshot = await FirebaseFirestore.instance
-            .collection('T3_STORE_TBL')
-            .doc(storeDocId)
-            .collection('T3_CONVENIENCE_TBL')
-            .where('S_PARKING', isEqualTo: true)
-            .get();
-
-        convenienceSnapshot.docs.forEach((convenienceDoc) {
-          // 여기에서 필요한 작업 수행
-          print('서브컬렉션 데이터11: ${convenienceDoc.data()}');
-          setState(() {
-            isImportSuddenPopularVisible = false;
-          });
-        });
       });
     } catch (e) {
       print('데이터 가져오기 오류: $e');
     }
   }
+
+
 
 
 
