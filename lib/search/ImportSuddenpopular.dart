@@ -15,7 +15,7 @@ class ImportSuddenPopular extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 15.0),
+              padding: const EdgeInsets.only(top: 15.0,left: 10),
               child: Text(
                 "관심 급상승 음식점",
                 style: TextStyle(
