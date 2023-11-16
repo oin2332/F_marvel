@@ -19,8 +19,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await initializeDateFormatting('ko_KR', null);
-  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+  // await initializeDateFormatting('ko_KR', null);
+  // FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
 
   if (!kIsWeb) {

@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../user/userModel.dart';
 import '../user/userUnlogin.dart';
+import 'package:http/http.dart' as http;
 
 class ReservationAdd extends StatefulWidget {
   final String addr;
@@ -109,6 +113,24 @@ class _ReservationAddState extends State<ReservationAdd> {
       'R_name': usernick,
       'R_state': null,
     });
+
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    String? fcmToken = await messaging.getToken();
+    await http.post(
+      Uri.parse('https://fcm.googleapis.com/fcm/send'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'key=AAAAH6_c1yw:APA91bEJTMrIJhVjJa4MBP76N_XncTlXQvXnOQB4aBv_9nrqEJP6dbJbiLZi-DQMGfg3PAXkXJwZHcxlJjW6PLLjaLGz34LBpXxYONkF9Xqlltb4FBqpW8P99ua-8opTVXUKeaQGZjPK', // FCM 서버 키를 넣어주세요
+      },
+      body: jsonEncode({
+        'notification': {
+          'title': '푸드마블 ',
+          'body': '예약이 성공적으로 완료되었습니다.',
+        },
+        'to': fcmToken,
+      }),
+    );
+
 
     Navigator.of(context).pop();
     _secondModalSheet2(context);
