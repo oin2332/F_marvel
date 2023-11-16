@@ -19,6 +19,7 @@ class _SearchListShop extends State<SearchListShop> {
 
   void initState() {
     super.initState();
+    fetchAllUserData();
   }
 
   void fetchAllUserData() async {
@@ -154,7 +155,6 @@ class _SearchListShop extends State<SearchListShop> {
                         ),
                         onTap: () {
                           Navigator.push(
-                            //주석
                             context,
                             MaterialPageRoute(
                                 builder: (context) => DetailPage(docId: documentData['yourDocId']),

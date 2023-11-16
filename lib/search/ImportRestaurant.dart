@@ -2,8 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 
+import 'ImportSearchlist.dart';
+
 
 class ImportRestaurant extends StatefulWidget {
+
   final VoidCallback onTapCallback;
 
   ImportRestaurant({required this.onTapCallback});
@@ -142,9 +145,14 @@ class _ImportRestaurantState extends State<ImportRestaurant> {
               );
             },
           ),
+          Container(
+            height: 500,
+            child: SearchListShop(searchResults: parkingDataList),
+          ),
         ],
       ),
     );
+
   }
 
   Widget _buildItemWithImage({
@@ -197,7 +205,6 @@ class _ImportRestaurantState extends State<ImportRestaurant> {
             ),
           ),
 
-
         ],
       ),
     );
@@ -212,11 +219,12 @@ class _ImportRestaurantState extends State<ImportRestaurant> {
           .collection('T3_STORE_TBL')
           .get();
 
-      storeSnapshot.docs.forEach((storeDoc) async {
+      List<Map<String, dynamic>> updatedParkingDataList = []; // 업데이트된 목록
+
+      for (var storeDoc in storeSnapshot.docs) {
         String storeDocId = storeDoc.id;
 
         if (title == "#주차가능매장") {
-          // 직접 서브컬렉션에 쿼리를 수행
           QuerySnapshot convenienceSnapshot = await FirebaseFirestore.instance
               .collection('T3_STORE_TBL')
               .doc(storeDocId)
@@ -225,25 +233,24 @@ class _ImportRestaurantState extends State<ImportRestaurant> {
               .get();
 
           convenienceSnapshot.docs.forEach((convenienceDoc) {
-            print('서브컬렉션 데이터: ${convenienceDoc.data()}');
+            print('서브컬렉션 데이터: ${convenienceDoc.data() as Map<String, dynamic>}');
+            // 데이터를 업데이트된 목록에 추가
+            updatedParkingDataList.add(convenienceDoc.data() as Map<String, dynamic>);
           });
-
-          if (convenienceSnapshot.docs.isNotEmpty) {
-            print('주차가능매장이 선택됨!');
-            setState(() {
-              isImportSuddenPopularVisible = false;
-            });
-          }
         }
+      }
+
+
+      setState(() {
+        parkingDataList = updatedParkingDataList;
       });
+
+      if (parkingDataList.isNotEmpty) {
+        print('주차가능매장이 선택됨!');
+        widget.onTapCallback();
+      }
     } catch (e) {
       print('데이터 가져오기 오류: $e');
     }
   }
-
-
-
-
-
-
 }
