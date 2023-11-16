@@ -1,14 +1,52 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_file.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'dart:async';
 
+import '../FCM/fcmex.dart';
+import '../FCM/firebase_options.dart';
+import '../reservation/function/Alarm.dart';
+import '../shop/storePage.dart';
+import '../user/userModel.dart';
 import 'mainPage.dart';
 
-void main() => runApp(MaterialApp(
-  title: 'Home',
-  home: LoadingPage(),
-  debugShowCheckedModeBanner: false,
-));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await initializeDateFormatting('ko_KR', null);
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+
+  if (!kIsWeb) {
+    await setupFlutterNotifications();
+  }
+
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserModel()),
+        ChangeNotifierProvider(create: (context) => ModalData()),
+        ChangeNotifierProvider(create: (context) => ReservationDataProvider()),
+
+
+      ],
+      child: MyApp(),
+    ),
+  );
+}
+
+// void main() => runApp(MaterialApp(
+//   title: 'Home',
+//   home: LoadingPage(),
+//   debugShowCheckedModeBanner: false,
+// ));
 
 class LoadingPage extends StatefulWidget {
   @override

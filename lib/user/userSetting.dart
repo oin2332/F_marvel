@@ -87,51 +87,51 @@ class UserSetting extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Container(height: 1, width: 250, color: Colors.grey),
-                  Text('서비스 이용', style: TextStyle(color: Colors.grey[600]!),),
-                  TextButton(
-                    onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => BlockList()));
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('차단한 사용자 관리', style: TextStyle(color: Colors.black)),
-                          Icon(Icons.keyboard_arrow_right, color: Colors.black)
-                        ],
-                      ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => NotificationSetting()));
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('알림 설정', style: TextStyle(color: Colors.black)),
-                          Icon(Icons.keyboard_arrow_right, color: Colors.black)
-                        ],
-                      ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: (){},
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('1:1 문의', style: TextStyle(color: Colors.black)),
-                          Icon(Icons.keyboard_arrow_right, color: Colors.black)
-                        ],
-                      ),
-                    ),
-                  ),
+                  // Container(height: 1, width: 250, color: Colors.grey),
+                  // Text('서비스 이용', style: TextStyle(color: Colors.grey[600]!),),
+                  // TextButton(
+                  //   onPressed: (){
+                  //     Navigator.push(context, MaterialPageRoute(builder: (_) => BlockList()));
+                  //   },
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.all(8.0),
+                  //     child: Row(
+                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //       children: [
+                  //         Text('차단한 사용자 관리', style: TextStyle(color: Colors.black)),
+                  //         Icon(Icons.keyboard_arrow_right, color: Colors.black)
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // TextButton(
+                  //   onPressed: (){
+                  //     Navigator.push(context, MaterialPageRoute(builder: (_) => NotificationSetting()));
+                  //   },
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.all(8.0),
+                  //     child: Row(
+                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //       children: [
+                  //         Text('알림 설정', style: TextStyle(color: Colors.black)),
+                  //         Icon(Icons.keyboard_arrow_right, color: Colors.black)
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // TextButton(
+                  //   onPressed: (){},
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.all(8.0),
+                  //     child: Row(
+                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //       children: [
+                  //         Text('1:1 문의', style: TextStyle(color: Colors.black)),
+                  //         Icon(Icons.keyboard_arrow_right, color: Colors.black)
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                   Container(height: 1, width: 250, color: Colors.grey),
                   Text('기타', style: TextStyle(color: Colors.grey[600]!),),
                   TextButton(

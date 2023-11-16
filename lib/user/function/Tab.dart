@@ -27,47 +27,48 @@ class NoticeTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: FutureBuilder<List<Map<String, dynamic>>>(
-        future: noticeData,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            return Text('데이터를 불러오는 도중 에러 발생: ${snapshot.error}');
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Text('불러올 데이터가 없습니다.');
-          } else {
-            List<Map<String, dynamic>> notices = snapshot.data!;
-
-            return ListView.builder(
-              itemCount: notices.length,
-              itemBuilder: (context, index) {
-                Map<String, dynamic> notice = notices[index];
-
-                return InkWell(
-                  onTap: () {
-                    // 탭했을 때의 동작 정의
-                  },
-                  child: Container(
-                    child: Row(
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(notice['title'] ?? '제목 없음'),
-                            Text(notice['date'] ?? '날짜 없음'),
-                          ],
-                        ),
-                        Icon(Icons.arrow_forward_ios),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-          }
-        },
-      ),
+      child: Text('공지사항 없음ㅅ'),
+      // child: FutureBuilder<List<Map<String, dynamic>>>(
+      //   future: noticeData,
+      //   builder: (context, snapshot) {
+      //     if (snapshot.connectionState == ConnectionState.waiting) {
+      //       return CircularProgressIndicator();
+      //     } else if (snapshot.hasError) {
+      //       return Text('데이터를 불러오는 도중 에러 발생: ${snapshot.error}');
+      //     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+      //       return Text('불러올 데이터가 없습니다.');
+      //     } else {
+      //       List<Map<String, dynamic>> notices = snapshot.data!;
+      //
+      //       return ListView.builder(
+      //         itemCount: notices.length,
+      //         itemBuilder: (context, index) {
+      //           Map<String, dynamic> notice = notices[index];
+      //
+      //           return InkWell(
+      //             onTap: () {
+      //               // 탭했을 때의 동작 정의
+      //             },
+      //             child: Container(
+      //               child: Row(
+      //                 children: [
+      //                   Column(
+      //                     crossAxisAlignment: CrossAxisAlignment.start,
+      //                     children: [
+      //                       Text(notice['title'] ?? '제목 없음'),
+      //                       Text(notice['date'] ?? '날짜 없음'),
+      //                     ],
+      //                   ),
+      //                   Icon(Icons.arrow_forward_ios),
+      //                 ],
+      //               ),
+      //             ),
+      //           );
+      //         },
+      //       );
+      //     }
+      //   },
+      // ),
     );
   }
 }
