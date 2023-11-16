@@ -28,7 +28,7 @@ class RestaurantItem {
 
 class _ImportRestaurantState extends State<ImportRestaurant> {
   bool isImportSuddenPopularVisible = true;
-  bool isImportRestaurantVisible = true;
+  bool isImportRestaurantVisible = false;
   List<Map<String, dynamic>> parkingDataList = [];
 
 
@@ -145,14 +145,14 @@ class _ImportRestaurantState extends State<ImportRestaurant> {
               );
             },
           ),
-          Container(
-            height: 500,
-            child: SearchListShop(searchResults: parkingDataList),
-          ),
+          if (isImportRestaurantVisible)
+            Container(
+              height: 500,
+              child: SearchListShop(searchResults: parkingDataList),
+            ),
         ],
       ),
     );
-
   }
 
   Widget _buildItemWithImage({
@@ -211,15 +211,14 @@ class _ImportRestaurantState extends State<ImportRestaurant> {
   }
 
 
-
   Future<void> _handleItemTap(String title) async {
     print('handleItemTap 호출: $title');
     try {
       QuerySnapshot storeSnapshot = await FirebaseFirestore.instance
           .collection('T3_STORE_TBL')
           .get();
-
-      List<Map<String, dynamic>> updatedParkingDataList = []; // 업데이트된 목록
+      print('Number of documents in storeSnapshot: ${storeSnapshot.size}');
+      List<Map<String, dynamic>> updatedParkingDataList = [];
 
       for (var storeDoc in storeSnapshot.docs) {
         String storeDocId = storeDoc.id;
@@ -232,20 +231,23 @@ class _ImportRestaurantState extends State<ImportRestaurant> {
               .where('S_PARKING', isEqualTo: true)
               .get();
 
+
+
           convenienceSnapshot.docs.forEach((convenienceDoc) {
-            print('서브컬렉션 데이터: ${convenienceDoc.data() as Map<String, dynamic>}');
-            // 데이터를 업데이트된 목록에 추가
-            updatedParkingDataList.add(convenienceDoc.data() as Map<String, dynamic>);
+            Map<String, dynamic> convenienceData = convenienceDoc.data() as Map<String, dynamic>;
+            print('서브컬렉션 데이터: $convenienceData');
+            updatedParkingDataList.add(convenienceData);
           });
         }
       }
 
 
-      setState(() {
-        parkingDataList = updatedParkingDataList;
-      });
+      if (updatedParkingDataList.isNotEmpty) {
+        setState(() {
+          parkingDataList = updatedParkingDataList;
+          isImportRestaurantVisible = true;
+        });
 
-      if (parkingDataList.isNotEmpty) {
         print('주차가능매장이 선택됨!');
         widget.onTapCallback();
       }

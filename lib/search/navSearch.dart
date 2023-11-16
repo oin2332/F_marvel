@@ -24,7 +24,7 @@ class _NavSearchState extends State<NavSearch> {
   TextEditingController _searchController = TextEditingController();
   List<String> recentSearches = [];
   bool isImportSuddenPopularVisible = true;
-  bool isImportRestaurantVisible = true;
+  bool isImportRestaurantVisible = false;
 
 
 
@@ -200,6 +200,7 @@ class _NavSearchState extends State<NavSearch> {
               onTapCallback: () {
                 setState(() {
                   isImportSuddenPopularVisible = false;
+                  isImportRestaurantVisible = true;
                 });
               },
             ),

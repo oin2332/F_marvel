@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../shop/detailpage.dart';
+import '../shop/loading.dart';
 
 
 
@@ -105,8 +107,9 @@ class _SearchListShop extends State<SearchListShop> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: Image.network(
-                    '${documentData['S_IMG']}',
+                  child: CachedNetworkImage(
+                    placeholder: (context, url) => LoadingSpinner3(),
+                    imageUrl: documentData['S_IMG'],
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -130,7 +133,7 @@ class _SearchListShop extends State<SearchListShop> {
                               children: [
                                 Icon(Icons.star, size: 25, color: Colors.yellow[600]),
                                 Text(
-                                  '${documentData['STARage']}', // 평균 별점 표시
+                                  '${documentData['STARage'] ?? 0}', // 평균 별점 표시
                                   style: TextStyle(
                                     fontSize: 17,
                                     fontWeight: FontWeight.bold,
@@ -157,7 +160,7 @@ class _SearchListShop extends State<SearchListShop> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DetailPage(docId: documentData['yourDocId']),
+                              builder: (context) => DetailPage(docId: documentData['yourDocId']),
                             ),
                           );
                         },
