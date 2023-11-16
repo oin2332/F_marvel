@@ -45,7 +45,6 @@ class _SearchState extends State<Search> {
   }
 
   Future<String> getUserIdFromT3UserTable() async {
-
     try {
       QuerySnapshot userSnapshot = await FirebaseFirestore.instance
           .collection('T3_USER_TBL')
@@ -59,8 +58,6 @@ class _SearchState extends State<Search> {
         if (userId != null) {
           print('아이디를알려조: $userId');
         }
-
-
 
         await _searchval.collection('T3_SEARCH_TBL').add({
           'S_SEARCHVALURE': _searchController.text,

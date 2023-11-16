@@ -205,7 +205,7 @@ class _ImportRestaurantState extends State<ImportRestaurant> {
 
 
 
-  void _handleItemTap(String title) async {
+  Future<void> _handleItemTap(String title) async {
     try {
       QuerySnapshot storeSnapshot = await FirebaseFirestore.instance
           .collection('T3_STORE_TBL')
@@ -215,10 +215,9 @@ class _ImportRestaurantState extends State<ImportRestaurant> {
         String storeDocId = storeDoc.id;
 
         if (title == "#주차가능매장") {
-          // 여기에서 storeDoc.data()로부터 원하는 필드 값을 가져와서 처리
           var fieldValue = (storeDoc.data() as Map<String, dynamic>)['S_PARKING'];
-          if (fieldValue != null && fieldValue == true) {
-            _fetchDataFromFirestore(storeDoc);
+          if (fieldValue == true) {
+            print('주차가능매장이 선택됨!');
           }
         }
 
@@ -231,7 +230,10 @@ class _ImportRestaurantState extends State<ImportRestaurant> {
 
         convenienceSnapshot.docs.forEach((convenienceDoc) {
           // 여기에서 필요한 작업 수행
-          print('서브컬렉션 데이터: ${convenienceDoc.data()}');
+          print('서브컬렉션 데이터11: ${convenienceDoc.data()}');
+          setState(() {
+            isImportSuddenPopularVisible = false;
+          });
         });
       });
     } catch (e) {
@@ -239,24 +241,6 @@ class _ImportRestaurantState extends State<ImportRestaurant> {
     }
   }
 
-  void _fetchDataFromFirestore(DocumentSnapshot storeDoc) async {
-    String docId = storeDoc.id;
-    try {
-      QuerySnapshot convenienceSnapshot = await FirebaseFirestore.instance
-          .collection('T3_STORE_TBL')
-          .doc(docId)
-          .collection('T3_CONVENIENCE_TBL')
-          .where('S_PARKING', isEqualTo: true)
-          .get();
-
-      List<Map<String, dynamic>> parkingDataList = [];
-      convenienceSnapshot.docs.forEach((doc) {
-        print('서브컬렉션 데이터: ${doc.data()}');
-      });
-    } catch (e) {
-      print('데이터 가져오기 오류: $e');
-    }
-  }
 
 
 
