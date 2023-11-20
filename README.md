@@ -57,7 +57,7 @@
 
 <br>
 
-<img src="https://capsule-render.vercel.app/api?type=Waving&height=200&section=footer&text=Good~Bye!&fontSize=90&fontColor=D3D3D3" />
+<img src="https://capsule-render.vercel.app/api?type=Waving&height=200&section=footer&text=&fontSize=90&fontColor=D3D3D3" />
 
 
 
