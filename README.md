@@ -42,5 +42,23 @@
 ### 유저 정보 수정
 ![유저정보수정](https://github.com/bogyuuggi/food_marvel/assets/137017214/6df73f15-9d3b-49b6-87cf-418c6ac4e37f)
 
+## ⭐ 기능구성도 & DB
+* [기능구성도](주소)
+* [DB설계1](주소)
+
+<br>
+<br>
+
+## [📺 시연 영상]()
+<br>
+
+## [💾 발표 PPT](https://drive.google.com/file/d/1rG5kZhM1EaDUcfW3BLHAX0UXETSJoOiq/view?usp=drive_link)
+<br>
+
+<br>
+
+<img src="https://capsule-render.vercel.app/api?type=Waving&height=200&section=footer&text=Good~Bye!&fontSize=90&fontColor=D3D3D3" />
+
+
 
 
