@@ -43,8 +43,8 @@
 ![유저정보수정](https://github.com/bogyuuggi/food_marvel/assets/137017214/6df73f15-9d3b-49b6-87cf-418c6ac4e37f)
 
 ## ⭐ 기능구성도 & DB
-* [기능구성도](주소)
-* [DB설계1](주소)
+* [주요 기능](https://drive.google.com/file/d/1zIEXABTvqsbZrY_Xl0OPCnnyRovo_gID/view?usp=sharing)
+* [DB설계1](https://drive.google.com/file/d/1c4XUcJlmsXREam5GMCb6ildlTNvJ_7rQ/view?usp=sharing)
 
 <br>
 <br>
