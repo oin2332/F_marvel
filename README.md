@@ -52,7 +52,7 @@
 ## [📺 시연 영상]()
 <br>
 
-## [💾 발표 PPT](https://drive.google.com/file/d/1rG5kZhM1EaDUcfW3BLHAX0UXETSJoOiq/view?usp=drive_link)
+## [💾 발표 PPT](https://docs.google.com/presentation/d/1aPd37AObHSqhlVXDv6MPwRutlybriHwp/edit?usp=drive_link&ouid=110411026348712368863&rtpof=true&sd=true)
 <br>
 
 <br>
