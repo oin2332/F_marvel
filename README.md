@@ -31,7 +31,7 @@
 * 프로세서 : Intel(R) Core(TM) i5-9400F CPU @ 2.90GHz
 * 기타 도구 및 라이브러리: <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 
-# 👁‍🗨 주요기능!
+# 👁‍🗨 기능 맛보기!
 ### 예약 & 푸시알림 시스템　　　　　　　　유저 정보 수정
 <img src="https://github.com/bogyuuggi/food_marvel/assets/137017214/acb8c73c-810a-42af-9036-b381e0ec1a61" width="300" height="800"/> 　　　
 <img src="https://github.com/bogyuuggi/food_marvel/assets/137017214/6df73f15-9d3b-49b6-87cf-418c6ac4e37f" width="300" height="800"/> 
