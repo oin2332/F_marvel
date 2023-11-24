@@ -101,7 +101,7 @@ class _ImportIconsState extends State<ImportIcons> {
                         height: 52,),
                     ),
                     Text(buttonsData[index].text,
-                      style: TextStyle(fontSize: 16),)
+                      style: TextStyle(fontSize: 14),)
                   ],
                 ),
               );

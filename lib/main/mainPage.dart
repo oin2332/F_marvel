@@ -62,6 +62,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: MainPage(),
       themeMode: ThemeMode.system,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

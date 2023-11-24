@@ -104,7 +104,7 @@ Widget _buildReviewList() {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(uId, style: TextStyle(fontWeight: FontWeight.bold)), // 리뷰 작성자 아이디
-                              Text('리뷰 23개, 평균별점 4.1'), // 리뷰 갯수, 평균 별점
+                              // Text('리뷰 23개, 평균별점 4.1'), // 리뷰 갯수, 평균 별점
                             ],
                           ),
                         ],
@@ -114,7 +114,7 @@ Widget _buildReviewList() {
                             style: ElevatedButton.styleFrom(
                               primary: Colors.deepOrange[400]!, // 원하는 색상으로 변경
                             ),
-                            child: Text('팔로우', style: TextStyle(fontWeight: FontWeight.bold))
+                            child: Text('팔로우', style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white))
                         ),
                     ],
                   ),

@@ -17,7 +17,7 @@ class _TempState extends State<Temp> {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+            icon: Icon(Icons.arrow_back_ios_new, color: Colors.black),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -26,7 +26,7 @@ class _TempState extends State<Temp> {
           backgroundColor: Colors.white,
           elevation: 0,
           bottom: PreferredSize(
-            preferredSize: Size.fromHeight(60.0),
+            preferredSize: Size.fromHeight(80.0),
             child: Column(
               children: [
                 TabBar(

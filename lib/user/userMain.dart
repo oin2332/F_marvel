@@ -49,6 +49,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
   bool? isPublic;
   late TabController _tabController;
   late String? nickname; // 추가
+  late String? intro; // 추가
 
   @override
   void initState() {
@@ -107,6 +108,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
     UserModel userModel = Provider.of<UserModel>(context);
     String? userId = Provider.of<UserModel>(context).userId; // UserModel에서 사용자 아이디 받아오기
     String? nickname = Provider.of<UserModel>(context).nickname;
+    String? intro = Provider.of<UserModel>(context).intro;
 
     return Scaffold(
       appBar: AppBar(
@@ -186,6 +188,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
                 )
               ],
             ),
+            Text('$intro', style: TextStyle( fontSize: 12),),
             SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -253,7 +256,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
             ),
             SizedBox(height: 10),
             Container(
-              height: 300,
+              height: MediaQuery.of(context).size.height * 0.3,
               padding: EdgeInsets.all(10),
               child: TabBarView(
                 controller: _tabController,
@@ -277,7 +280,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
                         ),
 
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 10),
                       GestureDetector(
                         onTap: (){
                           Navigator.push(context, MaterialPageRoute(builder: (_) => MyCollection(
@@ -374,8 +377,23 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
                       SizedBox(height: 30),
                       Text('저장한 레스토랑', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),),
                       SizedBox(height: 10),
-                      Text('저장한 레스토랑이 없습니다.', style: TextStyle(color: Colors.grey[400]!),textAlign: TextAlign.center,),
-                      Text('요즘 많이 저장하는 레스토랑을 확인해보세요.', style: TextStyle(color: Colors.grey[400]!),textAlign: TextAlign.center,),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '저장한 레스토랑이 없습니다.',
+                              style: TextStyle(color: Colors.grey[400]!),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              '요즘 많이 저장하는 레스토랑을 확인해보세요.',
+                              style: TextStyle(color: Colors.grey[400]!),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                   Column(
@@ -392,7 +410,7 @@ class _UserMainState extends State<UserMain>with SingleTickerProviderStateMixin{
       ),
       bottomNavigationBar: BottomAppBar(
         child: Container(
-          height: 50,
+          // height: 50
           color: Color.fromRGBO(255, 255, 255, 1.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import '../user/userModel.dart';
+import 'list.dart';
 
 class BoardAdd extends StatefulWidget {
   const BoardAdd({super.key});
@@ -84,6 +85,11 @@ class _BoardAddState extends State<BoardAdd> {
 
       _title.clear();
       _content.clear();
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Temp()),
+      );
+
     } else {
       print("제목 또는 내용을 입력해주세요.");
     }
