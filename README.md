@@ -15,12 +15,9 @@
 <br>
 <br>
 
-# 멤버 구성
-* 서보규(팀장) - 유저 ( 회원가입 / 로그인 / 리뷰 게시판 /유저 정보 수정/  유저 프로필 수정/ 공지사항 및 이용약관 / Storage를 이용한 이미지 업로드 및 출력 / FireStore 설계  )
-* 이상엽 - 메인 ( 앱 로고 디자인 / 메인 페이지 / 유저 컬렉션 / FireStore 설계)
-* 강도현 - 검색( 일반적 검색 / 필터링 / 최근 검색어 / 관심 급상승 검색어 / FireStore 설계)
+# 담당업무
 * 신동환 - 식당 및 지도 ( 식당 등록 / 식당 리스트 출력 / 식당 상세 페이지 / FireStore 설계)
-* 손명욱 - 지도 및 예약 ( 전반적인 지도 API / 예약 기능 / FireStore 설계)
+
 
 # ⚙ 개발환경
 
@@ -31,28 +28,22 @@
 * 프로세서 : Intel(R) Core(TM) i5-9400F CPU @ 2.90GHz
 * 기타 도구 및 라이브러리: <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 
-# 👁‍🗨 기능 맛보기!
-### 예약 & 푸시알림 시스템　　　　　　　　유저 정보 수정
-<img src="https://github.com/bogyuuggi/food_marvel/assets/137017214/acb8c73c-810a-42af-9036-b381e0ec1a61" width="300" height="800"/> 　　　
-<img src="https://github.com/bogyuuggi/food_marvel/assets/137017214/6df73f15-9d3b-49b6-87cf-418c6ac4e37f" width="300" height="800"/> 
+# 👁‍🗨 작업페이지 GIF
+![1](https://github.com/bogyuuggi/food_marvel/assets/137017214/7af804b0-ee40-435d-9c29-424a77695547)
+![2](https://github.com/bogyuuggi/food_marvel/assets/137017214/c9b074bd-bde1-4bf9-8546-3c098542b5a6)
+![3](https://github.com/bogyuuggi/food_marvel/assets/137017214/333595ee-d7fb-4956-a7e6-e0cfbc41f896)
 
 
-## ⭐ 기능구성도 & DB
-* [주요 기능](https://drive.google.com/file/d/1zIEXABTvqsbZrY_Xl0OPCnnyRovo_gID/view?usp=sharing)
-* [DB설계1](https://drive.google.com/file/d/1c4XUcJlmsXREam5GMCb6ildlTNvJ_7rQ/view?usp=sharing)
 
-<br>
+
+## [👨‍👨‍👧‍👦 Time GitHub로 이동(클릭)](https://github.com/bogyuuggi/food_marvel.git)
 <br>
 
-## [📺 시연 영상](https://www.youtube.com/watch?v=2kLDOkaCJJo)
+## [📺 시연 영상(클릭)](https://www.youtube.com/watch?v=2kLDOkaCJJo)
 <br>
 
-## [💾 발표 PPT](https://docs.google.com/presentation/d/1dBy1NOmcYX3TKXhgV6sgBW_WkOBL7OFQ/edit?usp=sharing&ouid=110411026348712368863&rtpof=true&sd=true)
+## [💾 발표 PPT(클릭)](https://docs.google.com/presentation/d/1dBy1NOmcYX3TKXhgV6sgBW_WkOBL7OFQ/edit?usp=sharing&ouid=110411026348712368863&rtpof=true&sd=true)
 <br>
-
-<br>
-
-<img src="https://capsule-render.vercel.app/api?type=Waving&height=200&section=footer&text=&fontSize=90&fontColor=D3D3D3" />
 
 
 
